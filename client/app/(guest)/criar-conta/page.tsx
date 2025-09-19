@@ -42,7 +42,7 @@ export default function Page() {
       {contextHolder}
       <div className="flex items-center justify-center text-4xl text-[#172b4d] mb-6">
         <Logo width={40} />
-        <span className="-translate-x-1">inmo</span>
+        <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
       <h1 className="text-center mb-4  font-semibold text-[#172b4d] text-base">Registre-se para continuar</h1>
 
