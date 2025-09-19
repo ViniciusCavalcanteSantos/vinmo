@@ -11,7 +11,6 @@ export default function Providers({children}: PropsWithChildren) {
       <ConfigProvider
         locale={ptBR}
         theme={{
-          algorithm: theme.darkAlgorithm,
         }}
       >
         {children}

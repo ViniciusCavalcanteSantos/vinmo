@@ -3,10 +3,11 @@
 import {Button, Form, Input, notification} from "antd";
 import {LockOutlined, MailOutlined} from "@ant-design/icons";
 import Link from "next/link";
-import {login} from "@/app/lib/database/User";
+import {login} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
 import {redirect} from "next/navigation";
 import {useEffect} from "react";
+import Logo from "@/components/Logo";
 
 export default function Page() {
   const [api, contextHolder] = notification.useNotification();
@@ -39,7 +40,11 @@ export default function Page() {
       requiredMark={false}
     >
       {contextHolder}
-      <h1 className="text-center mb-8 text-2xl font-semibold">Entrar</h1>
+      <div className="flex items-center justify-center text-4xl text-[#172b4d] mb-6">
+        <Logo width={40} />
+        <span className="-translate-x-1">inmo</span>
+      </div>
+      <h1 className="text-center mb-4  font-semibold text-[#172b4d] text-base">Entre para continuar</h1>
       
       <Form.Item
         layout="vertical"
@@ -54,16 +59,26 @@ export default function Page() {
         label="Senha"
         name="password"
         rules={[{ required: true, min: 6, max: 255  }]}
+        style={{marginBottom: 40}}
       >
         <Input.Password prefix={<LockOutlined style={{ marginRight: 8 }} />} placeholder="Senha" style={{ padding: "10px 16px" }} />
       </Form.Item>
 
       <Form.Item>
-        <Button block type="primary" htmlType="submit" className="mb-2"> 
+        <Button block type="primary" htmlType="submit">
           Entrar
         </Button>
-        ou <Link href="/criar-conta">Crie uma conta!</Link>
       </Form.Item>
+
+      <div className="flex justify-center">
+        <Link href="/recuperar-senha">
+          <span className="underline underline-offset-2">Não consegue entrar?</span>
+        </Link>
+        <span className="px-2 text-[#172b4d]">•</span>
+        <Link href="/criar-conta">
+          <span className="underline">Criar uma conta</span>
+        </Link>
+      </div>
     </Form>
   );
 }
