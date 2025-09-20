@@ -1,6 +1,6 @@
 "use client"
 
-import {Button, Form, Input, notification} from "antd";
+import {Form, Input, notification} from "antd";
 import {LockOutlined, MailOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {login} from "@/lib/database/User";

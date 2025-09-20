@@ -1,7 +1,7 @@
 "use client"
 
 import {Form, Input, notification} from "antd";
-import {CheckCircleFilled, CheckCircleOutlined, LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
+import {CheckCircleFilled, LockOutlined, UserOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {register} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";

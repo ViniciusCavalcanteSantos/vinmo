@@ -1,9 +1,9 @@
 "use client"
 
 import {Form, Input, notification} from "antd";
-import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
+import {MailOutlined} from "@ant-design/icons";
 import Link from "next/link";
-import {register, send_code} from "@/lib/database/User";
+import {send_code} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
 import {redirect} from "next/navigation";
 import {useEffect, useState} from "react";
