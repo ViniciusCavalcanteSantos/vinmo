@@ -8,6 +8,7 @@ import {useLocalStorage} from "react-use";
 import {redirect} from "next/navigation";
 import {useEffect} from "react";
 import Logo from "@/components/Logo";
+import {PrimaryButton} from "@/components/PrimaryButton";
 
 export default function Page() {
   const [api, contextHolder] = notification.useNotification();
@@ -84,9 +85,9 @@ export default function Page() {
       </Form.Item>
 
       <Form.Item>
-        <Button block type="primary" htmlType="submit">
+        <PrimaryButton block type="primary" htmlType="submit">
           Registre-se
-        </Button>
+        </PrimaryButton>
       </Form.Item>
 
       <div className="flex justify-center">

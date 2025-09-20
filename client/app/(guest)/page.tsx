@@ -8,6 +8,7 @@ import {useLocalStorage} from "react-use";
 import {redirect} from "next/navigation";
 import {useEffect} from "react";
 import Logo from "@/components/Logo";
+import {PrimaryButton} from "@/components/PrimaryButton";
 
 export default function Page() {
   const [api, contextHolder] = notification.useNotification();
@@ -59,15 +60,15 @@ export default function Page() {
         label="Senha"
         name="password"
         rules={[{ required: true, min: 6, max: 255  }]}
-        style={{marginBottom: 40}}
+        style={{marginBottom: 24}}
       >
         <Input.Password prefix={<LockOutlined style={{ marginRight: 8 }} />} placeholder="Senha" style={{ padding: "10px 16px" }} />
       </Form.Item>
 
       <Form.Item>
-        <Button block type="primary" htmlType="submit">
+        <PrimaryButton block type="primary" htmlType="submit">
           Entrar
-        </Button>
+        </PrimaryButton>
       </Form.Item>
 
       <div className="flex justify-center">
