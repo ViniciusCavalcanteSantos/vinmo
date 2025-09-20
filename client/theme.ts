@@ -3,7 +3,7 @@ import {AliasToken} from "antd/es/theme/interface";
 import {CSSProperties} from "react";
 
 const theme = {
-  primary: "#1D4ED8",
+  primary: "#0c66e4",
   secondary: "#9333EA",
   background: "#FAFBFC",
   foreground: "#f8f8f8",
@@ -11,6 +11,8 @@ const theme = {
   leadDark: '#172b4d',
   leadLight: '#5e6c84',
   leadLighter: '#44546F',
+
+  linkColor: '#1677FF'
 } as const;
 
 const themeBody = {
