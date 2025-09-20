@@ -41,11 +41,11 @@ export default function Page() {
       requiredMark={false}
     >
       {contextHolder}
-      <div className="flex items-center justify-center text-4xl text-[#172b4d] mb-6">
+      <div className="flex items-center justify-center text-4xl text-lead-dark mb-6 text-dark">
         <Logo width={40} />
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
-      <h2 className="text-center mb-4  font-semibold text-[#172b4d] text-base">Entre para continuar</h2>
+      <h2 className="text-center mb-4  font-semibold text-lead-dark text-base">Entre para continuar</h2>
       
       <Form.Item
         layout="vertical"
@@ -75,7 +75,7 @@ export default function Page() {
         <Link href="/recuperar-senha">
           <span className="underline underline-offset-2">Não consegue entrar?</span>
         </Link>
-        <span className="px-2 text-[#172b4d]">•</span>
+        <span className="px-2  text-lead-dark">•</span>
         <Link href="/criar-conta">
           <span className="underline">Criar uma conta</span>
         </Link>

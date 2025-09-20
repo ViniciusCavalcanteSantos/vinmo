@@ -11,6 +11,9 @@
 @theme inline {
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
+  --color-lead-dark: var(--lead-dark);
+  --color-lead-light: var(--lead-light);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
