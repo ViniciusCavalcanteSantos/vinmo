@@ -1,4 +1,7 @@
 // theme.ts
+import {AliasToken} from "antd/es/theme/interface";
+import {CSSProperties} from "react";
+
 const theme = {
   primary: "#1D4ED8",
   secondary: "#9333EA",
@@ -6,4 +9,16 @@ const theme = {
   foreground: "#f8f8f8",
 } as const;
 
+const themeBody = {
+  "--primary": theme.primary,
+  "--secondary": theme.secondary,
+  "--background": theme.background,
+  "--foreground": theme.foreground,
+} as CSSProperties
+
+const themeAntd = {
+  colorPrimary: theme.primary,
+} as Partial<AliasToken>
+
 export default theme
+export { themeBody, themeAntd }

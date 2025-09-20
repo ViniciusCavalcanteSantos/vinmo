@@ -2,8 +2,9 @@
 
 import {AntdRegistry} from "@ant-design/nextjs-registry";
 import {PropsWithChildren} from "react";
-import {ConfigProvider, theme} from "antd";
+import {ConfigProvider} from "antd";
 import ptBR from 'antd/locale/pt_BR';
+import {themeAntd} from "@/theme";
 
 export default function Providers({children}: PropsWithChildren) {
   return (
@@ -11,6 +12,7 @@ export default function Providers({children}: PropsWithChildren) {
       <ConfigProvider
         locale={ptBR}
         theme={{
+          token: themeAntd
         }}
       >
         {children}
