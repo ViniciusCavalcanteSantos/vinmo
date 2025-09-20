@@ -111,5 +111,5 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
-
+    'max_email_confirmation_attempts' => env('MAX_EMAIL_CONFIRMATION_ATTEMPTS', 5)
 ];

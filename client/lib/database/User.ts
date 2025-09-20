@@ -25,6 +25,20 @@ export async function login(email: string, password: string) {
     return data;
 }
 
+export async function send_code(email: string) {
+    return await apiFetch<{ status: number } | AuthError>("/send_code", {
+        method: "POST",
+        body: JSON.stringify({email}),
+    });
+}
+
+export async function confirm_code(email: string, code: string) {
+    return await apiFetch<{ status: number } | AuthError>("/confirm_code", {
+        method: "POST",
+        body: JSON.stringify({email, code}),
+    });
+}
+
 export async function register(name: string, email: string, password: string, password_confirmation: string) {
     const res = await apiFetch<AuthSuccess | AuthError>("/register", {
         method: "POST",

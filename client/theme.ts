@@ -9,7 +9,8 @@ const theme = {
   foreground: "#f8f8f8",
 
   leadDark: '#172b4d',
-  leadLight: '#5e6c84'
+  leadLight: '#5e6c84',
+  leadLighter: '#44546F',
 } as const;
 
 const themeBody = {
@@ -19,6 +20,7 @@ const themeBody = {
   "--foreground": theme.foreground,
   "--lead-dark": theme.leadDark,
   "--lead-light": theme.leadLight,
+  "--lead-lighter": theme.leadLighter,
 } as CSSProperties
 
 const themeAntd = {

@@ -36,7 +36,7 @@ export default function Page() {
       message: `O e-mail com o código foi enviado`,
       description: 'Verifique a caixa de entrada.'
     });
-    redirect('/criar-conta/confirmar-codigo')
+    redirect('/criar-conta/finalizar')
   }
 
   return (
