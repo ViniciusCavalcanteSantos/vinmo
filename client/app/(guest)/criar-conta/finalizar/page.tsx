@@ -1,6 +1,6 @@
 "use client"
 
-import {Form, Input, notification} from "antd";
+import {Form, Input} from "antd";
 import {CheckCircleFilled, LockOutlined, UserOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {register} from "@/lib/database/User";
@@ -10,9 +10,10 @@ import {useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {ExternalLinkIcon} from "@/components/Icons/LinkIcon";
+import {useNotification} from "@/contexts/NotificationContext";
 
 export default function Page() {
-  const [api, contextHolder] = notification.useNotification();
+  const notification = useNotification();
   const [token, setToken] = useLocalStorage("token")
   const [_, setUser] = useLocalStorage("user")
   const [emailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
@@ -28,13 +29,13 @@ export default function Page() {
     const res = await register(values.name, emailConfirmation ?? "", values.password, values.password_confirmation)
     setSending(false)
     if("error" in res) {
-      api.info({
+      notification.info({
         message: res.error,
       });
       return;
     }
 
-    api.success({
+    notification.success({
       message: `Conta criada com sucesso`,
       description: 'Comece a usar imediatamente!'
     });
@@ -51,7 +52,6 @@ export default function Page() {
       onFinish={handleFinish}
       requiredMark={false}
     >
-      {contextHolder}
       <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
         <Logo width={40} />
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>

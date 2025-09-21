@@ -1,6 +1,6 @@
 "use client"
 
-import {Form, Input, notification} from "antd";
+import {Form, Input} from "antd";
 import {MailOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {send_code} from "@/lib/database/User";
@@ -9,9 +9,10 @@ import {redirect} from "next/navigation";
 import {useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
+import {useNotification} from "@/contexts/NotificationContext";
 
 export default function Page() {
-  const [api, contextHolder] = notification.useNotification();
+  const notification = useNotification();
   const [token] = useLocalStorage("token")
   const [_, setEmailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
@@ -25,14 +26,14 @@ export default function Page() {
     const res = await send_code(values.email)
     setSending(false)
     if("error" in res) {
-      api.info({
+      notification.info({
         message: res.error,
       });
       return;
     }
 
     setEmailConfirmation(values.email)
-    api.success({
+    notification.success({
       message: `O e-mail com o código foi enviado`,
       description: 'Verifique a caixa de entrada.'
     });
@@ -46,7 +47,6 @@ export default function Page() {
       onFinish={handleFinish}
       requiredMark={false}
     >
-      {contextHolder}
       <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
         <Logo width={40} />
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>

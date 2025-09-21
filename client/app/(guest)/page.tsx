@@ -1,6 +1,6 @@
 "use client"
 
-import {Form, Input, notification} from "antd";
+import {Form, Input} from "antd";
 import {LockOutlined, MailOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {login} from "@/lib/database/User";
@@ -9,9 +9,10 @@ import {redirect} from "next/navigation";
 import {useEffect} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
+import {useNotification} from "@/contexts/NotificationContext";
 
 export default function Page() {
-  const [api, contextHolder] = notification.useNotification();
+  const notification = useNotification();
   const [token, setToken] = useLocalStorage("token")
   const [_, setUser] = useLocalStorage("user")
 
@@ -22,7 +23,7 @@ export default function Page() {
   const handleFinish = async(values: any) => {
     const res = await login(values.email, values.password)
     if("error" in res) {
-      api.info({
+      notification.info({
         message: res.error,
       });
       return;
@@ -40,7 +41,6 @@ export default function Page() {
       onFinish={handleFinish}
       requiredMark={false}
     >
-      {contextHolder}
       <div className="flex items-center justify-center text-4xl text-lead-dark mb-6 text-dark">
         <Logo width={40} />
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>

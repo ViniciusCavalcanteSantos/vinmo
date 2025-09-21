@@ -5,6 +5,7 @@ import {PropsWithChildren} from "react";
 import {ConfigProvider} from "antd";
 import ptBR from 'antd/locale/pt_BR';
 import {themeAntd} from "@/theme";
+import {NotificationProvider} from "@/contexts/NotificationContext";
 
 export default function Providers({children}: PropsWithChildren) {
   return (
@@ -15,7 +16,9 @@ export default function Providers({children}: PropsWithChildren) {
           token: themeAntd
         }}
       >
-        {children}
+        <NotificationProvider>
+          {children}
+        </NotificationProvider>
       </ConfigProvider>
     </AntdRegistry>
   );
