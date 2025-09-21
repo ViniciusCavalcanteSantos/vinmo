@@ -42,8 +42,8 @@ export default function Page() {
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await confirm_code(emailConfirmation ?? "", values.code)
-    setSending(false)
     if("error" in res) {
+      setSending(false)
       notification.info({
         message: res.error,
       });

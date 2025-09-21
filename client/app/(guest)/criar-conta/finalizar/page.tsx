@@ -5,7 +5,7 @@ import {CheckCircleFilled, LockOutlined, UserOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {register} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
-import {redirect, useRouter} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
@@ -27,8 +27,8 @@ export default function Page() {
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await register(values.name, emailConfirmation ?? "", values.password, values.password_confirmation)
-    setSending(false)
     if("error" in res) {
+      setSending(false)
       notification.info({
         message: res.error,
       });

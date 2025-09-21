@@ -25,8 +25,8 @@ export default function Page() {
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await send_code(values.email)
-    setSending(false)
     if("error" in res) {
+      setSending(false)
       notification.info({
         message: res.error,
       });
