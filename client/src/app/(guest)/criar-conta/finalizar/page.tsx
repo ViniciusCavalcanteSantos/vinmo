@@ -99,9 +99,9 @@ export default function Page() {
 
       <p className='text-lead-light text-xs mb-2 px-2'>
         Ao fazer a inscrição, aceito os
-        <Link href="/" className='inline-flex items-center gap-1 mx-1 !underline hover:!no-underline'>Termos de Serviço <ExternalLinkIcon /></Link>
+        <Link href="/client/public" className='inline-flex items-center gap-1 mx-1 !underline hover:!no-underline'>Termos de Serviço <ExternalLinkIcon /></Link>
         e concordo com a
-        <Link href="/" className='inline-flex items-center gap-1 mx-1 !underline hover:!no-underline'>Política de Privacidade <ExternalLinkIcon /></Link>
+        <Link href="/client/public" className='inline-flex items-center gap-1 mx-1 !underline hover:!no-underline'>Política de Privacidade <ExternalLinkIcon /></Link>
         da Vinmo.
       </p>
 

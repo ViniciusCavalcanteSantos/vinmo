@@ -71,7 +71,7 @@ export default function Page() {
       </Form.Item>
 
       <div className="flex justify-center">
-        <Link href="/">
+        <Link href="/client/public">
           <span className="underline underline-offset-2">Já tem uma conta Vinmo? Entrar</span>
         </Link>
       </div>
