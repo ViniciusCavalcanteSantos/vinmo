@@ -5,7 +5,7 @@ import {MailOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {send_code} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
@@ -16,9 +16,10 @@ export default function Page() {
   const [token] = useLocalStorage("token")
   const [_, setEmailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
+  const router = useRouter();
 
   useEffect(() => {
-    if(token) redirect("/home")
+    if(token) router.push("/home")
   }, [token])
   
   const handleFinish = async(values: any) => {
@@ -37,7 +38,7 @@ export default function Page() {
       message: `O e-mail com o código foi enviado`,
       description: 'Verifique a caixa de entrada.'
     });
-    redirect('/criar-conta/confirmar-codigo')
+    router.push('/criar-conta/confirmar-codigo')
   }
 
   return (

@@ -5,21 +5,22 @@ import {LockOutlined, MailOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {login} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
-import {redirect} from "next/navigation";
 import {useEffect} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useNotification} from "@/contexts/NotificationContext";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
   const notification = useNotification();
   const [token, setToken] = useLocalStorage("token")
   const [_, setUser] = useLocalStorage("user")
+  const router = useRouter();
 
   useEffect(() => {
-    if(token) redirect("/home")
+    if(token) router.push("/home")
   }, [token])
-  
+
   const handleFinish = async(values: any) => {
     const res = await login(values.email, values.password)
     if("error" in res) {
@@ -31,7 +32,7 @@ export default function Page() {
     
     setToken(res.token)
     setUser(res.user)
-    redirect("/home")
+    router.push("/home")
   }
 
   return (

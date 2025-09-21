@@ -3,7 +3,7 @@
 import {Form, Input} from "antd";
 import {confirm_code, send_code} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
@@ -14,13 +14,14 @@ export default function Page() {
   const [token] = useLocalStorage("token")
   const [emailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
+  const router = useRouter();
 
   useEffect(() => {
-    if(token) redirect("/home")
+    if(token) router.push("/home")
   }, [token])
 
   useEffect(() => {
-    if(!emailConfirmation) redirect("/criar-conta")
+    if(!emailConfirmation) router.push("/criar-conta")
   }, [emailConfirmation])
 
   const sendCode = async() => {
@@ -53,7 +54,7 @@ export default function Page() {
       message: `Email verificado com sucesso!`,
       description: 'Você pode prosseguir com o cadastro'
     });
-    redirect('/criar-conta/finalizar')
+    router.push('/criar-conta/finalizar')
   }
 
   return (

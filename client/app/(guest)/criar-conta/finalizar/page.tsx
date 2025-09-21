@@ -5,7 +5,7 @@ import {CheckCircleFilled, LockOutlined, UserOutlined} from "@ant-design/icons";
 import Link from "next/link";
 import {register} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
-import {redirect} from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
@@ -18,10 +18,10 @@ export default function Page() {
   const [_, setUser] = useLocalStorage("user")
   const [emailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
-
+  const router = useRouter();
 
   useEffect(() => {
-    if(token) redirect("/home")
+    if(token) router.push("/home")
   }, [token])
   
   const handleFinish = async(values: any) => {
@@ -42,7 +42,7 @@ export default function Page() {
 
     setToken(res.token)
     setUser(res.user)
-    redirect("/home")
+    router.push("/home")
   }
 
   return (
