@@ -1,5 +1,33 @@
 {
   "login": {
-    "sign_in_to_continue": "Entre para continuar"
-  }
+    "sign_in": "Entrar",
+    "sign_in_to_continue":  "Entre para continuar",
+    "create_an_account": "Criar uma conta",
+    "account_created": "Conta criada com sucesso",
+    "start_using_immediately": "Comece a usar imediatamente!",
+    "register_to_continue": "Registre-se para continuar",
+    "register": "Registre-se",
+    "email": "Email",
+    "password": "Senha",
+    "confirm_password": "Confirmar senha",
+    "create_password": "Criar senha",
+    "cant_get_in": "Não consegue entrar?",
+    "already_have_a_account": "Já tem uma conta Vinmo? Entrar",
+    "email_code_sent": "O email com o código foi enviado",
+    "new_email_code_sent": "O email com o novo código foi enviado",
+    "check_your_inbox": "Verifique a caixa de entrada.",
+    "we_emailed_you": "A gente enviou o código por e-mail para você",
+    "to_complete_account_setup": "Para concluir a configuração da sua conta, insira o código que a gente enviou para:",
+    "code": "Código",
+    "verify": "Verificar",
+    "didnt_receive_an_email": "Não recebeu um e-mail? Reenviar e-mail",
+    "email_verified": "Endereço de email verificado",
+    "email_verified_successfully": "Email verificado com sucesso!",
+    "you_can_proceed_with_registration": "Você pode prosseguir com o cadastro",
+    "email_address": "Endereço de email",
+    "signup_terms": "Ao fazer a inscrição, aceito os <tos>Termos de Serviço<icon/></tos> e concordo com a <pp>Política de Privacidade<icon/></pp> da Vinmo.",
+    "finish": "Finalizar"
+  },
+  "full_name": "Nome completo",
+  "enter_full_name": "Digitar o seu nome completo"
 }

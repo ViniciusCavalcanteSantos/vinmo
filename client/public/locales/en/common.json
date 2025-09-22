@@ -1,5 +1,33 @@
 {
   "login": {
-    "sign_in_to_continue": "Sign in to continue"
-  }
+    "sign_in": "Sign in",
+    "sign_in_to_continue":  "Sign in to continue",
+    "create_an_account": "Create an account",
+    "account_created": "Account created successfully",
+    "start_using_immediately": "Start using immediately!",
+    "register_to_continue": "Register to continue",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "create_password": "Create password",
+    "cant_get_in": "Forgot your password?",
+    "already_have_a_account": "Already have a Vinmo account? Sign in",
+    "email_code_sent": "The email with the code has been sent",
+    "new_email_code_sent": "The email with the new code has been sent",
+    "check_your_inbox": "Check your inbox.",
+    "we_emailed_you": "We emailed you the code",
+    "to_complete_account_setup": "To complete your account setup, enter the code we sent to:",
+    "code": "Code",
+    "verify": "Verify",
+    "didnt_receive_an_email": "Didn't receive an email? Resend email",
+    "email_verified": "Verified email address",
+    "email_verified_successfully": "Email verified successfully!",
+    "you_can_proceed_with_registration": "You can proceed with registration",
+    "email_address": "Email address",
+    "signup_terms": "By signing up, I accept the <tos>Terms of Service<icon/></tos> and agree to the <pp>Privacy Policy<icon/></pp> of Vinmo.",
+    "finish": "Finish"
+  },
+  "full_name": "Full name",
+  "enter_full_name": "Enter your full name"
 }

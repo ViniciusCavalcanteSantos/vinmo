@@ -10,8 +10,10 @@ import {useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useNotification} from "@/contexts/NotificationContext";
+import {useT} from "@/i18n/client";
 
 export default function Page() {
+  const { t } = useT()
   const notification = useNotification();
   const [token] = useLocalStorage("token")
   const [_, setEmailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
@@ -35,8 +37,8 @@ export default function Page() {
 
     setEmailConfirmation(values.email)
     notification.success({
-      message: `O e-mail com o código foi enviado`,
-      description: 'Verifique a caixa de entrada.'
+      message: t('login.email_code_sent'),
+      description: t('login.check_your_inbox')
     });
     router.push('/criar-conta/confirmar-codigo')
   }
@@ -52,7 +54,7 @@ export default function Page() {
         <Logo width={40} />
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
-      <h1 className="text-center mb-4 font-semibold text-lead-dark text-base">Registre-se para continuar</h1>
+      <h1 className="text-center mb-4 font-semibold text-lead-dark text-base">{t('login.register_to_continue')}</h1>
 
       <Form.Item
         layout="vertical"
@@ -66,13 +68,13 @@ export default function Page() {
 
       <Form.Item>
         <PrimaryButton block type="primary" htmlType="submit" loading={sending}>
-          Registre-se
+          {t('login.register')}
         </PrimaryButton>
       </Form.Item>
 
       <div className="flex justify-center">
-        <Link href="/client/public">
-          <span className="underline underline-offset-2">Já tem uma conta Vinmo? Entrar</span>
+        <Link href="/">
+          <span className="underline underline-offset-2">{t('login.already_have_a_account')}</span>
         </Link>
       </div>
     </Form>

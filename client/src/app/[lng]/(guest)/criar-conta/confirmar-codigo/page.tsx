@@ -8,8 +8,10 @@ import {useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useNotification} from "@/contexts/NotificationContext";
+import {useT} from "@/i18n/client";
 
 export default function Page() {
+  const { t } = useT()
   const notification = useNotification();
   const [token] = useLocalStorage("token")
   const [emailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
@@ -34,8 +36,8 @@ export default function Page() {
     }
 
     notification.success({
-      message: `O e-mail com o novo código foi enviado`,
-      description: 'Verifique a caixa de entrada.'
+      message: t('login.new_email_code_sent'),
+      description: t('login.check_your_inbox')
     });
   }
 
@@ -51,8 +53,8 @@ export default function Page() {
     }
 
     notification.success({
-      message: `Email verificado com sucesso!`,
-      description: 'Você pode prosseguir com o cadastro'
+      message: t('login.email_verified_successfully'),
+      description: t('login.you_can_proceed_with_registration')
     });
     router.push('/criar-conta/finalizar')
   }
@@ -68,13 +70,13 @@ export default function Page() {
         <Logo width={40} />
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
-      <h1 className="text-center mb-4 font-semibold text-lead-dark text-2xl">A gente enviou o código por e-mail para você</h1>
-      <p className="text-lead-lighter text-sm mb-2">Para concluir a configuração da sua conta, insira o código que a gente enviou para:</p>
+      <h1 className="text-center mb-4 font-semibold text-lead-dark text-2xl">{t('login.we_emailed_you')}</h1>
+      <p className="text-lead-lighter text-sm mb-2">{t('login.to_complete_account_setup')}</p>
       <p className="text-lead-lighter font-bold text-base mb-2">{emailConfirmation}</p>
 
       <Form.Item
         layout="vertical"
-        label="Código"
+        label={t('login.code')}
         name="code"
         rules={[{ required: true, max: 255 }]}
         style={{marginBottom: 20}}
@@ -84,13 +86,13 @@ export default function Page() {
 
       <Form.Item>
         <PrimaryButton block type="primary" htmlType="submit" loading={sending}>
-          Verificar
+          {t('login.verify')}
         </PrimaryButton>
       </Form.Item>
 
       <div className="flex justify-center">
         <button className='font-medium text-blue-600 dark:text-blue-500 cursor-pointer' onClick={sendCode} type="button">
-          <span className="underline underline-offset-2">Não recebeu um e-mail? Reenviar e-mail</span>
+          <span className="underline underline-offset-2">{t('login.didnt_receive_an_email')}</span>
         </button>
       </div>
     </Form>
