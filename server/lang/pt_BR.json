@@ -194,5 +194,16 @@
   "Ensure your account is using a long, random password to stay secure": "Certifique-se de que sua conta esteja usando uma senha longa e aleatória para permanecer segura",
   "Log in to your account": "Entrar na sua conta",
   "Enter your email and password below to log in": "Digite seu e-mail e senha abaixo para entrar",
-  "Don't have an account?": "Não tem uma conta?"
+  "Code sent successfully": "Código enviado com sucesso",
+  "Don't have an account?": "Não tem uma conta?",
+  "We had a problem sending your email, please try again later": "Tivemos um problema ao enviar seu email, tente  novamente mais tarde",
+  "Maximum number of attempts reached": "Número máximo de tentativas atingido",
+  "Verification code has expired": "O código de verificação expirou",
+  "The verification code entered is invalid": "O código de verificação inserido é inválido",
+  "Email verified successfully": "Email verificado com sucesso",
+  "We were unable to confirm your code, please try again later": "Não foi possível confirmar o seu código, tente novamente mais tarde",
+  "Registration completed successfully": "Cadastro realizado com sucesso",
+  "Email or Password is incorrect": "Email ou senha estão incorretos",
+  "Login successfully": "Login realizado com sucesso",
+  "User successfully obtained": "Usuário obtido com sucesso"
 }

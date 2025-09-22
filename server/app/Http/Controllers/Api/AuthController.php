@@ -38,12 +38,12 @@ class AuthController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => "Código enviado com sucesso",
+                'message' => __('Code sent successfully'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Tivemos um problema ao enviar seu email, tente  novamente mais tarde',
+                'message' => __('We had a problem sending your email, please try again later'),
             ], 500);
         }
     }
@@ -65,7 +65,7 @@ class AuthController extends Controller
             if ($attempts >= $attemptsMax) {
                 return response()->json([
                     'status' => 'max_attempts',
-                    'message' => 'Número máximo de tentativas atingido',
+                    'message' => __('Maximum number of attempts reached'),
                 ], 422);
             }
 
@@ -77,7 +77,7 @@ class AuthController extends Controller
             if (!$codeSession || !$emailSession) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'O código de verificação expirou',
+                    'message' => __('Verification code has expired'),
                 ], 422);
             }
 
@@ -85,19 +85,19 @@ class AuthController extends Controller
             if ($code !== $codeSession || $email !== $emailSession) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'O código de verificação inserido é inválido',
+                    'message' => __('The verification code entered is invalid'),
                 ], 422);
             }
 
             Cache::put('email_verified_at', Carbon::now()->toDateTimeString());
             return response()->json([
                 'status' => 'success',
-                'message' => 'Email verificado com sucesso',
+                'message' => __('Email verified successfully'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Não foi possível confirmar o seu código, tente novamente mais tarde' . $e->getMessage(),
+                'message' => __('We were unable to confirm your code, please try again later'),
             ], 500);
         }
     }
@@ -132,7 +132,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Cadastro realizado com sucesso',
+            'message' => __('Registration completed successfully'),
             'token' => $token,
             'user' => $user->only(['id', 'name', 'email']),
         ]);
@@ -143,7 +143,7 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Credenciais inválidas'
+                'message' => __('Email or Password is incorrect'),
             ], 401);
         }
 
@@ -152,7 +152,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Login realizado com sucesso',
+            'message' => __('Login successfully'),
             'token' => $token,
             'user' => $user->only(['id', 'name', 'email']),
         ]);
@@ -162,7 +162,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => 'success',
-            'message' => 'Usuário obtido com sucesso',
+            'message' => __('User successfully obtained'),
             'user' => $request->user(),
         ]);
     }
