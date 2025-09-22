@@ -80,7 +80,7 @@ export default function Page() {
           <span className="underline underline-offset-2">{t('login.cant_get_in')}</span>
         </Link>
         <span className="px-2  text-lead-dark">•</span>
-        <Link href="/criar-conta">
+        <Link href="/signup">
           <span className="underline">{t('login.create_an_account')}</span>
         </Link>
       </div>

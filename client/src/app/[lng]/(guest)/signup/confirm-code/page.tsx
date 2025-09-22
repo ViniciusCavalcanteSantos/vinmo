@@ -24,7 +24,7 @@ export default function Page() {
   }, [token])
 
   useEffect(() => {
-    if(!emailConfirmation) router.push("/criar-conta")
+    if(!emailConfirmation) router.push("/signup")
   }, [emailConfirmation])
 
   const sendCode = async() => {
@@ -49,7 +49,7 @@ export default function Page() {
       notification.warning({
         message: res.message,
       });
-      router.push('/criar-conta')
+      router.push('/signup')
       return;
     }
 
@@ -66,7 +66,7 @@ export default function Page() {
       description: t('login.you_can_proceed_with_registration')
     });
     console.log('teste')
-    router.push('/criar-conta/finalizar')
+    router.push('/signup/finish')
   }
 
   return (

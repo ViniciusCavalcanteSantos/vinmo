@@ -41,7 +41,7 @@ export default function Page() {
       message: t('login.email_code_sent'),
       description: t('login.check_your_inbox')
     });
-    router.push('/criar-conta/confirmar-codigo')
+    router.push('/signup/confirm-code')
   }
 
   return (
