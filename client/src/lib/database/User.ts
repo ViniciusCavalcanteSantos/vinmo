@@ -9,11 +9,8 @@ interface AuthSuccess {
     };
 }
 
-interface AuthError {
-    error: string;
-}
 export async function login(email: string, password: string) {
-    const data = await apiFetch<AuthSuccess | AuthError>("/login", {
+    const data = await apiFetch<AuthSuccess>("/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
     });
@@ -26,21 +23,21 @@ export async function login(email: string, password: string) {
 }
 
 export async function send_code(email: string) {
-    return await apiFetch<{ status: number } | AuthError>("/send_code", {
+    return await apiFetch("/send_code", {
         method: "POST",
         body: JSON.stringify({email}),
     });
 }
 
 export async function confirm_code(email: string, code: string) {
-    return await apiFetch<{ status: number } | AuthError>("/confirm_code", {
+    return await apiFetch("/confirm_code", {
         method: "POST",
         body: JSON.stringify({email, code}),
     });
 }
 
 export async function register(name: string, email: string, password: string, password_confirmation: string) {
-    const res = await apiFetch<AuthSuccess | AuthError>("/register", {
+    const res = await apiFetch<AuthSuccess>("/register", {
         method: "POST",
         body: JSON.stringify({ name, email, password, password_confirmation }),
     });

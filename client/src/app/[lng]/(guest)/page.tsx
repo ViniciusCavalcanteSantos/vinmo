@@ -11,6 +11,7 @@ import {PrimaryButton} from "@/components/PrimaryButton";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useRouter} from "next/navigation";
 import {useT} from "@/i18n/client";
+import {ApiStatus} from "@/types/ApiResponse";
 
 export default function Page() {
   const { t } = useT()
@@ -25,13 +26,13 @@ export default function Page() {
 
   const handleFinish = async(values: any) => {
     const res = await login(values.email, values.password)
-    if("error" in res) {
+    if(res.status !== ApiStatus.SUCCESS) {
       notification.info({
-        message: res.error,
+        message: res.message
       });
       return;
     }
-    
+
     setToken(res.token)
     setUser(res.user)
     router.push("/home")

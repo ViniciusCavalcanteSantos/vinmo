@@ -9,6 +9,7 @@ import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useT} from "@/i18n/client";
+import {ApiStatus} from "@/types/ApiResponse";
 
 export default function Page() {
   const { t } = useT()
@@ -28,9 +29,9 @@ export default function Page() {
 
   const sendCode = async() => {
     const res = await send_code(emailConfirmation ?? "")
-    if("error" in res) {
+    if(res.status !== ApiStatus.SUCCESS) {
       notification.info({
-        message: res.error,
+        message: res.message,
       });
       return;
     }
@@ -44,10 +45,10 @@ export default function Page() {
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await confirm_code(emailConfirmation ?? "", values.code)
-    if("error" in res) {
+    if(res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
-        message: res.error,
+        message: res.message,
       });
       return;
     }
@@ -56,6 +57,7 @@ export default function Page() {
       message: t('login.email_verified_successfully'),
       description: t('login.you_can_proceed_with_registration')
     });
+    console.log('teste')
     router.push('/criar-conta/finalizar')
   }
 

@@ -13,6 +13,7 @@ import {ExternalLinkIcon} from "@/components/Icons/LinkIcon";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useT} from "@/i18n/client";
 import {Trans} from "react-i18next";
+import {ApiStatus} from "@/types/ApiResponse";
 
 export default function Page() {
   const { t } = useT();
@@ -30,10 +31,10 @@ export default function Page() {
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await register(values.name, emailConfirmation ?? "", values.password, values.password_confirmation)
-    if("error" in res) {
+    if(res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
-        message: res.error,
+        message: res.message,
       });
       return;
     }
