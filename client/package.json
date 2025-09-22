@@ -15,10 +15,15 @@
     "@ant-design/icons": "^5.6.1",
     "@ant-design/nextjs-registry": "^1.1.0",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "accept-language": "^3.0.20",
     "antd": "^5.27.3",
+    "i18next": "^25.5.2",
+    "i18next-browser-languagedetector": "^8.2.0",
+    "i18next-resources-to-backend": "^1.2.1",
     "next": "15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-i18next": "^15.7.3",
     "react-use": "^17.6.0"
   },
   "devDependencies": {
