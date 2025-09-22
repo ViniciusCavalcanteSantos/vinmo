@@ -1,5 +1,6 @@
 import ApiResponse, {ApiStatus} from "@/types/ApiResponse";
 import {redirect} from "next/navigation";
+import i18next from "@/i18n/i18next";
 
 export type ApiFetchResponse<T = undefined> = ApiResponse & (T extends undefined ? {} : T);
 
@@ -9,8 +10,10 @@ export default async function apiFetch<T = undefined>(path: string | URL | Reque
             ? localStorage.getItem("token")
             : null;
 
+    const lang = i18next.language;
     const headers = {
         "Content-Type": "application/json",
+        "Accept-Language": lang,
         ...(options.headers || {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {})
     };
