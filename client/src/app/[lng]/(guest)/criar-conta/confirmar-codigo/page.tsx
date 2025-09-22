@@ -45,6 +45,14 @@ export default function Page() {
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await confirm_code(emailConfirmation ?? "", values.code)
+    if(res.status === ApiStatus.MAX_ATTEMPTS) {
+      notification.warning({
+        message: res.message,
+      });
+      router.push('/criar-conta')
+      return;
+    }
+
     if(res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({

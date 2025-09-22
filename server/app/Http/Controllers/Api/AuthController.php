@@ -64,8 +64,8 @@ class AuthController extends Controller
             $attemptsMax = config('auth.max_email_confirmation_attempts');
             if ($attempts >= $attemptsMax) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => 'Número máximo de tentativas atingido.',
+                    'status' => 'max_attempts',
+                    'message' => 'Número máximo de tentativas atingido',
                 ], 422);
             }
 
