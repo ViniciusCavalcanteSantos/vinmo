@@ -7,6 +7,7 @@ use App\Mail\EmailConfirmation;
 use App\Mail\EmailPasswordReset;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,84 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => __('Code sent successfully'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('We had a problem sending your email, please try again later'),
+            ], 500);
+        }
+    }
+
+    public function validate_recovery_token(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required|size:64',
+            'email' => 'required|email|max:255',
+        ]);
+        if ($validator->fails()) return response()->json([
+            'status' => 'error',
+            'message' => $validator->errors()->first()
+        ], 422);
+
+        try {
+            $user = User::where('email', $request->email)->first();
+            if(!$user) return response()->json([
+                'status' => 'error',
+                'message' => __("We can't find a user with that e-mail address"),
+            ]);
+
+            $status = Password::tokenExists($user, $request->token);
+            if(!$status) return response()->json([
+                'status' => 'error',
+                'message' => __('Token not found or has expired'),
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Token validated successfully'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('We had a problem sending your email, please try again later'),
+            ], 500);
+        }
+    }
+
+    public function change_password(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required|size:64',
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+        if ($validator->fails()) return response()->json([
+            'status' => 'error',
+            'message' => $validator->errors()->first()
+        ], 422);
+
+        try {
+            $status = Password::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($user, $password) {
+                    $user->forceFill([
+                        'password' => bcrypt($password),
+                    ])->save();
+
+                    event(new PasswordReset($user));
+                }
+            );
+
+            if($status !== Password::PasswordReset) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => __('Password reset link has expired. Please request a new one'),
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Your password was successfully changed'),
             ]);
         } catch (\Exception $e) {
             return response()->json([

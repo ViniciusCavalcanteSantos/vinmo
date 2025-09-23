@@ -56,6 +56,20 @@ export async function send_recovery_link(email: string) {
     });
 }
 
+export async function validate_recovery_token(email: string, token: string) {
+    return await apiFetch("/validate_recovery_token", {
+        method: "POST",
+        body: JSON.stringify({email, token}),
+    });
+}
+
+export async function change_password(email: string, token: string, password: string, password_confirmation: string) {
+    return await apiFetch("/change_password", {
+        method: "POST",
+        body: JSON.stringify({email, token, password, password_confirmation}),
+    });
+}
+
 export async function getUser() {
     return apiFetch("/user");
 }
