@@ -6,7 +6,7 @@ import Link from "next/link";
 import {register} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {ExternalLinkIcon} from "@/components/Icons/LinkIcon";
@@ -18,16 +18,12 @@ import {ApiStatus} from "@/types/ApiResponse";
 export default function Page() {
   const { t } = useT();
   const notification = useNotification();
-  const [token, setToken] = useLocalStorage("token")
-  const [_, setUser] = useLocalStorage("user")
+  const [_, setToken] = useLocalStorage("token")
+  const [__, setUser] = useLocalStorage("user")
   const [emailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
   const router = useRouter();
 
-  useEffect(() => {
-    if(token) router.push("/home")
-  }, [token])
-  
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await register(values.name, emailConfirmation ?? "", values.password, values.password_confirmation)

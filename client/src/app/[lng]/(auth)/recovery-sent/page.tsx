@@ -17,13 +17,9 @@ import {Trans} from "react-i18next";
 export default function Page() {
   const { t } = useT()
   const notification = useNotification();
-  const [token] = useLocalStorage("token")
   const [sending, setSending] = useState(false)
   const router = useRouter();
   const [emailRecovery] = useLocalStorage("emailRecovery", null)
-  useEffect(() => {
-    if(token) router.push("/home")
-  }, [token])
 
   useEffect(() => {
     if(!emailRecovery) router.push("/forgot-password")

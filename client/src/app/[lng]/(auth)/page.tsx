@@ -16,13 +16,9 @@ import {ApiStatus} from "@/types/ApiResponse";
 export default function Page() {
   const { t } = useT()
   const notification = useNotification();
-  const [token, setToken] = useLocalStorage("token")
-  const [_, setUser] = useLocalStorage("user")
+  const [_, setToken] = useLocalStorage("token")
+  const [__, setUser] = useLocalStorage("user")
   const router = useRouter();
-
-  useEffect(() => {
-    if(token) router.push("/home")
-  }, [token])
 
   const handleFinish = async(values: any) => {
     const res = await login(values.email, values.password)

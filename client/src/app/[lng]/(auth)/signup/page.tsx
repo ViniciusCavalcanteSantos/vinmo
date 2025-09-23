@@ -16,15 +16,10 @@ import {ApiStatus} from "@/types/ApiResponse";
 export default function Page() {
   const { t } = useT()
   const notification = useNotification();
-  const [token] = useLocalStorage("token")
   const [_, setEmailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
   const router = useRouter();
 
-  useEffect(() => {
-    if(token) router.push("/home")
-  }, [token])
-  
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await send_code(values.email)

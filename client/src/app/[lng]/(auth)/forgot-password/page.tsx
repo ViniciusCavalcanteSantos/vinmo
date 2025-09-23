@@ -6,7 +6,7 @@ import Link from "next/link";
 import {send_recovery_link} from "@/lib/database/User";
 import {useLocalStorage} from "react-use";
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useNotification} from "@/contexts/NotificationContext";
@@ -16,15 +16,10 @@ import {ApiStatus} from "@/types/ApiResponse";
 export default function Page() {
   const { t } = useT()
   const notification = useNotification();
-  const [token] = useLocalStorage("token")
   const [sending, setSending] = useState(false)
   const [_, setEmailRecovery] = useLocalStorage("emailRecovery", null)
   const router = useRouter();
 
-  useEffect(() => {
-    if(token) router.push("/home")
-  }, [token])
-  
   const handleFinish = async(values: any) => {
     setSending(true)
     const res = await send_recovery_link(values.email)
