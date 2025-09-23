@@ -53,6 +53,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'url_client' => env('APP_URL_CLIENT', 'http://localhost:3000'),
 
     /*
     |--------------------------------------------------------------------------

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\EmailConfirmation;
+use App\Mail\EmailPasswordReset;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -35,6 +37,42 @@ class AuthController extends Controller
             Cache::put('confirmation_email', $request->email);
 
             Mail::to($request->email)->send(new EmailConfirmation($code));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Code sent successfully'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('We had a problem sending your email, please try again later'),
+            ], 500);
+        }
+    }
+
+    public function send_recovery_link(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:255',
+        ]);
+        if ($validator->fails()) return response()->json([
+            'status' => 'error',
+            'message' => $validator->errors()->first()
+        ], 422);
+
+        try {
+            $user = User::where('email', $request->email)->first();
+            if(!$user) return response()->json([
+                'status' => 'error',
+                'message' => __("We can't find a user with that e-mail address"),
+            ]);
+
+            $token = $user->currentAccessToken();
+            if(!$token) {
+                $token = Password::createToken($user);
+            }
+
+            Mail::to($request->email)->send(new EmailPasswordReset($user, $token));
 
             return response()->json([
                 'status' => 'success',

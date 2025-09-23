@@ -76,7 +76,7 @@ export default function Page() {
       </Form.Item>
 
       <div className="flex justify-center">
-        <Link href="/recuperar-senha">
+        <Link href="/forgot-password">
           <span className="underline underline-offset-2">{t('login.cant_get_in')}</span>
         </Link>
         <span className="px-2  text-lead-dark">•</span>

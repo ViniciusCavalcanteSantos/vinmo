@@ -49,6 +49,13 @@ export async function register(name: string, email: string, password: string, pa
     return res;
 }
 
+export async function send_recovery_link(email: string) {
+    return await apiFetch("/send_recovery_link", {
+        method: "POST",
+        body: JSON.stringify({email}),
+    });
+}
+
 export async function getUser() {
     return apiFetch("/user");
 }

@@ -5,6 +5,7 @@ export const PrimaryButton = (props: ButtonProps) => {
     <Button
       {...props}
       style={{
+        fontWeight: "500",
         padding: "19px 12px",
         borderRadius: 4,
         ...(props.style || {}),
