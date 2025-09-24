@@ -9,6 +9,9 @@
 }
 
 @theme inline {
+  --breakpoint-xss: 380px;
+  --breakpoint-xs: 480px;
+
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-lead-dark: var(--lead-dark);
