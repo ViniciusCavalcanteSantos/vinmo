@@ -27,7 +27,7 @@ const themeBody = {
 
 const themeAntd = {
   colorPrimary: theme.primary,
-
+  fontFamily: "var(--font-geist-sans), sans-serif",
 } as Partial<AliasToken>
 
 export default theme

@@ -7,6 +7,7 @@ import {themeBody} from "@/theme";
 import {languages} from "@/i18n/settings";
 const geistSans = Geist({
   variable: "--font-geist-sans",
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
 });
 
