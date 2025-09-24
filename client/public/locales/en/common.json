@@ -1,4 +1,34 @@
 {
+  "seo": {
+    "signin": {
+      "title": "Sign in",
+      "description": "Access your Vinmo account."
+    },
+    "signup": {
+      "title": "Sign up",
+      "description": "Create your Vinmo account."
+    },
+    "confirm_code": {
+      "title": "Verify email",
+      "description": "Confirm your Vinmo email."
+    },
+    "finish": {
+      "title": "Account verified",
+      "description": "Email successfully verified."
+    },
+    "reset_password": {
+      "title": "Reset password",
+      "description": "Set a new Vinmo password."
+    },
+    "recovery_sent": {
+      "title": "Email sent",
+      "description": "Password reset link sent."
+    },
+    "forgot_password": {
+      "title": "Forgot password",
+      "description": "Recover your Vinmo password."
+    }
+  },
   "login": {
     "sign_in": "Sign in",
     "sign_in_to_continue":  "Sign in to continue",
