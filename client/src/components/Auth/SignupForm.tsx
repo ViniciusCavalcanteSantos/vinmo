@@ -69,7 +69,7 @@ export default function SignupForm() {
       </Form.Item>
 
       <div className="flex justify-center">
-        <Link href="/">
+        <Link href="/signin">
           <span className="underline underline-offset-2">{t('login.already_have_a_account')}</span>
         </Link>
       </div>

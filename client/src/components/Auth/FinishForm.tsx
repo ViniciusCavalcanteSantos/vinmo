@@ -101,8 +101,8 @@ export default function FinishForm() {
         <Trans
           i18nKey="login.signup_terms"
           components={{
-            tos: <Link href="/" className='inline-flex items-center gap-1 !underline hover:!no-underline'></Link>,
-            pp: <Link href="/" className='inline-flex items-center gap-1 !underline hover:!no-underline'></Link>,
+            tos: <Link href="/service-terms" className='inline-flex items-center gap-1 !underline hover:!no-underline'></Link>,
+            pp: <Link href="/privacy-policy" className='inline-flex items-center gap-1 !underline hover:!no-underline'></Link>,
             icon: <ExternalLinkIcon />
           }}
         />

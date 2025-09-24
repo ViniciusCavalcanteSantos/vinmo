@@ -66,7 +66,7 @@ export default function RecoverySentForm() {
         <Trans
           i18nKey="login.if_you_havent_rececived_the_email_check_your_spam"
           components={{
-            su: <Link href="/" className='inline-flex items-center gap-1 '></Link>,
+            su: <Link href="/signup" className='inline-flex items-center gap-1 '></Link>,
           }}
         />
       </p>

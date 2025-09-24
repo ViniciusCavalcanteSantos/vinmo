@@ -47,7 +47,7 @@ export default function ResetPasswordForm() {
     notification.success({
       message: res.message,
     });
-    router.push('/')
+    router.push('/signin')
   }
 
   return(
@@ -90,7 +90,7 @@ export default function ResetPasswordForm() {
       </Form.Item>
 
       <div className="flex justify-center">
-        <Link href="/">
+        <Link href="/signin">
           <span className="underline underline-offset-2">{t('login.return_to_log_in')}</span>
         </Link>
       </div>

@@ -68,7 +68,7 @@ export default function ForgotPasswordForm() {
       </Form.Item>
 
       <div className="flex justify-center">
-        <Link href="/client/public">
+        <Link href="/signin">
           <span className="underline underline-offset-2">{t('login.return_to_log_in')}</span>
         </Link>
       </div>
