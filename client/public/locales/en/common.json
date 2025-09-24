@@ -1,5 +1,9 @@
 {
   "seo": {
+    "landpage": {
+      "title": "The AI that organizes and delivers your photos quickly",
+      "description": "Our platform recognizes faces in your photos, creates individual galleries for each client or guest, and automates delivery. No more manually sorting photos."
+    },
     "signin": {
       "title": "Sign in",
       "description": "Access your Vinmo account."

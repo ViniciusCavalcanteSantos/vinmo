@@ -1,5 +1,9 @@
 {
   "seo": {
+    "landpage": {
+      "title": "A IA que organiza e entrega suas fotos com velocidade",
+      "description": "Nossa plataforma identifica os rostos em suas fotos, cria galerias individuais para cada cliente ou convidado e automatiza sua entrega. Chega de separar fotos manualmente."
+    },
     "signin": {
       "title": "Entrar",
       "description": "Acesse sua conta Vinmo."
