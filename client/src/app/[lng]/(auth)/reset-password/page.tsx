@@ -3,17 +3,25 @@
 import {Form, Input} from "antd";
 import {MailOutlined} from "@ant-design/icons";
 import Link from "next/link";
-import {change_password, send_recovery_link, validate_recovery_token} from "@/lib/database/User";
-import {useLocalStorage} from "react-use";
+import {change_password, validate_recovery_token} from "@/lib/database/User";
 import {useRouter, useSearchParams} from "next/navigation";
-import {useEffect, useState} from "react";
+import {Suspense, useEffect, useState} from "react";
 import Logo from "@/components/Logo";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse"
+import Fallback from "@/components/Fallback";
 
 export default function Page() {
+  return (
+    <Suspense fallback={<Fallback />}>
+      <ResetPasswordForm />
+    </Suspense>
+  );
+}
+
+async function ResetPasswordForm() {
   const { t } = useT()
   const notification = useNotification();
   const [sending, setSending] = useState(false);
@@ -51,7 +59,7 @@ export default function Page() {
     router.push('/')
   }
 
-  return (
+  return(
     <Form
       initialValues={{ remember: true }}
       style={{ maxWidth: 360 }}
