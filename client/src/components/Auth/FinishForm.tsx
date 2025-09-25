@@ -18,7 +18,6 @@ import {ApiStatus} from "@/types/ApiResponse";
 export default function FinishForm() {
   const { t } = useT();
   const notification = useNotification();
-  const [_, setToken] = useLocalStorage("token")
   const [__, setUser] = useLocalStorage("user")
   const [emailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
@@ -40,7 +39,7 @@ export default function FinishForm() {
       description: t('login.start_using_immediately')
     });
 
-    setToken(res.token)
+    localStorage.setItem("token", res.token);
     setUser(res.user)
     router.push("/home")
   }

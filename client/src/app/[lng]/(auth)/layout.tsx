@@ -1,16 +1,14 @@
 "use client"
 
 import {PropsWithChildren, useEffect} from "react";
-import {useLocalStorage} from "react-use";
 import {useRouter} from "next/navigation";
 
 export default function Layout({children}: PropsWithChildren) {
   const router = useRouter();
-  const [token] = useLocalStorage("token")
-
   useEffect(() => {
+    const token = localStorage.getItem("token")
     if(token) router.push("/home")
-  }, [token])
+  }, [])
 
   return (
     <div className="h-full flex justify-center items-center">

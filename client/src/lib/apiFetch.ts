@@ -13,6 +13,7 @@ export default async function apiFetch<T = undefined>(path: string | URL | Reque
     const lang = i18next.language;
     const headers = {
         "Content-Type": "application/json",
+        "Accept": "application/json",
         "Accept-Language": lang,
         ...(options.headers || {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {})

@@ -1,7 +1,7 @@
 "use client"
 
 import Logo from "@/components/Logo";
-import {Form, Input} from "antd";
+import {Checkbox, Form, Input} from "antd";
 import {LockOutlined, MailOutlined} from "@ant-design/icons";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import Link from "next/link";
@@ -15,12 +15,11 @@ import {ApiStatus} from "@/types/ApiResponse";
 export default function SigninForm() {
   const { t } = useT()
   const notification = useNotification();
-  const [_, setToken] = useLocalStorage("token")
   const [__, setUser] = useLocalStorage("user")
   const router = useRouter();
 
   const handleFinish = async(values: any) => {
-    const res = await login(values.email, values.password)
+    const res = await login(values.email, values.password, values.remember_me)
     if(res.status !== ApiStatus.SUCCESS) {
       notification.info({
         message: res.message
@@ -28,7 +27,7 @@ export default function SigninForm() {
       return;
     }
 
-    setToken(res.token)
+    localStorage.setItem("token", res.token);
     setUser(res.user)
     router.push("/home")
   }
@@ -59,9 +58,18 @@ export default function SigninForm() {
         label={t('login.password')}
         name="password"
         rules={[{ required: true, min: 6, max: 255  }]}
-        style={{marginBottom: 24}}
+        style={{marginBottom: 10}}
       >
         <Input.Password prefix={<LockOutlined style={{ marginRight: 8 }} />} placeholder={t('login.password')} style={{ padding: "10px 16px" }} />
+      </Form.Item>
+
+      <Form.Item
+        name="remember_me"
+        valuePropName="checked"
+        initialValue={false}
+        style={{marginBottom: 10}}
+      >
+        <Checkbox>{t('login.remember_me')}</Checkbox>
       </Form.Item>
 
       <Form.Item>

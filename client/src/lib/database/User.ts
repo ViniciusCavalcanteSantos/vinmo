@@ -9,10 +9,10 @@ interface AuthSuccess {
     };
 }
 
-export async function login(email: string, password: string) {
+export async function login(email: string, password: string, remember_me: boolean){
     const data = await apiFetch<AuthSuccess>("/login", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, remember_me }),
     });
 
     if ("token" in data && typeof window !== "undefined") {

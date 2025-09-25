@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Mail\EmailConfirmation;
 use App\Mail\EmailPasswordReset;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -206,7 +205,7 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            Cache::put('email_verified_at', Carbon::now()->toDateTimeString());
+            Cache::put('email_verified_at', now()->toDateTimeString());
             return response()->json([
                 'status' => 'success',
                 'message' => __('Email verified successfully'),
@@ -257,6 +256,17 @@ class AuthController extends Controller
 
     public function login(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+            'remember_me' => 'boolean'
+        ]);
+
+        if ($validator->fails()) return response()->json([
+            'status' => 'error',
+            'message' => $validator->errors()->first()
+        ], 422);
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'status' => 'error',
@@ -264,13 +274,19 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $expiresAt = null;
+        if($request->remember_me) {
+            $expiresAt = now()->addWeek();
+
+        }
+
         $user = Auth::user();
-        $token = $user->createToken('api_token')->plainTextToken;
+        $token = $user->createToken('api_token', ['*'], $expiresAt);
 
         return response()->json([
             'status' => 'success',
             'message' => __('Login successfully'),
-            'token' => $token,
+            'token' => $token->plainTextToken,
             'user' => $user->only(['id', 'name', 'email']),
         ]);
     }
