@@ -40,7 +40,7 @@ export async function generateMetadata(
   };
 }
 
-async function RootLayout({
+async function LocaleLayout({
   children,
   params
 }: Readonly<{
@@ -54,7 +54,7 @@ async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
         style={themeBody}
       >
-        <Providers>
+        <Providers lang={lng}>
             {children}
         </Providers>
       </body>
@@ -62,4 +62,4 @@ async function RootLayout({
   );
 }
 
-export default RootLayout
+export default LocaleLayout

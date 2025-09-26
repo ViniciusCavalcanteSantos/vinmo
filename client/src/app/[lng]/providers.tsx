@@ -7,12 +7,10 @@ import {themeAntd} from "@/theme";
 import {NotificationProvider} from "@/contexts/NotificationContext";
 import en from 'antd/locale/en_US';
 import ptBR from 'antd/locale/pt_BR';
-import i18next from "@/i18n/i18next";
 import {Locale} from "antd/es/locale";
 
 
-export default function Providers({children}: PropsWithChildren) {
-  const lang = i18next.language
+export default function Providers({children, lang}: PropsWithChildren<{ lang: string }>) {
   const langMap: Record<string, Locale>  = {
     'en': en,
     'pt-BR': ptBR
