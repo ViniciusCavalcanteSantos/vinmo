@@ -83,5 +83,15 @@
     "": ""
   },
   "full_name": "Full name",
-  "enter_full_name": "Enter your full name"
+  "enter_full_name": "Enter your full name",
+  "profile": "Profile",
+  "logout": "Logout",
+  "global_navigation": "Global navigation",
+  "open_main_menu": "Open main menu",
+  "close_menu": "Close menu",
+  "contracts": "Contracts",
+  "events": "Events",
+  "clients": "Clients",
+  "team_members": "Team Members",
+  "photo_sorter": "Photo Sorter"
 }

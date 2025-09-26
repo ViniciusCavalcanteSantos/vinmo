@@ -83,5 +83,15 @@
     "": ""
   },
   "full_name": "Nome completo",
-  "enter_full_name": "Digitar o seu nome completo"
+  "enter_full_name": "Digitar o seu nome completo",
+  "profile": "Perfil",
+  "logout": "Sair",
+  "global_navigation": "Navegação Global",
+  "open_main_menu": "Abrir menu principal",
+  "close_menu": "Fechar menu",
+  "contracts": "Contratos",
+  "events": "Eventos",
+  "clients": "Clientes",
+  "team_members": "Membros da Equipe",
+  "photo_sorter": "Separadora de Fotos"
 }

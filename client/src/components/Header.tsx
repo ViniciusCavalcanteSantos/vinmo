@@ -1,245 +1,131 @@
 "use client"
 
-import {useState} from "react";
+import {CSSProperties, useState} from "react";
 import Link from "next/link";
+import Logo from "@/components/Logo";
+import {
+  AliwangwangOutlined,
+  CalendarOutlined, CameraOutlined,
+  CloseOutlined,
+  FileTextOutlined,
+  MenuOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
+import {useT} from "@/i18n/client";
+import useUser from "@/hooks/useUser";
+import UserAvatarDropdown from "@/components/UserAvatarDropdown";
+import {Button, Divider} from "antd";
+import theme from "@/theme";
 
 export default function Header() {
+  const user = useUser();
   const [open, setOpen] = useState(false);
+  const {t} = useT()
+
+  // user.picture = "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg"
+  const iconsStyle = { fontSize: 20, color: theme.neutralEmphasis} as CSSProperties
+  const menu = [
+    {title: t('contracts'), link: "/contracts", icon: <FileTextOutlined style={iconsStyle} />},
+    {title: t('events'), link: "/contracts", icon: <CalendarOutlined style={iconsStyle} />},
+    {title: t('clients'), link: "/clients", icon: <TeamOutlined style={iconsStyle} />},
+    {title: t('team_members'), link: "/team-members", icon: <AliwangwangOutlined style={iconsStyle} />},
+    {title: t('photo_sorter'), link: "/photo-sorter", icon: <CameraOutlined style={iconsStyle} />}
+  ]
 
   return (
-    <header className="bg-gray-900">
-      <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-        <div className="flex lg:flex-1">
+    <header className="bg-foreground border-b-1 border-dark-muted">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+        <div className="flex lg:flex-1 items-center">
+          <div className="mr-4">
+            <button
+              className="rounded-md bg-white border-1 border-border cursor-pointer hover:bg-neutral-muted"
+              onClick={() => setOpen(true)}
+            >
+              <MenuOutlined className="p-2 !text-neutral-emphasis" />
+              <span className="sr-only">{t('open_main_menu')}</span>
+            </button>
+          </div>
+
           <Link href="/home" className="-m-1.5 p-1.5">
-            <span className="sr-only">Vinmo</span>
-            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt=""
-                 className="h-8 w-auto"/>
+            <div className="flex items-center justify-center text-[28px] text-lead-dark">
+              <Logo width={32}/>
+              <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
+            </div>
           </Link>
         </div>
-        <div className="flex lg:hidden">
-          <button type="button" onClick={() => setOpen(!open)}
-                  className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400 cursor-pointer">
-            <span className="sr-only">Open main menu</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" data-slot="icon"
-                 aria-hidden="true" className="size-6">
-              <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" strokeLinecap="round"
-                    strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-        <div className="hidden lg:flex lg:gap-x-12">
-          <div className="relative">
-            <Link href="#" className="flex items-center gap-x-1 text-sm/6 font-semibold text-white">
-              Contratos
 
-              {/*<svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"*/}
-              {/*     className="size-5 flex-none text-gray-500">*/}
-              {/*  <path*/}
-              {/*    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"*/}
-              {/*    clipRule="evenodd" fillRule="evenodd"/>*/}
-              {/*</svg>*/}
-            </Link>
+        <UserAvatarDropdown user={user}/>
+      </div>
 
-            {/*<el-popover id="desktop-menu-product" anchor="bottom" popover
-                        className="w-screen max-w-md overflow-hidden rounded-3xl bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(3)] backdrop:bg-transparent open:block data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in">
-              <div className="p-4">
-                <div
-                  className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-white/5">
-                  <div
-                    className="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                         data-slot="icon" aria-hidden="true"
-                         className="size-6 text-gray-400 group-hover:text-white">
-                      <path d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" stroke-linecap="round"
-                            stroke-linejoin="round"/>
-                      <path d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" stroke-linecap="round"
-                            stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="flex-auto">
-                    <a href="#" className="block font-semibold text-white">
-                      Analytics
-                      <span className="absolute inset-0"></span>
-                    </a>
-                    <p className="mt-1 text-gray-400">Get a better understanding of your traffic</p>
-                  </div>
-                </div>
-                <div
-                  className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-white/5">
-                  <div
-                    className="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                         data-slot="icon" aria-hidden="true"
-                         className="size-6 text-gray-400 group-hover:text-white">
-                      <path
-                        d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672ZM12 2.25V4.5m5.834.166-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243-1.59-1.59"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="flex-auto">
-                    <a href="#" className="block font-semibold text-white">
-                      Engagement
-                      <span className="absolute inset-0"></span>
-                    </a>
-                    <p className="mt-1 text-gray-400">Speak directly to your customers</p>
-                  </div>
-                </div>
-                <div
-                  className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-white/5">
-                  <div
-                    className="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                         data-slot="icon" aria-hidden="true"
-                         className="size-6 text-gray-400 group-hover:text-white">
-                      <path
-                        d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="flex-auto">
-                    <a href="#" className="block font-semibold text-white">
-                      Security
-                      <span className="absolute inset-0"></span>
-                    </a>
-                    <p className="mt-1 text-gray-400">Your customers’ data will be safe and secure</p>
-                  </div>
-                </div>
-                <div
-                  className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-white/5">
-                  <div
-                    className="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                         data-slot="icon" aria-hidden="true"
-                         className="size-6 text-gray-400 group-hover:text-white">
-                      <path
-                        d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="flex-auto">
-                    <a href="#" className="block font-semibold text-white">
-                      Integrations
-                      <span className="absolute inset-0"></span>
-                    </a>
-                    <p className="mt-1 text-gray-400">Connect with third-party tools</p>
-                  </div>
-                </div>
-                <div
-                  className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-white/5">
-                  <div
-                    className="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-700/50 group-hover:bg-gray-700">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                         data-slot="icon" aria-hidden="true"
-                         className="size-6 text-gray-400 group-hover:text-white">
-                      <path
-                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="flex-auto">
-                    <a href="#" className="block font-semibold text-white">
-                      Automations
-                      <span className="absolute inset-0"></span>
-                    </a>
-                    <p className="mt-1 text-gray-400">Build strategic funnels that will convert</p>
-                  </div>
-                </div>
+      <div
+        className={`
+          fixed w-full h-full top-0 right-0
+          ${open ? "" : "pointer-events-none"}
+        `}
+      >
+        <div
+          onClick={() => setOpen(false)}
+          className={`
+          absolute w-full h-full top-0 right-0 
+          bg-overlay transition-opacity duration-300 
+          ${open ? "opacity-100" : "opacity-0 pointer-events-none"}
+        `}></div>
+
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="global-navigation-id"
+          className={`
+            transition-transform duration-300 ${open ? '' : '-translate-x-full'} ease-in-out
+            h-full w-full max-w-80 bg-white fixed left-0 rounded-l-xl shadow-[0_0_0_1px_rgba(209,217,224,0.5),0_-6px_12px_-3px_rgba(37,41,46,0.04),0_-6px_18px_0_rgba(37,41,46,0.12)]
+            max-xss:!w-[calc(100%-2rem)]
+          `}>
+          <h1 id="global-navigation-id" className="sr-only">Global navigation{t('global_navigation')}</h1>
+          <div className="h-full w-full flex flex-col p-2">
+            <div className="flex justify-between items-center px-2 pt-2 pb-6">
+              <div className="">
+                <span className="sr-only">Vinmo</span>
+                <Logo width={32}/>
               </div>
-              <div className="grid grid-cols-2 divide-x divide-white/10 bg-gray-700/50">
-                <a href="#"
-                   className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-white hover:bg-gray-700/50">
-                  <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"
-                       className="size-5 flex-none text-gray-500">
-                    <path
-                      d="M2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm6.39-2.908a.75.75 0 0 1 .766.027l3.5 2.25a.75.75 0 0 1 0 1.262l-3.5 2.25A.75.75 0 0 1 8 12.25v-4.5a.75.75 0 0 1 .39-.658Z"
-                      clipRule="evenodd" fillRule="evenodd"/>
-                  </svg>
-                  Watch demo
-                </a>
-                <a href="#"
-                   className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-white hover:bg-gray-700/50">
-                  <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"
-                       className="size-5 flex-none text-gray-500">
-                    <path
-                      d="M2 3.5A1.5 1.5 0 0 1 3.5 2h1.148a1.5 1.5 0 0 1 1.465 1.175l.716 3.223a1.5 1.5 0 0 1-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 0 0 6.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 0 1 1.767-1.052l3.223.716A1.5 1.5 0 0 1 18 15.352V16.5a1.5 1.5 0 0 1-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 0 1 2.43 8.326 13.019 13.019 0 0 1 2 5V3.5Z"
-                      clipRule="evenodd" fillRule="evenodd"/>
-                  </svg>
-                  Contact sales
-                </a>
-              </div>
-            </el-popover>*/}
-          </div>
 
-          <Link href="#" className="text-sm/6 font-semibold text-white hover:text-fuchsia-200">Eventos</Link>
-          <Link href="#" className="text-sm/6 font-semibold text-white">Clientes</Link>
-          <Link href="#" className="text-sm/6 font-semibold text-white">Usuários</Link>
-          <Link href="#" className="text-sm/6 font-semibold text-white">Separação</Link>
-        </div>
-      </nav>
-      <div>
-        <dialog id="mobile-menu" className={`backdrop:bg-transparent flex ${open ? '' : 'hidden'}`}>
-          <div tabIndex={0} className={`fixed inset-0 focus:outline-none`}>
-            <div
-              className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
-              <div className="flex items-center justify-between">
-                <Link href="/home" className="-m-1.5 p-1.5">
-                  <span className="sr-only">Vinmo</span>
-                  <img
-                    src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="" className="h-8 w-auto"/>
-                </Link>
-                <button type="button" onClick={() => setOpen(!open)}
-                        className="-m-2.5 rounded-md p-2.5 text-gray-400 cursor-pointer">
-                  <span className="sr-only">Close menu</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
-                       data-slot="icon" aria-hidden="true" className="size-6">
-                    <path d="M6 18 18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-              <div className="mt-6 flow-root">
-                <div className="-my-6 divide-y divide-white/10">
-                  <div className="space-y-2 py-6">
-                    <Link href="/Contratos"
-                          className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Eventos</Link>
-                    <Link href="/eventos"
-                          className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Eventos</Link>
-                    <Link href="/clientes"
-                          className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Clientes</Link>
-                    <Link href="/usuarios"
-                          className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5">Usuários</Link>
-
-                    <div className="-mx-3">
-                      <button type="button"
-                              className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-white hover:bg-white/5">
-                        Separação
-                        <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon"
-                             aria-hidden="true"
-                             className="size-5 flex-none in-aria-expanded:rotate-180">
-                          <path
-                            d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                            clipRule="evenodd" fillRule="evenodd"/>
-                        </svg>
-                      </button>
-                    </div>
-
-                    <div id="products" className="mt-2 block space-y-2">
-                      <Link href="#"
-                            className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-white hover:bg-white/5">
-                        Criar Nova
-                      </Link>
-                      <Link href="#"
-                         className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-white hover:bg-white/5">
-                        Ver Separações
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <button
+                className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted-dark hover:[&>span]:!text-dark cursor-pointer"
+                onClick={() => setOpen(false)}
+              >
+                <span className="sr-only">{t('close_menu')}</span>
+                <CloseOutlined className="!text-neutral-emphasis text-sm" />
+              </button>
             </div>
+            
+            <nav className="">
+              <ul className="flex flex-col gap-1">
+                {menu.map((item, index) => (
+                  <li key={index}>
+                    <Link href={item.link}>
+                      <Button
+                        className="w-full flex !justify-start !text-dark !px-2"
+                        type="text"
+                        icon={item.icon}
+                      >
+                        {item.title}
+                      </Button>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="">
+                <Divider className="!my-4 !border-border-muted" />
+              </div>
+
+              <div className="px-2">
+                {/*<h2 className="text-neutral-emphasis text-xs font-bold">Events</h2>*/}
+              </div>
+            </nav>
           </div>
-        </dialog>
+        </div>
       </div>
     </header>
   )
 }
+

@@ -5,25 +5,40 @@
   --white: #fff;
   --black: #000;
   --background: #FAFBFC;
-  --foreground: #f8f8f8;
+  --foreground: #f6f8fa;
 }
 
 @theme inline {
   --breakpoint-xss: 380px;
   --breakpoint-xs: 480px;
-
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-lead-dark: var(--lead-dark);
   --color-lead-light: var(--lead-light);
   --color-lead-lighter: var(--lead-lighter);
 
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-dark: var(--muted-dark);
+
+  --color-neutral-emphasis: var(--neutral-emphasis);
+  --color-neutral-muted: var(--neutral-muted);
+
+  --color-dark: var(--dark);
+  --color-dark-muted: var(--dark-muted);
+
+  --color-border: var(--border);
+  --color-border-muted: var(--border-muted);
+
+  --color-overlay: var(--overlay);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
