@@ -13,7 +13,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/me', [AuthController::class, 'me']);
+
+    Route::get('/locations/countries', [LocationController::class, 'getCountries']);
+    Route::get('/locations/countries/{country_cca2}/states', [LocationController::class, 'getStates']);
+    Route::get('/locations/countries/{country_cca2}/states/{state_code}/cities', [LocationController::class, 'getCities']);
 });
