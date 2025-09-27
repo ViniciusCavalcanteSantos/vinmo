@@ -4,6 +4,7 @@ import {Button, Card, Empty, Flex, Table, TableColumnsType} from "antd";
 import {useState} from "react";
 import {TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
+import CreateContractModal from "@/components/CreateContractModal";
 import {useT} from "@/i18n/client";
 
 interface DataType {
@@ -16,6 +17,7 @@ interface DataType {
 export default function Page() {
   const { t } = useT();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [open, setOpen] = useState(false);
 
   const columns: TableColumnsType<DataType> = [
     {title: 'Type', dataIndex: 'type'},
@@ -81,6 +83,12 @@ export default function Page() {
             </Empty>
           ),
         }}
+      />
+
+      <CreateContractModal
+        open={open}
+        onCreate={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
       />
     </Card>
   );
