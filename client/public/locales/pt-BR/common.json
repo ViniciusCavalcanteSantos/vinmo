@@ -143,5 +143,8 @@
   "full_time": "Integral",
   "elementary_school": "Educação infantil",
   "middle_school": "Ensino fundamental",
-  "high_school": "Ensino médio"
+  "high_school": "Ensino médio",
+  "code": "Código",
+  "title": "Título",
+  "uf": "UF"
 }

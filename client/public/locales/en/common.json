@@ -143,5 +143,8 @@
   "full_time": "Full-time",
   "elementary_school": "Preschool",
   "middle_school": "Elementary School",
-  "high_school": "High School"
+  "high_school": "High School",
+  "code": "Código",
+  "title": "Título",
+  "uf": "UF"
 }

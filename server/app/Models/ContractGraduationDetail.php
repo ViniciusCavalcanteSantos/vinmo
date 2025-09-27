@@ -13,4 +13,14 @@ class ContractGraduationDetail extends Model
     public function contract() {
         return $this->belongsTo(Contract::class);
     }
+
+    public function isUniversity()
+    {
+        return $this->type === 'university';
+    }
+
+    public function isSchool()
+    {
+        return $this->type === 'school';
+    }
 }

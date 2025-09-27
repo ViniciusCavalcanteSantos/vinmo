@@ -124,7 +124,7 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
         return;
       }
       handleClean();
-      onCreate(res);
+      onCreate(res.contract);
     })
       .catch(() => {});
   }

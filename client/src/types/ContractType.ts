@@ -20,17 +20,22 @@ type ContractType = {
   id: number,
   code: string,
   title: string,
-  graduation_details?: {
+  address: {
+    granularity: string,
+    city: string,
+    state: string,
+    country: string,
+  }
+  graduationDetails?: {
     type: graduationDetailsType,
-    institution_name: string,
-    institution_acronym?: string,
-    class: string,
+    institutionName: string,
+    institutionAcronym?: string,
+    className: string,
     shift: graduationDetailsShift
-    conclusion_year: number,
-
-    university_course?: string,
-    school_grade_level?: graduationDetailsSchoolLevel,
-  },
+    conclusionYear: number,
+    universityCourse?: string,
+    schoolGradeLevel?: graduationDetailsSchoolLevel,
+  }
 }
 
 export default ContractType

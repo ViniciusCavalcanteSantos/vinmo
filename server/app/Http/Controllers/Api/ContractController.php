@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreContractRequest;
+use App\Http\Resources\ContractResource;
 use App\Models\Contract;
 use App\Models\ContractCategory;
 use App\Services\ContractService;
@@ -18,7 +19,17 @@ class ContractController extends Controller
      */
     public function index()
     {
-        //
+        $user_id = auth()->id();
+        $contracts = Contract
+            ::where('user_id', $user_id)
+            ->with('address')
+            ->with('graduationDetail')
+            ->get();
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Contracts retrieved successfully'),
+            'contracts' => ContractResource::collection($contracts),
+        ]);
     }
 
     /**
@@ -28,10 +39,11 @@ class ContractController extends Controller
     {
         try {
             $contract = $contractService->createContract($request);
+            $contract->load('category', 'graduationDetail');
             return response()->json([
                 'status' => 'success',
                 'message' => __('Contract created!'),
-                'contract' => $contract
+                'contract' => new ContractResource($contract)
             ]);
 
         } catch (\Exception $e) {
