@@ -22,7 +22,6 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const {t} = useT()
 
-  // user.picture = "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg"
   const iconsStyle = { fontSize: 20, color: theme.neutralEmphasis} as CSSProperties
   const menu = [
     {title: t('contracts'), link: "/contracts", icon: <FileTextOutlined style={iconsStyle} />},
@@ -59,7 +58,7 @@ export default function Header() {
 
       <div
         className={`
-          fixed w-full h-full top-0 right-0
+          fixed w-full h-full top-0 right-0 z-1001
           ${open ? "" : "pointer-events-none"}
         `}
       >
