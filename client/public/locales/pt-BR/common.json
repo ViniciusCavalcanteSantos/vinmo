@@ -146,5 +146,8 @@
   "high_school": "Ensino médio",
   "code": "Código",
   "title": "Título",
-  "uf": "UF"
+  "uf": "UF",
+  "actions": "Ações",
+  "pagination_one": "{{start}}-{{end}} de {{total}} item",
+  "pagination_other": "{{start}}-{{end}} de {{total}} itens"
 }

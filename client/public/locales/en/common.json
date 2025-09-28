@@ -146,5 +146,8 @@
   "high_school": "High School",
   "code": "Código",
   "title": "Título",
-  "uf": "UF"
+  "uf": "UF",
+  "actions": "Actions",
+  "pagination_one": "{{start}}-{{end}} of {{total}} item",
+  "pagination_other": "{{start}}-{{end}} of {{total}} items"
 }

@@ -17,18 +17,29 @@ class ContractController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user_id = auth()->id();
+        $perPage = $request->input('per_page', 15);
+
         $contracts = Contract
             ::where('user_id', $user_id)
             ->with('address')
             ->with('graduationDetail')
-            ->get();
+            ->latest()
+            ->paginate($perPage);
         return response()->json([
             'status' => 'success',
             'message' => __('Contracts retrieved successfully'),
             'contracts' => ContractResource::collection($contracts),
+            'meta' => [
+                'total' => $contracts->total(),
+                'current_page' => $contracts->currentPage(),
+                'last_page' => $contracts->lastPage(),
+                'per_page' => $contracts->perPage(),
+                'from' => $contracts->firstItem(),
+                'to' => $contracts->lastItem(),
+            ],
         ]);
     }
 

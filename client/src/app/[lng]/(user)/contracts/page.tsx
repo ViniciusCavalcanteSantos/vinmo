@@ -1,14 +1,27 @@
 "use client"
 
-import {Button, Card, Empty, Flex, Table, TableColumnsType} from "antd";
+import {
+  Button,
+  Card,
+  Dropdown,
+  Empty,
+  Flex,
+  MenuProps,
+  Space,
+  Table,
+  TableColumnsType,
+  TablePaginationConfig,
+  Tooltip
+} from "antd";
 import {useEffect, useState} from "react";
-import {TableRowSelection} from "antd/es/table/interface";
+import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import CreateContractModal from "@/components/CreateContractModal";
 import {useT} from "@/i18n/client";
 import {getContracts} from "@/lib/database/Contract";
 import ContractType from "@/types/ContractType";
 import {ApiStatus} from "@/types/ApiResponse";
+import {DeleteOutlined, EditOutlined, MoreOutlined} from "@ant-design/icons";
 
 export default function Page() {
   const { t } = useT();
@@ -17,11 +30,43 @@ export default function Page() {
   const [contracts, setContracts] = useState<ContractType[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 15,
+    total: 0,
+  });
+
   const columns: TableColumnsType<ContractType> = [
     {title: t('code'), dataIndex: 'code'},
     {title: t('title'), dataIndex: 'title'},
     {title: t('city'), dataIndex: ['address', 'city']},
     {title: t('uf'), dataIndex: ['address', 'state']},
+    {
+      title: t('actions'),
+      key: 'actions',
+      align: 'center',
+      width: 120, // É bom definir uma largura fixa para a coluna de ações
+      render: (_, record) => (
+        <Space size="middle">
+          <Tooltip title={t('edit')}>
+            <Button
+              type="text"
+              shape="circle"
+              icon={<EditOutlined />}
+              onClick={() => (record)}
+            />
+          </Tooltip>
+          <Tooltip title={t('delete')}>
+            <Button
+              type="text"
+              shape="circle"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => (record)}
+            />
+          </Tooltip>
+        </Space>)
+    }
     // {title: 'Events', dataIndex: 'events'},
     // {title: 'Photos uploaded', dataIndex: 'photos_uploaded'},
     // {title: 'Photos sorted', dataIndex: 'photos_sorted'},
@@ -29,15 +74,31 @@ export default function Page() {
   ];
 
   useEffect(() => {
-    (async() => {
+    const fetchContracts = async() => {
       setLoading(true)
-      const res = await getContracts()
+      if(!pagination.current || !pagination.pageSize) return;
+
+      const res = await getContracts(pagination.current, pagination.pageSize)
       if(res.status === ApiStatus.SUCCESS) {
         setContracts(res.contracts)
-        setLoading(false)
+        setPagination(prev => ({
+          ...prev,
+          total: res.meta.total,
+        }));
       }
-    })()
-  }, [])
+      setLoading(false)
+    }
+
+    fetchContracts()
+  }, [pagination.current, pagination.pageSize])
+
+  const handleTableChange = (
+    newPagination: TablePaginationConfig,
+    filters: Record<string, any>,
+    sorter: SorterResult<ContractType> | SorterResult<ContractType>[]
+  ) => {
+    setPagination(newPagination);
+  };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -68,7 +129,7 @@ export default function Page() {
           {t('contracts')}
         </h2>
         <Flex gap="small">
-          <Search placeholder={t('search_contract')} style={{width: 240}} loading={false}/>
+          <Search placeholder={t('search_contract')} style={{width: 240}} loading={false} />
           <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
         </Flex>
       </Flex>
@@ -80,6 +141,14 @@ export default function Page() {
         dataSource={contracts}
         bordered={true}
         loading={loading}
+        scroll={{ x: 'max-content' }}
+        pagination={{
+          ...pagination,
+          showSizeChanger: true,
+          pageSizeOptions: ['15', '30', '50', '100'],
+          showTotal: (total, range) => t('pagination', {start: range[0], end: range[1], total, count: total}),
+        }}
+        onChange={handleTableChange}
         locale={{
           emptyText: (
             <Empty
