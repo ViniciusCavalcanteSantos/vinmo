@@ -1,18 +1,6 @@
 "use client"
 
-import {
-  Button,
-  Card,
-  Dropdown,
-  Empty,
-  Flex,
-  MenuProps,
-  Space,
-  Table,
-  TableColumnsType,
-  TablePaginationConfig,
-  Tooltip
-} from "antd";
+import {Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
 import {useEffect, useState} from "react";
 import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
@@ -21,10 +9,10 @@ import {useT} from "@/i18n/client";
 import {getContracts} from "@/lib/database/Contract";
 import ContractType from "@/types/ContractType";
 import {ApiStatus} from "@/types/ApiResponse";
-import {DeleteOutlined, EditOutlined, MoreOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 
 export default function Page() {
-  const { t } = useT();
+  const {t} = useT();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [open, setOpen] = useState(false);
   const [contracts, setContracts] = useState<ContractType[]>([]);
@@ -45,14 +33,14 @@ export default function Page() {
       title: t('actions'),
       key: 'actions',
       align: 'center',
-      width: 120, // É bom definir uma largura fixa para a coluna de ações
+      width: 120,
       render: (_, record) => (
         <Space size="middle">
           <Tooltip title={t('edit')}>
             <Button
               type="text"
               shape="circle"
-              icon={<EditOutlined />}
+              icon={<EditOutlined/>}
               onClick={() => (record)}
             />
           </Tooltip>
@@ -61,7 +49,7 @@ export default function Page() {
               type="text"
               shape="circle"
               danger
-              icon={<DeleteOutlined />}
+              icon={<DeleteOutlined/>}
               onClick={() => (record)}
             />
           </Tooltip>
@@ -74,12 +62,12 @@ export default function Page() {
   ];
 
   useEffect(() => {
-    const fetchContracts = async() => {
+    const fetchContracts = async () => {
       setLoading(true)
-      if(!pagination.current || !pagination.pageSize) return;
+      if (!pagination.current || !pagination.pageSize) return;
 
       const res = await getContracts(pagination.current, pagination.pageSize)
-      if(res.status === ApiStatus.SUCCESS) {
+      if (res.status === ApiStatus.SUCCESS) {
         setContracts(res.contracts)
         setPagination(prev => ({
           ...prev,
@@ -110,7 +98,17 @@ export default function Page() {
   };
 
   const hasSelected = selectedRowKeys.length > 0;
-  const handleDelete = () => {}
+
+  const handleCreate = (contract: ContractType) => {
+    setContracts([contract, ...contracts]);
+  }
+
+  const handleEdit = (contract: ContractType) => {
+
+  }
+
+  const handleDelete = () => {
+  }
 
   const header = hasSelected ? () => {
     return (
@@ -129,7 +127,7 @@ export default function Page() {
           {t('contracts')}
         </h2>
         <Flex gap="small">
-          <Search placeholder={t('search_contract')} style={{width: 240}} loading={false} />
+          <Search placeholder={t('search_contract')} style={{width: 240}} loading={false}/>
           <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
         </Flex>
       </Flex>
@@ -141,7 +139,7 @@ export default function Page() {
         dataSource={contracts}
         bordered={true}
         loading={loading}
-        scroll={{ x: 'max-content' }}
+        scroll={{x: 'max-content'}}
         pagination={{
           ...pagination,
           showSizeChanger: true,
@@ -167,7 +165,7 @@ export default function Page() {
 
       <CreateContractModal
         open={open}
-        onCreate={() => setOpen(false)}
+        onCreate={handleCreate}
         onCancel={() => setOpen(false)}
       />
     </Card>

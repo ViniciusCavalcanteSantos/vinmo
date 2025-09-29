@@ -9,8 +9,6 @@ use App\Models\Contract;
 use App\Models\ContractCategory;
 use App\Services\ContractService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class ContractController extends Controller
 {
@@ -50,7 +48,7 @@ class ContractController extends Controller
     {
         try {
             $contract = $contractService->createContract($request);
-            $contract->load('category', 'graduationDetail');
+            $contract->load('address', 'graduationDetail');
             return response()->json([
                 'status' => 'success',
                 'message' => __('Contract created!'),

@@ -5,6 +5,7 @@ import {useT} from "@/i18n/client";
 import {createContract} from "@/lib/database/Contract";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
+import ContractType from "@/types/ContractType";
 
 interface OptionType {
   value: string;
@@ -14,12 +15,12 @@ interface OptionType {
 // Props do componente
 interface CreateContractModalProps {
   open: boolean;
-  onCreate: (values: any) => void;
+  onCreate: (values: ContractType) => void;
   onCancel: () => void;
 }
 
-const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreate, onCancel }) => {
-  const { t } = useT();
+const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate, onCancel}) => {
+  const {t} = useT();
   const notification = useNotification();
 
   const [form] = Form.useForm();
@@ -31,7 +32,7 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
   const [graduationType, setGraduationType] = useState('');
 
   // Estados para os dados de localização
-  const [categories, setCategories] = useState<{name: string, slug:string}[]>([]);
+  const [categories, setCategories] = useState<{ name: string, slug: string }[]>([]);
   const [countries, setCountries] = useState<OptionType[]>([]);
   const [states, setStates] = useState<OptionType[]>([]);
   const [cities, setCities] = useState<OptionType[]>([]);
@@ -58,7 +59,7 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
 
 
   const handleCountryChange = (countryCode: string) => {
-    form.setFieldsValue({ state: null, city: null });
+    form.setFieldsValue({state: null, city: null});
     setStates([]);
     setCities([]);
     if (countryCode) {
@@ -70,7 +71,7 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
   };
 
   const handleStateChange = (stateCode: string) => {
-    form.setFieldsValue({ city: null });
+    form.setFieldsValue({city: null});
     setCities([]);
     const countryCode = form.getFieldValue('country');
     if (stateCode && countryCode) {
@@ -112,12 +113,12 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
   }
 
   const handleOk = () => {
-    form.validateFields().then(async(values) => {
+    form.validateFields().then(async (values) => {
       if (values.conclusion_year) {
         values.conclusion_year = values.conclusion_year.year(); // pega apenas o ano
       }
       const res = await createContract(values);
-      if(res.status !== ApiStatus.SUCCESS) {
+      if (res.status !== ApiStatus.SUCCESS) {
         notification.warning({
           message: res.message
         })
@@ -126,7 +127,8 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
       handleClean();
       onCreate(res.contract);
     })
-      .catch(() => {});
+      .catch(() => {
+      });
   }
   return (
     <Modal
@@ -142,55 +144,57 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
         {/* CAMPOS COMUNS */}
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item name="category" label={t('category')} rules={[{ required: true, message: t('select_category')+"!" }]}>
+            <Form.Item name="category" label={t('category')}
+                       rules={[{required: true, message: t('select_category') + "!"}]}>
               <Select placeholder={t('select_category')}
                       onChange={handleCategoryChange}
                       options={categories.map(category => {
                         return {value: category.slug, label: category.name};
-                      })} />
+                      })}/>
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="code" label={t('contract_code')} rules={[{ required: true, message: t('enter_contract_code') }]}>
-              <Input placeholder={t('contract_code_ex')} />
+            <Form.Item name="code" label={t('contract_code')}
+                       rules={[{required: true, message: t('enter_contract_code')}]}>
+              <Input placeholder={t('contract_code_ex')}/>
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item name="title" label={t('contract_title')} rules={[{ required: true, message: t('enter_title') }]}>
-          <Input placeholder={t('contract_title_ex')} />
+        <Form.Item name="title" label={t('contract_title')} rules={[{required: true, message: t('enter_title')}]}>
+          <Input placeholder={t('contract_title_ex')}/>
         </Form.Item>
 
         {/* CAMPOS DE LOCALIZAÇÃO */}
         <Row gutter={16}>
           <Col span={8}>
-            <Form.Item name="country" label={t('country')} rules={[{ required: true, message: t('select_country') }]}>
+            <Form.Item name="country" label={t('country')} rules={[{required: true, message: t('select_country')}]}>
               <Select showSearch placeholder={t('select_country')}
                       loading={loadingCountries}
                       onChange={handleCountryChange}
                       options={countries}
                       filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} />
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="state" label={t('state_province')} rules={[{ required: true, message: t('select_state')}]}>
+            <Form.Item name="state" label={t('state_province')} rules={[{required: true, message: t('select_state')}]}>
               <Select showSearch placeholder={t('select_state')}
                       loading={loadingStates}
                       disabled={!country || loadingStates}
                       onChange={handleStateChange}
                       options={states}
                       filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} />
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="city" label={t('city')} rules={[{ required: true, message: t('enter_city') }]} >
+            <Form.Item name="city" label={t('city')} rules={[{required: true, message: t('enter_city')}]}>
               <AutoComplete placeholder={t('enter_or_select')}
                             disabled={!state}
                             options={cities}
                             filterOption={(inputValue, option) =>
                               (option?.label ?? '').toUpperCase().includes(inputValue.toUpperCase())}>
-                <Input />
+                <Input/>
               </AutoComplete>
             </Form.Item>
           </Col>
@@ -199,7 +203,7 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
         {category === 'graduation' && (
           <>
             <Divider>{t('graduation_details')}</Divider>
-            <Form.Item name="type" label={t('graduation_type')} rules={[{ required: true, message: t('select_type') }]}>
+            <Form.Item name="type" label={t('graduation_type')} rules={[{required: true, message: t('select_type')}]}>
               <Radio.Group onChange={(e) => setGraduationType(e.target.value)}>
                 <Radio value="university">{t('university')}</Radio>
                 <Radio value="school">{t('school')}</Radio>
@@ -211,31 +215,31 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
                 <Row gutter={16}>
                   <Col span={16}>
                     <Form.Item name="institution_name" label={t('institution_name')}
-                               rules={[{ required: true, message: t('enter_institution_name') }]}>
-                      <Input />
+                               rules={[{required: true, message: t('enter_institution_name')}]}>
+                      <Input/>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item name="institution_acronym" label={t('acronym_optional')}>
-                      <Input />
+                      <Input/>
                     </Form.Item>
                   </Col>
                 </Row>
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item name="class" label={t('class')}
-                               rules={[{ required: true, message: t('enter_class') }]}>
-                      <Input />
+                               rules={[{required: true, message: t('enter_class')}]}>
+                      <Input/>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item name="shift" label={t('shift')}
-                               rules={[{ required: true, message: t('select_shift') }]}>
+                               rules={[{required: true, message: t('select_shift')}]}>
                       <Select placeholder={t('select')} options={[
-                        { value: 'morning', label: t('morning') },
-                        { value: 'afternoon', label: t('afternoon') },
-                        { value: 'night', label: t('night') },
-                        { value: 'full_time', label: t('full_time') },
+                        {value: 'morning', label: t('morning')},
+                        {value: 'afternoon', label: t('afternoon')},
+                        {value: 'night', label: t('night')},
+                        {value: 'full_time', label: t('full_time')},
                       ]}/>
                     </Form.Item>
                   </Col>
@@ -243,16 +247,16 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item name="conclusion_year" label={t('conclusion_year')}
-                               rules={[{ required: true, message: t('select_year') }]}>
-                      <DatePicker picker="year" style={{ width: '100%' }} />
+                               rules={[{required: true, message: t('select_year')}]}>
+                      <DatePicker picker="year" style={{width: '100%'}}/>
                     </Form.Item>
                   </Col>
 
                   {graduationType === 'university' && (
                     <Col span={12}>
                       <Form.Item name="university_course" label={t('course_name')}
-                                 rules={[{ required: true, message: t('enter_course_name') }]}>
-                        <Input />
+                                 rules={[{required: true, message: t('enter_course_name')}]}>
+                        <Input/>
                       </Form.Item>
                     </Col>
                   )}
@@ -260,12 +264,12 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({ open, onCreat
                   {graduationType === 'school' && (
                     <Col span={12}>
                       <Form.Item name="school_grade_level" label={t('grade_level')}
-                                 rules={[{ required: true, message: t('select_grade_level') }]}>
+                                 rules={[{required: true, message: t('select_grade_level')}]}>
                         <Select placeholder={t('select')} options={[
-                          { value: 'elementary_school', label: t('elementary_school') },
-                          { value: 'middle_school', label: t('middle_school') },
-                          { value: 'high_school', label: t('high_school') },
-                        ]} />
+                          {value: 'elementary_school', label: t('elementary_school')},
+                          {value: 'middle_school', label: t('middle_school')},
+                          {value: 'high_school', label: t('high_school')},
+                        ]}/>
                       </Form.Item>
                     </Col>
                   )}
