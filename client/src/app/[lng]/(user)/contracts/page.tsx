@@ -1,23 +1,22 @@
 "use client"
 
 import {Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import CreateContractModal from "@/components/CreateContractModal";
 import {useT} from "@/i18n/client";
-import {getContracts} from "@/lib/database/Contract";
 import ContractType from "@/types/ContractType";
-import {ApiStatus} from "@/types/ApiResponse";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
+import {useContracts} from "@/contexts/ContractsContext";
+import {ApiStatus} from "@/types/ApiResponse";
 
 export default function Page() {
   const {t} = useT();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [open, setOpen] = useState(false);
-  const [contracts, setContracts] = useState<ContractType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {contracts, fetchContracts, loadingContracts} = useContracts();
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
@@ -69,24 +68,20 @@ export default function Page() {
     // {title: 'Size', dataIndex: 'size'},
   ];
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    const res = await getContracts(pagination.current!, pagination.pageSize!, searchTermDebounce);
-
+  const fetchData = async () => {
+    const res = await fetchContracts(pagination.current, pagination.pageSize!, searchTermDebounce);
     if (res.status === ApiStatus.SUCCESS) {
-      setContracts(res.contracts);
       setPagination(prev => ({
         ...prev,
         total: res.meta.total,
       }));
     }
-    setLoading(false);
     setLoadingSearch(false)
-  }, [pagination.current, pagination.pageSize, searchTermDebounce]);
+  }
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [searchTermDebounce]);
 
   const handleTableChange = (
     newPagination: TablePaginationConfig,
@@ -94,6 +89,9 @@ export default function Page() {
     sorter: SorterResult<ContractType> | SorterResult<ContractType>[]
   ) => {
     setPagination(newPagination);
+    fetchContracts(newPagination.current!, newPagination.pageSize!, searchTerm).then(data => {
+      setPagination(prev => ({...prev, total: data.meta.total}));
+    });
   };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -107,15 +105,8 @@ export default function Page() {
 
   const hasSelected = selectedRowKeys.length > 0;
 
-  const handleCreate = () => {
-    fetchData();
-    setOpen(false)
-  }
-
-  const handleEdit = (contract: ContractType) => {
-
-  }
-
+  const handleCreate = () => setOpen(false)
+  const handleEdit = () => setOpen(false)
   const handleDelete = () => {
   }
 
@@ -148,7 +139,7 @@ export default function Page() {
         columns={columns}
         dataSource={contracts}
         bordered={true}
-        loading={loading}
+        loading={loadingContracts}
         scroll={{x: 'max-content'}}
         pagination={{
           ...pagination,

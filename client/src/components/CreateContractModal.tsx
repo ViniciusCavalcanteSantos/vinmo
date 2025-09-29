@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {AutoComplete, Col, DatePicker, Divider, Form, Input, Modal, Radio, Row, Select,} from 'antd';
 import {getCategories, getCities, getCountries, getStates} from "@/lib/database/Location";
 import {useT} from "@/i18n/client";
-import {createContract} from "@/lib/database/Contract";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import ContractType from "@/types/ContractType";
+import {useContracts} from "@/contexts/ContractsContext";
 
 interface OptionType {
   value: string;
@@ -22,6 +22,7 @@ interface CreateContractModalProps {
 const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate, onCancel}) => {
   const {t} = useT();
   const notification = useNotification();
+  const {createContract} = useContracts();
 
   const [form] = Form.useForm();
   const country = Form.useWatch('country', form);
@@ -113,20 +114,21 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate
   }
 
   const handleOk = () => {
-    form.validateFields().then(async (values) => {
-      if (values.conclusion_year) {
-        values.conclusion_year = values.conclusion_year.year(); // pega apenas o ano
-      }
-      const res = await createContract(values);
-      if (res.status !== ApiStatus.SUCCESS) {
-        notification.warning({
-          message: res.message
-        })
-        return;
-      }
-      handleClean();
-      onCreate(res.contract);
-    })
+    form.validateFields()
+      .then(async (values) => {
+        if (values.conclusion_year) {
+          values.conclusion_year = values.conclusion_year.year();
+        }
+        const res = await createContract(values);
+        if (res.status !== ApiStatus.SUCCESS) {
+          notification.warning({
+            message: res.message
+          })
+          return;
+        }
+        handleClean();
+        onCreate(res.contract);
+      })
       .catch(() => {
       });
   }

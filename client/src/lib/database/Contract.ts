@@ -1,7 +1,7 @@
 import apiFetch from "@/lib/apiFetch";
 import ContractType from "@/types/ContractType";
 
-export interface PaginatedContractsResponse {
+export interface FetchContractsResponse {
   contracts: ContractType[];
   meta: {
     current_page: number;
@@ -11,7 +11,11 @@ export interface PaginatedContractsResponse {
   };
 }
 
-export async function getContracts(page: number, pageSize: number, searchTerm: string) {
+export interface CreateContractResponse {
+  contract: ContractType
+}
+
+export async function fetchContracts(page: number, pageSize: number, searchTerm: string) {
   const query = new URLSearchParams({
     page: String(page),
     per_page: String(pageSize)
@@ -21,16 +25,24 @@ export async function getContracts(page: number, pageSize: number, searchTerm: s
     query.append('search', searchTerm);
   }
 
-  return await apiFetch<PaginatedContractsResponse>(`/contract?${query.toString()}`, {
+  return await apiFetch<FetchContractsResponse>(`/contract?${query.toString()}`, {
     method: "GET",
   });
 }
 
+
 export async function createContract(values: any) {
-  const data = await apiFetch<{ contract: ContractType }>("/contract", {
+  const data = await apiFetch<CreateContractResponse>("/contract", {
     method: "POST",
     body: JSON.stringify(values),
   });
 
   return data;
+}
+
+
+export async function updateContract(values: any) {
+}
+
+export async function deleteContract(id: string) {
 }
