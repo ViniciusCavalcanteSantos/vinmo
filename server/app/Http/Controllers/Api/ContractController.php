@@ -19,13 +19,18 @@ class ContractController extends Controller
     {
         $user_id = auth()->id();
         $perPage = $request->input('per_page', 15);
+        $searchTerm = $request->input('search');
 
-        $contracts = Contract
+        $contractsQuery = Contract
             ::where('user_id', $user_id)
-            ->with('address')
-            ->with('graduationDetail')
-            ->latest()
-            ->paginate($perPage);
+            ->with('address', 'graduationDetail')
+            ->latest();
+
+        $contractsQuery->when($searchTerm, function ($query, $term) {
+            $query->where('searchable', "LIKE", "%{$term}%");
+        });
+
+        $contracts = $contractsQuery->paginate($perPage);
         return response()->json([
             'status' => 'success',
             'message' => __('Contracts retrieved successfully'),
