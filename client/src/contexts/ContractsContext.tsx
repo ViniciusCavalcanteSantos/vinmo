@@ -26,7 +26,7 @@ const ContractsContext = createContext<UserDataContextType | undefined>(undefine
 
 export const ContractsProvider = ({children}: { children: React.ReactNode }) => {
   const [contracts, setContracts] = useState<ContractType[]>([]);
-  const [loadingContracts, setLoadingContracts] = useState(false);
+  const [loadingContracts, setLoadingContracts] = useState(true);
 
   const fetchContracts = async (page: number = 1, pageSize: number = 15, searchTerm?: string) => {
     setLoadingContracts(true);

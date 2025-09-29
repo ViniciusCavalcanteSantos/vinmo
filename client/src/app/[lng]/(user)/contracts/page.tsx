@@ -22,7 +22,6 @@ export default function Page() {
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
   useDebounce(() => {
     setSearchTermDebounce(searchTerm);
-    setLoadingSearch(true);
   }, 300, [searchTerm])
 
   const [pagination, setPagination] = useState<TablePaginationConfig>({
@@ -75,6 +74,7 @@ export default function Page() {
   ];
 
   const fetchData = async () => {
+    setLoadingSearch(true);
     const res = await fetchContracts(pagination.current, pagination.pageSize!, searchTermDebounce);
     if (res.status === ApiStatus.SUCCESS) {
       setPagination(prev => ({
