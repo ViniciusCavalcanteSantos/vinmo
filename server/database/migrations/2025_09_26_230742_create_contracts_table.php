@@ -22,6 +22,8 @@ return new class extends Migration {
             $table->text('searchable')->nullable();
             $table->fullText('searchable');
             $table->timestamps();
+
+            $table->unique(['user_id', 'code']);
         });
     }
 
