@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreContractRequest;
+use App\Http\Requests\UpdateContractRequest;
 use App\Http\Resources\ContractResource;
 use App\Models\Contract;
 use App\Models\ContractCategory;
@@ -23,7 +24,7 @@ class ContractController extends Controller
 
         $contractsQuery = Contract
             ::where('user_id', $user_id)
-            ->with('address', 'graduationDetail')
+            ->with('category', 'address', 'graduationDetail')
             ->latest();
 
         $contractsQuery->when($searchTerm, function ($query, $term) {
@@ -53,7 +54,7 @@ class ContractController extends Controller
     {
         try {
             $contract = $contractService->createContract($request);
-            $contract->load('address', 'graduationDetail');
+            $contract->load('category', 'address', 'graduationDetail');
             return response()->json([
                 'status' => 'success',
                 'message' => __('Contract created!'),
@@ -79,9 +80,23 @@ class ContractController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateContractRequest $request, Contract $contract, ContractService $contractService)
     {
-        //
+        try {
+            $contract = $contractService->updateContract($contract, $request);
+            $contract->load('category', 'address', 'graduationDetail');
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Contract updated!'),
+                'contract' => new ContractResource($contract)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Could not perform action')
+            ]);
+        }
     }
 
     /**

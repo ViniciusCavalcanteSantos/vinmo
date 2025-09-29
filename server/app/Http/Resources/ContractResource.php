@@ -19,7 +19,7 @@ class ContractResource extends JsonResource
             'code' => $this->code,
             'title' => $this->title,
             'createdAt' => $this->created_at->toIso8601String(),
-
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'address' => new AddressResource($this->whenLoaded('address')),
             'graduationDetails' => new GraduationDetailResource($this->whenLoaded('graduationDetail')),
         ];

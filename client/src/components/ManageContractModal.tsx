@@ -6,6 +6,7 @@ import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import ContractType from "@/types/ContractType";
 import {useContracts} from "@/contexts/ContractsContext";
+import dayjs from "dayjs";
 
 interface OptionType {
   value: string;
@@ -13,16 +14,20 @@ interface OptionType {
 }
 
 // Props do componente
-interface CreateContractModalProps {
+interface ManageContractModalProps {
   open: boolean;
+  contract?: ContractType;
   onCreate: (values: ContractType) => void;
+  onEdit: (values: ContractType) => void;
   onCancel: () => void;
 }
 
-const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate, onCancel}) => {
+const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract, onCreate, onEdit, onCancel}) => {
   const {t} = useT();
   const notification = useNotification();
-  const {createContract} = useContracts();
+  const {createContract, updateContract} = useContracts();
+
+  const isEditMode = !!contract;
 
   const [form] = Form.useForm();
   const country = Form.useWatch('country', form);
@@ -41,7 +46,7 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate
   // Estados para controle de carregamento
   const [loadingCountries, setLoadingCountries] = useState(false);
   const [loadingStates, setLoadingStates] = useState(false);
-  const [loadingCities, setLoadingCities] = useState(false);
+  const [_, setLoadingCities] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -57,6 +62,57 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate
         })
     }
   }, [open]);
+
+  useEffect(() => {
+    const populateFields = async () => {
+      if (isEditMode && contract) {
+        form.setFieldsValue({
+          code: contract.code,
+          title: contract.title,
+          category: contract.category.slug,
+          country: contract.address.country,
+          state: contract.address.state,
+          city: contract.address.city,
+          type: contract.graduationDetails?.type,
+          institution_name: contract.graduationDetails?.institutionName,
+          institution_acronym: contract.graduationDetails?.institutionAcronym,
+          class: contract.graduationDetails?.className,
+          shift: contract.graduationDetails?.shift,
+          conclusion_year: contract.graduationDetails?.conclusionYear ? dayjs().year(contract.graduationDetails?.conclusionYear) : null,
+          university_course: contract.graduationDetails?.universityCourse,
+        });
+
+        // Atualiza os estados internos do componente que controlam a UI
+        setCategory(contract.category.slug);
+        if (contract.category.slug === 'graduation') {
+          setGraduationType(contract.graduationDetails?.type ?? '');
+        }
+
+        // Carrega estados e cidades com base nos dados do contrato
+        if (contract.address.country) {
+          setLoadingStates(true);
+          getStates(contract.address.country)
+            .then(data => {
+              setStates(data.states);
+              if (contract.address.state) {
+                setLoadingCities(true);
+                getCities(contract.address.country, contract.address.state)
+                  .then(cityData => setCities(cityData.cities))
+                  .finally(() => setLoadingCities(false));
+              }
+            })
+            .finally(() => setLoadingStates(false));
+        }
+      } else {
+        // Garante que o formulário está limpo se não for modo de edição
+        handleClean();
+      }
+    };
+
+    if (open) {
+      populateFields();
+    }
+  }, [open, contract, form, isEditMode]);
 
 
   const handleCountryChange = (countryCode: string) => {
@@ -119,7 +175,13 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate
         if (values.conclusion_year) {
           values.conclusion_year = values.conclusion_year.year();
         }
-        const res = await createContract(values);
+        let res;
+        if (isEditMode) {
+          res = await updateContract(contract.id, values);
+        } else {
+          res = await createContract(values);
+        }
+
         if (res.status !== ApiStatus.SUCCESS) {
           notification.warning({
             message: res.message
@@ -127,7 +189,11 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate
           return;
         }
         handleClean();
-        onCreate(res.contract);
+        if (isEditMode) {
+          onEdit(res.contract)
+        } else {
+          onCreate(res.contract);
+        }
       })
       .catch(() => {
       });
@@ -135,12 +201,13 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate
   return (
     <Modal
       open={open}
-      title={t('create_new_contract')}
+      title={isEditMode ? t('edit_contract') : t('create_new_contract')}
       okText={t('save_contract')}
       cancelText={t('cancel')}
       width={800}
       onCancel={handleCancel}
       onOk={handleOk}
+      destroyOnHidden
     >
       <Form form={form} layout="vertical" name="form_in_modal">
         {/* CAMPOS COMUNS */}
@@ -285,4 +352,4 @@ const CreateContractModal: React.FC<CreateContractModalProps> = ({open, onCreate
   );
 };
 
-export default CreateContractModal;
+export default ManageContractModal;

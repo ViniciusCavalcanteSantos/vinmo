@@ -36,7 +36,7 @@
   "login": {
     "sign_up": "Sign up",
     "sign_in": "Sign in",
-    "sign_in_to_continue":  "Sign in to continue",
+    "sign_in_to_continue": "Sign in to continue",
     "create_an_account": "Create an account",
     "account_created": "Account created successfully",
     "start_using_immediately": "Start using immediately!",
@@ -98,6 +98,7 @@
   "search_contract": "Search contract...",
   "add_new_contract": "Add new contract",
   "create_new_contract": "Create new contract",
+  "edit_contract": "Edit contract",
   "save_contract": "Salvar Contrato",
   "category": "Category",
   "select_category": "Select a category",

@@ -16,8 +16,8 @@ class GraduationDetailResource extends JsonResource
     {
         return [
             'type' => $this->type,
-            'institution' => $this->institution_name,
-            'acronym' => $this->institution_acronym,
+            'institutionName' => $this->institution_name,
+            'institutionAcronym' => $this->institution_acronym,
             'className' => $this->class,
             'shift' => $this->shift,
             'conclusionYear' => $this->conclusion_year,

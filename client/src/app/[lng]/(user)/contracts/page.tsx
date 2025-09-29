@@ -4,7 +4,7 @@ import {Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginati
 import {useEffect, useState} from "react";
 import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
-import CreateContractModal from "@/components/CreateContractModal";
+import ManageContractModal from "@/components/ManageContractModal";
 import {useT} from "@/i18n/client";
 import ContractType from "@/types/ContractType";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
@@ -31,6 +31,12 @@ export default function Page() {
     total: 0,
   });
 
+  const [editingContract, setEditingContract] = useState<ContractType>();
+  const editContract = (contract: ContractType) => {
+    setEditingContract(contract)
+    setOpen(true)
+  }
+
   const columns: TableColumnsType<ContractType> = [
     {title: t('code'), dataIndex: 'code'},
     {title: t('title'), dataIndex: 'title'},
@@ -48,7 +54,7 @@ export default function Page() {
               type="text"
               shape="circle"
               icon={<EditOutlined/>}
-              onClick={() => (record)}
+              onClick={() => editContract(record)}
             />
           </Tooltip>
           <Tooltip title={t('delete')}>
@@ -105,10 +111,13 @@ export default function Page() {
 
   const hasSelected = selectedRowKeys.length > 0;
 
-  const handleCreate = () => setOpen(false)
-  const handleEdit = () => setOpen(false)
-  const handleDelete = () => {
+  const handleClose = () => {
+    setEditingContract(undefined)
+    setOpen(false)
   }
+  const handleCreate = () => handleClose()
+  const handleEdit = () => handleClose()
+  const handleDelete = () => handleClose()
 
   const header = hasSelected ? () => {
     return (
@@ -164,9 +173,11 @@ export default function Page() {
         }}
       />
 
-      <CreateContractModal
+      <ManageContractModal
         open={open}
+        contract={editingContract}
         onCreate={handleCreate}
+        onEdit={handleEdit}
         onCancel={() => setOpen(false)}
       />
     </Card>

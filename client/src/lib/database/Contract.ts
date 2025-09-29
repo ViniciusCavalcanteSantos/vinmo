@@ -15,6 +15,11 @@ export interface CreateContractResponse {
   contract: ContractType
 }
 
+export interface UpdateContractResponse {
+  contract: ContractType
+}
+
+
 export async function fetchContracts(page: number, pageSize: number, searchTerm: string) {
   const query = new URLSearchParams({
     page: String(page),
@@ -41,7 +46,13 @@ export async function createContract(values: any) {
 }
 
 
-export async function updateContract(values: any) {
+export async function updateContract(id: number, values: any) {
+  const data = await apiFetch<UpdateContractResponse>(`/contract/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(values),
+  });
+
+  return data;
 }
 
 export async function deleteContract(id: string) {

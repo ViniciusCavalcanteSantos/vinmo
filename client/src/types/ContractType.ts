@@ -20,6 +20,10 @@ type ContractType = {
   id: number,
   code: string,
   title: string,
+  category: {
+    name: string,
+    slug: string,
+  }
   address: {
     granularity: string,
     city: string,

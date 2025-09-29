@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class StoreContractRequest extends FormRequest
+class UpdateContractRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,16 @@ class StoreContractRequest extends FormRequest
     public function rules(): array
     {
         $userId = $this->user()->id;
+        $contractId = $this->route('contract')->id;
         $rules = [
             'category' => ['required', 'string', 'exists:contracts_categories,slug'],
             'code' => [
                 'required',
                 'string',
                 'max:40',
-                Rule::unique('contracts', 'code')->where('user_id', $userId)
+                Rule::unique('contracts', 'code')
+                    ->where('user_id', $userId)
+                    ->ignore($contractId)
             ],
             'title' => ['required', 'string', 'max:180'],
             'country' => ['required', 'string', 'size:3', 'alpha'],
