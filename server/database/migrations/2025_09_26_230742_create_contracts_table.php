@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -19,6 +18,9 @@ return new class extends Migration
             $table->foreign('category_id')->references('id')->on('contracts_categories');
             $table->string('code', 40);
             $table->string('title', 180);
+
+            $table->text('searchable')->nullable();
+            $table->fullText('searchable');
             $table->timestamps();
         });
     }
