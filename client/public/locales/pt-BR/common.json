@@ -98,7 +98,7 @@
   "search_contract": "Buscar contrato...",
   "add_new_contract": "Adicionar novo contrato",
   "create_new_contract": "Criar novo contrato",
-  "edit_contract": "Edit contract",
+  "edit_contract": "Editar contrato",
   "save_contract": "Salvar Contrato",
   "category": "Categoria",
   "select_category": "Selecione a categoria",
@@ -150,5 +150,7 @@
   "uf": "UF",
   "actions": "Ações",
   "pagination_one": "{{start}}-{{end}} de {{total}} item",
-  "pagination_other": "{{start}}-{{end}} de {{total}} itens"
+  "pagination_other": "{{start}}-{{end}} de {{total}} itens",
+  "edit": "Editar",
+  "delete": "Excluir"
 }

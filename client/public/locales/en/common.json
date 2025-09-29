@@ -150,5 +150,7 @@
   "uf": "UF",
   "actions": "Actions",
   "pagination_one": "{{start}}-{{end}} of {{total}} item",
-  "pagination_other": "{{start}}-{{end}} of {{total}} items"
+  "pagination_other": "{{start}}-{{end}} of {{total}} items",
+  "edit": "Edit",
+  "delete": "Delete"
 }
