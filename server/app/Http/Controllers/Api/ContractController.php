@@ -57,10 +57,9 @@ class ContractController extends Controller
             $contract->load('category', 'address', 'graduationDetail');
             return response()->json([
                 'status' => 'success',
-                'message' => __('Contract created!'),
+                'message' => __('Contract created'),
                 'contract' => new ContractResource($contract)
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -87,7 +86,7 @@ class ContractController extends Controller
             $contract->load('category', 'address', 'graduationDetail');
             return response()->json([
                 'status' => 'success',
-                'message' => __('Contract updated!'),
+                'message' => __('Contract updated'),
                 'contract' => new ContractResource($contract)
             ]);
 
@@ -104,7 +103,25 @@ class ContractController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $contract = Contract::find($id);
+        if (!$contract) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Contract not found')
+            ], 404);
+        }
+
+        if (!$contract->delete()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Could not perform action')
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Contract deleted')
+        ]);
     }
 
     public function getCategories()

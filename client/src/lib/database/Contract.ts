@@ -55,5 +55,10 @@ export async function updateContract(id: number, values: any) {
   return data;
 }
 
-export async function deleteContract(id: string) {
+export async function removeContract(id: number) {
+  const data = await apiFetch(`/contract/${id}`, {
+    method: "DELETE",
+  });
+
+  return data;
 }

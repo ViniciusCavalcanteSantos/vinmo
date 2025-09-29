@@ -6,8 +6,9 @@ import {
   CreateContractResponse,
   fetchContracts as fetchContractsApi,
   FetchContractsResponse,
+  removeContract as removeContractApi,
   updateContract as updateContractApi,
-  UpdateContractResponse
+  UpdateContractResponse,
 } from "@/lib/database/Contract";
 import {ApiStatus} from "@/types/ApiResponse";
 import ContractType from "@/types/ContractType";
@@ -19,7 +20,7 @@ interface UserDataContextType {
   fetchContracts: (page?: number, pageSize?: number, searchTerm?: string) => Promise<ApiFetchResponse<FetchContractsResponse>>;
   createContract: (values: any) => Promise<ApiFetchResponse<CreateContractResponse>>;
   updateContract: (id: number, values: any) => Promise<ApiFetchResponse<UpdateContractResponse>>;
-  removeContract: (id: number) => Promise<void>;
+  removeContract: (id: number) => Promise<ApiFetchResponse>;
 }
 
 const ContractsContext = createContext<UserDataContextType | undefined>(undefined);
@@ -55,11 +56,11 @@ export const ContractsProvider = ({children}: { children: React.ReactNode }) => 
   };
 
   const removeContract = async (id: number) => {
-    // const res = await removeContractApi(id);
-    // if (res.status === ApiStatus.SUCCESS) {
-    //   setContracts(prev => prev.filter(c => c.id !== id));
-    // }
-    // return res;
+    const res = await removeContractApi(id);
+    if (res.status === ApiStatus.SUCCESS) {
+      setContracts(prev => prev.filter(c => c.id !== id));
+    }
+    return res;
   };
 
   return (

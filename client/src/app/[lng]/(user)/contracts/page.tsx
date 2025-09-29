@@ -16,7 +16,7 @@ export default function Page() {
   const {t} = useT();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [open, setOpen] = useState(false);
-  const {contracts, fetchContracts, loadingContracts} = useContracts();
+  const {contracts, fetchContracts, loadingContracts, removeContract} = useContracts();
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
@@ -62,7 +62,7 @@ export default function Page() {
               shape="circle"
               danger
               icon={<DeleteOutlined/>}
-              onClick={() => (record)}
+              onClick={() => removeContract(record.id)}
             />
           </Tooltip>
         </Space>)
