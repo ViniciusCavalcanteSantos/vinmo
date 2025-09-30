@@ -5,7 +5,8 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import {
   AliwangwangOutlined,
-  CalendarOutlined, CameraOutlined,
+  CalendarOutlined,
+  CameraOutlined,
   CloseOutlined,
   FileTextOutlined,
   MenuOutlined,
@@ -22,13 +23,13 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const {t} = useT()
 
-  const iconsStyle = { fontSize: 20, color: theme.neutralEmphasis} as CSSProperties
+  const iconsStyle = {fontSize: 20, color: theme.neutralEmphasis} as CSSProperties
   const menu = [
-    {title: t('contracts'), link: "/contracts", icon: <FileTextOutlined style={iconsStyle} />},
-    {title: t('events'), link: "/contracts", icon: <CalendarOutlined style={iconsStyle} />},
-    {title: t('clients'), link: "/clients", icon: <TeamOutlined style={iconsStyle} />},
-    {title: t('team_members'), link: "/team-members", icon: <AliwangwangOutlined style={iconsStyle} />},
-    {title: t('photo_sorter'), link: "/photo-sorter", icon: <CameraOutlined style={iconsStyle} />}
+    {title: t('contracts'), link: "/contracts", icon: <FileTextOutlined style={iconsStyle}/>},
+    {title: t('events'), link: "/events", icon: <CalendarOutlined style={iconsStyle}/>},
+    {title: t('clients'), link: "/clients", icon: <TeamOutlined style={iconsStyle}/>},
+    {title: t('team_members'), link: "/team-members", icon: <AliwangwangOutlined style={iconsStyle}/>},
+    {title: t('photo_sorter'), link: "/photo-sorter", icon: <CameraOutlined style={iconsStyle}/>}
   ]
 
   return (
@@ -40,7 +41,7 @@ export default function Header() {
               className="rounded-md bg-white border-1 border-border cursor-pointer hover:bg-neutral-muted"
               onClick={() => setOpen(true)}
             >
-              <MenuOutlined className="p-2 !text-neutral-emphasis" />
+              <MenuOutlined className="p-2 !text-neutral-emphasis"/>
               <span className="sr-only">{t('open_main_menu')}</span>
             </button>
           </div>
@@ -92,10 +93,10 @@ export default function Header() {
                 onClick={() => setOpen(false)}
               >
                 <span className="sr-only">{t('close_menu')}</span>
-                <CloseOutlined className="!text-neutral-emphasis text-sm" />
+                <CloseOutlined className="!text-neutral-emphasis text-sm"/>
               </button>
             </div>
-            
+
             <nav className="">
               <ul className="flex flex-col gap-1">
                 {menu.map((item, index) => (
@@ -114,7 +115,7 @@ export default function Header() {
               </ul>
 
               <div className="">
-                <Divider className="!my-4 !border-border-muted" />
+                <Divider className="!my-4 !border-border-muted"/>
               </div>
 
               <div className="px-2">
