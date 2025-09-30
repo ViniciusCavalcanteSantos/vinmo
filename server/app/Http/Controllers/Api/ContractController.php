@@ -24,7 +24,7 @@ class ContractController extends Controller
 
         $contractsQuery = Contract
             ::where('user_id', $user_id)
-            ->with('category', 'address', 'graduationDetail')
+            ->with(['category', 'address', 'graduationDetail'])
             ->latest();
 
         $contractsQuery->when($searchTerm, function ($query, $term) {
