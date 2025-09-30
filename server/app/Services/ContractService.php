@@ -34,7 +34,7 @@ class ContractService
                 $contract->graduationDetail()->create([
                     'type' => $validated['type'],
                     'institution_name' => $validated['institution_name'],
-                    'institution_acronym' => $validated['institution_acronym'],
+                    'institution_acronym' => $validated['institution_acronym'] ?? null,
                     'class' => $validated['class'],
                     'shift' => $validated['shift'],
                     'conclusion_year' => $validated['conclusion_year'],
