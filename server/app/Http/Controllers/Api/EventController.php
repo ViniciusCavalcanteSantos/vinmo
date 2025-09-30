@@ -93,9 +93,17 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
-        $event->delete();
+        if (!$event->delete()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Could not perform action')
+            ], 500);
+        }
 
-        return response()->json();
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Event deleted')
+        ]);
     }
 
     public function getEventTypes(\Request $request, $contract_id)
