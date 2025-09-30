@@ -16,14 +16,15 @@ enum graduationDetailsSchoolLevel {
   HIGH_SCHOOL = 'high_school',
 }
 
+export type ContractCategory = {
+  name: string, slug: string,
+}
+
 type ContractType = {
   id: number,
   code: string,
   title: string,
-  category: {
-    name: string,
-    slug: string,
-  }
+  category: ContractCategory
   address: {
     granularity: string,
     city: string,
