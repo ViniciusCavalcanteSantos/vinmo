@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEventRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Contract;
 use App\Models\Event;
@@ -55,11 +56,10 @@ class EventController extends Controller
             $event->load('type');
             return response()->json([
                 'status' => 'success',
-                'message' => __('Contract created'),
+                'message' => __('Event created'),
                 'event' => new EventResource($event)
             ]);
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => __('Could not perform action')
@@ -72,11 +72,23 @@ class EventController extends Controller
         return $event;
     }
 
-    public function update(StoreEventRequest $request, Event $event)
+    public function update(UpdateEventRequest $request, EventService $eventService, Event $event)
     {
-        $event->update($request->validated());
-
-        return $event;
+        try {
+            $event = $eventService->updateEvent($event, $request);
+            $event->load('type');
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Event updated'),
+                'event' => new EventResource($event)
+            ]);
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Could not perform action')
+            ]);
+        }
     }
 
     public function destroy(Event $event)

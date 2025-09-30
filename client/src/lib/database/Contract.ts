@@ -20,7 +20,7 @@ export interface UpdateContractResponse {
 }
 
 
-export async function fetchContracts(page: number, pageSize: number, searchTerm: string) {
+export async function fetchContracts(page: number, pageSize: number, searchTerm?: string) {
   const query = new URLSearchParams({
     page: String(page),
     per_page: String(pageSize)

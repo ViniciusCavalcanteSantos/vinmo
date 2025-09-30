@@ -182,7 +182,7 @@ export default function Page() {
 
       <ManageEventModal
         open={open}
-        // event={editingEvent}
+        event={editingEvent}
         onCreate={handleCreate}
         onEdit={handleEdit}
         onCancel={() => setOpen(false)}

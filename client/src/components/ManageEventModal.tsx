@@ -9,13 +9,8 @@ import ContractType from "@/types/ContractType";
 import {fetchContracts} from "@/lib/database/Contract";
 import {fetchEventTypes} from "@/lib/database/Event";
 import TextArea from "antd/es/input/TextArea";
+import dayjs from "dayjs";
 
-interface OptionType {
-  value: string;
-  label: string;
-}
-
-// Props do componente
 interface ManageEventModalProps {
   open: boolean;
   event?: EventType;
@@ -48,6 +43,30 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
       })()
     }
   }, [open]);
+
+  useEffect(() => {
+    const populateFields = async () => {
+      if (isEditMode && event) {
+        form.setFieldsValue({
+          contract: event.contractId,
+          event_date: dayjs(event.eventDate),
+          event_start_time: event.startTime ? dayjs(event.startTime, "HH:mm") : null,
+          description: event.description,
+        });
+
+        await handleContractChange(event.contractId);
+        form.setFieldsValue({
+          event_type: event.type.id,
+        })
+      } else {
+        handleClean();
+      }
+    };
+
+    if (open) {
+      populateFields();
+    }
+  }, [open, event, contracts, form, isEditMode]);
 
   const handleContractChange = async (contractId: number) => {
     setEventTypes([]);

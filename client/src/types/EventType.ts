@@ -2,6 +2,7 @@ import {ContractCategory} from "@/types/ContractType";
 
 type EventType = {
   id: number,
+  contractId: number,
   eventDate: string,
   startTime?: string,
   endTime?: string,

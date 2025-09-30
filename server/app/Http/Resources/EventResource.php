@@ -16,8 +16,10 @@ class EventResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'contractId' => $this->contract_id,
             'eventDate' => $this->event_date->format('Y-m-d'),
             'startTime' => $this->start_time?->format('H:i'),
+            'description' => $this->description,
             'createdAt' => $this->created_at->toIso8601String(),
             'type' => $this->whenLoaded('type', function ($type) {
                 $type->load('category');
