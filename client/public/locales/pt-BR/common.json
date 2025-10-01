@@ -173,5 +173,6 @@
   "event_hour_optional": "Horário do evento (opcional)",
   "description_optional": "Descrição (opcional)",
   "enter_date": "Insira a data",
-  "save_event": "Salvar evento"
+  "save_event": "Salvar evento",
+  "cant_edit_contract_category": "Não é possível editar a categoria do contrato"
 }

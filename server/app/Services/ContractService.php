@@ -50,12 +50,10 @@ class ContractService
     public function updateContract(Contract $contract, UpdateContractRequest $request): Contract
     {
         $validated = $request->validated();
-        $category = ContractCategory::where('slug', $validated['category'])->firstOrFail();
 
-        return DB::transaction(function () use ($contract, $validated, $category) {
+        return DB::transaction(function () use ($contract, $validated) {
             $contract->update([
                 'user_id' => auth()->id(),
-                'category_id' => $category->id,
                 'code' => $validated['code'],
                 'title' => $validated['title'],
             ]);
@@ -67,7 +65,7 @@ class ContractService
                 'city' => $validated['city'],
             ]);
 
-            if ($validated['category'] === 'graduation') {
+            if ($contract->category->slug === 'graduation') {
                 $contract->graduationDetail()->updateOrCreate([], [
                     'type' => $validated['type'],
                     'institution_name' => $validated['institution_name'],

@@ -131,7 +131,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
       onOk={handleOk}
       destroyOnHidden
     >
-      <Form form={form} layout="vertical" name="form_in_modal">
+      <Form form={form} layout="vertical" name="form_in_modal" preserve={false}>
         {/* CAMPOS COMUNS */}
         <Row gutter={16}>
           <Col span={12}>

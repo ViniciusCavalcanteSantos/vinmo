@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Contract;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -25,9 +26,9 @@ class UpdateContractRequest extends FormRequest
     public function rules(): array
     {
         $userId = $this->user()->id;
-        $contractId = $this->route('contract')->id;
+        $contract = Contract::find($this->route('contract')->id);
+        $contractId = $contract->id;
         $rules = [
-            'category' => ['required', 'string', 'exists:contracts_categories,slug'],
             'code' => [
                 'required',
                 'string',
@@ -43,7 +44,7 @@ class UpdateContractRequest extends FormRequest
         ];
 
         // Adiciona regras somente se a categoria for 'graduation'
-        if ($this->input('category') === 'graduation') {
+        if ($contract->category->slug === 'graduation') {
             $graduationRules = [
                 'type' => ['required', Rule::in(['university', 'school'])],
                 'institution_name' => ['required', 'string', 'max:180'],

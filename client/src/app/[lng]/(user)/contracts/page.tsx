@@ -178,7 +178,7 @@ export default function Page() {
         contract={editingContract}
         onCreate={handleCreate}
         onEdit={handleEdit}
-        onCancel={() => setOpen(false)}
+        onCancel={handleClose}
       />
     </Card>
   );

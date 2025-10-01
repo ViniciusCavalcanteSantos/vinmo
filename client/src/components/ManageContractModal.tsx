@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AutoComplete, Col, DatePicker, Divider, Form, Input, Modal, Radio, Row, Select,} from 'antd';
+import {AutoComplete, Col, DatePicker, Divider, Form, Input, Modal, Radio, Row, Select, Tooltip,} from 'antd';
 import {getCategories, getCities, getCountries, getStates} from "@/lib/database/Location";
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
@@ -34,7 +34,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
   const state = Form.useWatch('state', form);
 
   // Estados para controle de UI
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState<string | null>(null);
   const [graduationType, setGraduationType] = useState('');
 
   // Estados para os dados de localização
@@ -158,7 +158,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
 
   const handleClean = () => {
     form.resetFields();
-    setCategory('');
+    setCategory(null);
     setGraduationType('');
     setStates([]);
     setCities([]);
@@ -215,11 +215,16 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
           <Col span={12}>
             <Form.Item name="category" label={t('category')}
                        rules={[{required: true, message: t('select_category') + "!"}]}>
-              <Select placeholder={t('select_category')}
-                      onChange={handleCategoryChange}
-                      options={categories.map(category => {
-                        return {value: category.slug, label: category.name};
-                      })}/>
+              <Tooltip title={isEditMode ? t('cant_edit_contract_category') : null}>
+                <Select
+                  disabled={isEditMode}
+                  placeholder={t('select_category')}
+                  onChange={handleCategoryChange}
+                  value={category}
+                  options={categories.map(category => {
+                    return {value: category.slug, label: category.name};
+                  })}/>
+              </Tooltip>
             </Form.Item>
           </Col>
           <Col span={12}>

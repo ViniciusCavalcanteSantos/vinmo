@@ -91,6 +91,7 @@ class ContractController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            var_dump($e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => __('Could not perform action')
