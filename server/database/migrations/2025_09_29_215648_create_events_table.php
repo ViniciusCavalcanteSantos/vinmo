@@ -17,6 +17,9 @@ return new class extends Migration {
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->string('description', 300)->nullable();
+
+            $table->text('searchable')->nullable();
+            $table->fullText('searchable');
             $table->timestamps();
         });
     }
