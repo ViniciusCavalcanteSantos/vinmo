@@ -108,7 +108,12 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
             message: res.message
           })
           return;
+        } else {
+          notification.success({
+            message: res.message
+          })
         }
+
         handleClean();
         if (isEditMode) {
           onEdit(res.event)

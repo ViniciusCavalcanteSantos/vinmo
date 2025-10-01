@@ -185,7 +185,12 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
             message: res.message
           })
           return;
+        } else {
+          notification.success({
+            message: res.message
+          })
         }
+
         handleClean();
         if (isEditMode) {
           onEdit(res.contract)
