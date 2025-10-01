@@ -2,7 +2,7 @@
 
 import {AntdRegistry} from "@ant-design/nextjs-registry";
 import {PropsWithChildren} from "react";
-import {ConfigProvider} from "antd";
+import {App, ConfigProvider} from "antd";
 import {themeAntd} from "@/theme";
 import {NotificationProvider} from "@/contexts/NotificationContext";
 import en from 'antd/locale/en_US';
@@ -11,7 +11,7 @@ import {Locale} from "antd/es/locale";
 
 
 export default function Providers({children, lang}: PropsWithChildren<{ lang: string }>) {
-  const langMap: Record<string, Locale>  = {
+  const langMap: Record<string, Locale> = {
     'en': en,
     'pt-BR': ptBR
   }
@@ -24,9 +24,11 @@ export default function Providers({children, lang}: PropsWithChildren<{ lang: st
           token: themeAntd
         }}
       >
-        <NotificationProvider>
-          {children}
-        </NotificationProvider>
+        <App>
+          <NotificationProvider>
+            {children}
+          </NotificationProvider>
+        </App>
       </ConfigProvider>
     </AntdRegistry>
   );

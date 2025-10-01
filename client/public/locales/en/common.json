@@ -155,6 +155,7 @@
   "view": "View",
   "edit": "Edit",
   "delete": "Delete",
+  "yes_delete": "Yes, delete",
   "send_photo": "Send Photo",
   "event_name": "Event Name",
   "event_category": "Event Category",
@@ -175,5 +176,9 @@
   "description_optional": "Description (optional)",
   "enter_date": "Enter the date",
   "save_event": "Save Event",
-  "cant_edit_contract_category": "You cannot edit the contract category"
+  "cant_edit_contract_category": "You cannot edit the contract category",
+  "are_you_sure_to_delete_contract": "Are you sure you want to delete this contract?",
+  "delete_contract_confirmation": "Esta ação não poderá ser desfeita. O contrato <strong>\"{label}\"</strong> será removido permanentemente.",
+  "associated_information_that_will_be_lost": "Associated information that will be lost:",
+  "linked_clients": "Linked clients"
 }

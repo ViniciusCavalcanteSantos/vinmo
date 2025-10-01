@@ -1,19 +1,21 @@
 "use client"
 
-import {Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
+import {App, Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
 import {useEffect, useState} from "react";
 import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import ManageContractModal from "@/components/ManageContractModal";
 import {useT} from "@/i18n/client";
 import ContractType from "@/types/ContractType";
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from "@ant-design/icons";
 import {useDebounce} from "react-use";
 import {useContracts} from "@/contexts/ContractsContext";
 import {ApiStatus} from "@/types/ApiResponse";
+import {Trans} from "react-i18next";
 
 export default function Page() {
   const {t} = useT();
+  const {modal} = App.useApp();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [open, setOpen] = useState(false);
   const {contracts, fetchContracts, loadingContracts, removeContract} = useContracts();
@@ -34,6 +36,37 @@ export default function Page() {
     setEditingContract(contract)
     setOpen(true)
   }
+
+  const handleRemove = (record: ContractType) => {
+    modal.confirm({
+      title: t('are_you_sure_to_delete_contract'),
+      icon: <ExclamationCircleFilled/>,
+      content: (
+        <div>
+          <p>
+            <Trans
+              i18nKey="delete_contract_confirmation"
+              values={{label: `${record.code} - ${record.title}`}}
+              components={{strong: <strong/>}}
+            />
+          </p>
+          <br/>
+          <p><strong>{t('associated_information_that_will_be_lost')}</strong></p>
+          <ul>
+            <li><strong>0</strong> {t('events')}</li>
+            <li><strong>0</strong> {t('linked_clients')}</li>
+            <li><strong>0</strong> {t('uploaded_photos')}</li>
+          </ul>
+        </div>
+      ),
+      okText: t('yes_delete'),
+      okType: 'danger',
+      cancelText: t('cancel'),
+      async onOk() {
+        await removeContract(record.id);
+      },
+    });
+  };
 
   const columns: TableColumnsType<ContractType> = [
     {title: t('code'), dataIndex: 'code'},
@@ -61,15 +94,11 @@ export default function Page() {
               shape="circle"
               danger
               icon={<DeleteOutlined/>}
-              onClick={() => removeContract(record.id)}
+              onClick={() => handleRemove(record)}
             />
           </Tooltip>
         </Space>)
     }
-    // {title: 'Events', dataIndex: 'events'},
-    // {title: 'Photos uploaded', dataIndex: 'photos_uploaded'},
-    // {title: 'Photos sorted', dataIndex: 'photos_sorted'},
-    // {title: 'Size', dataIndex: 'size'},
   ];
 
   const fetchData = async () => {
@@ -121,10 +150,11 @@ export default function Page() {
       <div className="flex items-center">
         <h3 className="mr-4 font-medium">{selectedRowKeys.length} Selecionados</h3>
 
-        <Button color="danger" variant="solid" onClick={handleDelete}>Excluir</Button>
+        <Button color="danger" variant="solid" onClick={() => handleDelete()}>Excluir</Button>
       </div>
     );
   } : undefined;
+
 
   return (
     <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
