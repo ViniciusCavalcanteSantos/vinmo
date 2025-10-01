@@ -24,10 +24,12 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255|unique:users',
         ]);
-        if ($validator->fails()) return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first()
-        ], 422);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
 
         try {
             $code = str_pad(random_int(0, 99999999), 8, '0', STR_PAD_LEFT);
@@ -55,20 +57,24 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255',
         ]);
-        if ($validator->fails()) return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first()
-        ], 422);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
 
         try {
             $user = User::where('email', $request->email)->first();
-            if(!$user) return response()->json([
-                'status' => 'error',
-                'message' => __("We can't find a user with that e-mail address"),
-            ]);
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => __("We can't find a user with that e-mail address"),
+                ]);
+            }
 
             $token = $user->currentAccessToken();
-            if(!$token) {
+            if (!$token) {
                 $token = Password::createToken($user);
             }
 
@@ -92,23 +98,29 @@ class AuthController extends Controller
             'token' => 'required|size:64',
             'email' => 'required|email|max:255',
         ]);
-        if ($validator->fails()) return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first()
-        ], 422);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
 
         try {
             $user = User::where('email', $request->email)->first();
-            if(!$user) return response()->json([
-                'status' => 'error',
-                'message' => __("We can't find a user with that e-mail address"),
-            ]);
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => __("We can't find a user with that e-mail address"),
+                ]);
+            }
 
             $status = Password::tokenExists($user, $request->token);
-            if(!$status) return response()->json([
-                'status' => 'error',
-                'message' => __('Token not found or has expired'),
-            ]);
+            if (!$status) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => __('Token not found or has expired'),
+                ]);
+            }
 
             return response()->json([
                 'status' => 'success',
@@ -122,16 +134,19 @@ class AuthController extends Controller
         }
     }
 
-    public function change_password(Request $request) {
+    public function change_password(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'token' => 'required|size:64',
             'email' => 'required|email|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
-        if ($validator->fails()) return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first()
-        ], 422);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
 
         try {
             $status = Password::reset(
@@ -145,7 +160,7 @@ class AuthController extends Controller
                 }
             );
 
-            if($status !== Password::PasswordReset) {
+            if ($status !== Password::PasswordReset) {
                 return response()->json([
                     'status' => 'error',
                     'message' => __('Password reset link has expired. Please request a new one'),
@@ -170,10 +185,12 @@ class AuthController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'code' => 'required|digits:8',
         ]);
-        if ($validator->fails()) return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first()
-        ], 422);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
 
         try {
             $attempts = Cache::get('confirmation_attempts', 0);
@@ -231,10 +248,12 @@ class AuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'email_verified_at' => 'required|date_format:Y-m-d H:i:s'
         ]);
-        if ($validator->fails()) return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first()
-        ], 422);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
 
 
         $user = User::create([
@@ -262,10 +281,12 @@ class AuthController extends Controller
             'remember_me' => 'boolean'
         ]);
 
-        if ($validator->fails()) return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first()
-        ], 422);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
 
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
@@ -274,11 +295,9 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $expiresAt = null;
-        if($request->remember_me) {
-            $expiresAt = now()->addWeek();
-
-        }
+        $expiresAt = $request->remember_me
+            ? now()->addWeek()
+            : now()->addHours(2);
 
         $user = Auth::user();
         $token = $user->createToken('api_token', ['*'], $expiresAt);
