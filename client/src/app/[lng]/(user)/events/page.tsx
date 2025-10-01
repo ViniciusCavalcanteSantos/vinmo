@@ -17,7 +17,6 @@ export default function Page() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [open, setOpen] = useState(false);
   const {events, fetchEvents, loadingEvents, removeEvent} = useEvents();
-  const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
   useDebounce(() => {
@@ -93,7 +92,6 @@ export default function Page() {
   ];
 
   const fetchData = async () => {
-    setLoadingSearch(true);
     const res = await fetchEvents(pagination.current, pagination.pageSize!, searchTermDebounce);
     if (res.status === ApiStatus.SUCCESS) {
       setPagination(prev => ({
@@ -101,7 +99,6 @@ export default function Page() {
         total: res.meta.total,
       }));
     }
-    setLoadingSearch(false)
   }
 
   useEffect(() => {
@@ -145,7 +142,7 @@ export default function Page() {
           {t('events')}
         </h2>
         <Flex gap="small">
-          <Search placeholder={t('search_event')} style={{width: 240}} loading={loadingSearch}
+          <Search placeholder={t('search_event')} style={{width: 240}} loading={loadingEvents}
                   onChange={e => setSearchTerm(e.target.value)}/>
           <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
         </Flex>
