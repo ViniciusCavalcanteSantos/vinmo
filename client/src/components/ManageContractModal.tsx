@@ -7,6 +7,7 @@ import {useNotification} from "@/contexts/NotificationContext";
 import ContractType from "@/types/ContractType";
 import {useContracts} from "@/contexts/ContractsContext";
 import dayjs from "dayjs";
+import {InfoCircleOutlined} from "@ant-design/icons";
 
 interface OptionType {
   value: string;
@@ -32,9 +33,9 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
   const [form] = Form.useForm();
   const country = Form.useWatch('country', form);
   const state = Form.useWatch('state', form);
+  const category = Form.useWatch('category', form);
 
   // Estados para controle de UI
-  const [category, setCategory] = useState<string | null>(null);
   const [graduationType, setGraduationType] = useState('');
 
   // Estados para os dados de localização
@@ -83,8 +84,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
         });
 
         // Atualiza os estados internos do componente que controlam a UI
-        setCategory(contract.category.slug);
-        if (contract.category.slug === 'graduation') {
+        if (category === 'graduation') {
           setGraduationType(contract.graduationDetails?.type ?? '');
         }
 
@@ -140,7 +140,6 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
   };
 
   const handleCategoryChange = (value: string) => {
-    setCategory(value);
     if (value !== 'graduation') {
       setGraduationType('');
       form.setFieldsValue({
@@ -158,7 +157,6 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
 
   const handleClean = () => {
     form.resetFields();
-    setCategory(null);
     setGraduationType('');
     setStates([]);
     setCities([]);
@@ -213,18 +211,27 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
         {/* CAMPOS COMUNS */}
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item name="category" label={t('category')}
-                       rules={[{required: true, message: t('select_category') + "!"}]}>
-              <Tooltip title={isEditMode ? t('cant_edit_contract_category') : null}>
-                <Select
-                  disabled={isEditMode}
-                  placeholder={t('select_category')}
-                  onChange={handleCategoryChange}
-                  value={category}
-                  options={categories.map(category => {
-                    return {value: category.slug, label: category.name};
-                  })}/>
-              </Tooltip>
+            <Form.Item
+              name="category"
+              rules={[{required: true, message: t('select_category') + "!"}]}
+              label={
+                <span>
+                  {t('category')}&nbsp;
+                  {isEditMode && (
+                    <Tooltip title={t('cant_edit_contract_category')}>
+                      <InfoCircleOutlined style={{color: 'rgba(0,0,0,.45)'}}/>
+                    </Tooltip>
+                  )}
+                </span>
+              }
+            >
+              <Select
+                disabled={isEditMode}
+                placeholder={t('select_category')}
+                onChange={handleCategoryChange}
+                options={categories.map(category => {
+                  return {value: category.slug, label: category.name};
+                })}/>
             </Form.Item>
           </Col>
           <Col span={12}>
