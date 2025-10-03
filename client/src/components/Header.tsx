@@ -101,7 +101,7 @@ export default function Header() {
               <ul className="flex flex-col gap-1">
                 {menu.map((item, index) => (
                   <li key={index}>
-                    <Link href={item.link}>
+                    <Link href={item.link} onClick={() => setOpen(false)}>
                       <Button
                         className="w-full flex !justify-start !text-dark !px-2"
                         type="text"
