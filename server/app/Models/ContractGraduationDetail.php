@@ -2,15 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ContractGraduationDetail extends Model
 {
+    use HasFactory;
+
     protected $table = 'contracts_graduation_details';
 
-    protected $fillable = ['type', 'institution_name', 'institution_acronym', 'class', 'shift', 'conclusion_year', 'university_course', 'school_grade_level'];
+    protected $fillable = [
+        'type', 'institution_name', 'institution_acronym', 'class', 'shift', 'conclusion_year', 'university_course',
+        'school_grade_level'
+    ];
 
-    public function contract() {
+    public function contract()
+    {
         return $this->belongsTo(Contract::class);
     }
 

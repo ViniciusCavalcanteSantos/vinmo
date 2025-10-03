@@ -4,12 +4,15 @@ namespace App\Models;
 
 use App\Observers\ContractObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 #[ObservedBy([ContractObserver::class])]
 class Contract extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['user_id', 'category_id', 'code', 'title', 'searchable'];
 
     public function user()
