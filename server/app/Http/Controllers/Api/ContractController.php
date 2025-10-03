@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreContractRequest;
-use App\Http\Requests\UpdateContractRequest;
+use App\Http\Requests\ContractRequest;
 use App\Http\Resources\ContractResource;
 use App\Models\Contract;
 use App\Models\ContractCategory;
@@ -50,7 +49,7 @@ class ContractController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreContractRequest $request, ContractService $contractService)
+    public function store(ContractRequest $request, ContractService $contractService)
     {
         try {
             $contract = $contractService->createContract($request);
@@ -79,7 +78,7 @@ class ContractController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateContractRequest $request, Contract $contract, ContractService $contractService)
+    public function update(ContractRequest $request, Contract $contract, ContractService $contractService)
     {
         try {
             $contract = $contractService->updateContract($contract, $request);

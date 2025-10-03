@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\EventRequest;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class EventService
 {
-    public function createEvent(StoreEventRequest $request): Event
+    public function createEvent(EventRequest $request): Event
     {
         $validated = $request->validated();
 
@@ -26,7 +27,7 @@ class EventService
         });
     }
 
-    public function updateEvent(Event $event, UpdateEventRequest $request): Event
+    public function updateEvent(Event $event, EventRequest $request): Event
     {
         $validated = $request->validated();
 

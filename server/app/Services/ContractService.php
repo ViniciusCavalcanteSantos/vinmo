@@ -2,15 +2,14 @@
 
 namespace App\Services;
 
-use App\Http\Requests\StoreContractRequest;
-use App\Http\Requests\UpdateContractRequest;
+use App\Http\Requests\ContractRequest;
 use App\Models\Contract;
 use App\Models\ContractCategory;
 use Illuminate\Support\Facades\DB;
 
 class ContractService
 {
-    public function createContract(StoreContractRequest $request): Contract
+    public function createContract(ContractRequest $request): Contract
     {
         $validated = $request->validated();
         $category = ContractCategory::where('slug', $validated['category'])->firstOrFail();
@@ -47,7 +46,7 @@ class ContractService
         });
     }
 
-    public function updateContract(Contract $contract, UpdateContractRequest $request): Contract
+    public function updateContract(Contract $contract, ContractRequest $request): Contract
     {
         $validated = $request->validated();
 

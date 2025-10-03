@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Contract;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateContractRequest extends ApiFormRequest
+class ContractRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,25 +23,40 @@ class UpdateContractRequest extends ApiFormRequest
     public function rules(): array
     {
         $userId = $this->user()->id;
-        $contract = Contract::find($this->route('contract')->id);
-        $contractId = $contract->id;
         $rules = [
-            'code' => [
-                'required',
-                'string',
-                'max:40',
-                Rule::unique('contracts', 'code')
-                    ->where('user_id', $userId)
-                    ->ignore($contractId)
-            ],
             'title' => ['required', 'string', 'max:180'],
             'country' => ['required', 'string', 'size:3', 'alpha'],
             'state' => ['required', 'string', 'max:12'],
             'city' => ['required', 'string', 'max:40'],
         ];
 
-        // Adiciona regras somente se a categoria for 'graduation'
-        if ($contract->category->slug === 'graduation') {
+        if ($this->isMethod('POST')) {
+            $rules['category'] = ['required', 'string', 'exists:contracts_categories,slug'];
+            $rules['code'] = [
+                'required',
+                'string',
+                'max:40',
+                Rule::unique('contracts', 'code')->where('user_id', $userId)
+            ];
+        } else {
+            $contractId = $this->route('contract')->id;
+            $rules['code'] = [
+                'required',
+                'string',
+                'max:40',
+                Rule::unique('contracts', 'code')
+                    ->where('user_id', $userId)
+                    ->ignore($contractId)
+            ];
+        }
+
+        if ($this->isMethod('POST')) {
+            $isGraduationCategory = $this->input('category') === 'graduation';
+        } else {
+            $isGraduationCategory = $this->route('contract')->category->slug === 'graduation';
+        }
+
+        if ($isGraduationCategory) {
             $graduationRules = [
                 'type' => ['required', Rule::in(['university', 'school'])],
                 'institution_name' => ['required', 'string', 'max:180'],
@@ -54,20 +69,16 @@ class UpdateContractRequest extends ApiFormRequest
             $conditionalRule = [];
             if ($this->input('type') === 'university') {
                 $conditionalRule = [
-                    'university_course' => [
-                        'required_if:type,university', 'nullable', 'string', 'max:120'
-                    ]
+                    'university_course' => ['required', 'string', 'max:120']
                 ];
             }
             if ($this->input('type') === 'school') {
                 $conditionalRule = [
                     'school_grade_level' => [
-                        'required_if:type,school', 'nullable',
-                        Rule::in(['elementary_school', 'middle_school', 'high_school'])
+                        'required', Rule::in(['elementary_school', 'middle_school', 'high_school'])
                     ]
                 ];
             }
-
 
             $rules = array_merge($rules, $graduationRules, $conditionalRule);
         }

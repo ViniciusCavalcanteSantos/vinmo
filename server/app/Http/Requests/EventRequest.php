@@ -3,9 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\Contract;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateEventRequest extends ApiFormRequest
+class EventRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +23,14 @@ class UpdateEventRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        $rules = [
+        return [
             'contract' => ['required', 'integer', 'exists:contracts,id'],
             'event_type' => [
                 'required',
                 'integer',
                 Rule::exists('events_types', 'id')
                     ->where(function ($query) {
-                        if ($contractId = request('contract')) {
+                        if ($contractId = $this->input('contract')) {
                             $contract = Contract::find($contractId);
 
                             if ($contract) {
@@ -42,7 +43,5 @@ class UpdateEventRequest extends ApiFormRequest
             'event_start_time' => ['nullable', 'date_format:H:i'],
             'description' => ['nullable', 'string', 'max:300'],
         ];
-
-        return $rules;
     }
 }

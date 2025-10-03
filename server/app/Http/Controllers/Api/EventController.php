@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEventRequest;
-use App\Http\Requests\UpdateEventRequest;
+use App\Http\Requests\EventRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Contract;
 use App\Models\Event;
@@ -49,7 +48,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function store(StoreEventRequest $request, EventService $eventService)
+    public function store(EventRequest $request, EventService $eventService)
     {
         try {
             $event = $eventService->createEvent($request);
@@ -72,7 +71,7 @@ class EventController extends Controller
         return $event;
     }
 
-    public function update(UpdateEventRequest $request, EventService $eventService, Event $event)
+    public function update(EventRequest $request, EventService $eventService, Event $event)
     {
         try {
             $event = $eventService->updateEvent($event, $request);
