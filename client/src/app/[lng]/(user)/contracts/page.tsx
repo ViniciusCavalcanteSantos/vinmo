@@ -68,37 +68,56 @@ export default function Page() {
     });
   };
 
+  const ActionButtons = ({record}: { record: ContractType }) => (
+    <Space size="middle">
+      <Tooltip title={t('edit')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          icon={<EditOutlined/>}
+          onClick={() => editContract(record)}
+        />
+      </Tooltip>
+      <Tooltip title={t('delete')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          danger
+          icon={<DeleteOutlined/>}
+          onClick={() => handleRemove(record)}
+        />
+      </Tooltip>
+    </Space>
+  );
+
   const columns: TableColumnsType<ContractType> = [
-    {title: t('code'), dataIndex: 'code'},
-    {title: t('title'), dataIndex: 'title'},
-    {title: t('city'), dataIndex: ['address', 'city']},
-    {title: t('uf'), dataIndex: ['address', 'state']},
+    {
+      title: t('code'),
+      dataIndex: 'code',
+      sorter: (a, b) => a.code.localeCompare(b.code)
+    },
+    {
+      title: t('title'),
+      dataIndex: 'title',
+      sorter: (a, b) => a.title.localeCompare(b.title)
+    },
+    {
+      title: t('city'),
+      dataIndex: ['address', 'city'],
+      sorter: (a, b) => a.address.city.localeCompare(b.address.city)
+    },
+    {
+      title: t('uf'),
+      dataIndex: ['address', 'state'],
+      sorter: (a, b) => a.address.state.localeCompare(b.address.state)
+    },
     {
       title: t('actions'),
       key: 'actions',
       align: 'center',
       fixed: 'right',
       width: 120,
-      render: (_, record) => (
-        <Space size="middle">
-          <Tooltip title={t('edit')}>
-            <Button
-              type="text"
-              shape="circle"
-              icon={<EditOutlined/>}
-              onClick={() => editContract(record)}
-            />
-          </Tooltip>
-          <Tooltip title={t('delete')}>
-            <Button
-              type="text"
-              shape="circle"
-              danger
-              icon={<DeleteOutlined/>}
-              onClick={() => handleRemove(record)}
-            />
-          </Tooltip>
-        </Space>)
+      render: (_, record) => <ActionButtons record={record}/>
     }
   ];
 
@@ -123,10 +142,16 @@ export default function Page() {
     filters: Record<string, any>,
     sorter: SorterResult<ContractType> | SorterResult<ContractType>[]
   ) => {
-    setPagination(newPagination);
-    fetchContracts(newPagination.current!, newPagination.pageSize!, searchTerm).then(data => {
-      setPagination(prev => ({...prev, total: data.meta.total}));
-    });
+    if (
+      newPagination.current !== pagination.current ||
+      newPagination.pageSize !== pagination.pageSize
+    ) {
+      setPagination(newPagination);
+      fetchContracts(newPagination.current!, newPagination.pageSize!, searchTerm)
+        .then(data => {
+          setPagination(prev => ({...prev, total: data.meta.total}));
+        });
+    }
   };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -174,7 +199,6 @@ export default function Page() {
       <Table<ContractType>
         rowKey="id"
         title={header}
-        rowSelection={rowSelection}
         columns={columns}
         dataSource={contracts}
         bordered={true}

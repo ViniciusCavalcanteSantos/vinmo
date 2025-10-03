@@ -34,56 +34,86 @@ export default function Page() {
     setOpen(true)
   }
 
+  const ActionButtons = ({record}: { record: EventType }) => (
+    <Space size="middle">
+      <Tooltip title={t('view')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          icon={<EyeOutlined/>}
+          onClick={() => (record)}
+        />
+      </Tooltip>
+      <Tooltip title={t('edit')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          icon={<EditOutlined/>}
+          onClick={() => editEvent(record)}
+        />
+      </Tooltip>
+      <Tooltip title={t('send_photo')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          icon={<UploadOutlined/>}
+          onClick={() => (record)}
+        />
+      </Tooltip>
+      <Tooltip title={t('delete')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          danger
+          icon={<DeleteOutlined/>}
+          onClick={() => removeEvent(record.id)}
+        />
+      </Tooltip>
+    </Space>
+  )
+
+
   const columns: TableColumnsType<EventType> = [
-    {title: t('event_name'), dataIndex: ['type', "name"]},
-    {title: t('event_category'), dataIndex: ['type', 'category', "name"]},
-    {title: t('event_date'), dataIndex: 'eventDate'},
-    {title: t('start_time'), dataIndex: 'startTime'},
-    {title: t('uploaded_photos'), dataIndex: ['temp'], render: () => 0},
-    {title: t('separated_photos'), dataIndex: ['temp'], render: () => 0},
-    {title: t('size'), dataIndex: ['temp'], render: () => "0 MB"},
+    {
+      title: t('event_name'),
+      dataIndex: ['type', "name"],
+      sorter: (a, b) => a.type.name.localeCompare(b.type.name)
+    },
+    {
+      title: t('event_category'),
+      dataIndex: ['type', 'category', "name"],
+      sorter: (a, b) => a.type.category.name.localeCompare(b.type.category.name)
+    },
+    {
+      title: t('event_date'),
+      dataIndex: 'eventDate',
+    },
+    {
+      title: t('start_time'),
+      dataIndex: 'startTime'
+    },
+    {
+      title: t('uploaded_photos'),
+      dataIndex: ['temp'],
+      render: () => 0
+    },
+    {
+      title: t('separated_photos'),
+      dataIndex: ['temp'],
+      render: () => 0
+    },
+    {
+      title: t('size'),
+      dataIndex: ['temp'],
+      render: () => "0 MB"
+    },
     {
       title: t('actions'),
       key: 'actions',
       align: 'center',
       fixed: 'right',
       width: 120,
-      render: (_, record) => (
-        <Space size="middle">
-          <Tooltip title={t('view')}>
-            <Button
-              type="text"
-              shape="circle"
-              icon={<EyeOutlined/>}
-              onClick={() => (record)}
-            />
-          </Tooltip>
-          <Tooltip title={t('edit')}>
-            <Button
-              type="text"
-              shape="circle"
-              icon={<EditOutlined/>}
-              onClick={() => editEvent(record)}
-            />
-          </Tooltip>
-          <Tooltip title={t('send_photo')}>
-            <Button
-              type="text"
-              shape="circle"
-              icon={<UploadOutlined/>}
-              onClick={() => (record)}
-            />
-          </Tooltip>
-          <Tooltip title={t('delete')}>
-            <Button
-              type="text"
-              shape="circle"
-              danger
-              icon={<DeleteOutlined/>}
-              onClick={() => removeEvent(record.id)}
-            />
-          </Tooltip>
-        </Space>)
+      render: (_, record) => <ActionButtons record={record}/>
     }
   ];
 
@@ -108,10 +138,15 @@ export default function Page() {
     filters: Record<string, any>,
     sorter: SorterResult<EventType> | SorterResult<EventType>[]
   ) => {
-    setPagination(newPagination);
-    fetchEvents(newPagination.current!, newPagination.pageSize!, searchTermDebounce).then(data => {
-      setPagination(prev => ({...prev, total: data.meta.total}));
-    });
+    if (
+      newPagination.current !== pagination.current ||
+      newPagination.pageSize !== pagination.pageSize
+    ) {
+      setPagination(newPagination);
+      fetchEvents(newPagination.current!, newPagination.pageSize!, searchTermDebounce).then(data => {
+        setPagination(prev => ({...prev, total: data.meta.total}));
+      });
+    }
   };
 
   const handleClose = () => {
