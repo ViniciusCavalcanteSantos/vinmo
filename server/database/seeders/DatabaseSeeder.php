@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             ContractCategorySeeder::class,
+            ContractSeeder::class,
             EventTypeSeed::class
         ]);
     }
