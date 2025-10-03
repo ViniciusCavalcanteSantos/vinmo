@@ -77,6 +77,7 @@ export default function Page() {
       title: t('actions'),
       key: 'actions',
       align: 'center',
+      fixed: 'right',
       width: 120,
       render: (_, record) => (
         <Space size="middle">
@@ -101,18 +102,20 @@ export default function Page() {
     }
   ];
 
-  const fetchData = async () => {
-    const res = await fetchContracts(pagination.current, pagination.pageSize!, searchTermDebounce);
-    if (res.status === ApiStatus.SUCCESS) {
-      setPagination(prev => ({
-        ...prev,
-        total: res.meta.total,
-      }));
-    }
-  }
-
   useEffect(() => {
-    fetchData();
+    setPagination(prev => ({
+      ...prev,
+      current: 1,
+    }));
+    fetchContracts(1, pagination.pageSize!, searchTermDebounce)
+      .then(res => {
+        if (res.status === ApiStatus.SUCCESS) {
+          setPagination(prev => ({
+            ...prev,
+            total: res.meta.total,
+          }));
+        }
+      })
   }, [searchTermDebounce]);
 
   const handleTableChange = (
@@ -176,7 +179,7 @@ export default function Page() {
         dataSource={contracts}
         bordered={true}
         loading={loadingContracts}
-        scroll={{x: 'max-content'}}
+        scroll={{y: 560, x: 'max-content'}}
         pagination={{
           ...pagination,
           showSizeChanger: true,

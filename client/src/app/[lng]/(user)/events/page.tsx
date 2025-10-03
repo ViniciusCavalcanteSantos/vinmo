@@ -2,7 +2,7 @@
 
 import {Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
 import {useEffect, useState} from "react";
-import {SorterResult, TableRowSelection} from "antd/es/table/interface";
+import {SorterResult} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
 import EventType from "@/types/EventType";
@@ -14,7 +14,6 @@ import ManageEventModal from "@/components/ManageEventModal";
 
 export default function Page() {
   const {t} = useT();
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [open, setOpen] = useState(false);
   const {events, fetchEvents, loadingEvents, removeEvent} = useEvents();
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,6 +46,7 @@ export default function Page() {
       title: t('actions'),
       key: 'actions',
       align: 'center',
+      fixed: 'right',
       width: 120,
       render: (_, record) => (
         <Space size="middle">
@@ -85,24 +85,22 @@ export default function Page() {
           </Tooltip>
         </Space>)
     }
-    // {title: 'Events', dataIndex: 'events'},
-    // {title: 'Photos uploaded', dataIndex: 'photos_uploaded'},
-    // {title: 'Photos sorted', dataIndex: 'photos_sorted'},
-    // {title: 'Size', dataIndex: 'size'},
   ];
 
-  const fetchData = async () => {
-    const res = await fetchEvents(pagination.current, pagination.pageSize!, searchTermDebounce);
-    if (res.status === ApiStatus.SUCCESS) {
-      setPagination(prev => ({
-        ...prev,
-        total: res.meta.total,
-      }));
-    }
-  }
-
   useEffect(() => {
-    fetchData();
+    setPagination(prev => ({
+      ...prev,
+      current: 1
+    }));
+    fetchEvents(1, pagination.pageSize!, searchTermDebounce)
+      .then(res => {
+        if (res.status === ApiStatus.SUCCESS) {
+          setPagination(prev => ({
+            ...prev,
+            total: res.meta.total,
+          }));
+        }
+      })
   }, [searchTermDebounce]);
 
   const handleTableChange = (
@@ -111,29 +109,15 @@ export default function Page() {
     sorter: SorterResult<EventType> | SorterResult<EventType>[]
   ) => {
     setPagination(newPagination);
-    fetchEvents(newPagination.current!, newPagination.pageSize!, searchTerm).then(data => {
+    fetchEvents(newPagination.current!, newPagination.pageSize!, searchTermDebounce).then(data => {
       setPagination(prev => ({...prev, total: data.meta.total}));
     });
   };
-
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
-
-  const rowSelection: TableRowSelection<EventType> = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-
-  const hasSelected = selectedRowKeys.length > 0;
 
   const handleClose = () => {
     setEditingEvent(undefined)
     setOpen(false)
   }
-  const handleCreate = () => handleClose()
-  const handleEdit = () => handleClose()
-  const handleDelete = () => handleClose()
 
   return (
     <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
@@ -153,7 +137,7 @@ export default function Page() {
         dataSource={events}
         bordered={true}
         loading={loadingEvents}
-        scroll={{x: 'max-content'}}
+        scroll={{y: 560, x: 'max-content'}}
         pagination={{
           ...pagination,
           showSizeChanger: true,
@@ -180,8 +164,8 @@ export default function Page() {
       <ManageEventModal
         open={open}
         event={editingEvent}
-        onCreate={handleCreate}
-        onEdit={handleEdit}
+        onCreate={handleClose}
+        onEdit={handleClose}
         onCancel={() => setOpen(false)}
       />
     </Card>
