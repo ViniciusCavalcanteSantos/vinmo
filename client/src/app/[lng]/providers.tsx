@@ -24,7 +24,7 @@ export default function Providers({children, lang}: PropsWithChildren<{ lang: st
           token: themeAntd
         }}
       >
-        <App>
+        <App className="h-full">
           <NotificationProvider>
             {children}
           </NotificationProvider>
