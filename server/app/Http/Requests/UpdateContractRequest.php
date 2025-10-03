@@ -3,12 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\Contract;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class UpdateContractRequest extends FormRequest
+class UpdateContractRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -76,14 +73,5 @@ class UpdateContractRequest extends FormRequest
         }
 
         return $rules;
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        $firstError = $validator->errors()->first();
-        throw new HttpResponseException(response()->json([
-            'status' => 'error',
-            'message' => $firstError
-        ], 422));
     }
 }
