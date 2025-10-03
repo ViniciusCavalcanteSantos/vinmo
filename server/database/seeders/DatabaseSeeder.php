@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ContractCategorySeeder::class,
             ContractSeeder::class,
-            EventTypeSeed::class
+            EventTypeSeed::class,
+            EventSeeder::class,
         ]);
     }
 }
