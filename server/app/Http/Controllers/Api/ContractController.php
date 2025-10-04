@@ -21,14 +21,16 @@ class ContractController extends Controller
         $perPage = $request->input('per_page', 15);
         $searchTerm = $request->input('search');
 
-        $contractsQuery = Contract
-            ::where('user_id', $user_id)
-            ->with(['category', 'address', 'graduationDetail'])
-            ->latest();
-
-        $contractsQuery->when($searchTerm, function ($query, $term) {
-            $query->where('searchable', "LIKE", "%{$term}%");
-        });
+        if ($searchTerm) {
+            $contractsQuery = Contract::search($searchTerm)
+                ->where('user_id', $user_id)
+                ->query(fn($query) => $query->with(['category', 'address', 'graduationDetail']));
+        } else {
+            $contractsQuery = Contract::query()
+                ->where('user_id', $user_id)
+                ->with(['category', 'address', 'graduationDetail'])
+                ->latest();
+        }
 
         $contracts = $contractsQuery->paginate($perPage);
         return response()->json([

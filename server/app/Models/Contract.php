@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 
 #[ObservedBy([ContractObserver::class])]
 class Contract extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $fillable = ['user_id', 'category_id', 'code', 'title', 'searchable'];
 
@@ -45,5 +46,29 @@ class Contract extends Model
     public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'addressable');
+    }
+
+    /**
+     * Define os dados que serão enviados para o índice do Elasticsearch.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $this->load('address', 'graduationDetail');
+
+        return [
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'category_id' => $this->category_id,
+            'code' => $this->code,
+            'title' => $this->title,
+            'city' => $this->address?->city,
+            'state' => $this->address?->state,
+            'neighborhood' => $this->address?->neighborhood,
+            'institution_name' => $this->graduationDetail?->institution_name,
+            'class' => $this->graduationDetail?->class,
+            'university_course' => $this->graduationDetail?->university_course,
+        ];
     }
 }
