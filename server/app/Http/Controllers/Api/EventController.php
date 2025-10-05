@@ -68,7 +68,11 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-        return $event;
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Event retrieved'),
+            'event' => new EventResource($event)
+        ]);
     }
 
     public function update(EventRequest $request, EventService $eventService, Event $event)

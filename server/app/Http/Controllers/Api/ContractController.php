@@ -70,9 +70,13 @@ class ContractController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Contract $contract)
     {
-        //
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Contract retrieved'),
+            'contract' => new ContractResource($contract)
+        ]);
     }
 
     /**
