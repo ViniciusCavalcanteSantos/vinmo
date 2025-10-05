@@ -129,4 +129,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'github_webhook_secret' => env('GITHUB_WEBHOOK_SECRET'),
 ];
