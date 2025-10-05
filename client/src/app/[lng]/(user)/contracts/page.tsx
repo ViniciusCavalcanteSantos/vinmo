@@ -12,6 +12,7 @@ import {useDebounce} from "react-use";
 import {useContracts} from "@/contexts/ContractsContext";
 import {ApiStatus} from "@/types/ApiResponse";
 import {Trans} from "react-i18next";
+import PageHeader from "@/components/PageHeader";
 
 export default function Page() {
   const {t} = useT();
@@ -185,55 +186,57 @@ export default function Page() {
 
 
   return (
-    <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-      <Flex justify="space-between" align="center" style={{marginBottom: 16}}>
-        <h2 className="text-lg font-semibold">
-          {t('contracts')}
-        </h2>
-        <Flex gap="small">
-          <Search placeholder={t('search_contract')} style={{width: 240}} loading={loadingContracts}
-                  onChange={e => setSearchTerm(e.target.value)}/>
-          <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
+    <>
+      <PageHeader title={t('contracts')}/>
+
+      <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+        <Flex justify="end" align="center" style={{marginBottom: 16}}>
+          <Flex gap="small">
+            <Search placeholder={t('search_contract')} style={{width: 240}} loading={loadingContracts}
+                    onChange={e => setSearchTerm(e.target.value)}/>
+            <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
+          </Flex>
         </Flex>
-      </Flex>
-      <Table<ContractType>
-        rowKey="id"
-        title={header}
-        columns={columns}
-        dataSource={contracts}
-        bordered={true}
-        loading={loadingContracts}
-        scroll={{y: 560, x: 'max-content'}}
-        pagination={{
-          ...pagination,
-          showSizeChanger: true,
-          pageSizeOptions: ['15', '30', '50', '100'],
-          showTotal: (total, range) => t('pagination', {start: range[0], end: range[1], total, count: total}),
-        }}
-        onChange={handleTableChange}
-        locale={{
-          emptyText: (
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description={
-                <span>
+        <Table<ContractType>
+          rowKey="id"
+          title={header}
+          columns={columns}
+          dataSource={contracts}
+          bordered={true}
+          loading={loadingContracts}
+          scroll={{y: 560, x: 'max-content'}}
+          pagination={{
+            ...pagination,
+            showSizeChanger: true,
+            pageSizeOptions: ['15', '30', '50', '100'],
+            showTotal: (total, range) => t('pagination', {start: range[0], end: range[1], total, count: total}),
+          }}
+          onChange={handleTableChange}
+          locale={{
+            emptyText: (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={
+                  <span>
             {t('no_contract_found')}
           </span>
-              }
-            >
-              <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
-            </Empty>
-          ),
-        }}
-      />
+                }
+              >
+                <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
+              </Empty>
+            ),
+          }}
+        />
 
-      <ManageContractModal
-        open={open}
-        contract={editingContract}
-        onCreate={handleCreate}
-        onEdit={handleEdit}
-        onCancel={handleClose}
-      />
-    </Card>
+        <ManageContractModal
+          open={open}
+          contract={editingContract}
+          onCreate={handleCreate}
+          onEdit={handleEdit}
+          onCancel={handleClose}
+        />
+      </Card>
+    </>
+
   );
 }

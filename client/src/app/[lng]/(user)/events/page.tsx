@@ -11,6 +11,7 @@ import {useDebounce} from "react-use";
 import {useEvents} from "@/contexts/EventsContext";
 import {ApiStatus} from "@/types/ApiResponse";
 import ManageEventModal from "@/components/ManageEventModal";
+import PageHeader from "@/components/PageHeader";
 
 export default function Page() {
   const {t} = useT();
@@ -155,54 +156,55 @@ export default function Page() {
   }
 
   return (
-    <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-      <Flex justify="space-between" align="center" style={{marginBottom: 16}}>
-        <h2 className="text-lg font-semibold">
-          {t('events')}
-        </h2>
-        <Flex gap="small">
-          <Search placeholder={t('search_event')} style={{width: 240}} loading={loadingEvents}
-                  onChange={e => setSearchTerm(e.target.value)}/>
-          <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
+    <>
+      <PageHeader title={t('events')}/>
+
+      <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+        <Flex justify="end" align="center" style={{marginBottom: 16}}>
+          <Flex gap="small">
+            <Search placeholder={t('search_event')} style={{width: 240}} loading={loadingEvents}
+                    onChange={e => setSearchTerm(e.target.value)}/>
+            <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
+          </Flex>
         </Flex>
-      </Flex>
-      <Table<EventType>
-        rowKey="id"
-        columns={columns}
-        dataSource={events}
-        bordered={true}
-        loading={loadingEvents}
-        scroll={{y: 560, x: 'max-content'}}
-        pagination={{
-          ...pagination,
-          showSizeChanger: true,
-          pageSizeOptions: ['15', '30', '50', '100'],
-          showTotal: (total, range) => t('pagination', {start: range[0], end: range[1], total, count: total}),
-        }}
-        onChange={handleTableChange}
-        locale={{
-          emptyText: (
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description={
-                <span>
+        <Table<EventType>
+          rowKey="id"
+          columns={columns}
+          dataSource={events}
+          bordered={true}
+          loading={loadingEvents}
+          scroll={{y: 560, x: 'max-content'}}
+          pagination={{
+            ...pagination,
+            showSizeChanger: true,
+            pageSizeOptions: ['15', '30', '50', '100'],
+            showTotal: (total, range) => t('pagination', {start: range[0], end: range[1], total, count: total}),
+          }}
+          onChange={handleTableChange}
+          locale={{
+            emptyText: (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={
+                  <span>
             {t('no_event_found')}
           </span>
-              }
-            >
-              <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
-            </Empty>
-          ),
-        }}
-      />
+                }
+              >
+                <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
+              </Empty>
+            ),
+          }}
+        />
 
-      <ManageEventModal
-        open={open}
-        event={editingEvent}
-        onCreate={handleClose}
-        onEdit={handleClose}
-        onCancel={() => setOpen(false)}
-      />
-    </Card>
+        <ManageEventModal
+          open={open}
+          event={editingEvent}
+          onCreate={handleClose}
+          onEdit={handleClose}
+          onCancel={() => setOpen(false)}
+        />
+      </Card>
+    </>
   );
 }

@@ -49,7 +49,7 @@ export default function Header() {
           <Link href="/home" className="-m-1.5 p-1.5">
             <div className="flex items-center justify-center text-[28px] text-lead-dark">
               <Logo width={32}/>
-              <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
+              <div className="-translate-x-1"><span className="sr-only">V</span>inmo</div>
             </div>
           </Link>
         </div>
