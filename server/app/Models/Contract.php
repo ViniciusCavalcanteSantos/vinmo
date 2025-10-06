@@ -6,6 +6,8 @@ use App\Observers\ContractObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 #[ObservedBy([ContractObserver::class])]
@@ -15,22 +17,22 @@ class Contract extends Model
 
     protected $fillable = ['user_id', 'category_id', 'code', 'title', 'searchable'];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(ContractCategory::class);
     }
 
-    public function graduationDetail()
+    public function graduationDetail(): HasOne
     {
         return $this->hasOne(ContractGraduationDetail::class, 'contract_id', 'id');
     }
 
-    public function isGraduation()
+    public function isGraduation(): bool
     {
         if (!$this->relationLoaded('category')) {
             $this->load('category');
