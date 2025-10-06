@@ -1,3 +1,5 @@
+import {CityAreaAddressType} from "@/types/AddressType";
+
 enum graduationDetailsType {
   UNIVERSITY = 'university',
   SCHOOL = 'school',
@@ -25,12 +27,7 @@ type ContractType = {
   code: string,
   title: string,
   category: ContractCategory
-  address: {
-    granularity: string,
-    city: string,
-    state: string,
-    country: string,
-  }
+  address: CityAreaAddressType
   graduationDetails?: {
     type: graduationDetailsType,
     institutionName: string,
