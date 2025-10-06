@@ -2,43 +2,58 @@
 @import "tailwindcss";
 
 :root {
-  --white: #fff;
-  --black: #000;
-  --background: #FAFBFC;
-  --foreground: #f6f8fa;
+    --white: #fff;
+    --black: #000;
+    --background: #FAFBFC;
+    --foreground: #f6f8fa;
 }
 
 @theme inline {
-  --breakpoint-xss: 380px;
-  --breakpoint-xs: 480px;
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-lead-dark: var(--lead-dark);
-  --color-lead-light: var(--lead-light);
-  --color-lead-lighter: var(--lead-lighter);
+    --breakpoint-xss: 380px;
+    --breakpoint-xs: 480px;
+    --color-primary: var(--primary);
+    --color-secondary: var(--secondary);
+    --color-lead-dark: var(--lead-dark);
+    --color-lead-light: var(--lead-light);
+    --color-lead-lighter: var(--lead-lighter);
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
 
-  --color-muted: var(--muted);
-  --color-muted-dark: var(--muted-dark);
+    --color-muted: var(--muted);
+    --color-muted-dark: var(--muted-dark);
 
-  --color-neutral-emphasis: var(--neutral-emphasis);
-  --color-neutral-muted: var(--neutral-muted);
+    --color-neutral-emphasis: var(--neutral-emphasis);
+    --color-neutral-muted: var(--neutral-muted);
 
-  --color-dark: var(--dark);
-  --color-dark-muted: var(--dark-muted);
+    --color-dark: var(--dark);
+    --color-dark-muted: var(--dark-muted);
 
-  --color-border: var(--border);
-  --color-border-muted: var(--border-muted);
+    --color-border: var(--border);
+    --color-border-muted: var(--border-muted);
 
-  --color-overlay: var(--overlay);
+    --color-overlay: var(--overlay);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
 }
 
 body {
-  color: var(--dark);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+    color: var(--dark);
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.antd-upload-w-180 {
+    width: 180px;
+    height: 180px;
+}
+
+.antd-upload-w-180 .ant-upload-list-item-container,
+.antd-upload-w-180 .ant-upload-select {
+    width: 180px !important;
+    height: 180px !important;
+}
+
+.antd-upload-error .ant-upload.ant-upload-select {
+    border-color: #ff4d4f !important;
 }
