@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ContractController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\LocationController;
@@ -30,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('event/types/{contract}', [EventController::class, 'getEventTypes']);
     Route::apiResource('/event', EventController::class);
+
+    Route::apiResource('/client', ClientController::class);
 });
 
 Route::post('/deploy/webhook', function (Request $request) {
