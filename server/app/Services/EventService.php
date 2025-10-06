@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Http\Requests\EventRequest;
-use App\Http\Requests\StoreEventRequest;
-use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +14,7 @@ class EventService
 
         return DB::transaction(function () use ($validated) {
             $event = Event::create([
-                'contract_id' => auth()->id(),
+                'contract_id' => $validated['contract_id'],
                 'type_id' => $validated['event_type'],
                 'event_date' => $validated['event_date'],
                 'start_time' => $validated['event_start_time'] ?? null,

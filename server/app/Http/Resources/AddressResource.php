@@ -16,6 +16,10 @@ class AddressResource extends JsonResource
     {
         return [
             'granularity' => $this->granularity,
+            'street' => $this->street ?? null,
+            'number' => $this->street ?? null,
+            'neighborhood' => $this->street ?? null,
+            'complement' => $this->street ?? null,
             'city' => $this->city,
             'state' => $this->state,
             'country' => $this->country,

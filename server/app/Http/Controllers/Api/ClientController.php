@@ -22,7 +22,7 @@ class ClientController extends Controller
 
         $clientsQuery = Client
             ::where('user_id', $user_id)
-            ->with(['category', 'address', 'graduationDetail'])
+            ->with(['address'])
             ->latest();
 
 //        $clientsQuery->when($searchTerm, function ($query, $term) {
