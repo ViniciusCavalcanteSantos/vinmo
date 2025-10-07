@@ -130,4 +130,6 @@ return [
     ],
 
     'github_webhook_secret' => env('GITHUB_WEBHOOK_SECRET'),
+
+    'encoded_ids' => env('ENCODED_IDS', false),
 ];
