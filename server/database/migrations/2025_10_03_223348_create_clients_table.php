@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreign('user_id')->references('id')->on('users');
 
             $table->string('name', 60);
-            $table->string('picture_url');
+            $table->string('profile_url');
 
             $table->string('code', 20)->nullable();
             $table->date('birthdate')->nullable();
