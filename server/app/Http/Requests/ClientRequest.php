@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ClientRequest extends FormRequest
+class ClientRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +23,7 @@ class ClientRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string|max:60',
-            'picture' => 'nullable|file|image',
+            'picture' => 'required|file|image',
             'inform_address' => 'required|boolean',
             'inform_guardian' => 'required|boolean',
 
