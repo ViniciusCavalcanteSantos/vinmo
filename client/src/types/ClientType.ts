@@ -11,7 +11,7 @@ type ClientType = {
   id: number,
   userId: number,
   name: string,
-  pictureUrl: string,
+  profileUrl: string,
   code?: string,
   birthdate?: string,
   phone?: string,

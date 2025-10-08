@@ -23,7 +23,7 @@ class ClientRequest extends ApiFormRequest
     {
         $rules = [
             'name' => 'required|string|max:60',
-            'picture' => 'required|file|image',
+            'profile' => 'required|file|image',
             'inform_address' => 'required|boolean',
             'inform_guardian' => 'required|boolean',
 

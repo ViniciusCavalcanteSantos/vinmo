@@ -10,7 +10,7 @@ class Client extends Model
 {
     protected $fillable = [
         'user_id',
-        'code', 'name', 'birthdate', 'phone', 'picture_url',
+        'code', 'name', 'birthdate', 'phone', 'profile_url',
         'guardian_name', 'guardian_type', 'guardian_email', 'guardian_phone',
     ];
 

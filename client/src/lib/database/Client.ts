@@ -1,5 +1,7 @@
 import apiFetch from "@/lib/apiFetch";
 import ClientType from "@/types/ClientType";
+import {UploadFile} from "antd";
+import {objectToFormData} from "@/lib/objectToFormData";
 
 export interface FetchClientsResponse {
   clients: ClientType[];
@@ -45,28 +47,27 @@ export async function fetchClient(id: number) {
   });
 }
 
-export async function createClient(values: any) {
-  const data = await apiFetch<CreateClientResponse>("/client", {
-    method: "POST",
-    body: JSON.stringify(values),
-  });
+export async function createClient(values: any, profile: UploadFile) {
+  const formData = objectToFormData(values, {profile: profile},)
+  if (profile.originFileObj) {
+    formData.append("profile", profile.originFileObj);
+  }
 
-  return data;
+  return await apiFetch<CreateClientResponse>("/client", {
+    method: "POST",
+    body: formData,
+  });
 }
 
 export async function updateClient(id: number, values: any) {
-  const data = await apiFetch<UpdateClientResponse>(`/client/${id}`, {
+  return await apiFetch<UpdateClientResponse>(`/client/${id}`, {
     method: "PUT",
     body: JSON.stringify(values),
   });
-
-  return data;
 }
 
 export async function removeClient(id: number) {
-  const data = await apiFetch(`/client/${id}`, {
+  return await apiFetch(`/client/${id}`, {
     method: "DELETE",
   });
-
-  return data;
 }

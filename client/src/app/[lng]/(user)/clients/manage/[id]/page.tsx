@@ -25,10 +25,10 @@ import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import ClientType, {guardianTypes} from "@/types/ClientType";
-import {useClients} from "@/contexts/ClientsContext";
 import dayjs from "dayjs";
 import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
+import {createClient, fetchClient, updateClient} from "@/lib/database/Client";
 
 interface OptionType {
   value: string;
@@ -38,7 +38,6 @@ interface OptionType {
 const ManageClientPage: React.FC = () => {
   const {t} = useT();
   const notification = useNotification();
-  const {createClient, updateClient, fetchClient} = useClients();
   const router = useRouter();
   const params = useParams();
   const clientId = params.id as string;
@@ -162,7 +161,7 @@ const ManageClientPage: React.FC = () => {
     if (isEditMode) {
       res = await updateClient(Number(clientId), values);
     } else {
-      res = await createClient(values);
+      res = await createClient(values, fileList[0]);
     }
 
     if (res.status !== ApiStatus.SUCCESS) {
@@ -171,8 +170,11 @@ const ManageClientPage: React.FC = () => {
       notification.success({message: res.message});
 
       if (keepAdding) {
+        setFileList([])
         form.resetFields();
-        form.setFieldsValue({keep_adding: true});
+        form.setFieldsValue({inform_address: informAddress});
+        form.setFieldsValue({inform_guardian: informGuardian});
+        form.setFieldsValue({keep_adding: keepAdding});
       } else {
         router.push('/clients');
       }
