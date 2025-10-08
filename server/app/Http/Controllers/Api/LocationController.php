@@ -29,7 +29,7 @@ class LocationController extends Controller
 
                 return [
                     'value' => $country->cca3,
-                    'label' => $translatedName .  ($nativeName ? " ({$nativeName})" : ''),
+                    'label' => $country->extra->emoji.' '.$translatedName.($nativeName ? " ({$nativeName})" : ''),
                 ];
             });
 
@@ -44,7 +44,7 @@ class LocationController extends Controller
     {
         $countries = new Countries();
         $country = $countries->where('cca3', strtoupper($country_cca3))->first();
-        if($country->isEmpty()) {
+        if ($country->isEmpty()) {
             return response()->json([
                 'status' => 'error',
                 'message' => __('Country not found'),
@@ -60,7 +60,7 @@ class LocationController extends Controller
             ]);
         }
 
-        $states = $states->map(function($state) {
+        $states = $states->map(function ($state) {
             return [
                 'value' => $state['postal'],
                 'label' => $state['name'],
@@ -78,7 +78,7 @@ class LocationController extends Controller
     {
         $countries = new Countries();
         $country = $countries->where('cca3', strtoupper($country_cca3))->first();
-        if($country->isEmpty()) {
+        if ($country->isEmpty()) {
             return response()->json([
                 'status' => 'error',
                 'message' => __('Country not found'),
@@ -86,7 +86,7 @@ class LocationController extends Controller
         }
 
         $state = $country->hydrateStates()->states->where('postal', $state_code)->first();
-        if($state->isEmpty()) {
+        if ($state->isEmpty()) {
             return response()->json([
                 'status' => 'error',
                 'message' => __('State not found'),
@@ -98,7 +98,7 @@ class LocationController extends Controller
             return response()->json(['status' => 'success', 'cities' => []]);
         }
 
-        $cities = $cities->map(function($city) {
+        $cities = $cities->map(function ($city) {
             return [
                 'value' => $city['name'],
                 'label' => $city['name'],
