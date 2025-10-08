@@ -14,16 +14,16 @@ import {send_code} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default function SignupForm() {
-  const { t } = useT()
+  const {t} = useT()
   const notification = useNotification();
-  const [_, setEmailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
+  const [_, setEmailConfirmation] = useLocalStorage<string | null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
   const router = useRouter();
 
-  const handleFinish = async(values: any) => {
+  const handleFinish = async (values: any) => {
     setSending(true)
     const res = await send_code(values.email)
-    if(res.status !== ApiStatus.SUCCESS) {
+    if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
         message: res.message,
@@ -39,15 +39,15 @@ export default function SignupForm() {
     router.push('/signup/confirm-code')
   }
 
-  return(
+  return (
     <Form
-      initialValues={{ remember: true }}
-      style={{ maxWidth: 360 }}
+      className="!w-full max-w-100 bg-white !px-10 !py-8 rounded-sm shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+      initialValues={{remember: true}}
       onFinish={handleFinish}
       requiredMark={false}
     >
       <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
-        <Logo width={40} />
+        <Logo width={40}/>
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
       <h1 className="text-center mb-4 font-semibold text-lead-dark text-base">{t('login.register_to_continue')}</h1>
@@ -56,10 +56,11 @@ export default function SignupForm() {
         layout="vertical"
         label="Email"
         name="email"
-        rules={[{ required: true, max: 255 }]}
+        rules={[{required: true, max: 255}]}
         style={{marginBottom: 12}}
       >
-        <Input prefix={<MailOutlined style={{ marginRight: 8 }} />} placeholder="Email" style={{ padding: "10px 16px" }} type="email" />
+        <Input prefix={<MailOutlined style={{marginRight: 8}}/>} placeholder="Email" style={{padding: "10px 16px"}}
+               type="email"/>
       </Form.Item>
 
       <Form.Item>

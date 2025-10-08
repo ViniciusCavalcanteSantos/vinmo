@@ -10,19 +10,17 @@ export default function Layout({children}: PropsWithChildren) {
 
   useEffect(() => {
     const token = localStorage.getItem("token")
-    if(token) router.replace("/home")
+    if (token) router.replace("/home")
     else {
       setChecking(false);
     }
   }, [])
 
-  if(checking) return <Fallback />;
+  if (checking) return <Fallback/>;
 
   return (
     <div className="h-full flex justify-center items-center bg-background">
-      <div className="w-100 bg-white px-10 py-8 rounded-sm shadow-[0_0_10px_rgba(0,0,0,0.1)]">
-        {children}
-      </div>
+      {children}
     </div>
   );
 }

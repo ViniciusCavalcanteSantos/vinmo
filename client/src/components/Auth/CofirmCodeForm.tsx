@@ -12,19 +12,19 @@ import {confirm_code, send_code} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default function ConfirmCodeForm() {
-  const { t } = useT()
+  const {t} = useT()
   const notification = useNotification();
-  const [emailConfirmation] = useLocalStorage<string|null>('emailConfirmation', null)
+  const [emailConfirmation] = useLocalStorage<string | null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
   const router = useRouter();
 
   useEffect(() => {
-    if(!emailConfirmation) router.push("/signup")
+    if (!emailConfirmation) router.push("/signup")
   }, [emailConfirmation])
 
-  const sendCode = async() => {
+  const sendCode = async () => {
     const res = await send_code(emailConfirmation ?? "")
-    if(res.status !== ApiStatus.SUCCESS) {
+    if (res.status !== ApiStatus.SUCCESS) {
       notification.info({
         message: res.message,
       });
@@ -37,10 +37,10 @@ export default function ConfirmCodeForm() {
     });
   }
 
-  const handleFinish = async(values: any) => {
+  const handleFinish = async (values: any) => {
     setSending(true)
     const res = await confirm_code(emailConfirmation ?? "", values.code)
-    if(res.status === ApiStatus.MAX_ATTEMPTS) {
+    if (res.status === ApiStatus.MAX_ATTEMPTS) {
       notification.warning({
         message: res.message,
       });
@@ -48,7 +48,7 @@ export default function ConfirmCodeForm() {
       return;
     }
 
-    if(res.status !== ApiStatus.SUCCESS) {
+    if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
         message: res.message,
@@ -60,18 +60,18 @@ export default function ConfirmCodeForm() {
       message: t('login.email_verified_successfully'),
       description: t('login.you_can_proceed_with_registration')
     });
-    router.push('/signup/finish')
+    router.push('/signup/address')
   }
 
-  return(
+  return (
     <Form
-      initialValues={{ remember: true }}
-      style={{ maxWidth: 360 }}
+      className="!w-full max-w-100 bg-white !px-10 !py-8 rounded-sm shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+      initialValues={{remember: true}}
       onFinish={handleFinish}
       requiredMark={false}
     >
       <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
-        <Logo width={40} />
+        <Logo width={40}/>
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
       <h1 className="text-center mb-4 font-semibold text-lead-dark text-2xl">{t('login.we_emailed_you')}</h1>
@@ -82,10 +82,10 @@ export default function ConfirmCodeForm() {
         layout="vertical"
         label={t('login.code')}
         name="code"
-        rules={[{ required: true, max: 255 }]}
+        rules={[{required: true, max: 255}]}
         style={{marginBottom: 20}}
       >
-        <Input.OTP length={8} disabled={sending} onChange={(value) => handleFinish({code: value})} />
+        <Input.OTP length={8} disabled={sending} onChange={(value) => handleFinish({code: value})}/>
       </Form.Item>
 
       <Form.Item>
@@ -95,7 +95,8 @@ export default function ConfirmCodeForm() {
       </Form.Item>
 
       <div className="flex justify-center">
-        <button className='font-medium text-blue-600 dark:text-blue-500 cursor-pointer' onClick={sendCode} type="button">
+        <button className='font-medium text-blue-600 dark:text-blue-500 cursor-pointer' onClick={sendCode}
+                type="button">
           <span className="underline underline-offset-2">{t('login.didnt_receive_an_email')}</span>
         </button>
       </div>

@@ -18,13 +18,13 @@ Route::post('/confirm_code', [AuthController::class, 'confirm_code']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/locations/countries', [LocationController::class, 'getCountries']);
+Route::get('/locations/countries/{country_cca2}/states', [LocationController::class, 'getStates']);
+Route::get('/locations/countries/{country_cca2}/states/{state_code}/cities',
+    [LocationController::class, 'getCities']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
-
-    Route::get('/locations/countries', [LocationController::class, 'getCountries']);
-    Route::get('/locations/countries/{country_cca2}/states', [LocationController::class, 'getStates']);
-    Route::get('/locations/countries/{country_cca2}/states/{state_code}/cities',
-        [LocationController::class, 'getCities']);
 
     Route::get('/contract/categories', [ContractController::class, 'getCategories']);
     Route::apiResource('/contract', ContractController::class);

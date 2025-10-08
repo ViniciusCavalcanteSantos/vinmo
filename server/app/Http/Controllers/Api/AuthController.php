@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
@@ -237,6 +238,7 @@ class AuthController extends Controller
 
     public function register(Request $request): JsonResponse
     {
+
         $request->merge([
             'email' => Cache::get('confirmation_email'),
             'email_verified_at' => Cache::get('email_verified_at'),
@@ -246,7 +248,15 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'email_verified_at' => 'required|date_format:Y-m-d H:i:s'
+            'email_verified_at' => 'required|date_format:Y-m-d H:i:s',
+            'address.postal_code' => 'required|string|max:12',
+            'address.street' => 'required|string|max:120',
+            'address.number' => 'required|string|max:10',
+            'address.neighborhood' => 'required|string|max:40',
+            'address.complement' => 'nullable|string|max:120',
+            'address.city' => 'required|string|max:40',
+            'address.state' => 'required|string|max:12',
+            'address.country' => 'required|string|size:2',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -255,13 +265,30 @@ class AuthController extends Controller
             ], 422);
         }
 
+        $validated = $validator->validated();
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'email_verified_at' => $request->email_verified_at,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            $user = DB::transaction(function () use ($validated) {
+                $user = User::create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'email_verified_at' => $validated['email_verified_at'],
+                    'password' => Hash::make($validated['password']),
+                ]);
+
+                $user->address()->create(array_merge($validated['address'], [
+                    'label' => 'User Address',
+                    'granularity' => 'full_address'
+                ]));
+
+                return $user;
+            });
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'We had a problem creating your new account, please try again later',
+            ], 422);
+        }
 
         $token = $user->createToken('api_token')->plainTextToken;
 

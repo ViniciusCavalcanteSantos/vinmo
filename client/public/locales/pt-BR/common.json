@@ -16,6 +16,10 @@
       "title": "Verificar email",
       "description": "Confirme seu email Vinmo."
     },
+    "address": {
+      "title": "Informe seu endereço",
+      "description": "Por favor informe seu endereço"
+    },
     "finish": {
       "title": "Conta Confirmada",
       "description": "Email verificado com sucesso."
@@ -61,6 +65,7 @@
     "didnt_receive_an_email": "Não recebeu um email? Reenviar email",
     "email_verified": "Endereço de email verificado",
     "email_verified_successfully": "Email verificado com sucesso!",
+    "finish_setting_up_your_account": "Conclua a configuração da sua conta",
     "you_can_proceed_with_registration": "Você pode prosseguir com o cadastro",
     "email_address": "Endereço de email",
     "signup_terms": "Ao fazer a inscrição, aceito os <tos>Termos de Serviço<icon/></tos> e concordo com a <pp>Política de Privacidade<icon/></pp> da Vinmo.",
@@ -74,13 +79,8 @@
     "if_you_havent_rececived_the_email_check_your_spam": "Se você não recebeu o email, verifique sua pasta de spam ou <su>registre-se</su>",
     "change_password": "Mudar senha",
     "remember_me": "Lembre-se de mim",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-    "": ""
+    "we_need_your_address": "We need your address",
+    "please_inform_your_address": "Por favor informe seu endereço"
   },
   "full_name": "Nome completo",
   "enter_full_name": "Digitar o seu nome completo",
@@ -118,9 +118,15 @@
   "enter_city": "Insira a cidade",
   "address": "Endereço",
   "neighborhood": "Bairro",
+  "enter_neighborhood": "Insira o bairro",
+  "postal_code": "CEP",
+  "enter_postal_code": "Insira o CEP",
   "street": "Rua",
+  "enter_street": "Insira a rua",
   "number": "Número",
+  "enter_number": "Insira o número",
   "complement": "Complemento",
+  "enter_complement": "Insira o complemento",
   "cancel": "Cancelar",
   "enter_or_select": "Digite ou selecione",
   "graduation_type": "Tipo de Formatura",
@@ -182,5 +188,7 @@
   "are_you_sure_to_delete_contract": "Você tem certeza que deseja excluir este contrato?",
   "delete_contract_confirmation": "Esta ação não poderá ser desfeita. O contrato <strong>\"{{label}}\"</strong> será removido permanentemente.",
   "associated_information_that_will_be_lost": "Informações associadas que serão perdidas:",
-  "linked_clients": "Clientes vinculados"
+  "linked_clients": "Clientes vinculados",
+  "next": "Próximo",
+  "previous": "Anterior"
 }
