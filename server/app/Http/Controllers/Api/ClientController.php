@@ -71,6 +71,7 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
+        $client->load('address');
         return response()->json([
             'status' => 'success',
             'message' => __('Client retrieved'),
@@ -85,15 +86,13 @@ class ClientController extends Controller
     {
         try {
             $client = $clientService->updateClient($client, $request);
-            $client->load('category', 'address', 'graduationDetail');
+            $client->load('address');
             return response()->json([
                 'status' => 'success',
                 'message' => __('Client updated'),
                 'client' => new ClientResource($client)
             ]);
-
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => __('Could not perform action')

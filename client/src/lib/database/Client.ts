@@ -48,7 +48,7 @@ export async function fetchClient(id: number) {
 }
 
 export async function createClient(values: any, profile: UploadFile) {
-  const formData = objectToFormData(values, {profile: profile},)
+  const formData = objectToFormData(values)
   if (profile.originFileObj) {
     formData.append("profile", profile.originFileObj);
   }
@@ -59,10 +59,16 @@ export async function createClient(values: any, profile: UploadFile) {
   });
 }
 
-export async function updateClient(id: number, values: any) {
+export async function updateClient(id: number, values: any, profile: UploadFile) {
+  const formData = objectToFormData(values)
+  if (profile.originFileObj) {
+    formData.append("profile", profile.originFileObj);
+  }
+
+  formData.append("_method", "PUT");
   return await apiFetch<UpdateClientResponse>(`/client/${id}`, {
-    method: "PUT",
-    body: JSON.stringify(values),
+    method: "POST",
+    body: formData
   });
 }
 

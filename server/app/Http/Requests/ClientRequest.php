@@ -21,9 +21,10 @@ class ClientRequest extends ApiFormRequest
      */
     public function rules(): array
     {
+        $isEdit = $this->isMethod('PUT') || $this->isMethod('PATCH');
         $rules = [
             'name' => 'required|string|max:60',
-            'profile' => 'required|file|image',
+            'profile' => $isEdit ? 'nullable|file|image' : 'required|file|image',
             'inform_address' => 'required|boolean',
             'inform_guardian' => 'required|boolean',
 

@@ -85,12 +85,53 @@ const ManageClientPage: React.FC = () => {
           const clientData = res.client;
           form.setFieldsValue({
             ...clientData,
+            guardian_name: clientData.guardian?.name,
+            guardian_type: clientData.guardian?.type,
+            guardian_phone: clientData.guardian?.phone,
+            guardian_email: clientData.guardian?.email,
+            // postal_code: clientData.address.postal_code,
+            street: clientData.address?.street,
+            number: clientData.address?.number,
+            neighborhood: clientData.address?.neighborhood,
+            complement: clientData.address?.complement,
+            country: clientData.address?.country,
+            state: clientData.address?.state,
+            city: clientData.address?.city,
+            inform_address: !!clientData.address,
+            inform_guardian: !!clientData.guardian?.name,
             birthdate: clientData.birthdate ? dayjs(clientData.birthdate) : null,
           });
+          if (clientData.address) {
+            try {
+              const {country, state} = clientData.address;
+              setLoadingStates(true);
+              setLoadingCities(true);
+              const [statesRes, citiesRes] = await Promise.all([
+                getStates(country),
+                getCities(country, state)
+              ]);
 
-          if (clientData.address?.country) {
-            handleCountryChange(clientData.address.country);
+              if (statesRes.status !== ApiStatus.SUCCESS || citiesRes.status !== ApiStatus.SUCCESS) {
+                return notification.warning({message: 'Falha ao carregar o endereço!'});
+              }
+
+              setStates(statesRes.states)
+              setCities(citiesRes.cities)
+            } catch (err) {
+            } finally {
+              setLoadingCountries(false);
+              setLoadingCities(false);
+            }
           }
+
+          setFileList([
+            {
+              uid: '-1',
+              name: 'profile.jpg',
+              status: 'done',
+              url: clientData.profileUrl,
+            },
+          ]);
         } else {
           notification.error({message: 'Cliente não encontrado.'});
           router.back();
@@ -159,16 +200,19 @@ const ManageClientPage: React.FC = () => {
 
     let res;
     if (isEditMode) {
-      res = await updateClient(Number(clientId), values);
+      res = await updateClient(Number(clientId), values, fileList[0]);
     } else {
       res = await createClient(values, fileList[0]);
     }
 
-    if (res.status !== ApiStatus.SUCCESS) {
-      notification.warning({message: res.message});
-    } else {
-      notification.success({message: res.message});
+    setLoadingSubmit(false);
 
+    if (res.status !== ApiStatus.SUCCESS) {
+      return notification.warning({message: res.message});
+    }
+
+    notification.success({message: res.message});
+    if (!isEditMode) {
       if (keepAdding) {
         setFileList([])
         form.resetFields();
@@ -179,7 +223,6 @@ const ManageClientPage: React.FC = () => {
         router.push('/clients');
       }
     }
-    setLoadingSubmit(false);
   }
 
   const handleBeforeUpload = (file: File) => {
@@ -308,14 +351,14 @@ const ManageClientPage: React.FC = () => {
                 <Checkbox>{t('Informar responsâvel')}</Checkbox>
               </Form.Item>
 
-              <Form.Item
-                name="keep_adding"
-                valuePropName="checked"
-                initialValue={false}
-                style={{marginBottom: 10}}
+              {!isEditMode && <Form.Item
+                  name="keep_adding"
+                  valuePropName="checked"
+                  initialValue={false}
+                  style={{marginBottom: 10}}
               >
-                <Checkbox>{t('Continuar adicionando')}</Checkbox>
-              </Form.Item>
+                  <Checkbox>{t('Continuar adicionando')}</Checkbox>
+              </Form.Item>}
             </Row>
 
             {informGuardian && (
