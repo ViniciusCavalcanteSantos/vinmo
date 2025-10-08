@@ -1,6 +1,6 @@
 "use client";
 
-import {createContext, useContext, useState} from "react";
+import {createContext, useCallback, useContext, useMemo, useState} from "react";
 import {
   createContract as createContractApi,
   CreateContractResponse,
@@ -29,7 +29,7 @@ export const ContractsProvider = ({children}: { children: React.ReactNode }) => 
   const [contracts, setContracts] = useState<ContractType[]>([]);
   const [loadingContracts, setLoadingContracts] = useState(true);
 
-  const fetchContracts = async (page: number = 1, pageSize: number = 15, searchTerm?: string) => {
+  const fetchContracts = useCallback(async (page: number = 1, pageSize: number = 15, searchTerm?: string) => {
     setLoadingContracts(true);
     const res = await fetchContractsApi(page, pageSize, searchTerm || "");
     if (res.status === ApiStatus.SUCCESS) {
@@ -37,42 +37,44 @@ export const ContractsProvider = ({children}: { children: React.ReactNode }) => 
     }
     setLoadingContracts(false);
     return res;
-  }
+  }, [])
 
-  const createContract = async (values: any) => {
+  const createContract = useCallback(async (values: any) => {
     const res = await createContractApi(values);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchContracts();
     }
     return res;
-  };
+  }, [fetchContracts]);
 
-  const updateContract = async (id: number, values: any) => {
+  const updateContract = useCallback(async (id: number, values: any) => {
     const res = await updateContractApi(id, values);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchContracts();
     }
     return res;
-  };
+  }, [fetchContracts]);
 
-  const removeContract = async (id: number) => {
+  const removeContract = useCallback(async (id: number) => {
     const res = await removeContractApi(id);
     if (res.status === ApiStatus.SUCCESS) {
       setContracts(prev => prev.filter(c => c.id !== id));
     }
     return res;
-  };
+  }, []);
+
+  const value = useMemo(() => ({
+    contracts,
+    loadingContracts,
+    fetchContracts,
+    createContract,
+    updateContract,
+    removeContract,
+  }), [contracts, loadingContracts, fetchContracts, createContract, updateContract, removeContract])
 
   return (
     <ContractsContext.Provider
-      value={{
-        contracts,
-        loadingContracts,
-        fetchContracts,
-        createContract,
-        updateContract,
-        removeContract,
-      }}
+      value={value}
     >
       {children}
     </ContractsContext.Provider>

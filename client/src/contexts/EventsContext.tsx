@@ -1,6 +1,6 @@
 "use client";
 
-import {createContext, useContext, useState} from "react";
+import {createContext, useCallback, useContext, useMemo, useState} from "react";
 import {
   createEvent as createEventApi,
   CreateEventResponse,
@@ -29,7 +29,7 @@ export const EventsProvider = ({children}: { children: React.ReactNode }) => {
   const [events, setEvents] = useState<EventType[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
-  const fetchEvents = async (page: number = 1, pageSize: number = 15, searchTerm?: string) => {
+  const fetchEvents = useCallback(async (page: number = 1, pageSize: number = 15, searchTerm?: string) => {
     setLoadingEvents(true);
     const res = await fetchEventsApi(page, pageSize, searchTerm || "");
     if (res.status === ApiStatus.SUCCESS) {
@@ -37,42 +37,44 @@ export const EventsProvider = ({children}: { children: React.ReactNode }) => {
     }
     setLoadingEvents(false);
     return res;
-  }
+  }, [])
 
-  const createEvent = async (values: any) => {
+  const createEvent = useCallback(async (values: any) => {
     const res = await createEventApi(values);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchEvents();
     }
     return res;
-  };
+  }, [fetchEvents]);
 
-  const updateEvent = async (id: number, values: any) => {
+  const updateEvent = useCallback(async (id: number, values: any) => {
     const res = await updateEventApi(id, values);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchEvents();
     }
     return res;
-  };
+  }, [fetchEvents]);
 
-  const removeEvent = async (id: number) => {
+  const removeEvent = useCallback(async (id: number) => {
     const res = await removeEventApi(id);
     if (res.status === ApiStatus.SUCCESS) {
       setEvents(prev => prev.filter(c => c.id !== id));
     }
     return res;
-  };
+  }, []);
+
+  const value = useMemo(() => ({
+    events,
+    loadingEvents,
+    fetchEvents,
+    createEvent,
+    updateEvent,
+    removeEvent,
+  }), [events, loadingEvents, fetchEvents, createEvent, updateEvent, removeEvent]);
 
   return (
     <EventsContext.Provider
-      value={{
-        events,
-        loadingEvents,
-        fetchEvents,
-        createEvent,
-        updateEvent,
-        removeEvent,
-      }}
+      value={value}
     >
       {children}
     </EventsContext.Provider>
