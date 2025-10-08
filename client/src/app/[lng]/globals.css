@@ -57,3 +57,8 @@ body {
 .antd-upload-error .ant-upload.ant-upload-select {
     border-color: #ff4d4f !important;
 }
+
+.rounded-avatar,
+.rounded-avatar ~ .ant-image-mask {
+    border-radius: 50%
+}

@@ -1,12 +1,12 @@
 "use client"
 
-import {Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
+import {Button, Card, Empty, Flex, Image, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
 import {useEffect, useState} from "react";
 import {SorterResult} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
 import ClientType from "@/types/ClientType";
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, EyeOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
 import {useClients} from "@/contexts/ClientsContext";
 import {ApiStatus} from "@/types/ApiResponse";
@@ -55,7 +55,20 @@ export default function Page() {
     {
       title: t('name'),
       dataIndex: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name)
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      render: (_, record) => (
+        <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
+          <Image
+            className="rounded-avatar"
+            src={record.profileUrl}
+            width={32}
+            height={32}
+            style={{cursor: 'pointer'}}
+            preview={{mask: <EyeOutlined/>}}
+          />
+          <span>{record.name}</span>
+        </div>
+      ),
     },
     {
       title: t('code'),
@@ -65,6 +78,11 @@ export default function Page() {
     {
       title: t('birthdate'),
       dataIndex: 'birthdate',
+    },
+    {
+      title: t('phone'),
+      dataIndex: 'phone',
+      sorter: (a, b) => a.phone?.localeCompare(b.phone ?? "") ?? 1
     },
     {
       title: t('street'),
