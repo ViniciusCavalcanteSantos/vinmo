@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Mail\EmailConfirmation;
 use App\Mail\EmailPasswordReset;
 use App\Models\User;
@@ -296,7 +297,7 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => __('Registration completed successfully'),
             'token' => $token,
-            'user' => $user->only(['id', 'name', 'email']),
+            'user' => new UserResource($user),
         ]);
     }
 
@@ -327,13 +328,14 @@ class AuthController extends Controller
             : now()->addHours(2);
 
         $user = Auth::user();
+        $user->load('address');
         $token = $user->createToken('api_token', ['*'], $expiresAt);
 
         return response()->json([
             'status' => 'success',
             'message' => __('Login successfully'),
             'token' => $token->plainTextToken,
-            'user' => $user->only(['id', 'name', 'email']),
+            'user' => new UserResource($user),
         ]);
     }
 
@@ -342,7 +344,7 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => __('User successfully obtained'),
-            'user' => $request->user(),
+            'user' => new UserResource($request->user())
         ]);
     }
 }
