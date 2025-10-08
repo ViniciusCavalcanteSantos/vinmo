@@ -29,6 +29,7 @@ import dayjs from "dayjs";
 import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
 import {createClient, fetchClient, updateClient} from "@/lib/database/Client";
+import {useUser} from "@/contexts/UserContext";
 
 interface OptionType {
   value: string;
@@ -41,6 +42,7 @@ const ManageClientPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const clientId = params.id as string;
+  const {defaultDateFormat} = useUser();
 
   const isEditMode = clientId !== 'new';
 
@@ -174,7 +176,6 @@ const ManageClientPage: React.FC = () => {
     }
   };
 
-  // ALTERAÇÃO: Pequena modificação para aceitar o countryCode como parâmetro
   const handleStateChange = async (stateCode: string) => {
     form.setFieldsValue({city: null});
     setCities([]);
@@ -321,7 +322,7 @@ const ManageClientPage: React.FC = () => {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item name="birthdate" label={t('birthdate')} rules={[]}>
-                  <DatePicker picker="date" style={{width: '100%'}} maxDate={dayjs()}/>
+                  <DatePicker picker="date" style={{width: '100%'}} maxDate={dayjs()} format={defaultDateFormat}/>
                 </Form.Item>
               </Col>
 

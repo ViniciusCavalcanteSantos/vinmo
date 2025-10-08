@@ -12,12 +12,15 @@ import {useClients} from "@/contexts/ClientsContext";
 import {ApiStatus} from "@/types/ApiResponse";
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
+import {useUser} from "@/contexts/UserContext";
+import dayjs from "dayjs";
 
 export default function Page() {
   const {t} = useT();
   const {clients, fetchClients, loadingClients, removeClient} = useClients();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
+  const {defaultDateFormat} = useUser();
   useDebounce(() => {
     setSearchTermDebounce(searchTerm);
   }, 300, [searchTerm])
@@ -78,6 +81,7 @@ export default function Page() {
     {
       title: t('birthdate'),
       dataIndex: 'birthdate',
+      render: (_, record) => (dayjs(record.birthdate).format(defaultDateFormat))
     },
     {
       title: t('phone'),

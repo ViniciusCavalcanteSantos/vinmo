@@ -10,6 +10,7 @@ import {fetchContracts} from "@/lib/database/Contract";
 import {fetchEventTypes} from "@/lib/database/Event";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
+import {useUser} from "@/contexts/UserContext";
 
 interface ManageEventModalProps {
   open: boolean;
@@ -23,6 +24,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
   const {t} = useT();
   const notification = useNotification();
   const {createEvent, updateEvent} = useEvents();
+  const {defaultDateFormat} = useUser();
 
   const isEditMode = !!event;
 
@@ -168,7 +170,9 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
               name="event_date" label={t('event_date')} rules={[{required: true, message: t('enter_date')}]}>
               <DatePicker
                 picker="date"
-                style={{width: '100%'}}/>
+                style={{width: '100%'}}
+                format={defaultDateFormat}
+              />
             </Form.Item>
           </Col>
 

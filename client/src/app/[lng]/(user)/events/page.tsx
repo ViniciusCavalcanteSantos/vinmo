@@ -12,6 +12,8 @@ import {useEvents} from "@/contexts/EventsContext";
 import {ApiStatus} from "@/types/ApiResponse";
 import ManageEventModal from "@/components/ManageEventModal";
 import PageHeader from "@/components/PageHeader";
+import dayjs from "dayjs";
+import {useUser} from "@/contexts/UserContext";
 
 export default function Page() {
   const {t} = useT();
@@ -22,6 +24,8 @@ export default function Page() {
   useDebounce(() => {
     setSearchTermDebounce(searchTerm);
   }, 300, [searchTerm])
+
+  const {defaultDateFormat} = useUser();
 
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
@@ -88,6 +92,7 @@ export default function Page() {
     {
       title: t('event_date'),
       dataIndex: 'eventDate',
+      render: (_, record) => (dayjs(record.eventDate).format(defaultDateFormat))
     },
     {
       title: t('start_time'),
