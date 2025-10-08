@@ -34,5 +34,7 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+    'image_analysis' => [
+        'default' => env('DEFAULT_IMAGE_ANALYZER', 'aws'),
+    ]
 ];
