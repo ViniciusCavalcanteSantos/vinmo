@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->string('neighborhood', 40)->nullable();
             $table->string('city', 40);
             $table->string('state', 12);
-            $table->string('country', 3);
+            $table->string('country', 2);
             $table->timestamps();
 
             $table->index(['addressable_id', 'addressable_type']);

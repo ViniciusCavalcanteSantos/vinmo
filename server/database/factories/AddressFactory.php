@@ -18,8 +18,8 @@ class AddressFactory extends Factory
     public function definition(): array
     {
         $countries = new Countries();
-        $country = $countries->whereIn('cca3', ['USA', 'BRA'])->random();
-        $countryCode = $country->cca3;
+        $country = $countries->whereIn('cca2', ['US', 'BR'])->random();
+        $countryCode = $country->cca2;
 
         $states = $country->hydrateStates()->states;
         $state = $states->isNotEmpty() ? $states->random() : null;

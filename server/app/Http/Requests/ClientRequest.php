@@ -45,7 +45,7 @@ class ClientRequest extends ApiFormRequest
                 'complement' => 'nullable|string|max:120',
                 'city' => 'required|string|max:40',
                 'state' => 'required|string|max:12',
-                'country' => 'required|string|size:3',
+                'country' => 'required|string|size:2',
             ]);
         }
 

@@ -28,7 +28,7 @@ class LocationController extends Controller
                 ) ?? $country->name->common;
 
                 return [
-                    'value' => $country->cca3,
+                    'value' => $country->cca2,
                     'label' => $country->extra->emoji.' '.$translatedName.($nativeName ? " ({$nativeName})" : ''),
                 ];
             });
@@ -40,10 +40,10 @@ class LocationController extends Controller
         ]);
     }
 
-    public function getStates(Request $request, $country_cca3)
+    public function getStates(Request $request, $country_cca2)
     {
         $countries = new Countries();
-        $country = $countries->where('cca3', strtoupper($country_cca3))->first();
+        $country = $countries->where('cca2', strtoupper($country_cca2))->first();
         if ($country->isEmpty()) {
             return response()->json([
                 'status' => 'error',
@@ -74,10 +74,10 @@ class LocationController extends Controller
         ]);
     }
 
-    public function getCities(Request $request, $country_cca3, $state_code)
+    public function getCities(Request $request, $country_cca2, $state_code)
     {
         $countries = new Countries();
-        $country = $countries->where('cca3', strtoupper($country_cca3))->first();
+        $country = $countries->where('cca2', strtoupper($country_cca2))->first();
         if ($country->isEmpty()) {
             return response()->json([
                 'status' => 'error',

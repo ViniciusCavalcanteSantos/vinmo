@@ -24,7 +24,7 @@ class ContractRequest extends ApiFormRequest
         $userId = $this->user()->id;
         $rules = [
             'title' => ['required', 'string', 'max:180'],
-            'country' => ['required', 'string', 'size:3', 'alpha'],
+            'country' => ['required', 'string', 'size:2', 'alpha'],
             'state' => ['required', 'string', 'max:12'],
             'city' => ['required', 'string', 'max:40'],
         ];
