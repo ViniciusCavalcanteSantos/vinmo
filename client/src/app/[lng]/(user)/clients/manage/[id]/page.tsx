@@ -30,6 +30,7 @@ import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
 import {createClient, fetchClient, updateClient} from "@/lib/database/Client";
 import {useUser} from "@/contexts/UserContext";
+import {AsYouType, CountryCode, getCountries as getPhoneCountries} from "libphonenumber-js";
 
 interface OptionType {
   value: string;
@@ -42,7 +43,7 @@ const ManageClientPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const clientId = params.id as string;
-  const {defaultDateFormat} = useUser();
+  const {user, defaultDateFormat} = useUser();
 
   const isEditMode = clientId !== 'new';
 
@@ -251,6 +252,16 @@ const ManageClientPage: React.FC = () => {
     setFileList(newFileList);
   }
 
+  const handlePhoneChange = (e: any) => {
+    const value = e.target.value;
+
+    const countryCode = getPhoneCountries().includes(user?.address.country as CountryCode)
+      ? user?.address.country as CountryCode
+      : "US"
+    const formated = (new AsYouType(countryCode)).input(value)
+    form.setFieldsValue({phone: formated})
+  }
+
   return (
     <>
       <PageHeader title={isEditMode ? t('edit_client') : t('create_new_client')}/>
@@ -328,7 +339,7 @@ const ManageClientPage: React.FC = () => {
 
               <Col span={12}>
                 <Form.Item name="phone" label={t('phone')} rules={[]}>
-                  <Input placeholder={t('phone')} maxLength={20}/>
+                  <Input placeholder={t('phone')} maxLength={20} onChange={handlePhoneChange}/>
                 </Form.Item>
               </Col>
             </Row>
