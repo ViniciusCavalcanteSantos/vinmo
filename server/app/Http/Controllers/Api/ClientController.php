@@ -7,7 +7,10 @@ use App\Http\Requests\ClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Services\ClientService;
+use App\Services\StoragePathService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
 {
@@ -113,7 +116,16 @@ class ClientController extends Controller
             ], 404);
         }
 
-        if (!$client->delete()) {
+        try {
+            DB::transaction(function () use ($client) {
+                $client->delete();
+                $directoryPath = StoragePathService::getClientProfilePath($client->id);
+
+                if (Storage::directoryExists($directoryPath)) {
+                    Storage::deleteDirectory($directoryPath);
+                }
+            });
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => __('Could not perform action')

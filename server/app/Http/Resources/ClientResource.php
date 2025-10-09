@@ -18,7 +18,7 @@ class ClientResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
-            'profileUrl' => $this->profile_url,
+            'profileUrl' => $this->profile_url_full,
             'birthdate' => $this->birthdate?->format('Y-m-d'),
             'phone' => $this->phone,
             'guardian' => [

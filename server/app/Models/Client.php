@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -33,12 +32,10 @@ class Client extends Model
         return $this->morphOne(Address::class, 'addressable');
     }
 
-    public function profileUrl(): Attribute
+    public function getProfileUrlFullAttribute(): ?string
     {
-        return Attribute::make(
-            get: fn(string $value) => $value
-                ? Storage::url($value)
-                : null
-        );
+        return $this->attributes['profile_url']
+            ? Storage::url($this->attributes['profile_url'])
+            : null;
     }
 }

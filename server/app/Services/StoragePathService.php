@@ -33,7 +33,7 @@ class StoragePathService
             : (string) $id;
     }
 
-    public static function getClientProfilePath(int|string $clientId, string $filename): string
+    public static function getClientProfilePath(int|string $clientId, string $filename = ''): string
     {
         return 'clients/'.self::id($clientId).'/'.$filename;
     }
