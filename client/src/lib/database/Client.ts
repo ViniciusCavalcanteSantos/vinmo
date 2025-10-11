@@ -47,15 +47,18 @@ export async function fetchClient(id: number) {
   });
 }
 
-export async function createClient(values: any, profile: UploadFile) {
-  const formData = objectToFormData(values)
-  if (profile.originFileObj) {
-    formData.append("profile", profile.originFileObj);
-  }
+export async function createClient(
+  values: any,
+  profile: UploadFile | File | Blob,
+  onProgress?: (progress: number) => void
+) {
+  const formData = objectToFormData(values, {'profile': profile})
 
-  return await apiFetch<CreateClientResponse>("/client", {
+  return apiFetch<CreateClientResponse>("/client", {
     method: "POST",
     body: formData,
+    driver: 'axios',
+    onProgress
   });
 }
 
