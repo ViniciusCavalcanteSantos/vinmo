@@ -101,7 +101,7 @@ export default function Page() {
     {
       title: t('birthdate'),
       dataIndex: 'birthdate',
-      render: (_, record) => (dayjs(record.birthdate).format(defaultDateFormat))
+      render: (_, record) => (record.birthdate ? dayjs(record.birthdate).format(defaultDateFormat) : '')
     },
     {
       title: t('phone'),
