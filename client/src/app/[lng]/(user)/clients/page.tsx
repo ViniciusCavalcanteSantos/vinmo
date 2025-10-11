@@ -1,7 +1,21 @@
 "use client"
 
-import {Button, Card, Empty, Flex, Image, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
-import {useEffect, useState} from "react";
+import {
+  Button,
+  Card,
+  Empty,
+  Flex,
+  Form,
+  Image,
+  Modal,
+  Select,
+  Space,
+  Table,
+  TableColumnsType,
+  TablePaginationConfig,
+  Tooltip
+} from "antd";
+import React, {useEffect, useState} from "react";
 import {SorterResult} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
@@ -14,13 +28,19 @@ import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
 import {useUser} from "@/contexts/UserContext";
 import dayjs from "dayjs";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
   const {t} = useT();
   const {clients, fetchClients, loadingClients, removeClient} = useClients();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
+  const [openModalRegister, setOpenModalRegister] = useState(false);
   const {defaultDateFormat} = useUser();
+  const router = useRouter();
+  const [form] = Form.useForm();
+
+
   useDebounce(() => {
     setSearchTermDebounce(searchTerm);
   }, 300, [searchTerm])
@@ -155,6 +175,17 @@ export default function Page() {
     }
   };
 
+  const handleOk = () => {
+    form.validateFields()
+      .then(async ({register_type}: any) => {
+        if (register_type === 'manual') {
+          router.push('/clients/manage/new');
+        } else if (register_type === 'image_name') {
+          router.push('/clients/create/by-image-name');
+        }
+      })
+  }
+
   return (
     <>
       <PageHeader title={t('clients')}/>
@@ -164,11 +195,9 @@ export default function Page() {
           <Flex gap="small">
             <Search placeholder={t('search_client')} style={{width: 240}} loading={loadingClients}
                     onChange={e => setSearchTerm(e.target.value)}/>
-            <Link href="/clients/manage/new">
-              <Button type="primary">
-                {t('add_new_client')}
-              </Button>
-            </Link>
+            <Button type="primary" onClick={() => setOpenModalRegister(true)}>
+              {t('add_new_client')}
+            </Button>
           </Flex>
         </Flex>
         <Table<ClientType>
@@ -195,14 +224,33 @@ export default function Page() {
           </span>
                 }
               >
-                <Link href="/clients/manage/new">
-                  <Button type="primary">{t('add_new_client')}</Button>
-                </Link>
+                <Button type="primary" onClick={() => setOpenModalRegister(true)}>{t('add_new_client')}</Button>
               </Empty>
             ),
           }}
         />
       </Card>
+
+      <Modal
+        open={openModalRegister}
+        title={t('choose_register_type')}
+        okText={t('go')}
+        onCancel={() => setOpenModalRegister(false)}
+        onOk={handleOk}
+      >
+        <Form form={form} layout="vertical" name="form_in_modal">
+          <Form.Item name="register_type" label={t('register_type')}
+                     rules={[{required: true, message: t('select_a_register_type')}]}>
+            <Select placeholder={t('select_a_register_type')}
+                    options={[
+                      {value: "manual", label: t("manual_registration")},
+                      {value: "image_name", label: t("by_image_name")},
+                      {value: "link", label: t("by_link")}
+                    ]}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 }
