@@ -256,5 +256,11 @@
   "Religious Procession": "Procissão Religiosa",
   "Parish Feast / Festival": "Festa da Paróquia / Quermesse",
   "Event created": "Evento criado",
-  "Event updated": "Evento atualizado"
+  "Event updated": "Evento atualizado",
+  "Client not found": "Contrato não encontrado",
+  "Client retrieved successfully": "Contratos obtidos com sucesso",
+  "Client created": "Cliente criado",
+  "Client updated": "Cliente atualizado",
+  "Client deleted": "Cliente excluído",
+  "go": "Ir"
 }

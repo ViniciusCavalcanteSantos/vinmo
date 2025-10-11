@@ -351,7 +351,7 @@ const ManageClientPage: React.FC = () => {
                 initialValue={false}
                 style={{marginBottom: 10, marginRight: 10}}
               >
-                <Checkbox>{t('Informar endereço')}</Checkbox>
+                <Checkbox>{t('inform_address')}</Checkbox>
               </Form.Item>
 
               <Form.Item
@@ -360,7 +360,7 @@ const ManageClientPage: React.FC = () => {
                 initialValue={false}
                 style={{marginBottom: 10, marginRight: 10}}
               >
-                <Checkbox>{t('Informar responsâvel')}</Checkbox>
+                <Checkbox>{t('inform_guardian')}</Checkbox>
               </Form.Item>
 
               {!isEditMode && <Form.Item
@@ -369,7 +369,7 @@ const ManageClientPage: React.FC = () => {
                   initialValue={false}
                   style={{marginBottom: 10}}
               >
-                  <Checkbox>{t('Continuar adicionando')}</Checkbox>
+                  <Checkbox>{t('keep_adding')}</Checkbox>
               </Form.Item>}
             </Row>
 
@@ -387,7 +387,7 @@ const ManageClientPage: React.FC = () => {
 
                   <Col span={8}>
                     <Form.Item name="guardian_type" label={t('guardian_type')}
-                               rules={[{required: true, message: t('enter_guardian_type')}]}>
+                               rules={[{required: true, message: t('select_guardian_type')}]}>
                       <Select
                         placeholder={t('select_guardian_type')}
                         options={guardianTypes.map(guardianType => {
@@ -426,7 +426,7 @@ const ManageClientPage: React.FC = () => {
                 <Row gutter={16}>
                   <Col span={6}>
                     <Form.Item name="postal_code" label={t('postal_code')}
-                               rules={[{required: true, message: t('enter_code')}]}>
+                               rules={[{required: true, message: t('enter_postal_code')}]}>
                       <Input placeholder={t('postal_code')} maxLength={12}/>
                     </Form.Item>
                   </Col>
