@@ -14,7 +14,7 @@ class EventService
 
         return DB::transaction(function () use ($validated) {
             $event = Event::create([
-                'contract_id' => $validated['contract_id'],
+                'contract_id' => $validated['contract'],
                 'type_id' => $validated['event_type'],
                 'event_date' => $validated['event_date'],
                 'start_time' => $validated['event_start_time'] ?? null,
@@ -31,7 +31,7 @@ class EventService
 
         return DB::transaction(function () use ($validated, $event) {
             $event->update([
-                'contract_id' => auth()->id(),
+                'contract_id' => $validated['contract'],
                 'type_id' => $validated['event_type'],
                 'event_date' => $validated['event_date'],
                 'start_time' => $validated['event_start_time'] ?? null,
