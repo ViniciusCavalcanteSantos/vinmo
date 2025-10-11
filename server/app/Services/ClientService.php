@@ -29,7 +29,7 @@ class ClientService
                 'guardian_phone' => $validated['guardian_phone'] ?? null,
             ]);
 
-            if ($validated['inform_address']) {
+            if ($validated['inform_address'] ?? false) {
                 $client->address()->create([
                     'label' => 'Client address',
                     'granularity' => 'full_address',
@@ -83,7 +83,7 @@ class ClientService
                 'guardian_phone' => $validated['guardian_phone'] ?? null,
             ]);
 
-            if ($validated['inform_address']) {
+            if ($validated['inform_address'] ?? false) {
                 $client->address()->updateOrCreate([
                     'label' => 'Client address',
                     'granularity' => 'full_address',

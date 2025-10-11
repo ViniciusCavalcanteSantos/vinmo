@@ -25,16 +25,16 @@ class ClientRequest extends ApiFormRequest
         $rules = [
             'name' => 'required|string|max:60',
             'profile' => $isEdit ? 'nullable|file|image' : 'required|file|image',
-            'inform_address' => 'required|boolean',
-            'inform_guardian' => 'required|boolean',
+            'inform_address' => 'sometimes|boolean',
+            'inform_guardian' => 'sometimes|boolean',
 
             'code' => 'nullable|string|max:20',
             'birthdate' => 'nullable|date',
             'phone' => 'nullable|string|max:20',
         ];
 
-        $informAddress = $this->input('inform_address');
-        $informGuardian = $this->input('inform_guardian');
+        $informAddress = $this->input('inform_address') ?? false;
+        $informGuardian = $this->input('inform_guardian') ?? false;
 
         if ($informAddress) {
             $rules = array_merge($rules, [
