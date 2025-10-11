@@ -101,6 +101,11 @@ export default function Page() {
     {
       title: t('birthdate'),
       dataIndex: 'birthdate',
+      sorter: (a, b) => {
+        const dateA = a.birthdate ? dayjs(a.birthdate).valueOf() : 0;
+        const dateB = b.birthdate ? dayjs(b.birthdate).valueOf() : 0;
+        return dateA - dateB;
+      },
       render: (_, record) => (record.birthdate ? dayjs(record.birthdate).format(defaultDateFormat) : '')
     },
     {

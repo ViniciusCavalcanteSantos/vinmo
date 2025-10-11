@@ -42,6 +42,9 @@ export default function Dropzone(
   description = description ?? t('dropzone.description')
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
+    accept: {
+      'image/*': []
+    },
     onDrop: (acceptedFiles) => {
       const filesWithProgress = acceptedFiles.map((file) =>
         Object.assign(file, {

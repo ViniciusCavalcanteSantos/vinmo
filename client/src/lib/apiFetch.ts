@@ -75,8 +75,12 @@ export default async function apiFetch<T = undefined>(
 
       return data;
     } catch (error: any) {
-      console.error("Axios error:", error);
-      return handleUnexpectedError(error.status)
+      const data = error.response.data
+      if (!data || !("status" in data) || !("message" in data)) {
+        return handleUnexpectedError(error.status)
+      }
+
+      return data;
     }
   }
 

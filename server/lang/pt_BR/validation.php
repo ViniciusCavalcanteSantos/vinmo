@@ -244,7 +244,8 @@ return [
         'shift' => 'turno',
         'conclusion_year' => 'ano de conclusão',
         'university_course' => 'curso da universidade',
-        'school_grade_level' => 'nível da grade'
+        'school_grade_level' => 'nível da grade',
+        'profile' => 'perfil'
     ],
 
 ];

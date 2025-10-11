@@ -46,7 +46,14 @@ const Page: React.FC = () => {
   }, [files]);
 
   const handleUpload = async (file: FileWithUploadData) => {
-    const fileName = file.name;
+    let fileName = file.name.replace(/\.[^/.]+$/, "");
+    fileName = fileName
+      .normalize("NFKC")
+      .replace(/[^\p{L}\p{N}\p{M}\s'-]/gu, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!fileName) fileName = "Sem nome";
+
     const res = await createClient({name: fileName}, file, (progress) => {
       setFiles(prev =>
         prev.map(f => {
@@ -59,6 +66,7 @@ const Page: React.FC = () => {
     })
 
     if (res.status !== ApiStatus.SUCCESS) {
+      notification.warning({message: res.message})
       setFiles(prev =>
         prev.map(f => {
           if (f.id === file.id) {

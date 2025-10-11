@@ -205,7 +205,7 @@
   "finish_and_exit": "Concluir e sair",
   "name": "Nome",
   "birthdate": "Data de nascimento",
-  "phone": "Telefoe",
+  "phone": "Telefone",
   "add_new_client": "Adicionar novo cliente",
   "search_client": "Buscar cliente",
   "choose_register_type": "Escolher tipo de registro",
@@ -240,5 +240,6 @@
   "brother": "Irmão",
   "godmother": "Madrinha",
   "godfather": "Padrinho",
-  "other": "Outro"
+  "other": "Outro",
+  "go": "Ir"
 }
