@@ -184,6 +184,7 @@
   "event": "Evento",
   "select_contract": "Selecionar contrato",
   "select_event": "Selecionar evento",
+  "select_events": "Selecione os eventos",
   "event_hour_optional": "Horário do evento (opcional)",
   "description_optional": "Descrição (opcional)",
   "enter_date": "Insira a data",
@@ -241,5 +242,7 @@
   "godmother": "Madrinha",
   "godfather": "Padrinho",
   "other": "Outro",
-  "go": "Ir"
+  "go": "Ir",
+  "assign": "Atribuir",
+  "assign_client_to_event": "Atribuir cliente a evento"
 }

@@ -32,6 +32,13 @@ class Client extends Model
         return $this->morphOne(Address::class, 'addressable');
     }
 
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'clients_event_assignments')
+            ->withTimestamps();
+    }
+
+
     public function getProfileUrlFullAttribute(): ?string
     {
         return $this->attributes['profile_url']

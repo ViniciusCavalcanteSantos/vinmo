@@ -184,6 +184,7 @@
   "event": "Event",
   "select_contract": "Select Contract",
   "select_event": "Select Event",
+  "select_events": "Select events",
   "event_hour_optional": "Event time (optional)",
   "description_optional": "Description (optional)",
   "enter_date": "Enter the date",
@@ -241,5 +242,7 @@
   "godmother": "Godmother",
   "godfather": "Godfather",
   "other": "Other",
-  "go": "Go"
+  "go": "Go",
+  "assign": "Assign",
+  "assign_client_to_event": "Assign client to event"
 }

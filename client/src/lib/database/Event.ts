@@ -27,7 +27,7 @@ export interface UpdateEventResponse {
   event: EventType
 }
 
-export async function fetchEvents(page: number, pageSize: number, searchTerm: string) {
+export async function fetchEvents(page: number, pageSize: number, searchTerm?: string) {
   const query = new URLSearchParams({
     page: String(page),
     per_page: String(pageSize)

@@ -262,5 +262,7 @@
   "Client created": "Cliente criado",
   "Client updated": "Cliente atualizado",
   "Client deleted": "Cliente excluído",
-  "go": "Ir"
+  "go": "Ir",
+  "Assignments retrieved": "Atribuições obtidas",
+  "Assignments updated": "Atribuições atualizadas"
 }

@@ -16,11 +16,10 @@ import {
   Tooltip
 } from "antd";
 import React, {useEffect, useState} from "react";
-import {SorterResult} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
 import ClientType from "@/types/ClientType";
-import {DeleteOutlined, EditOutlined, EyeOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, EyeOutlined, LinkOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
 import {useClients} from "@/contexts/ClientsContext";
 import {ApiStatus} from "@/types/ApiResponse";
@@ -29,17 +28,24 @@ import Link from "next/link";
 import {useUser} from "@/contexts/UserContext";
 import dayjs from "dayjs";
 import {useRouter} from "next/navigation";
+import EventSelector from "@/components/EventSelector";
+import {createAssignment, fetchAssignments} from "@/lib/database/Assignment";
+import {useNotification} from "@/contexts/NotificationContext";
 
 export default function Page() {
   const {t} = useT();
+  const notification = useNotification();
   const {clients, fetchClients, loadingClients, removeClient} = useClients();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
   const [openModalRegister, setOpenModalRegister] = useState(false);
+  const [openModalAssignClient, setOpenModalAssignClient] = useState(false);
+  const [assignments, setAssignments] = useState<number[]>([]);
+  const [clientId, setClientId] = useState<number | null>(null);
+
   const {defaultDateFormat} = useUser();
   const router = useRouter();
   const [form] = Form.useForm();
-
 
   useDebounce(() => {
     setSearchTermDebounce(searchTerm);
@@ -51,6 +57,21 @@ export default function Page() {
     total: 0,
   });
 
+  const openModalAssignment = (clientId: number) => {
+    fetchAssignments(clientId)
+      .then(res => {
+        setAssignments(res.assignments)
+        setClientId(clientId)
+        setOpenModalAssignClient(true)
+      })
+  }
+
+  const closeModalAssignClient = () => {
+    setAssignments([])
+    setClientId(null)
+    setOpenModalAssignClient(false)
+  }
+
   const ActionButtons = ({record}: { record: ClientType }) => (
     <Space size="middle">
       <Tooltip title={t('edit')} destroyOnHidden>
@@ -61,6 +82,14 @@ export default function Page() {
             icon={<EditOutlined/>}
           />
         </Link>
+      </Tooltip>
+      <Tooltip title={t('assign')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          icon={<LinkOutlined/>}
+          onClick={() => openModalAssignment(record.id)}
+        />
       </Tooltip>
       <Tooltip title={t('delete')} destroyOnHidden>
         <Button
@@ -166,8 +195,6 @@ export default function Page() {
 
   const handleTableChange = (
     newPagination: TablePaginationConfig,
-    filters: Record<string, any>,
-    sorter: SorterResult<ClientType> | SorterResult<ClientType>[]
   ) => {
     if (
       newPagination.current !== pagination.current ||
@@ -189,6 +216,21 @@ export default function Page() {
           router.push('/clients/create/by-image-name');
         }
       })
+  }
+
+  const handleAssignChange = (values: number[]) => {
+    setAssignments(values);
+  }
+
+  const handleAssign = async () => {
+    if (!clientId) return;
+    const res = await createAssignment(clientId, assignments)
+    if (res.status !== ApiStatus.SUCCESS) {
+      notification.warning({message: res.message})
+    }
+
+    notification.success({message: res.message})
+    closeModalAssignClient()
   }
 
   return (
@@ -255,6 +297,16 @@ export default function Page() {
             />
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        open={openModalAssignClient}
+        title={t('assign_client_to_event')}
+        okText={t('assign')}
+        onCancel={closeModalAssignClient}
+        onOk={handleAssign}
+      >
+        <EventSelector value={assignments} onChange={handleAssignChange}/>
       </Modal>
     </>
   );

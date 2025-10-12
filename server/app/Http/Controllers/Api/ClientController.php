@@ -28,9 +28,9 @@ class ClientController extends Controller
             ->with(['address'])
             ->latest();
 
-//        $clientsQuery->when($searchTerm, function ($query, $term) {
-//            $query->where('searchable', "LIKE", "%{$term}%");
-//        });
+        $clientsQuery->when($searchTerm, function ($query, $term) {
+            $query->where('searchable', "LIKE", "%{$term}%");
+        });
 
         $clients = $clientsQuery->paginate($perPage);
         return response()->json([

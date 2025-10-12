@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ContractController;
@@ -33,6 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/event', EventController::class);
 
     Route::apiResource('/client', ClientController::class);
+
+    Route::apiResource('/assignment/client', AssignmentController::class);
+    Route::post('/assignment/client/{client}', [AssignmentController::class, 'store']);
 });
 
 Route::post('/deploy/webhook', function (Request $request) {
