@@ -20,6 +20,13 @@ export function objectToFormData(
 
     if (value === undefined || value === null) return;
 
+    if (Array.isArray(value)) {
+      value.forEach(item => {
+        formData.append(`${field}[]`, item);
+      });
+      return;
+    }
+
     if (typeof value === "boolean") {
       formData.append(field, value ? "1" : "0");
       return;

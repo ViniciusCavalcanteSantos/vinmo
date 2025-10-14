@@ -28,6 +28,9 @@ class ClientRequest extends ApiFormRequest
             'inform_address' => 'sometimes|boolean',
             'inform_guardian' => 'sometimes|boolean',
 
+            'assignments' => 'sometimes|array',
+            'assignments.*' => 'integer|exists:events,id',
+
             'code' => 'nullable|string|max:20',
             'birthdate' => 'nullable|date',
             'phone' => 'nullable|string|max:20',

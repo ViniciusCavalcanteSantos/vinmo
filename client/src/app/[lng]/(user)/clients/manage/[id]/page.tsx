@@ -24,13 +24,14 @@ import {getCities, getCountries, getStates} from "@/lib/database/Location";
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
-import ClientType, {guardianTypes} from "@/types/ClientType";
+import {guardianTypes} from "@/types/ClientType";
 import dayjs from "dayjs";
 import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
 import {createClient, fetchClient, updateClient} from "@/lib/database/Client";
 import {useUser} from "@/contexts/UserContext";
 import {AsYouType, CountryCode, getCountries as getPhoneCountries} from "libphonenumber-js";
+import EventSelector from "@/components/EventSelector";
 
 interface OptionType {
   value: string;
@@ -51,6 +52,7 @@ const ManageClientPage: React.FC = () => {
   const informAddress = Form.useWatch('inform_address', form);
   const informGuardian = Form.useWatch('inform_guardian', form);
   const keepAdding = Form.useWatch('keep_adding', form);
+  const autoAssign = Form.useWatch('auto_assign', form);
   const country = Form.useWatch('country', form);
   const state = Form.useWatch('state', form);
 
@@ -69,6 +71,8 @@ const ManageClientPage: React.FC = () => {
 
   const [loadingForm, setLoadingForm] = useState(isEditMode);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+
+  const [assignments, setAssignments] = useState<number[]>([]);
 
   useEffect(() => {
     setLoadingCountries(true);
@@ -189,7 +193,7 @@ const ManageClientPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (values: ClientType) => {
+  const handleSubmit = async (values: any) => {
     if (!fileList[0]) {
       setUploadRequired(true);
       return;
@@ -199,6 +203,8 @@ const ManageClientPage: React.FC = () => {
     if (values.birthdate) {
       values.birthdate = dayjs(values.birthdate).format('YYYY-MM-DD');
     }
+
+    values.assignments = assignments
 
     let res;
     if (isEditMode) {
@@ -221,6 +227,7 @@ const ManageClientPage: React.FC = () => {
         form.setFieldsValue({inform_address: informAddress});
         form.setFieldsValue({inform_guardian: informGuardian});
         form.setFieldsValue({keep_adding: keepAdding});
+        form.setFieldsValue({auto_assign: autoAssign});
       } else {
         router.push('/clients');
       }
@@ -260,6 +267,10 @@ const ManageClientPage: React.FC = () => {
       : "US"
     const formated = (new AsYouType(countryCode)).input(value)
     form.setFieldsValue({phone: formated})
+  }
+
+  const handleAssignChange = (values: number[]) => {
+    setAssignments(values);
   }
 
   return (
@@ -371,7 +382,24 @@ const ManageClientPage: React.FC = () => {
               >
                   <Checkbox>{t('keep_adding')}</Checkbox>
               </Form.Item>}
+
+              {!isEditMode && <Form.Item
+                  name="auto_assign"
+                  valuePropName="checked"
+                  initialValue={false}
+                  style={{marginBottom: 10}}
+              >
+                  <Checkbox>{t('auto_assign')}</Checkbox>
+              </Form.Item>}
             </Row>
+
+            {autoAssign && (
+              <>
+                <Divider>{t('assign_client_to_event')}</Divider>
+
+                <EventSelector value={assignments} onChange={handleAssignChange}/>
+              </>
+            )}
 
             {informGuardian && (
               <>

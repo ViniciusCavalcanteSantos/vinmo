@@ -44,6 +44,10 @@ class ClientService
                 ]);
             }
 
+            if ($validated['assignments'] ?? false) {
+                $client->events()->sync($validated['assignments']);
+            }
+
             $processedProfile = ImagePreparationService::from($profile)
                 ->fixOrientation()
                 ->limitDimensions()

@@ -1,7 +1,7 @@
 "use client";
 
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, Form, Row, Space, Statistic} from 'antd';
+import {Button, Card, Checkbox, Col, Divider, Form, Row, Space, Statistic} from 'antd';
 import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import PageHeader from "@/components/PageHeader";
@@ -10,6 +10,7 @@ import {createClient, removeClient} from "@/lib/database/Client";
 import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
 import {UserOutlined} from "@ant-design/icons";
+import EventSelector from "@/components/EventSelector";
 
 const Page: React.FC = () => {
   const {t} = useT();
@@ -17,6 +18,7 @@ const Page: React.FC = () => {
 
   const [form] = Form.useForm();
   const [loadingForm] = useState(false);
+  const autoAssign = Form.useWatch('auto_assign', form);
 
   const [files, setFiles] = useState<FileWithUploadData[]>([]);
   const [stats, setStats] = useState({
@@ -25,6 +27,8 @@ const Page: React.FC = () => {
     totalError: 0,
     totalPending: 0,
   });
+
+  const [assignments, setAssignments] = useState<number[]>([]);
 
   const updateStats = (currentFiles?: FileWithUploadData[]) => {
     currentFiles = currentFiles ?? files
@@ -54,7 +58,7 @@ const Page: React.FC = () => {
       .trim();
     if (!fileName) fileName = "Sem nome";
 
-    const res = await createClient({name: fileName}, file, (progress) => {
+    const res = await createClient({name: fileName, assignments: assignments}, file, (progress) => {
       setFiles(prev =>
         prev.map(f => {
           if (f.id === file.id) {
@@ -112,6 +116,10 @@ const Page: React.FC = () => {
     }
   }
 
+  const handleAssignChange = (values: number[]) => {
+    setAssignments(values);
+  }
+
   return (
     <>
       <PageHeader title={t('automatic_registration_by_photo')}/>
@@ -119,6 +127,23 @@ const Page: React.FC = () => {
       <div className="flex  items-start gap-4">
         <Card loading={loadingForm} variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)] w-full">
           <Form form={form} layout="vertical" name="manage_client_form">
+            {<Form.Item
+              name="auto_assign"
+              valuePropName="checked"
+              initialValue={false}
+              style={{marginBottom: 10}}
+            >
+              <Checkbox>{t('auto_assign')}</Checkbox>
+            </Form.Item>}
+
+            {autoAssign && (
+              <div className="mb-4">
+                <Divider>{t('assign_clients_to_events')}</Divider>
+
+                <EventSelector value={assignments} onChange={handleAssignChange}/>
+              </div>
+            )}
+
             <Dropzone
               onFilesAdded={onFilesAdded}
               onFilesRemoved={onFilesRemoved} files={files}

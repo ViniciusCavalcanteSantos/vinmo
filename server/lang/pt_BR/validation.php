@@ -245,7 +245,12 @@ return [
         'conclusion_year' => 'ano de conclusão',
         'university_course' => 'curso da universidade',
         'school_grade_level' => 'nível da grade',
-        'profile' => 'perfil'
+        'profile' => 'perfil',
+        'assignments' => 'atribuições',
+        'guardian_name' => 'Nome do responsável',
+        'guardian_type' => 'Tipo de responsável',
+        'guardian_email' => 'Email do responsável',
+        'guardian_phone' => 'Telefone do responsável'
     ],
 
 ];

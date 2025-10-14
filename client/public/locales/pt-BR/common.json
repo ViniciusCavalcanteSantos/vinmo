@@ -244,5 +244,7 @@
   "other": "Outro",
   "go": "Ir",
   "assign": "Atribuir",
-  "assign_client_to_event": "Atribuir cliente a evento"
+  "assign_client_to_event": "Atribuir cliente a evento",
+  "assign_clients_to_events": "Atribuir clientes a eventos",
+  "auto_assign": "Atribuir automaticamente"
 }
