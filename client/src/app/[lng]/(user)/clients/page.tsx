@@ -29,19 +29,17 @@ import {useUser} from "@/contexts/UserContext";
 import dayjs from "dayjs";
 import {useRouter} from "next/navigation";
 import EventSelector from "@/components/EventSelector";
-import {createAssignment, fetchAssignments} from "@/lib/database/Assignment";
+import {assignClient, assignClientBulk, fetchAssignments, unassignClientBulk} from "@/lib/database/Assignment";
 import {useNotification} from "@/contexts/NotificationContext";
+import {TableRowSelection} from "antd/es/table/interface";
 
 export default function Page() {
   const {t} = useT();
-  const notification = useNotification();
   const {clients, fetchClients, loadingClients, removeClient} = useClients();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
   const [openModalRegister, setOpenModalRegister] = useState(false);
-  const [openModalAssignClient, setOpenModalAssignClient] = useState(false);
-  const [assignments, setAssignments] = useState<number[]>([]);
-  const [clientId, setClientId] = useState<number | null>(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const {defaultDateFormat} = useUser();
   const router = useRouter();
@@ -57,19 +55,43 @@ export default function Page() {
     total: 0,
   });
 
-  const openModalAssignment = (clientId: number) => {
+  const [openModalAssign, setOpenModalAssign] = useState(false);
+  const [clientIds, setClientIds] = useState<number[]>([]);
+  const [assignType, setAssignType] = useState<"single" | "bulk" | "unassign">("single");
+  const [assignments, setAssignments] = useState<number[]>([]);
+
+  const openAssignSingle = (clientId: number) => {
+    setOpenModalAssign(true);
+    setAssignType('single');
+    setClientIds([clientId])
+    setAssignments([])
+
     fetchAssignments(clientId)
       .then(res => {
         setAssignments(res.assignments)
-        setClientId(clientId)
-        setOpenModalAssignClient(true)
       })
   }
 
-  const closeModalAssignClient = () => {
+  const openAssignBulk = () => {
+    console.log(selectedRowKeys)
+
+    setOpenModalAssign(true);
+    setAssignType('bulk');
+    setClientIds(selectedRowKeys as number[])
     setAssignments([])
-    setClientId(null)
-    setOpenModalAssignClient(false)
+  }
+
+  const openUnassignBulk = () => {
+    setOpenModalAssign(true);
+    setAssignType('unassign');
+    setClientIds(selectedRowKeys as number[])
+    setAssignments([])
+  }
+
+  const closeModalAssign = () => {
+    setOpenModalAssign(false);
+    setClientIds([])
+    setAssignments([])
   }
 
   const ActionButtons = ({record}: { record: ClientType }) => (
@@ -88,7 +110,7 @@ export default function Page() {
           type="text"
           shape="circle"
           icon={<LinkOutlined/>}
-          onClick={() => openModalAssignment(record.id)}
+          onClick={() => openAssignSingle(record.id)}
         />
       </Tooltip>
       <Tooltip title={t('delete')} destroyOnHidden>
@@ -218,20 +240,37 @@ export default function Page() {
       })
   }
 
-  const handleAssignChange = (values: number[]) => {
-    setAssignments(values);
-  }
 
-  const handleAssign = async () => {
-    if (!clientId) return;
-    const res = await createAssignment(clientId, assignments)
-    if (res.status !== ApiStatus.SUCCESS) {
-      notification.warning({message: res.message})
-    }
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
 
-    notification.success({message: res.message})
-    closeModalAssignClient()
-  }
+  const rowSelection: TableRowSelection<ClientType> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+
+  const hasSelected = selectedRowKeys.length > 0;
+
+  const header = hasSelected ? () => {
+    return (
+      <div className="flex items-center">
+        <h3 className="mr-4 font-medium">{selectedRowKeys.length} Selecionados</h3>
+
+        <Button type="primary" className="mr-2" onClick={() => openAssignBulk()}>
+          {t('assign')}
+        </Button>
+
+        <Button color="gold" variant="solid" onClick={() => openUnassignBulk()}>
+          {t('unassign')}
+        </Button>
+
+        {/*<Button color="danger" variant="solid" onClick={() => {*/}
+        {/*}}>Excluir</Button>*/}
+      </div>
+    );
+  } : undefined;
+
 
   return (
     <>
@@ -242,6 +281,7 @@ export default function Page() {
           <Flex gap="small">
             <Search placeholder={t('search_client')} style={{width: 240}} loading={loadingClients}
                     onChange={e => setSearchTerm(e.target.value)}/>
+
             <Button type="primary" onClick={() => setOpenModalRegister(true)}>
               {t('add_new_client')}
             </Button>
@@ -249,6 +289,8 @@ export default function Page() {
         </Flex>
         <Table<ClientType>
           rowKey="id"
+          title={header}
+          rowSelection={rowSelection}
           columns={columns}
           dataSource={clients}
           bordered={true}
@@ -299,15 +341,80 @@ export default function Page() {
         </Form>
       </Modal>
 
+      <AssignModals openModalAssign={openModalAssign} handleClose={closeModalAssign} clientIds={clientIds}
+                    type={assignType} initialAssignments={assignments}/>
+    </>
+  );
+}
+
+interface AssignModalsProps {
+  openModalAssign: boolean,
+  handleClose: () => void,
+  clientIds: number[],
+  initialAssignments: number[],
+  type: "single" | "bulk" | 'unassign'
+}
+
+function AssignModals({openModalAssign, handleClose, clientIds, type, initialAssignments = []}: AssignModalsProps) {
+  const {t} = useT();
+  const notification = useNotification();
+
+  const [assignments, setAssignments] = useState<number[]>(initialAssignments);
+
+  useEffect(() => {
+    setAssignments(initialAssignments)
+  }, [initialAssignments]);
+
+  const handleAssignChange = (values: number[]) => {
+    setAssignments(values);
+  }
+
+  const handleAssign = async () => {
+    if (!clientIds.length) return;
+
+    let res;
+    if (type === "single") {
+      res = await assignClient(clientIds[0], assignments)
+    } else if (type === "bulk") {
+      res = await assignClientBulk(clientIds, assignments)
+    } else {
+      res = await unassignClientBulk(clientIds, assignments)
+    }
+
+    if (res.status !== ApiStatus.SUCCESS) {
+      notification.warning({message: res.message})
+      return;
+    }
+
+    notification.success({message: res.message})
+    handleClose()
+  }
+
+  let title;
+  let okText;
+  if (type === "single") {
+    title = 'assign_client_to_event'
+    okText = 'assign'
+  } else if (type === "bulk") {
+    title = 'assign_clients_to_events'
+    okText = 'assign'
+  } else {
+    title = 'unassign_clients'
+    okText = 'unassign'
+  }
+
+  return (
+    <>
       <Modal
-        open={openModalAssignClient}
-        title={t('assign_client_to_event')}
-        okText={t('assign')}
-        onCancel={closeModalAssignClient}
+        open={openModalAssign}
+        title={t(title)}
+        okText={t(okText)}
+        onCancel={handleClose}
         onOk={handleAssign}
+        okButtonProps={{color: type === 'unassign' ? 'gold' : 'primary', variant: "solid"}}
       >
         <EventSelector value={assignments} onChange={handleAssignChange}/>
       </Modal>
     </>
-  );
+  )
 }

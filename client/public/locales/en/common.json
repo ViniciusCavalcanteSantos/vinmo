@@ -246,5 +246,6 @@
   "assign": "Assign",
   "assign_client_to_event": "Assign client to event",
   "assign_clients_to_events": "Assign clients to events",
-  "auto_assign": "Auto assign"
+  "auto_assign": "Auto assign",
+  "unassign": "Unassign"
 }

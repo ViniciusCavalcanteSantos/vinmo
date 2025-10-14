@@ -200,6 +200,7 @@ export default function Page() {
         <Table<ContractType>
           rowKey="id"
           title={header}
+          rowSelection={rowSelection}
           columns={columns}
           dataSource={contracts}
           bordered={true}

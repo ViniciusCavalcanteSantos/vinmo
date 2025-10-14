@@ -37,6 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/assignment/client', AssignmentController::class);
     Route::post('/assignment/client/{client}', [AssignmentController::class, 'store']);
+    Route::post('/assignment/bulk', [AssignmentController::class, 'storeBulk']);
+    Route::delete('/assignment/bulk', [AssignmentController::class, 'destroyBulk']);
 });
 
 Route::post('/deploy/webhook', function (Request $request) {

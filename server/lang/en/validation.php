@@ -194,6 +194,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'client_ids' => 'Clients',
+    ],
 
 ];

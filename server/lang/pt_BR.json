@@ -264,5 +264,7 @@
   "Client deleted": "Cliente excluído",
   "go": "Ir",
   "Assignments retrieved": "Atribuições obtidas",
-  "Assignments updated": "Atribuições atualizadas"
+  "Assignments updated": "Atribuições atualizadas",
+  "The selected client was not found in the system": "O cliente selecionado não foi encontrado no sistema",
+  "The selected event was not found in the system": "O evento selecionado não foi encontrada no sistema"
 }

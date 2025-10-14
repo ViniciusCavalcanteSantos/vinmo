@@ -250,7 +250,8 @@ return [
         'guardian_name' => 'Nome do responsável',
         'guardian_type' => 'Tipo de responsável',
         'guardian_email' => 'Email do responsável',
-        'guardian_phone' => 'Telefone do responsável'
+        'guardian_phone' => 'Telefone do responsável',
+        'client_ids' => 'Clientes',
     ],
 
 ];
