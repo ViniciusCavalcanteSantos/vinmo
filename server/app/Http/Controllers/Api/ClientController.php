@@ -96,6 +96,7 @@ class ClientController extends Controller
                 'client' => new ClientResource($client)
             ]);
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => __('Could not perform action')

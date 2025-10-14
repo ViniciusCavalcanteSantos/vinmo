@@ -1,5 +1,6 @@
 export type FullAddressType = {
   granularity: string,
+  postalCode: string,
   street: string,
   number: string,
   neighborhood: string,

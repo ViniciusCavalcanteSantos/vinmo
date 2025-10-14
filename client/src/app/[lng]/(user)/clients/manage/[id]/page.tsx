@@ -96,7 +96,7 @@ const ManageClientPage: React.FC = () => {
             guardian_type: clientData.guardian?.type,
             guardian_phone: clientData.guardian?.phone,
             guardian_email: clientData.guardian?.email,
-            // postal_code: clientData.address.postal_code,
+            postal_code: clientData.address?.postalCode,
             street: clientData.address?.street,
             number: clientData.address?.number,
             neighborhood: clientData.address?.neighborhood,

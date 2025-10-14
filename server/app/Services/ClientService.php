@@ -33,7 +33,7 @@ class ClientService
                 $client->address()->create([
                     'label' => 'Client address',
                     'granularity' => 'full_address',
-                    'postal_code' => $validated['street'],
+                    'postal_code' => $validated['postal_code'],
                     'street' => $validated['street'],
                     'number' => $validated['number'],
                     'neighborhood' => $validated['neighborhood'],
@@ -88,10 +88,11 @@ class ClientService
             ]);
 
             if ($validated['inform_address'] ?? false) {
-                $client->address()->updateOrCreate([
+
+                $client->address()->create([
                     'label' => 'Client address',
                     'granularity' => 'full_address',
-                    'postal_code' => $validated['street'],
+                    'postal_code' => $validated['postal_code'],
                     'street' => $validated['street'],
                     'number' => $validated['number'],
                     'neighborhood' => $validated['neighborhood'],
