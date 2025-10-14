@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
+use App\Observers\ClientObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Storage;
 
+#[ObservedBy([ClientObserver::class])]
 class Client extends Model
 {
     protected $fillable = [
         'user_id',
         'code', 'name', 'birthdate', 'phone', 'profile_url',
-        'guardian_name', 'guardian_type', 'guardian_email', 'guardian_phone',
+        'guardian_name', 'guardian_type', 'guardian_email', 'guardian_phone', 'searchable'
     ];
 
     protected $casts = [

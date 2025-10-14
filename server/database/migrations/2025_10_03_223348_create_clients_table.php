@@ -30,6 +30,8 @@ return new class extends Migration {
             $table->string('guardian_email', 60)->nullable();
             $table->string('guardian_phone', 20)->nullable();
 
+            $table->text('searchable')->nullable();
+            $table->fullText('searchable');
             $table->timestamps();
         });
     }
