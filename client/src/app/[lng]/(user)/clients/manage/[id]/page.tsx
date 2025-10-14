@@ -30,8 +30,8 @@ import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
 import {createClient, fetchClient, updateClient} from "@/lib/database/Client";
 import {useUser} from "@/contexts/UserContext";
-import {AsYouType, CountryCode, getCountries as getPhoneCountries} from "libphonenumber-js";
 import EventSelector from "@/components/EventSelector";
+import InputPhone from "@/components/InputPhone";
 
 interface OptionType {
   value: string;
@@ -259,16 +259,6 @@ const ManageClientPage: React.FC = () => {
     setFileList(newFileList);
   }
 
-  const handlePhoneChange = (e: any) => {
-    const value = e.target.value;
-
-    const countryCode = getPhoneCountries().includes(user?.address.country as CountryCode)
-      ? user?.address.country as CountryCode
-      : "US"
-    const formated = (new AsYouType(countryCode)).input(value)
-    form.setFieldsValue({phone: formated})
-  }
-
   const handleAssignChange = (values: number[]) => {
     setAssignments(values);
   }
@@ -350,7 +340,7 @@ const ManageClientPage: React.FC = () => {
 
               <Col span={12}>
                 <Form.Item name="phone" label={t('phone')} rules={[]}>
-                  <Input placeholder={t('phone')} maxLength={20} onChange={handlePhoneChange}/>
+                  <InputPhone placeholder={t('phone')}/>
                 </Form.Item>
               </Col>
             </Row>
@@ -440,7 +430,7 @@ const ManageClientPage: React.FC = () => {
                   <Col span={12}>
                     <Form.Item name="guardian_phone" label={t('guardian_phone')}
                                rules={[{required: true, message: t('enter_guardian_phone')}]}>
-                      <Input placeholder={t('enter_guardian_phone')} maxLength={20}/>
+                      <InputPhone placeholder={t('enter_guardian_phone')} maxLength={20}/>
                     </Form.Item>
                   </Col>
                 </Row>
