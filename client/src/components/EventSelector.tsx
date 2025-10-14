@@ -67,7 +67,6 @@ function EventSelector({value, onChange}: EventSelectorProps) {
     <>
       <TreeSelect
         showSearch={true}
-        onSearch={(value: any) => console.log(value)}
         title={t('events')}
         style={{width: '100%'}}
         value={loading ? [] : value}
@@ -80,6 +79,9 @@ function EventSelector({value, onChange}: EventSelectorProps) {
         multiple
         loading={loading}
         allowClear
+        filterTreeNode={(input, treeNode) =>
+          (treeNode?.title as string)?.toLowerCase().includes(input.toLowerCase())
+        }
       />
     </>
   );
