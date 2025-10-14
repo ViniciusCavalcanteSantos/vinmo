@@ -165,31 +165,6 @@ export default function Page() {
       sorter: (a, b) => a.phone?.localeCompare(b.phone ?? "") ?? 1
     },
     {
-      title: t('street'),
-      dataIndex: ['address', 'street'],
-      sorter: (a, b) => a.address?.street.localeCompare(b.address?.street ?? "") ?? 1
-    },
-    {
-      title: t('number'),
-      dataIndex: ['address', 'number'],
-      sorter: (a, b) => a.address?.number.localeCompare(b.address?.number ?? "") ?? 1
-    },
-    {
-      title: t('neighborhood'),
-      dataIndex: ['address', 'neighborhood'],
-      sorter: (a, b) => a.address?.neighborhood.localeCompare(b.address?.neighborhood ?? "") ?? 1
-    },
-    {
-      title: t('city'),
-      dataIndex: ['address', 'city'],
-      sorter: (a, b) => a.address?.city.localeCompare(b.address?.city ?? "") ?? 1
-    },
-    {
-      title: t('state'),
-      dataIndex: ['address', 'state'],
-      sorter: (a, b) => a.address?.state.localeCompare(b.address?.state ?? "") ?? 1
-    },
-    {
       title: t('actions'),
       key: 'actions',
       align: 'center',
@@ -198,6 +173,25 @@ export default function Page() {
       render: (_, record) => <ActionButtons record={record}/>
     }
   ];
+
+  const expandedRowRender = (record: ClientType) => (
+    <div className="p-4 flex flex-wrap gap-4">
+      {record.address && <div>
+          <p><strong>{t('street')}:</strong> {record.address?.street}</p>
+          <p><strong>{t('number')}:</strong> {record.address?.number}</p>
+          <p><strong>{t('neighborhood')}:</strong> {record.address?.neighborhood}</p>
+          <p><strong>{t('city')}:</strong> {record.address?.city}</p>
+          <p><strong>{t('state')}:</strong> {record.address?.state}</p>
+      </div>}
+
+      {record.guardian?.name && <div>
+          <p><strong>{t('guardian_name')}:</strong> {record.guardian?.name}</p>
+          <p><strong>{t('guardian_type')}:</strong> {t(record.guardian?.type)}</p>
+          <p><strong>{t('guardian_phone')}:</strong> {record.guardian?.phone}</p>
+          <p><strong>{t('guardian_email')}:</strong> {record.guardian?.email}</p>
+      </div>}
+    </div>
+  );
 
   useEffect(() => {
     setPagination(prev => ({
@@ -292,6 +286,10 @@ export default function Page() {
           title={header}
           rowSelection={rowSelection}
           columns={columns}
+          expandable={{
+            expandedRowRender, rowExpandable: (record) =>
+              !!(record.address || record.guardian)
+          }}
           dataSource={clients}
           bordered={true}
           loading={loadingClients}
