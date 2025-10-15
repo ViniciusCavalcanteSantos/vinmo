@@ -23,7 +23,7 @@ export const UserProvider = ({children}: { children: React.ReactNode }) => {
 
     const userData = JSON.parse(storedUser) as User;
     setUser(userData)
-    setDefaultDateFormat(getDateFormatByCountry(userData.address.country ?? null));
+    setDefaultDateFormat(getDateFormatByCountry(userData.address?.country ?? null));
   }, []);
 
   const setUser = useCallback((userToSet: User) => {
