@@ -7,12 +7,16 @@ export type FullAddressType = {
   complement?: string,
   city: string,
   state: string,
+  stateName?: string,
   country: string,
+  countryName?: string,
 }
 
 export type CityAreaAddressType = {
   granularity: string,
   city: string,
   state: string,
+  stateName?: string,
   country: string,
+  countryName?: string,
 }

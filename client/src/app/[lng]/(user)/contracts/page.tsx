@@ -108,9 +108,9 @@ export default function Page() {
       sorter: (a, b) => a.address.city.localeCompare(b.address.city)
     },
     {
-      title: t('uf'),
-      dataIndex: ['address', 'state'],
-      sorter: (a, b) => a.address.state.localeCompare(b.address.state)
+      title: t('state'),
+      dataIndex: ['address', 'stateName'],
+      sorter: (a, b) => a.address.stateName?.localeCompare(b.address?.stateName ?? "") ?? 0
     },
     {
       title: t('actions'),

@@ -23,7 +23,9 @@ class AddressResource extends JsonResource
             'complement' => $this->complement ?? null,
             'city' => $this->city,
             'state' => $this->state,
+            'stateName' => getStateName($this->country, $this->state),
             'country' => $this->country,
+            'countryName' => getCountryName($this->country),
         ];
     }
 }

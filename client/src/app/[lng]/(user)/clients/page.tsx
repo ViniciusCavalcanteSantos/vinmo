@@ -181,7 +181,7 @@ export default function Page() {
           <p><strong>{t('number')}:</strong> {record.address?.number}</p>
           <p><strong>{t('neighborhood')}:</strong> {record.address?.neighborhood}</p>
           <p><strong>{t('city')}:</strong> {record.address?.city}</p>
-          <p><strong>{t('state')}:</strong> {record.address?.state}</p>
+          <p><strong>{t('state')}:</strong> {record.address?.stateName}</p>
       </div>}
 
       {record.guardian?.name && <div>
