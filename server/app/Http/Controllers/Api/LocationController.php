@@ -11,7 +11,8 @@ class LocationController extends Controller
     public function getCountries()
     {
         $lang = app()->getLocale();
-        $langMap = ['en' => 'eng', 'pt_BR' => 'por',];
+        $langMap = config('localization.pragmarx_lang_map');
+
         $translationKey = $langMap[$lang] ?? 'eng';
 
         $countries = new Countries();

@@ -17,11 +17,9 @@ class LanguageSelector
     public function handle(Request $request, Closure $next): Response
     {
         $lang = $request->header('Accept-Language', 'en');
-        $map = [
-            'en' => 'en',
-            'pt-BR' => 'pt_BR'
-        ];
-        App::setLocale($map[$lang] ?? 'en');
+        $langMap = config('localization.laravel_lang_map');
+
+        App::setLocale($langMap[$lang] ?? 'en');
         return $next($request);
     }
 }
