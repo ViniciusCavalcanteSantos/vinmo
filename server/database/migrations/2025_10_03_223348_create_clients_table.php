@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('organization_id')->nullable();
+            $table->foreign('organization_id')->references('id')->on('organizations');
 
             $table->string('name', 60);
             $table->string('profile_url');

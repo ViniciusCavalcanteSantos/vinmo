@@ -15,15 +15,15 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $user_id = auth()->id();
+        $organizationId = auth()->user()->organization_id;
         $perPage = $request->input('per_page', 15);
         $searchTerm = $request->input('search');
 
         $eventsQuery = Event
-            ::whereIn('contract_id', function ($query) use ($user_id) {
+            ::whereIn('contract_id', function ($query) use ($organizationId) {
                 $query->select('id')
                     ->from('contracts')
-                    ->where('user_id', $user_id);
+                    ->where('organization_id', $organizationId);
             })
             ->with('type')
             ->latest();

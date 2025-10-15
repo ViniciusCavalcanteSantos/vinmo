@@ -16,7 +16,7 @@ class ContractService
 
         return DB::transaction(function () use ($validated, $category) {
             $contract = Contract::create([
-                'user_id' => auth()->id(),
+                'organization_id' => auth()->user()->organization_id,
                 'category_id' => $category->id,
                 'code' => $validated['code'],
                 'title' => $validated['title'],
@@ -52,7 +52,7 @@ class ContractService
 
         return DB::transaction(function () use ($contract, $validated) {
             $contract->update([
-                'user_id' => auth()->id(),
+                'organization_id' => auth()->user()->organization_id,
                 'code' => $validated['code'],
                 'title' => $validated['title'],
             ]);

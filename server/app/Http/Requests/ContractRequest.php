@@ -21,7 +21,7 @@ class ContractRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        $userId = $this->user()->id;
+        $organizationId = $this->user()->organization_id;
         $rules = [
             'title' => ['required', 'string', 'max:180'],
             'country' => ['required', 'string', 'size:2', 'alpha'],
@@ -35,7 +35,7 @@ class ContractRequest extends ApiFormRequest
                 'required',
                 'string',
                 'max:40',
-                Rule::unique('contracts', 'code')->where('user_id', $userId)
+                Rule::unique('contracts', 'code')->where('organization_id', $organizationId)
             ];
         } else {
             $contractId = $this->route('contract')->id;
@@ -44,7 +44,7 @@ class ContractRequest extends ApiFormRequest
                 'string',
                 'max:40',
                 Rule::unique('contracts', 'code')
-                    ->where('user_id', $userId)
+                    ->where('organization_id', $organizationId)
                     ->ignore($contractId)
             ];
         }

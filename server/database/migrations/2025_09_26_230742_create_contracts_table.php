@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('organization_id');
             $table->unsignedBigInteger('category_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('organization_id')->references('id')->on('organizations');
             $table->foreign('category_id')->references('id')->on('contracts_categories');
             $table->string('code', 40);
             $table->string('title', 180);
@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->fullText('searchable');
             $table->timestamps();
 
-            $table->unique(['user_id', 'code']);
+            $table->unique(['organization_id', 'code']);
         });
     }
 

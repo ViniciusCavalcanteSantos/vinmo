@@ -17,12 +17,12 @@ class ContractController extends Controller
      */
     public function index(Request $request)
     {
-        $user_id = auth()->id();
+        $organizationId = auth()->user()->organization_id;
         $perPage = $request->input('per_page', 15);
         $searchTerm = $request->input('search');
 
         $contractsQuery = Contract
-            ::where('user_id', $user_id)
+            ::where('organization_id', $organizationId)
             ->with(['category', 'address', 'graduationDetail'])
             ->latest();
 

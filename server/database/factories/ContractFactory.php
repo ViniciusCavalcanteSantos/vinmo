@@ -6,7 +6,7 @@ use App\Models\Address;
 use App\Models\Contract;
 use App\Models\ContractCategory;
 use App\Models\ContractGraduationDetail;
-use App\Models\User;
+use App\Models\Organization;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,7 +24,7 @@ class ContractFactory extends Factory
         $title = $this->faker->sentence(3);
         $code = strtoupper($this->faker->unique()->bothify('###'));
         return [
-            'user_id' => User::factory(),
+            'organization_id' => Organization::factory(),
             'category_id' => ContractCategory::inRandomOrder()->first()->id ?? 1,
             'code' => $code,
             'title' => $title,

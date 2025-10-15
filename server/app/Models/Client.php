@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class Client extends Model
 {
     protected $fillable = [
-        'user_id',
+        'organization_id',
         'code', 'name', 'birthdate', 'phone', 'profile_url',
         'guardian_name', 'guardian_type', 'guardian_email', 'guardian_phone', 'searchable'
     ];
@@ -22,9 +22,9 @@ class Client extends Model
         'birthdate' => 'date',
     ];
 
-    public function user(): BelongsTo
+    public function organization(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Organization::class);
     }
 
     /**

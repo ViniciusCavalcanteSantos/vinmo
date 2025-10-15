@@ -16,7 +16,7 @@ class ClientService
 
         return DB::transaction(function () use ($validated, $profile) {
             $client = Client::create([
-                'user_id' => auth()->id(),
+                'organization_id' => auth()->user()->organization_id,
                 'name' => $validated['name'],
                 'profile_url' => '',
 

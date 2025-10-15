@@ -15,11 +15,11 @@ class Contract extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'category_id', 'code', 'title', 'searchable'];
+    protected $fillable = ['organization_id', 'category_id', 'code', 'title', 'searchable'];
 
-    public function user(): BelongsTo
+    public function organization(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Organization::class);
     }
 
     public function category(): BelongsTo

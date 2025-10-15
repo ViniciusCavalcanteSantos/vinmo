@@ -31,7 +31,7 @@ class ContractSeeder extends Seeder
                     fn($sequence) => ['title' => $category->name." - ".$faker->sentence(3)]
                 ))
                 ->create([
-                    'user_id' => $user->id,
+                    'organization_id' => $user->organization->id,
                     'category_id' => $category->id,
                 ]);
         }
