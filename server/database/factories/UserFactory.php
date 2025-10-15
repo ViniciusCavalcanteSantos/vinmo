@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Address;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -51,5 +52,10 @@ class UserFactory extends Factory
                 'granularity' => 'full_address',
             ])->make()->toArray());
         });
+    }
+
+    public function withOrganization()
+    {
+        return $this->for(Organization::factory());
     }
 }

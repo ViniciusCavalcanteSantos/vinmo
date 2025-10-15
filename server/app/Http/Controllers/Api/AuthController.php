@@ -270,7 +270,9 @@ class AuthController extends Controller
 
         try {
             $user = DB::transaction(function () use ($validated) {
+                $organization = \App\Models\Organization::create();
                 $user = User::create([
+                    'organization_id' => $organization->id,
                     'name' => $validated['name'],
                     'email' => $validated['email'],
                     'email_verified_at' => $validated['email_verified_at'],
