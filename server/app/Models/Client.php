@@ -27,6 +27,11 @@ class Client extends Model
         return $this->belongsTo(Organization::class);
     }
 
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
     /**
      * Um Cliente pode ter um endereço (ocal onde mora).
      */

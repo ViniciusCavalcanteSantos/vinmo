@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\ClientRequest;
+use App\Jobs\GenerateImageVersions;
 use App\Models\Client;
 use App\Services\ImageAnalysis\ImagePreparationService;
 use Illuminate\Support\Facades\DB;
@@ -64,8 +65,13 @@ class ClientService
                 throw new \Exception('Unable to store profile picture');
             }
 
-            $client->update(['profile_url' => $path]);
+            $image = $client->image()->create([
+                'path' => $path,
+                'size' => $processedProfile->getFileSize(),
+                'mime_type' => $processedProfile->getMimetype()
+            ]);
 
+            GenerateImageVersions::dispatch($image);
             return $client;
         });
     }

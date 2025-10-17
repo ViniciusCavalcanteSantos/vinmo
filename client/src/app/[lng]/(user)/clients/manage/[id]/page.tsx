@@ -136,7 +136,7 @@ const ManageClientPage: React.FC = () => {
               uid: '-1',
               name: 'profile.jpg',
               status: 'done',
-              url: clientData.profileUrl,
+              url: clientData.profile.web,
             },
           ]);
         } else {
@@ -295,7 +295,7 @@ const ManageClientPage: React.FC = () => {
               )}
             </Upload>
           </div>
-          
+
           {uploadRequired &&
               <div className="text-[#ff4d4f]">
                 {t('select_a_photo')}

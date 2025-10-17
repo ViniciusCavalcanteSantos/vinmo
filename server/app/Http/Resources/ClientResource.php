@@ -18,10 +18,13 @@ class ClientResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
-            'profileUrl' => $this->profile_url_full,
+            'profile' => [
+                'original' => $this->image->url,
+                'web' => optional($this->image->getVersion('web'))->url ?? $this->image->url,
+                'thumb' => optional($this->image->getVersion('thumb'))->url ?? $this->image->url,
+            ],
             'birthdate' => $this->birthdate?->format('Y-m-d'),
             'phone' => $this->phone,
-
             'createdAt' => $this->created_at->toIso8601String(),
             'address' => new AddressResource($this->whenLoaded('address')),
         ];

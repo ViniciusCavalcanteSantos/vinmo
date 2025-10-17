@@ -140,7 +140,7 @@ export default function Page() {
         <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
           <Image
             className="rounded-avatar"
-            src={record.profileUrl}
+            src={record.profile.web}
             width={32}
             height={32}
             style={{cursor: 'pointer'}}
