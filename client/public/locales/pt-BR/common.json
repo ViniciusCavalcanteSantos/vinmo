@@ -273,5 +273,6 @@
   "Invalid file": "Arquivo inválido!",
   "please_select_images_only": "Por favor, selecione apenas arquivos do tipo imagem!",
   "link_copied": "Link copiado",
-  "link_copied_to_clipboard": "Link copiado para a área de transferência"
+  "link_copied_to_clipboard": "Link copiado para a área de transferência",
+  "no_client_found": "Nenhum cliente encontrado"
 }

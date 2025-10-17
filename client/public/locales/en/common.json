@@ -273,5 +273,6 @@
   "Invalid_file": "Invalid file!",
   "please_select_images_only": "Please select image type files only!",
   "link_copied": "Link copied",
-  "link_copied_to_clipboard": "Link copied to clipboard"
+  "link_copied_to_clipboard": "Link copied to clipboard",
+  "no_client_found": "No client found"
 }
