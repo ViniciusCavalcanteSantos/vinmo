@@ -119,7 +119,7 @@ const ManageClientPage: React.FC = () => {
               ]);
 
               if (statesRes.status !== ApiStatus.SUCCESS || citiesRes.status !== ApiStatus.SUCCESS) {
-                return notification.warning({message: 'Falha ao carregar o endereço!'});
+                return notification.warning({message: t('failed_to_load_address')});
               }
 
               setStates(statesRes.states)
@@ -140,7 +140,7 @@ const ManageClientPage: React.FC = () => {
             },
           ]);
         } else {
-          notification.error({message: 'Cliente não encontrado.'});
+          notification.error({message: t('client_not_found')});
           router.back();
         }
         setLoadingForm(false);
@@ -238,8 +238,8 @@ const ManageClientPage: React.FC = () => {
     const isImage = file.type.startsWith('image/');
     if (!isImage) {
       notification.warning({
-        message: 'Arquivo inválido!',
-        description: 'Por favor, selecione apenas arquivos do tipo imagem!'
+        message: t('Invalid_file'),
+        description: t('please_select_images_only')
       });
       return Upload.LIST_IGNORE;
     }
@@ -295,6 +295,7 @@ const ManageClientPage: React.FC = () => {
               )}
             </Upload>
           </div>
+          
           {uploadRequired &&
               <div className="text-[#ff4d4f]">
                 {t('select_a_photo')}

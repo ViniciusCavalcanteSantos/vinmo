@@ -267,5 +267,9 @@
   "link_generated_description": "The link was created successfully.",
   "failed_to_generate": "Failed to generate link",
   "copy_register_link": "Copy register link",
-  "finish": "Finish"
+  "finish": "Finish",
+  "failed_to_load_address": "Failed to load address!",
+  "client_not_found": "Client not found",
+  "Invalid_file": "Invalid file!",
+  "please_select_images_only": "Please select image type files only!"
 }

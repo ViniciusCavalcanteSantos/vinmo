@@ -267,5 +267,9 @@
   "link_generated_description": "O link foi criado com sucesso.",
   "failed_to_generate": "Falha ao gerar link",
   "copy_register_link": "Copiar link de cadastro",
-  "finish": "Concluir"
+  "finish": "Concluir",
+  "failed_to_load_address": "Falha ao carregar o endereço!",
+  "client_not_found": "Cliente não encontrado",
+  "Invalid file": "Arquivo inválido!",
+  "please_select_images_only": "Por favor, selecione apenas arquivos do tipo imagem!"
 }
