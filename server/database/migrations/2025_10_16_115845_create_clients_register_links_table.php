@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('clients_register_links', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->ulid('id')->primary();
             $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
             $table->string('title', 80);
             $table->integer('max_registers')->nullable();
