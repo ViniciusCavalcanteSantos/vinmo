@@ -271,5 +271,7 @@
   "failed_to_load_address": "Falha ao carregar o endereço!",
   "client_not_found": "Cliente não encontrado",
   "Invalid file": "Arquivo inválido!",
-  "please_select_images_only": "Por favor, selecione apenas arquivos do tipo imagem!"
+  "please_select_images_only": "Por favor, selecione apenas arquivos do tipo imagem!",
+  "link_copied": "Link copiado",
+  "link_copied_to_clipboard": "Link copiado para a área de transferência"
 }

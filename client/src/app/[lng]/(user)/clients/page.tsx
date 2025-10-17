@@ -397,7 +397,7 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedLink)
       .then(() => {
-        notification.success({message: 'link_copied'})
+        notification.success({message: t('link_copied_to_clipboard')})
       })
       .catch(() => {
       })
