@@ -406,6 +406,7 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
   const close = () => {
     form.resetFields()
     setLoading(false)
+    setAssignments([])
     handleClose()
   }
 
@@ -469,11 +470,15 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
           </Row>
 
           {informMaxClient &&
-              <Form.Item
-                  name="max_registers" label={t('max_registers')}
-                  rules={[{required: true, message: t('enter_max_registers')}]}>
-                  <InputNumber placeholder={t('enter_max_registers')} min={1} max={999} className="!w-full"/>
-              </Form.Item>
+              <>
+                  <Divider>{t('max_registers')}</Divider>
+
+                  <Form.Item
+                      name="max_registers" label={t('max_registers')}
+                      rules={[{required: true, message: t('enter_max_registers')}]}>
+                      <InputNumber placeholder={t('enter_max_registers')} min={1} max={999} className="!w-full"/>
+                  </Form.Item>
+              </>
           }
 
           {autoAssign && (
