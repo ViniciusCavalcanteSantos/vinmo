@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/event', EventController::class);
 
     Route::apiResource('/client', ClientController::class);
+    Route::post('/client/generate-register-link', [ClientController::class, 'generateLink']);
 
     Route::apiResource('/assignment/client', AssignmentController::class);
     Route::post('/assignment/client/{client}', [AssignmentController::class, 'store']);

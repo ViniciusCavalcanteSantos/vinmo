@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
+use App\Models\ClientRegisterLink;
 use App\Services\ClientService;
 use App\Services\StoragePathService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
@@ -96,7 +99,6 @@ class ClientController extends Controller
                 'client' => new ClientResource($client)
             ]);
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => __('Could not perform action')
@@ -137,5 +139,46 @@ class ClientController extends Controller
             'status' => 'success',
             'message' => __('Client deleted')
         ]);
+    }
+
+    public function generateLink(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:3|max:80',
+            'require_address' => 'required|boolean',
+            'require_guardian_if_minor' => 'required|boolean',
+            'inform_max_clients' => 'required|boolean',
+            'max_registers' => 'sometimes|integer|min:1|max:999',
+            'assignments' => 'sometimes|array',
+            'assignments.*' => 'integer|exists:events,id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+        $validated = $validator->validated();
+        try {
+            $registerLink = ClientRegisterLink::create([
+                ...$validated,
+                'default_assignments' => $validated['assignments'],
+                'organization_id' => auth()->user()->organization_id,
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Link created'),
+                'link_id' => base64_encode($registerLink->id),
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('Falha ao criar link de cadastro: '.$e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Could not generate link')
+            ], 500);
+        }
     }
 }

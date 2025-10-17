@@ -12,15 +12,15 @@ class ClientRegisterLink extends Model
     protected $table = 'clients_register_links';
     protected $fillable = [
         'organization_id',
-        'title', 'max_registers', 'require_address', 'require_guardian_if_minor', 'auto_assign_to_events',
+        'title', 'max_registers', 'require_address', 'require_guardian_if_minor', 'default_assignments',
 
     ];
 
     protected function casts(): array
     {
         return [
-            'auto_assign_to_events' => 'array',
-            'auto_assign_to_events.*' => 'integer',
+            'default_assignments' => 'array',
+            'default_assignments.*' => 'integer',
         ];
     }
 }

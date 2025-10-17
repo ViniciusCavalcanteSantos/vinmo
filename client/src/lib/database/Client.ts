@@ -80,3 +80,14 @@ export async function removeClient(id: number) {
     method: "DELETE",
   });
 }
+
+
+export async function generateRegisterLink(
+  values: any,
+) {
+
+  return apiFetch<{ link_id: string }>("/client/generate-register-link", {
+    method: "POST",
+    body: JSON.stringify(values)
+  });
+}

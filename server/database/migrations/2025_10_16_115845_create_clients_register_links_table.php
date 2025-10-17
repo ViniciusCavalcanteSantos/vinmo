@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->integer('max_registers')->nullable();
             $table->boolean('require_address')->default(false);
             $table->boolean('require_guardian_if_minor')->default(false);
-            $table->json('auto_assign_to_events')->nullable();
+            $table->json('default_assignments')->nullable();
             $table->timestamps();
         });
     }

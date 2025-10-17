@@ -3,11 +3,16 @@
 import {
   Button,
   Card,
+  Checkbox,
+  Divider,
   Empty,
   Flex,
   Form,
   Image,
+  Input,
+  InputNumber,
   Modal,
+  Row,
   Select,
   Space,
   Table,
@@ -19,7 +24,7 @@ import React, {useEffect, useState} from "react";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
 import ClientType from "@/types/ClientType";
-import {DeleteOutlined, EditOutlined, EyeOutlined, LinkOutlined} from "@ant-design/icons";
+import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, LinkOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
 import {useClients} from "@/contexts/ClientsContext";
 import {ApiStatus} from "@/types/ApiResponse";
@@ -32,6 +37,7 @@ import EventSelector from "@/components/EventSelector";
 import {assignClient, assignClientBulk, fetchAssignments, unassignClientBulk} from "@/lib/database/Assignment";
 import {useNotification} from "@/contexts/NotificationContext";
 import {TableRowSelection} from "antd/es/table/interface";
+import {generateRegisterLink} from "@/lib/database/Client";
 
 export default function Page() {
   const {t} = useT();
@@ -55,6 +61,8 @@ export default function Page() {
     total: 0,
   });
 
+  const [openModalGenerateLink, setOpenModalGenerateLink] = useState(false);
+
   const [openModalAssign, setOpenModalAssign] = useState(false);
   const [clientIds, setClientIds] = useState<number[]>([]);
   const [assignType, setAssignType] = useState<"single" | "bulk" | "unassign">("single");
@@ -73,8 +81,6 @@ export default function Page() {
   }
 
   const openAssignBulk = () => {
-    console.log(selectedRowKeys)
-
     setOpenModalAssign(true);
     setAssignType('bulk');
     setClientIds(selectedRowKeys as number[])
@@ -230,6 +236,9 @@ export default function Page() {
           router.push('/clients/manage/new');
         } else if (register_type === 'image_name') {
           router.push('/clients/create/by-image-name');
+        } else {
+          setOpenModalRegister(false)
+          setOpenModalGenerateLink(true)
         }
       })
   }
@@ -318,6 +327,8 @@ export default function Page() {
         />
       </Card>
 
+      <CreateRegisterLinkModal open={openModalGenerateLink} handleClose={() => setOpenModalGenerateLink(false)}/>
+
       <Modal
         open={openModalRegister}
         title={t('choose_register_type')}
@@ -325,7 +336,7 @@ export default function Page() {
         onCancel={() => setOpenModalRegister(false)}
         onOk={handleOk}
       >
-        <Form form={form} layout="vertical" name="form_in_modal">
+        <Form form={form} layout="vertical" name="form_in_modal_choose_register_type">
           <Form.Item name="register_type" label={t('register_type')}
                      rules={[{required: true, message: t('select_a_register_type')}]}>
             <Select placeholder={t('select_a_register_type')}
@@ -343,6 +354,176 @@ export default function Page() {
                     type={assignType} initialAssignments={assignments}/>
     </>
   );
+}
+
+interface CreateRegisterLinkModalProps {
+  open: boolean,
+  handleClose: () => void,
+}
+
+function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalProps) {
+  const {t} = useT()
+
+  const [loading, setLoading] = useState(false);
+  const [openGenerated, setOpenGenerated] = useState(false);
+  const [generatedLink, setGeneratedLink] = useState('')
+
+  const [form] = Form.useForm();
+  const informMaxClient = Form.useWatch('inform_max_clients', form)
+  const autoAssign = Form.useWatch('auto_assign', form);
+
+  const [assignments, setAssignments] = useState<number[]>([]);
+
+  const notification = useNotification();
+
+  const handleOk = async () => {
+    form.validateFields()
+      .then(async (values) => {
+        setLoading(true)
+
+        values.assignments = assignments
+
+        const res = await generateRegisterLink(values)
+        if (res.link_id) {
+          const link = process.env.NEXT_PUBLIC_APP_URL + `/clients/create/by-link/${res.link_id}`
+          handleClose()
+          setGeneratedLink(link)
+          setOpenGenerated(true)
+        }
+      })
+      .finally(() => setLoading(false))
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(generatedLink)
+      .then(() => {
+        notification.success({message: 'link_copied'})
+      })
+      .catch(() => {
+      })
+  }
+
+  const close = () => {
+    form.resetFields()
+    setLoading(false)
+    handleClose()
+  }
+
+
+  return (
+    <>
+      <Modal
+        open={open}
+        title={t('share_register_link')}
+        okText={t('generate')}
+        onCancel={close}
+        onOk={handleOk}
+        confirmLoading={loading}
+        maskClosable={!loading}
+        destroyOnHidden
+      >
+        <Form form={form} layout="vertical" name="form_in_modal_generate_link">
+          <Form.Item
+            name="title"
+            label={t('title')}
+            style={{marginBottom: 10, marginRight: 10}}
+            rules={[{required: true, message: t('enter_title')}]}
+          >
+            <Input placeholder={t('enter_title')}/>
+          </Form.Item>
+
+          <Row gutter={[12, 8]}>
+            <Form.Item
+              name="require_address"
+              valuePropName="checked"
+              initialValue={false}
+              style={{marginBottom: 10, marginRight: 10}}
+            >
+              <Checkbox>{t('require_address')}</Checkbox>
+            </Form.Item>
+            <Form.Item
+              name="require_guardian_if_minor"
+              valuePropName="checked"
+              initialValue={false}
+              style={{marginBottom: 10, marginRight: 10}}
+            >
+              <Checkbox>{t('require_guardian_if_minor')}</Checkbox>
+            </Form.Item>
+            <Form.Item
+              name="inform_max_clients"
+              valuePropName="checked"
+              initialValue={false}
+              style={{marginBottom: 10, marginRight: 10}}
+            >
+              <Checkbox>{t('enable_maximum_registers')}</Checkbox>
+            </Form.Item>
+
+            {<Form.Item
+              name="auto_assign"
+              valuePropName="checked"
+              initialValue={false}
+              style={{marginBottom: 10}}
+            >
+              <Checkbox>{t('auto_assign')}</Checkbox>
+            </Form.Item>}
+          </Row>
+
+          {informMaxClient &&
+              <Form.Item
+                  name="max_registers" label={t('max_registers')}
+                  rules={[{required: true, message: t('enter_max_registers')}]}>
+                  <InputNumber placeholder={t('enter_max_registers')} min={1} max={999} className="!w-full"/>
+              </Form.Item>
+          }
+
+          {autoAssign && (
+            <>
+              <Divider>{t('assign_client_to_event')}</Divider>
+
+              <EventSelector value={assignments} onChange={(values) => setAssignments(values)}/>
+            </>
+          )}
+        </Form>
+      </Modal>
+
+      <Modal
+        open={openGenerated}
+        title={t('copy_register_link')}
+        okText={t('finish')}
+        onOk={() => setOpenGenerated(false)}
+        onCancel={() => setOpenGenerated(false)}
+        cancelButtonProps={{style: {display: 'none'}}}
+        destroyOnHidden
+      >
+        {generatedLink &&
+            <Form.Item
+                layout="vertical"
+                label={t("generated_link_label")}>
+                <Space.Compact className="w-full">
+                    <Input
+                        placeholder={t("no_link_generated")}
+                        value={generatedLink}
+                        readOnly
+                        style={{width: 'calc(100% - 50px)'}}
+                    />
+                    <Tooltip
+                        title={generatedLink ? t("copy_link") : t("generate_first")}>
+
+                        <Button
+                            style={{width: 50}}
+                            icon={<CopyOutlined/>}
+                            onClick={handleCopy}
+                            disabled={!generatedLink}
+                            aria-label={t("copy_link")}
+
+                        />
+                    </Tooltip>
+                </Space.Compact>
+            </Form.Item>
+        }
+      </Modal>
+    </>
+  )
 }
 
 interface AssignModalsProps {
