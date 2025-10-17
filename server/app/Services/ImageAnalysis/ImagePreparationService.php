@@ -56,7 +56,7 @@ class ImagePreparationService
      */
     public function limitDimensions(int $maxWidth = 2500, int $maxHeight = 2500): self
     {
-        $this->image->resizeDown($maxWidth, $maxHeight);
+        $this->image->scaleDown($maxWidth, $maxHeight);
         return $this;
     }
 
@@ -109,7 +109,7 @@ class ImagePreparationService
 
         while (true) {
             $clone = clone $this->image;
-            $clone->resizeDown($maxWidth);
+            $clone->scaleDown($maxWidth);
             $encoded = $clone->encode(new JpegEncoder(quality: $quality));
 
             if ($encoded->size() <= $maxBytes) {
@@ -159,5 +159,10 @@ class ImagePreparationService
             'image/gif' => 'gif',
             default => 'jpg', // padrão seguro
         };
+    }
+
+    public function getMimetype()
+    {
+        return $this->image->origin()->mimetype();
     }
 }
