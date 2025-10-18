@@ -5,6 +5,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Validation\ValidationException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -22,5 +23,17 @@ return Application::configure(basePath: dirname(__DIR__))
                 'status' => 'not_authenticated',
                 'message' => 'Usuário não autenticado.',
             ], 401);
+        });
+
+        $exceptions->renderable(function (ValidationException $e, $request) {
+            if ($request->wantsJson() || $request->is('api/*')) {
+                $firstError = collect($e->errors())->first()[0];
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $firstError,
+                    'errors' => $e->errors(),
+                ], 422);
+            }
         });
     })->create();
