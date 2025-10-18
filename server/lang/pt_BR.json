@@ -266,5 +266,11 @@
   "Assignments retrieved": "Atribuições obtidas",
   "Assignments updated": "Atribuições atualizadas",
   "The selected client was not found in the system": "O cliente selecionado não foi encontrado no sistema",
-  "The selected event was not found in the system": "O evento selecionado não foi encontrada no sistema"
+  "The selected event was not found in the system": "O evento selecionado não foi encontrada no sistema",
+  "No faces were detected in the image": "Nenhum rosto foi detectado na imagem",
+  "Failed to index face:": "Falha ao indexar rosto:",
+  "Failed to search for faces in the image:": "Falha ao procurar por faces na imagem:",
+  "Failed to remove collection face:": "Falha ao remover a face da collection:",
+  "Failed to count faces in image:": "Falha ao contar as faces na imagem:",
+  "Failed to parse image with AWS service:": "Falha ao analisar a imagem com o serviço da AWS:"
 }
