@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreign('organization_id')->references('id')->on('organizations');
 
             $table->string('name', 60);
-            $table->string('profile_url');
+            $table->string('rekognition_face_id');
 
             $table->string('code', 20)->nullable();
             $table->date('birthdate')->nullable();

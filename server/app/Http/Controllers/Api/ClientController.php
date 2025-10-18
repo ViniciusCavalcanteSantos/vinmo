@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class ClientController extends Controller
 {
@@ -64,6 +65,8 @@ class ClientController extends Controller
                 'message' => __('Client created'),
                 'client' => new ClientResource($client)
             ]);
+        } catch (ValidationException $e) {
+            throw $e;
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -98,6 +101,8 @@ class ClientController extends Controller
                 'message' => __('Client updated'),
                 'client' => new ClientResource($client)
             ]);
+        } catch (ValidationException $e) {
+            throw $e;
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

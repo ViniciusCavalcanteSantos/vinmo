@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Support\Facades\Storage;
 
 #[ObservedBy([ClientObserver::class])]
 class Client extends Model
 {
     protected $fillable = [
         'organization_id',
-        'code', 'name', 'birthdate', 'phone', 'profile_url',
+        'code', 'name', 'birthdate', 'phone', 'rekognition_face_id',
         'guardian_name', 'guardian_type', 'guardian_email', 'guardian_phone', 'searchable'
     ];
 
@@ -44,13 +43,5 @@ class Client extends Model
     {
         return $this->belongsToMany(Event::class, 'clients_event_assignments')
             ->withTimestamps();
-    }
-
-
-    public function getProfileUrlFullAttribute(): ?string
-    {
-        return $this->attributes['profile_url']
-            ? Storage::url($this->attributes['profile_url'])
-            : null;
     }
 }
