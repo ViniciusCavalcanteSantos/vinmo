@@ -82,10 +82,6 @@ class ClientService
         }
     }
 
-    // ------------------------
-    // Helpers
-    // ------------------------
-
     /**
      * Sincroniza eventos atribuídos (se o payload trouxer).
      */
@@ -95,6 +91,10 @@ class ClientService
             $client->events()->sync($validated['assignments']);
         }
     }
+
+    // ------------------------
+    // Helpers
+    // ------------------------
 
     /**
      * Processa a imagem localmente, envia para um caminho temporário,
@@ -166,6 +166,26 @@ class ClientService
             Storage::delete([$tempPath, $finalPath]);
             throw $e;
         }
+    }
+
+    public function deleteClient(Client $client): void
+    {
+        DB::transaction(function () use ($client) {
+            if ($client->rekognition_face_id) {
+                try {
+                    $this->imageAnalyzer->removeFace($client->rekognition_face_id);
+                } catch (ImageAnalysisException $e) {
+                    \Log::warning("Falha ao remover face da AWS para cliente #{$client->id}: ".$e->getMessage());
+                }
+            }
+
+            $directoryPath = StoragePathService::getClientProfilePath($client->id);
+            if (Storage::directoryExists($directoryPath)) {
+                Storage::deleteDirectory($directoryPath);
+            }
+
+            $client->delete();
+        });
     }
 
     /**

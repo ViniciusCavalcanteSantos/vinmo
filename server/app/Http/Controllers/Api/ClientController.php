@@ -8,11 +8,8 @@ use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Models\ClientRegisterLink;
 use App\Services\ClientService;
-use App\Services\StoragePathService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -114,36 +111,29 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(ClientService $clientService, string $id)
     {
         $client = Client::find($id);
         if (!$client) {
             return response()->json([
-                'status' => 'error',
-                'message' => __('Client not found')
-            ], 404);
+                'status' => 'success',
+                'message' => __('Client deleted')
+            ]);
         }
 
         try {
-            DB::transaction(function () use ($client) {
-                $client->delete();
-                $directoryPath = StoragePathService::getClientProfilePath($client->id);
+            $clientService->deleteClient($client);
 
-                if (Storage::directoryExists($directoryPath)) {
-                    Storage::deleteDirectory($directoryPath);
-                }
-            });
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Client deleted')
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => __('Could not perform action')
             ], 500);
         }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => __('Client deleted')
-        ]);
     }
 
     public function generateLink(Request $request)
