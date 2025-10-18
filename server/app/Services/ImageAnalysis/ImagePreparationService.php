@@ -4,6 +4,7 @@ namespace App\Services\ImageAnalysis;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Intervention\Image\Drivers\SpecializableEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\Encoders\PngEncoder;
 use Intervention\Image\Encoders\WebpEncoder;
@@ -13,6 +14,8 @@ use Intervention\Image\Laravel\Facades\Image;
 class ImagePreparationService
 {
     protected InterventionImage $image;
+    protected ?string $forcedFormat = null;
+    protected int $quality = 90;
 
     /**
      * Cria uma instância a partir de um arquivo ou caminho de arquivo.
@@ -61,33 +64,19 @@ class ImagePreparationService
     }
 
     /**
-     * Garante que a imagem esteja em um dos formatos permitidos.
-     * Converte para o primeiro formato da lista se necessário.
+     * Garante que a imagem esteja em um dos formatos permitidos,
+     * * e define o formato-alvo para exportações futuras.
      */
-    public function ensureFormat(
-        array $formats = ['image/jpeg', 'image/png'],
-        int $quality = 90
-    ): self {
+    public function ensureFormat(array $formats = ['image/jpeg', 'image/png'], int $quality = 90): self
+    {
+        $this->quality = $quality;
         $currentFormat = $this->image->origin()->mimetype();
-        if (in_array($currentFormat, $formats)) {
-            return $this;
+        if (!in_array($currentFormat, $formats)) {
+            $this->forcedFormat = $formats[0];
+        } else {
+            $this->forcedFormat = $currentFormat;
         }
 
-        $targetFormat = $formats[0];
-        switch ($targetFormat) {
-            case 'image/png':
-                $encoder = new PngEncoder(false, true);
-                break;
-            case 'image/webp':
-                $encoder = new WebpEncoder(quality: $quality);
-                break;
-            case 'image/jpeg':
-            default:
-                $encoder = new JpegEncoder(quality: $quality);
-                break;
-        }
-
-        $this->image->encode($encoder);
         return $this;
     }
 
@@ -101,19 +90,36 @@ class ImagePreparationService
      */
     public function fitBytes(int $maxBytes = 5 * 1024 * 1024, int $maxWidth = 2000): self
     {
-        $quality = 90;
+        if ($this->getFileSize() <= $maxBytes) {
+            return $this;
+        }
+
+        $quality = $this->quality;
         $minQuality = 50;
         $minWidth = 800;
         $widthStep = 300;
         $qualityStep = 10;
 
+        $format = $this->getMimetype();
+        $encoderClass = match ($format) {
+            'image/webp' => WebpEncoder::class,
+            default => JpegEncoder::class,
+        };
+
         while (true) {
             $clone = clone $this->image;
             $clone->scaleDown($maxWidth);
-            $encoded = $clone->encode(new JpegEncoder(quality: $quality));
+
+            $encoder = match ($encoderClass) {
+                WebpEncoder::class => new WebpEncoder(quality: $quality),
+                default => new JpegEncoder(quality: $quality),
+            };
+            $encoded = $clone->encode($encoder);
 
             if ($encoded->size() <= $maxBytes) {
                 $this->image = $clone;
+                $this->quality = $quality;
+                $this->forcedFormat = 'image/jpeg';
                 return $this;
             }
 
@@ -130,11 +136,6 @@ class ImagePreparationService
         }
     }
 
-    public function getIntervantionImage(): InterventionImage
-    {
-        return $this->image;
-    }
-
     public function getFileSize()
     {
         return strlen($this->getAsBytes());
@@ -142,7 +143,37 @@ class ImagePreparationService
 
     public function getAsBytes(): string
     {
-        return (string) $this->image->encode();
+        return (string) $this->image->encode($this->getEncoder());
+    }
+
+    /**
+     * Cria o encoder apropriado com base no formato definido.
+     */
+    protected function getEncoder(): SpecializableEncoder
+    {
+        $mime = $this->getMimetype();
+
+        return match ($mime) {
+            'image/png' => new PngEncoder(false, true),
+            'image/webp' => new WebpEncoder(quality: $this->quality),
+            'image/jpeg' => new JpegEncoder(quality: $this->quality),
+            default => new JpegEncoder(quality: $this->quality),
+        };
+    }
+
+    public function getMimetype(): string
+    {
+        return $this->forcedFormat ?? $this->image->origin()->mimetype();
+    }
+
+    public function toFilePointer()
+    {
+        return $this->image->encode($this->getEncoder())->toFilePointer();
+    }
+
+    public function getIntervantionImage(): InterventionImage
+    {
+        return $this->image;
     }
 
     /**
@@ -150,19 +181,12 @@ class ImagePreparationService
      */
     public function getExtension(): string
     {
-        $mime = $this->image->origin()->mimetype();
-
-        return match ($mime) {
+        return match ($this->getMimetype()) {
             'image/jpeg' => 'jpg',
             'image/png' => 'png',
             'image/webp' => 'webp',
             'image/gif' => 'gif',
-            default => 'jpg', // padrão seguro
+            default => 'jpg',
         };
-    }
-
-    public function getMimetype()
-    {
-        return $this->image->origin()->mimetype();
     }
 }
