@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClientPublicRequest;
 use App\Http\Requests\ClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
@@ -56,6 +57,39 @@ class ClientController extends Controller
     {
         try {
             $client = $clientService->createClient($request);
+            $client->load('address');
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Client created'),
+                'client' => new ClientResource($client)
+            ]);
+        } catch (ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Could not perform action')
+            ]);
+        }
+    }
+
+    public function storePublic(string $linkIdEncoded, ClientPublicRequest $request, ClientService $clientService)
+    {
+        $linkId = base64_decode($linkIdEncoded);
+        $link = ClientRegisterLink::find($linkId);
+
+        if ($link->used_registers >= $link->max_registers) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Maximum number of registers reached')
+            ]);
+        }
+
+        try {
+            $client = $clientService->createClient($request, $link->organization_id);
+            $link->used_registers += 1;
+            $link->save();
+
             $client->load('address');
             return response()->json([
                 'status' => 'success',
@@ -142,8 +176,7 @@ class ClientController extends Controller
             'title' => 'required|string|min:3|max:80',
             'require_address' => 'required|boolean',
             'require_guardian_if_minor' => 'required|boolean',
-            'inform_max_clients' => 'required|boolean',
-            'max_registers' => 'sometimes|integer|min:1|max:999',
+            'max_registers' => 'required|integer|min:1|max:999',
             'assignments' => 'sometimes|array',
             'assignments.*' => 'integer|exists:events,id',
         ]);
@@ -175,5 +208,31 @@ class ClientController extends Controller
                 'message' => __('Could not generate link')
             ], 500);
         }
+    }
+
+    public function getLinkInfo($linkIdEncoded)
+    {
+        $linkId = base64_decode($linkIdEncoded);
+        $link = ClientRegisterLink::find($linkId);
+
+        if (!$link) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Not Found'),
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('link retrieved successfully'),
+            'linkInfo' => [
+                'id' => $linkIdEncoded,
+                'title' => $link->title,
+                'maxRegisters' => $link->max_registers,
+                'requireAddress' => $link->require_address,
+                'requireGuardianIfMinor' => $link->require_guardian_if_minor,
+                'defaultLanguage' => $link->organization->users->first()->address->country,
+            ]
+        ]);
     }
 }

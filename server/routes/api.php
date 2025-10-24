@@ -24,6 +24,8 @@ Route::get('/locations/countries/{country_cca2}/states', [LocationController::cl
 Route::get('/locations/countries/{country_cca2}/states/{state_code}/cities',
     [LocationController::class, 'getCities']);
 
+Route::post('/public/client/register/{linkId}', [ClientController::class, 'storePublic']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 
@@ -34,7 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/event', EventController::class);
 
     Route::apiResource('/client', ClientController::class);
+    Route::get('/client/get-link-info/{linkId}', [ClientController::class, 'getLinkInfo']);
     Route::post('/client/generate-register-link', [ClientController::class, 'generateLink']);
+
 
     Route::apiResource('/assignment/client', AssignmentController::class);
     Route::post('/assignment/client/{client}', [AssignmentController::class, 'store']);

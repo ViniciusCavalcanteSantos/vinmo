@@ -2,9 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Models\ClientRegisterLink;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
-class ClientRequest extends ApiFormRequest
+class ClientPublicRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,23 +25,23 @@ class ClientRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        $isEdit = $this->isMethod('PUT') || $this->isMethod('PATCH');
         $rules = [
             'code' => 'nullable|string|max:20|regex:/^[A-Z0-9_-]+$/i',
             'name' => 'required|string|max:60',
-            'profile' => $isEdit ? 'nullable|file|image' : 'required|file|image',
+            'profile' => 'required|file|image',
+            'birthdate' => 'required|date',
+            'phone' => 'required|string|max:20',
+
             'inform_address' => 'sometimes|boolean',
             'inform_guardian' => 'sometimes|boolean',
 
             'assignments' => 'sometimes|array',
-            'assignments.*' => 'integer|exists:events,id',
+            'assignments.*' => 'integer|distinct|exists:events,id',
 
-            'birthdate' => 'nullable|date',
-            'phone' => 'nullable|string|max:20',
         ];
 
-        $informAddress = $this->input('inform_address') ?? false;
-        $informGuardian = $this->input('inform_guardian') ?? false;
+        $informAddress = $this->get('inform_address');
+        $informGuardian = $this->get('inform_guardian');
 
         if ($informAddress) {
             $rules = array_merge($rules, [
@@ -68,5 +72,38 @@ class ClientRequest extends ApiFormRequest
         }
 
         return $rules;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $token = $this->route('linkId');
+        $linkId = base64_decode($token);
+        $link = ClientRegisterLink::find($linkId);
+
+        if (!$link) {
+            throw ValidationException::withMessages([
+                'link' => [__('Link not found')],
+            ]);
+        }
+
+        $informGuardian = false;
+        if ($link->require_guardian_if_minor) {
+            $birthdate = Carbon::make($this->get('birthdate'));
+
+            if ($birthdate) {
+                $years = $birthdate->diffInYears(Carbon::now());
+                if ($years < 18) {
+                    $informGuardian = true;
+                }
+            }
+        }
+
+        if ($link) {
+            $this->merge([
+                'inform_address' => (bool) $link->require_address,
+                'inform_guardian' => $informGuardian,
+                'assignments' => (array) $link->default_assignments,
+            ]);
+        }
     }
 }

@@ -272,5 +272,6 @@
   "Failed to search for faces in the image:": "Falha ao procurar por faces na imagem:",
   "Failed to remove collection face:": "Falha ao remover a face da collection:",
   "Failed to count faces in image:": "Falha ao contar as faces na imagem:",
-  "Failed to parse image with AWS service:": "Falha ao analisar a imagem com o serviço da AWS:"
+  "Failed to parse image with AWS service:": "Falha ao analisar a imagem com o serviço da AWS:",
+  "Maximum number of registers reached": "Número máximo de registros atingido"
 }

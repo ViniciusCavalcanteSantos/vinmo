@@ -274,5 +274,17 @@
   "please_select_images_only": "Por favor, selecione apenas arquivos do tipo imagem!",
   "link_copied": "Link copiado",
   "link_copied_to_clipboard": "Link copiado para a área de transferência",
-  "no_client_found": "Nenhum cliente encontrado"
+  "no_client_found": "Nenhum cliente encontrado",
+  "client_photo": "Foto do cliente",
+  "your_photo": "Sua foto",
+  "not_found": "Não encontrado",
+  "link_not_found": "Link não encontrado",
+  "register": "Cadastrar",
+  "registration_completed": "Cadastro completo",
+  "you_are_now_registered_in_the_event": "Você está cadastrado no evento!",
+  "email": "Email",
+  "enter_name": "Insira o nome",
+  "enter_birthdate": "Insira a data de nascimento",
+  "enter_email": "Insira o email",
+  "enter_phone": "Insira o telefone"
 }

@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
             $table->string('title', 80);
             $table->integer('max_registers')->nullable();
+            $table->integer('used_registers')->default(0);
             $table->boolean('require_address')->default(false);
             $table->boolean('require_guardian_if_minor')->default(false);
             $table->json('default_assignments')->nullable();

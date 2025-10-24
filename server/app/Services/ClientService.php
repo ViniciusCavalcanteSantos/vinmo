@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\ClientPublicRequest;
 use App\Http\Requests\ClientRequest;
 use App\Jobs\GenerateImageVersions;
 use App\Models\Client;
@@ -31,14 +32,13 @@ class ClientService
      * Cria um cliente e processa a imagem de perfil (obrigatória).
      * @throws \Throwable
      */
-    public function createClient(ClientRequest $request): Client
+    public function createClient(ClientRequest|ClientPublicRequest $request, ?int $organizationId = null): Client
     {
         $validated = $request->validated();
         $profile = $request->file('profile');
-
-        return DB::transaction(function () use ($validated, $profile) {
+        return DB::transaction(function () use ($validated, $profile, $organizationId) {
             $client = Client::create([
-                'organization_id' => Auth::user()->organization_id,
+                'organization_id' => $organizationId ?? Auth::user()?->organization_id,
                 'name' => $validated['name'],
                 'rekognition_face_id' => '',
                 'code' => $validated['code'] ?? null,

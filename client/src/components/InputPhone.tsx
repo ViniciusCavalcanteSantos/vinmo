@@ -1,38 +1,44 @@
 import {Input, InputProps} from "antd";
 import {AsYouType, CountryCode, getCountries as getPhoneCountries} from "libphonenumber-js";
-import {useUser} from "@/contexts/UserContext";
+import {useSafeUser} from "@/contexts/UserContext";
 import React, {useEffect, useRef, useState} from "react";
 
 interface InputPhoneProps extends InputProps {
+  defaultCountryCode?: CountryCode;
 }
 
-export default function InputPhone(props: InputPhoneProps) {
+export default function InputPhone({defaultCountryCode, ...props}: InputPhoneProps) {
   const {value, onChange, ...restProps} = props;
-  const {user} = useUser()
+  const safeUser = useSafeUser()
 
   const [displayValue, setDisplayValue] = useState<string>('');
-  const [countryCode, setCountryCode] = useState<CountryCode>('US');
+  const [countryCode, setCountryCode] = useState<CountryCode>("US");
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const countryCode =
-      getPhoneCountries().includes(user?.address.country as CountryCode)
-        ? user?.address.country as CountryCode
-        : "US"
-    setCountryCode(countryCode);
-  }, [user?.address.country]);
+    if (defaultCountryCode) {
+      setCountryCode(defaultCountryCode);
+      return;
+    }
+
+    if (safeUser?.user) {
+      const countryCode =
+        getPhoneCountries().includes(safeUser?.user?.address.country as CountryCode)
+          ? safeUser?.user?.address.country as CountryCode
+          : "US"
+      setCountryCode(countryCode);
+    }
+  }, [safeUser?.user, defaultCountryCode]);
 
   useEffect(() => {
     const formated = (new AsYouType(countryCode)).input(value?.toString() ?? '')
     setDisplayValue(formated)
   }, [value, countryCode])
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setDisplayValue(input);
 
-    // Cancela formatações enquanto digita
     if (typingTimeout.current) clearTimeout(typingTimeout.current);
     onChange?.({
       ...e,

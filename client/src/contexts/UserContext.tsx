@@ -60,3 +60,11 @@ export const useUser = () => {
 
   return context;
 }
+
+export const useSafeUser = () => {
+  try {
+    return useUser()
+  } catch (err) {
+    return null;
+  }
+}

@@ -114,7 +114,7 @@
   "contract_title_ex": "Harvard Law School Graduation",
   "enter_title": "Enter the title!",
   "country": "Country",
-  "select_country": "Selecione o país",
+  "select_country": "Select a country",
   "state": "State",
   "select_state": "Select a state",
   "state_province": "State/Province",
@@ -274,5 +274,17 @@
   "please_select_images_only": "Please select image type files only!",
   "link_copied": "Link copied",
   "link_copied_to_clipboard": "Link copied to clipboard",
-  "no_client_found": "No client found"
+  "no_client_found": "No client found",
+  "client_photo": "Client photo",
+  "your_photo": "Your photo",
+  "not_found": "Not found",
+  "link_not_found": "Link not found",
+  "register": "Register",
+  "registration_completed": "Registration completed",
+  "you_are_now_registered_in_the_event": "You are now registered in the event!",
+  "email": "Email",
+  "enter_name": "Enter name",
+  "enter_birthdate": "Enter birthdate",
+  "enter_email": "Enter email",
+  "enter_phone": "Enter phone"
 }

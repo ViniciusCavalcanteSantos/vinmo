@@ -2,6 +2,7 @@ import apiFetch from "@/lib/apiFetch";
 import ClientType from "@/types/ClientType";
 import {UploadFile} from "antd";
 import {objectToFormData} from "@/lib/objectToFormData";
+import {RegisterLinkType} from "@/types/RegisterLinkType";
 
 export interface FetchClientsResponse {
   clients: ClientType[];
@@ -62,6 +63,23 @@ export async function createClient(
   });
 }
 
+
+export async function createClientPublic(
+  linkId: string,
+  values: any,
+  profile: UploadFile | File | Blob,
+  onProgress?: (progress: number) => void
+) {
+  const formData = objectToFormData(values, {'profile': profile})
+
+  return apiFetch<CreateClientResponse>(`/public/client/register/${linkId}`, {
+    method: "POST",
+    body: formData,
+    driver: 'axios',
+    onProgress
+  });
+}
+
 export async function updateClient(id: number, values: any, profile: UploadFile) {
   const formData = objectToFormData(values)
   if (profile.originFileObj) {
@@ -89,5 +107,11 @@ export async function generateRegisterLink(
   return apiFetch<{ link_id: string }>("/client/generate-register-link", {
     method: "POST",
     body: JSON.stringify(values)
+  });
+}
+
+export async function fetchLinkInfo(linkId: string) {
+  return apiFetch<{ linkInfo: RegisterLinkType }>(`/client/get-link-info/${linkId}`, {
+    method: "GET"
   });
 }

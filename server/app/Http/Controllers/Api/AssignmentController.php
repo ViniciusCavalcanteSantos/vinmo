@@ -60,7 +60,7 @@ class AssignmentController extends Controller
         try {
             foreach ($validated['client_ids'] as $clientId) {
                 $client = Client::find($clientId);
-                $client->events()->attach($validated['assignments']);
+                $client->events()->syncWithoutDetaching($validated['assignments']);
             }
 
             return response()->json([

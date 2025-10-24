@@ -369,7 +369,6 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
   const [generatedLink, setGeneratedLink] = useState('')
 
   const [form] = Form.useForm();
-  const informMaxClient = Form.useWatch('inform_max_clients', form)
   const autoAssign = Form.useWatch('auto_assign', form);
 
   const [assignments, setAssignments] = useState<number[]>([]);
@@ -385,7 +384,7 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
 
         const res = await generateRegisterLink(values)
         if (res.link_id) {
-          const link = process.env.NEXT_PUBLIC_APP_URL + `/clients/create/by-link/${res.link_id}`
+          const link = process.env.NEXT_PUBLIC_APP_URL + `/client/register/${res.link_id}`
           handleClose()
           setGeneratedLink(link)
           setOpenGenerated(true)
@@ -433,6 +432,12 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
             <Input placeholder={t('enter_title')}/>
           </Form.Item>
 
+          <Form.Item
+            name="max_registers" label={t('max_registers')}
+            rules={[{required: true, message: t('enter_max_registers')}]}>
+            <InputNumber placeholder={t('enter_max_registers')} min={1} max={999} maxLength={3} className="!w-full"/>
+          </Form.Item>
+
           <Row gutter={[12, 8]}>
             <Form.Item
               name="require_address"
@@ -450,14 +455,6 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
             >
               <Checkbox>{t('require_guardian_if_minor')}</Checkbox>
             </Form.Item>
-            <Form.Item
-              name="inform_max_clients"
-              valuePropName="checked"
-              initialValue={false}
-              style={{marginBottom: 10, marginRight: 10}}
-            >
-              <Checkbox>{t('enable_maximum_registers')}</Checkbox>
-            </Form.Item>
 
             {<Form.Item
               name="auto_assign"
@@ -468,18 +465,6 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
               <Checkbox>{t('auto_assign')}</Checkbox>
             </Form.Item>}
           </Row>
-
-          {informMaxClient &&
-              <>
-                  <Divider>{t('max_registers')}</Divider>
-
-                  <Form.Item
-                      name="max_registers" label={t('max_registers')}
-                      rules={[{required: true, message: t('enter_max_registers')}]}>
-                      <InputNumber placeholder={t('enter_max_registers')} min={1} max={999} className="!w-full"/>
-                  </Form.Item>
-              </>
-          }
 
           {autoAssign && (
             <>

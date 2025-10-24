@@ -44,7 +44,7 @@ const ManageClientPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const clientId = params.id as string;
-  const {user, defaultDateFormat} = useUser();
+  const {defaultDateFormat} = useUser();
 
   const isEditMode = clientId !== 'new';
 
@@ -256,6 +256,7 @@ const ManageClientPage: React.FC = () => {
   };
 
   const handleChange: UploadProps['onChange'] = ({fileList: newFileList}) => {
+    setUploadRequired(false)
     setFileList(newFileList);
   }
 
@@ -274,7 +275,7 @@ const ManageClientPage: React.FC = () => {
             className="inline-block text-sm text-[#ff4d4f] mr-1"
             style={{fontFamily: 'SimSun, sans-serif'}}
           >*</span>
-            Foto do cliente
+            {t('client_photo')}
           </div>
           <div className="min-h-[124px] overflow-hidden">
             <Upload

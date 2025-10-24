@@ -13,13 +13,33 @@ class Client extends Model
 {
     protected $fillable = [
         'organization_id',
-        'code', 'name', 'birthdate', 'phone', 'rekognition_face_id',
+        'code', 'name', 'birthdate', 'email', 'phone', 'rekognition_face_id',
         'guardian_name', 'guardian_type', 'guardian_email', 'guardian_phone', 'searchable'
     ];
 
     protected $casts = [
         'birthdate' => 'date',
     ];
+
+    public static function booted()
+    {
+        static::creating(function ($client) {
+            if (empty($client->code)) {
+                $client->code = self::generateNextCode();
+            }
+        });
+    }
+
+    protected static function generateNextCode(): string
+    {
+        $maxCode = self::whereNotNull('code')
+            ->where('code', 'regexp', '^[0-9]+$')
+            ->max('code');
+
+        $next = $maxCode ? ((int) $maxCode + 1) : 1;
+
+        return (string) $next;
+    }
 
     public function organization(): BelongsTo
     {
