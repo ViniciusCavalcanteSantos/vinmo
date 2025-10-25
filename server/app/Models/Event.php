@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 #[ObservedBy([EventObserver::class])]
 class Event extends Model
@@ -36,6 +37,11 @@ class Event extends Model
     {
         return $this->belongsToMany(Client::class, 'clients_event_assignments')
             ->withTimestamps();
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 
     protected function casts(): array

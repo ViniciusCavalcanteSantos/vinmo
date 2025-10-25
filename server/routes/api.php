@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ContractController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\EventPhotoController;
 use App\Http\Controllers\Api\LocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -34,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('event/types/{contract}', [EventController::class, 'getEventTypes']);
     Route::apiResource('/event', EventController::class);
+
+
+    Route::apiResource('/event/photo', EventPhotoController::class);
 
     Route::apiResource('/client', ClientController::class);
     Route::get('/client/get-link-info/{linkId}', [ClientController::class, 'getLinkInfo']);

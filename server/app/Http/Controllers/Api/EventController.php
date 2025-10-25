@@ -78,8 +78,18 @@ class EventController extends Controller
         }
     }
 
-    public function show(Event $event)
+    public function show(Request $request, Event $event)
     {
+        $load = ['type'];
+
+        $withContract = $request->input('with_contract', false);
+        if ($withContract) {
+            $load[] = 'contract';
+            $load[] = 'contract.category';
+        }
+
+        $event->load($load);
+
         return response()->json([
             'status' => 'success',
             'message' => __('Event retrieved'),

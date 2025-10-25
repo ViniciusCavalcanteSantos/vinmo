@@ -14,6 +14,7 @@ import ManageEventModal from "@/components/ManageEventModal";
 import PageHeader from "@/components/PageHeader";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
+import Link from "next/link";
 
 export default function Page() {
   const {t} = useT();
@@ -58,12 +59,13 @@ export default function Page() {
         />
       </Tooltip>
       <Tooltip title={t('send_photo')} destroyOnHidden>
-        <Button
-          type="text"
-          shape="circle"
-          icon={<UploadOutlined/>}
-          onClick={() => (record)}
-        />
+        <Link href={`/send-photo/${record.id}`}>
+          <Button
+            type="text"
+            shape="circle"
+            icon={<UploadOutlined/>}
+          />
+        </Link>
       </Tooltip>
       <Tooltip title={t('delete')} destroyOnHidden>
         <Button
@@ -133,7 +135,7 @@ export default function Page() {
       ...prev,
       current: 1
     }));
-    fetchEvents(1, pagination.pageSize!, searchTermDebounce)
+    fetchEvents(1, pagination.pageSize!, searchTermDebounce, true)
       .then(res => {
         if (res.status === ApiStatus.SUCCESS) {
           setPagination(prev => ({

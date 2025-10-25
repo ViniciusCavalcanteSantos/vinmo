@@ -286,5 +286,11 @@
   "enter_name": "Enter name",
   "enter_birthdate": "Enter birthdate",
   "enter_email": "Enter email",
-  "enter_phone": "Enter phone"
+  "enter_phone": "Enter phone",
+  "unable_to_load_event": "Unable to load the event",
+  "cost": "Cost",
+  "photo_upload": "Photo upload",
+  "upload_photo_to_event": "Upload photo to event",
+  "credits_per_photo": "{{value}} credits per photo",
+  "newly_added_photos_may_take_some_time_to_be_separated": "Newly added photos may take some time to be separated"
 }

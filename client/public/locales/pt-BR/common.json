@@ -286,5 +286,11 @@
   "enter_name": "Insira o nome",
   "enter_birthdate": "Insira a data de nascimento",
   "enter_email": "Insira o email",
-  "enter_phone": "Insira o telefone"
+  "enter_phone": "Insira o telefone",
+  "unable_to_load_event": "Não foi possível carregar o evento",
+  "cost": "Custo",
+  "photo_upload": "Enviar foto",
+  "upload_photo_to_event": "Enviar fotos para o evento",
+  "credits_per_photo": "{{value}} créditos por foto",
+  "newly_added_photos_may_take_some_time_to_be_separated": "Novas fotos adicionadas podem levar algum tempo para serem separadas"
 }

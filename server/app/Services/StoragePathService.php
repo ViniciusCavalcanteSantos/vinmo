@@ -21,6 +21,11 @@ class StoragePathService
         self::$useEncodedIds = false;
     }
 
+    public static function getEventPhotoFolder(int|string $eventId, string $filename = '')
+    {
+        return self::getEventFolder($eventId)."/photos/".$filename;
+    }
+
     public static function getEventFolder(int|string $eventId): string
     {
         return 'events/'.self::id($eventId);
