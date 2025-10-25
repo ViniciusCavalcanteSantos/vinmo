@@ -1,4 +1,4 @@
-import {ContractCategory} from "@/types/ContractType";
+import ContractType, {ContractCategory} from "@/types/ContractType";
 
 type EventType = {
   id: number,
@@ -8,6 +8,7 @@ type EventType = {
   endTime?: string,
   description?: string,
   createdAt: string,
+  contract?: ContractType
   type: {
     id: number,
     name: string

@@ -80,6 +80,11 @@ export default function Page() {
 
   const columns: TableColumnsType<EventType> = [
     {
+      title: t('contract'),
+      dataIndex: ['contract', "code"],
+      sorter: (a, b) => a.contract?.code.localeCompare(b.contract?.code ?? '') ?? 0
+    },
+    {
       title: t('event_name'),
       dataIndex: ['type', "name"],
       sorter: (a, b) => a.type.name.localeCompare(b.type.name)
@@ -149,9 +154,10 @@ export default function Page() {
       newPagination.pageSize !== pagination.pageSize
     ) {
       setPagination(newPagination);
-      fetchEvents(newPagination.current!, newPagination.pageSize!, searchTermDebounce).then(data => {
-        setPagination(prev => ({...prev, total: data.meta.total}));
-      });
+      fetchEvents(newPagination.current!, newPagination.pageSize!, searchTermDebounce, true)
+        .then(data => {
+          setPagination(prev => ({...prev, total: data.meta.total}));
+        });
     }
   };
 

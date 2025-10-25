@@ -27,7 +27,7 @@ export interface UpdateEventResponse {
   event: EventType
 }
 
-export async function fetchEvents(page: number, pageSize: number, searchTerm?: string) {
+export async function fetchEvents(page: number = 1, pageSize: number = 15, searchTerm?: string, withContract: boolean = false) {
   const query = new URLSearchParams({
     page: String(page),
     per_page: String(pageSize)
@@ -35,6 +35,10 @@ export async function fetchEvents(page: number, pageSize: number, searchTerm?: s
 
   if (searchTerm) {
     query.append('search', searchTerm);
+  }
+
+  if (withContract) {
+    query.append('with_contract', 'true');
   }
 
   return await apiFetch<FetchEventsResponse>(`/event?${query.toString()}`, {

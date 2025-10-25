@@ -19,17 +19,29 @@ class EventController extends Controller
         $perPage = $request->input('per_page', 15);
         $searchTerm = $request->input('search');
 
+        $load = ['type'];
+        $withContract = $request->input('with_contract', false);
+        if ($withContract) {
+            $load[] = 'contract';
+        }
+
         $eventsQuery = Event
             ::whereIn('contract_id', function ($query) use ($organizationId) {
                 $query->select('id')
                     ->from('contracts')
                     ->where('organization_id', $organizationId);
             })
-            ->with('type')
+            ->with($load)
             ->latest();
 
-        $eventsQuery->when($searchTerm, function ($query, $term) {
+        $eventsQuery->when($searchTerm, function ($query, $term) use ($withContract) {
             $query->where('searchable', "LIKE", "%{$term}%");
+
+            if ($withContract) {
+                $query->orWhereHas('contract', function ($q) use ($term) {
+                    $q->where('searchable', "LIKE", "%{$term}%");
+                });
+            }
         });
 
         $events = $eventsQuery->paginate($perPage);

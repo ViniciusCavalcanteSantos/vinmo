@@ -21,6 +21,7 @@ class EventResource extends JsonResource
             'startTime' => $this->start_time?->format('H:i'),
             'description' => $this->description,
             'createdAt' => $this->created_at->toIso8601String(),
+            'contract' => new ContractResource($this->whenLoaded('contract')),
             'type' => $this->whenLoaded('type', function ($type) {
                 $type->load('category');
                 return [
