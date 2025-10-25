@@ -7,6 +7,7 @@ use App\Services\ImageAnalysis\Interfaces\ImageAnalyzer;
 use Aws\Exception\AwsException;
 use Aws\Rekognition\RekognitionClient;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class AwsRekognitionAnalyzer implements ImageAnalyzer
 {
@@ -62,7 +63,105 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
         return rtrim($root, '/').'/'.ltrim($relativePath, '/');
     }
 
-    public function findKnownFacesInPhoto(string $s3ObjectKey, int $matchThreshold = 95): array
+    public function findAllKnownFacesInPhoto(string $s3ObjectKey, int $matchThreshold = 85): array
+    {
+        try {
+            $detect = $this->client->detectFaces([
+                'Image' => [
+                    'S3Object' => [
+                        'Bucket' => $this->s3Bucket,
+                        'Name' => $this::fullS3Key($s3ObjectKey),
+                    ],
+                ],
+                'Attributes' => ['ALL'],
+            ]);
+
+            $details = $detect['FaceDetails'] ?? [];
+            if (empty($details)) {
+                return [];
+            }
+
+            $bytes = Storage::get($s3ObjectKey);
+            $image = ImagePreparationService::from($bytes)->getIntervantionImage();
+            $W = $image->width();
+            $H = $image->height();
+
+            $bestByClient = [];
+
+            foreach ($details as $key => $face) {
+                $bbox = $face['BoundingBox'] ?? null;
+                if (!$bbox) {
+                    continue;
+                }
+
+                $left = max(0, (int) round(($bbox['Left'] ?? 0) * $W));
+                $top = max(0, (int) round(($bbox['Top'] ?? 0) * $H));
+                $width = max(1, (int) round(($bbox['Width'] ?? 0) * $W));
+                $height = max(1, (int) round(($bbox['Height'] ?? 0) * $H));
+
+                $left = min($left, max(0, $W - 1));
+                $top = min($top, max(0, $H - 1));
+                $width = min($width, $W - $left);
+                $height = min($height, $H - $top);
+
+                $width += 100;
+                $height += 100;
+                $imageClone = clone $image;
+                $cropedImage = $imageClone->crop($width, $height, $left, $top)->encode();
+
+                try {
+                    $search = $this->client->searchFacesByImage([
+                        'CollectionId' => $this->collectionId,
+                        'FaceMatchThreshold' => $matchThreshold,
+                        'Image' => [
+                            'Bytes' => $cropedImage->toString()
+                        ],
+                        'MaxFaces' => 5,
+                        'QualityFilter' => 'AUTO',
+                    ]);
+                } catch (AwsException $e) {
+                    $errorCode = $e->getAwsErrorCode();
+                    if ($errorCode === 'InvalidParameterException') {
+                        continue;
+                    }
+
+                    throw $e;
+                }
+
+
+                $matches = $search['FaceMatches'] ?? [];
+                if (empty($matches)) {
+                    continue;
+                }
+
+                foreach ($matches as $match) {
+                    $similarity = (float) ($match['Similarity'] ?? 0.0);
+                    $clientId = $match['Face']['ExternalImageId'];
+
+                    if (!isset($bestByClient[$clientId]) || $similarity > $bestByClient[$clientId]['confidence']) {
+                        $bestByClient[$clientId] = [
+                            'client_id' => $clientId,
+                            'confidence' => $similarity,
+                            'box' => [
+                                'left' => $left,
+                                'top' => $top,
+                                'width' => $width,
+                                'height' => $height,
+                            ],
+                            'matched_by' => 'rekognition',
+                        ];
+                    }
+                }
+            }
+
+            return array_values($bestByClient);
+        } catch (\Exception $e) {
+            throw new ImageAnalysisException(__('Failed to search for faces in the image')." ".$e->getAwsErrorMessage(),
+                $e->getCode(), $e);
+        }
+    }
+
+    public function findKnownFacesInPhoto(string $s3ObjectKey, int $matchThreshold = 85): array
     {
         try {
             $result = $this->client->searchFacesByImage([
@@ -71,7 +170,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                 'Image' => [
                     'S3Object' => [
                         'Bucket' => $this->s3Bucket,
-                        'Name' => $s3ObjectKey,
+                        'Name' => $this::fullS3Key($s3ObjectKey),
                     ],
                 ],
                 'MaxFaces' => 100,
@@ -114,7 +213,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                 'Image' => [
                     'S3Object' => [
                         'Bucket' => $this->s3Bucket,
-                        'Name' => $s3ObjectKey,
+                        'Name' => $this::fullS3Key($s3ObjectKey),
                     ],
                 ],
             ]);

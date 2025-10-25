@@ -26,7 +26,17 @@ interface ImageAnalyzer
      * @return array Uma lista de IDs de clientes (ExternalImageId) encontrados na imagem.
      * @throws ImageAnalysisException
      */
-    public function findKnownFacesInPhoto(string $s3ObjectKey, int $matchThreshold = 95): array;
+    public function findAllKnownFacesInPhoto(string $s3ObjectKey, int $matchThreshold = 85): array;
+
+    /**
+     * Procura por rostos conhecidos (clientes) em uma determinada imagem de evento. (apenas o maior rosto)
+     *
+     * @param  string  $s3ObjectKey  A chave do objeto da imagem do evento no S3.
+     * @param  int  $matchThreshold  A porcentagem mínima de similaridade (0-100).
+     * @return array Uma lista de IDs de clientes (ExternalImageId) encontrados na imagem.
+     * @throws ImageAnalysisException
+     */
+    public function findKnownFacesInPhoto(string $s3ObjectKey, int $matchThreshold = 85): array;
 
     /**
      * Remove uma face da collection de reconhecimento.
