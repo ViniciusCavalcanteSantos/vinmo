@@ -27,7 +27,7 @@ export interface UpdateClientResponse {
 }
 
 
-export async function fetchClients(page: number, pageSize: number, searchTerm?: string) {
+export async function fetchClients(page: number = 1, pageSize: number = 15, searchTerm?: string) {
   const query = new URLSearchParams({
     page: String(page),
     per_page: String(pageSize)

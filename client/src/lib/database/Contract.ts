@@ -20,7 +20,7 @@ export interface UpdateContractResponse {
 }
 
 
-export async function fetchContracts(page: number, pageSize: number, searchTerm?: string) {
+export async function fetchContracts(page: number = 1, pageSize: number = 15, searchTerm?: string) {
   const query = new URLSearchParams({
     page: String(page),
     per_page: String(pageSize)
@@ -35,30 +35,23 @@ export async function fetchContracts(page: number, pageSize: number, searchTerm?
   });
 }
 
-
 export async function createContract(values: any) {
-  const data = await apiFetch<CreateContractResponse>("/contract", {
+  return await apiFetch<CreateContractResponse>("/contract", {
     method: "POST",
     body: JSON.stringify(values),
   });
-
-  return data;
 }
 
 
 export async function updateContract(id: number, values: any) {
-  const data = await apiFetch<UpdateContractResponse>(`/contract/${id}`, {
+  return await apiFetch<UpdateContractResponse>(`/contract/${id}`, {
     method: "PUT",
     body: JSON.stringify(values),
   });
-
-  return data;
 }
 
 export async function removeContract(id: number) {
-  const data = await apiFetch(`/contract/${id}`, {
+  return await apiFetch(`/contract/${id}`, {
     method: "DELETE",
   });
-
-  return data;
 }

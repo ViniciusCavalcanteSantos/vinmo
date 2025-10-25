@@ -50,28 +50,22 @@ export async function fetchEventTypes(contractId: number) {
 }
 
 export async function createEvent(values: any) {
-  const data = await apiFetch<CreateEventResponse>("/event", {
+  return await apiFetch<CreateEventResponse>("/event", {
     method: "POST",
     body: JSON.stringify(values),
   });
-
-  return data;
 }
 
 
 export async function updateEvent(id: number, values: any) {
-  const data = await apiFetch<UpdateEventResponse>(`/event/${id}`, {
+  return await apiFetch<UpdateEventResponse>(`/event/${id}`, {
     method: "PUT",
     body: JSON.stringify(values),
   });
-
-  return data;
 }
 
 export async function removeEvent(id: number) {
-  const data = await apiFetch(`/event/${id}`, {
+  return await apiFetch(`/event/${id}`, {
     method: "DELETE",
   });
-
-  return data;
 }

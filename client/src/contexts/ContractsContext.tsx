@@ -6,6 +6,7 @@ import {
   CreateContractResponse,
   fetchContracts as fetchContractsApi,
   FetchContractsResponse,
+  removeContract,
   removeContract as removeContractApi,
   updateContract as updateContractApi,
   UpdateContractResponse,
@@ -17,10 +18,10 @@ import {ApiFetchResponse} from "@/lib/apiFetch";
 interface UserDataContextType {
   contracts: ContractType[];
   loadingContracts: boolean;
-  fetchContracts: (page?: number, pageSize?: number, searchTerm?: string) => Promise<ApiFetchResponse<FetchContractsResponse>>;
-  createContract: (values: any) => Promise<ApiFetchResponse<CreateContractResponse>>;
-  updateContract: (id: number, values: any) => Promise<ApiFetchResponse<UpdateContractResponse>>;
-  removeContract: (id: number) => Promise<ApiFetchResponse>;
+  fetchContracts: (...args: Parameters<typeof fetchContractsApi>) => Promise<ApiFetchResponse<FetchContractsResponse>>;
+  createContract: (...args: Parameters<typeof createContractApi>) => Promise<ApiFetchResponse<CreateContractResponse>>;
+  updateContract: (...args: Parameters<typeof updateContractApi>) => Promise<ApiFetchResponse<UpdateContractResponse>>;
+  removeContract: (...args: Parameters<typeof removeContract>) => Promise<ApiFetchResponse>;
 }
 
 const ContractsContext = createContext<UserDataContextType | undefined>(undefined);
@@ -29,9 +30,9 @@ export const ContractsProvider = ({children}: { children: React.ReactNode }) => 
   const [contracts, setContracts] = useState<ContractType[]>([]);
   const [loadingContracts, setLoadingContracts] = useState(true);
 
-  const fetchContracts = useCallback(async (page: number = 1, pageSize: number = 15, searchTerm?: string) => {
+  const fetchContracts = useCallback(async (...args: Parameters<typeof fetchContractsApi>) => {
     setLoadingContracts(true);
-    const res = await fetchContractsApi(page, pageSize, searchTerm || "");
+    const res = await fetchContractsApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       setContracts(res.contracts);
     }
@@ -39,26 +40,26 @@ export const ContractsProvider = ({children}: { children: React.ReactNode }) => 
     return res;
   }, [])
 
-  const createContract = useCallback(async (values: any) => {
-    const res = await createContractApi(values);
+  const createContract = useCallback(async (...args: Parameters<typeof createContractApi>) => {
+    const res = await createContractApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchContracts();
     }
     return res;
   }, [fetchContracts]);
 
-  const updateContract = useCallback(async (id: number, values: any) => {
-    const res = await updateContractApi(id, values);
+  const updateContract = useCallback(async (...args: Parameters<typeof updateContractApi>) => {
+    const res = await updateContractApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchContracts();
     }
     return res;
   }, [fetchContracts]);
 
-  const removeContract = useCallback(async (id: number) => {
-    const res = await removeContractApi(id);
+  const removeContract = useCallback(async (...args: Parameters<typeof removeContractApi>) => {
+    const res = await removeContractApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
-      setContracts(prev => prev.filter(c => c.id !== id));
+      setContracts(prev => prev.filter(c => c.id !== args[0]));
     }
     return res;
   }, []);

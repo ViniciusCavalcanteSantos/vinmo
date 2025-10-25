@@ -15,16 +15,15 @@ import {
 import {ApiStatus} from "@/types/ApiResponse";
 import ClientType from "@/types/ClientType";
 import {ApiFetchResponse} from "@/lib/apiFetch";
-import {UploadFile} from "antd";
 
 interface UserDataContextType {
   clients: ClientType[];
   loadingClients: boolean;
-  fetchClients: (page?: number, pageSize?: number, searchTerm?: string) => Promise<ApiFetchResponse<FetchClientsResponse>>;
-  fetchClient: (id: number) => Promise<ApiFetchResponse<FetchClientResponse>>;
-  createClient: (values: any, profile: UploadFile) => Promise<ApiFetchResponse<CreateClientResponse>>;
-  updateClient: (id: number, values: any, profile: UploadFile) => Promise<ApiFetchResponse<UpdateClientResponse>>;
-  removeClient: (id: number) => Promise<ApiFetchResponse>;
+  fetchClients: (...args: Parameters<typeof fetchClientsApi>) => Promise<ApiFetchResponse<FetchClientsResponse>>;
+  fetchClient: (...args: Parameters<typeof fetchClientApi>) => Promise<ApiFetchResponse<FetchClientResponse>>;
+  createClient: (...args: Parameters<typeof createClientApi>) => Promise<ApiFetchResponse<CreateClientResponse>>;
+  updateClient: (...args: Parameters<typeof updateClientApi>) => Promise<ApiFetchResponse<UpdateClientResponse>>;
+  removeClient: (...args: Parameters<typeof removeClientApi>) => Promise<ApiFetchResponse>;
 }
 
 const ClientsContext = createContext<UserDataContextType | undefined>(undefined);
@@ -33,9 +32,9 @@ export const ClientsProvider = ({children}: { children: React.ReactNode }) => {
   const [clients, setClients] = useState<ClientType[]>([]);
   const [loadingClients, setLoadingClients] = useState(true);
 
-  const fetchClients = useCallback(async (page: number = 1, pageSize: number = 15, searchTerm?: string) => {
+  const fetchClients = useCallback(async (...args: Parameters<typeof fetchClientsApi>) => {
     setLoadingClients(true);
-    const res = await fetchClientsApi(page, pageSize, searchTerm || "");
+    const res = await fetchClientsApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       setClients(res.clients);
     }
@@ -43,31 +42,31 @@ export const ClientsProvider = ({children}: { children: React.ReactNode }) => {
     return res;
   }, [])
 
-  const fetchClient = useCallback(async (id: number) => {
+  const fetchClient = useCallback(async (...args: Parameters<typeof fetchClientApi>) => {
     setLoadingClients(true);
-    return await fetchClientApi(id);
+    return await fetchClientApi(...args);
   }, [])
 
-  const createClient = useCallback(async (values: any, profile: UploadFile) => {
-    const res = await createClientApi(values, profile);
+  const createClient = useCallback(async (...args: Parameters<typeof createClientApi>) => {
+    const res = await createClientApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchClients();
     }
     return res;
   }, [fetchClients])
 
-  const updateClient = useCallback(async (id: number, values: any, profile: UploadFile) => {
-    const res = await updateClientApi(id, values, profile);
+  const updateClient = useCallback(async (...args: Parameters<typeof updateClientApi>) => {
+    const res = await updateClientApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchClients();
     }
     return res;
   }, [fetchClients])
 
-  const removeClient = useCallback(async (id: number) => {
-    const res = await removeClientApi(id);
+  const removeClient = useCallback(async (...args: Parameters<typeof removeClientApi>) => {
+    const res = await removeClientApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
-      setClients(prev => prev.filter(c => c.id !== id));
+      setClients(prev => prev.filter(c => c.id !== args[0]));
     }
     return res;
   }, [])

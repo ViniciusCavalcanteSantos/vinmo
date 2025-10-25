@@ -17,10 +17,10 @@ import {ApiFetchResponse} from "@/lib/apiFetch";
 interface UserDataContextType {
   events: EventType[];
   loadingEvents: boolean;
-  fetchEvents: (page?: number, pageSize?: number, searchTerm?: string) => Promise<ApiFetchResponse<FetchEventsResponse>>;
-  createEvent: (values: any) => Promise<ApiFetchResponse<CreateEventResponse>>;
-  updateEvent: (id: number, values: any) => Promise<ApiFetchResponse<UpdateEventResponse>>;
-  removeEvent: (id: number) => Promise<ApiFetchResponse>;
+  fetchEvents: (...args: Parameters<typeof fetchEventsApi>) => Promise<ApiFetchResponse<FetchEventsResponse>>;
+  createEvent: (...args: Parameters<typeof createEventApi>) => Promise<ApiFetchResponse<CreateEventResponse>>;
+  updateEvent: (...args: Parameters<typeof updateEventApi>) => Promise<ApiFetchResponse<UpdateEventResponse>>;
+  removeEvent: (...args: Parameters<typeof removeEventApi>) => Promise<ApiFetchResponse>;
 }
 
 const EventsContext = createContext<UserDataContextType | undefined>(undefined);
@@ -29,9 +29,9 @@ export const EventsProvider = ({children}: { children: React.ReactNode }) => {
   const [events, setEvents] = useState<EventType[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
-  const fetchEvents = useCallback(async (page: number = 1, pageSize: number = 15, searchTerm?: string) => {
+  const fetchEvents = useCallback(async (...args: Parameters<typeof fetchEventsApi>) => {
     setLoadingEvents(true);
-    const res = await fetchEventsApi(page, pageSize, searchTerm || "");
+    const res = await fetchEventsApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       setEvents(res.events);
     }
@@ -39,26 +39,26 @@ export const EventsProvider = ({children}: { children: React.ReactNode }) => {
     return res;
   }, [])
 
-  const createEvent = useCallback(async (values: any) => {
-    const res = await createEventApi(values);
+  const createEvent = useCallback(async (...args: Parameters<typeof createEventApi>) => {
+    const res = await createEventApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchEvents();
     }
     return res;
   }, [fetchEvents]);
 
-  const updateEvent = useCallback(async (id: number, values: any) => {
-    const res = await updateEventApi(id, values);
+  const updateEvent = useCallback(async (...args: Parameters<typeof updateEventApi>) => {
+    const res = await updateEventApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
       await fetchEvents();
     }
     return res;
   }, [fetchEvents]);
 
-  const removeEvent = useCallback(async (id: number) => {
-    const res = await removeEventApi(id);
+  const removeEvent = useCallback(async (...args: Parameters<typeof removeEventApi>) => {
+    const res = await removeEventApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
-      setEvents(prev => prev.filter(c => c.id !== id));
+      setEvents(prev => prev.filter(c => c.id !== args[0]));
     }
     return res;
   }, []);
