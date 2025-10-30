@@ -27,13 +27,13 @@ class EventPhotoService
         $photo = $request->file('photo');
 
         return DB::transaction(function () use ($event, $photo) {
-            $this->processAndStoreProfilePhoto($event, $photo);
+            $this->processAndStorePhoto($event, $photo);
 
             return $event->fresh();
         });
     }
 
-    public function processAndStoreProfilePhoto(Event $event, $uploaded)
+    public function processAndStorePhoto(Event $event, $uploaded)
     {
         $processed = ImagePreparationService::from($uploaded)
             ->fixOrientation()

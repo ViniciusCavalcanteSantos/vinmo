@@ -54,4 +54,17 @@ class Image extends Model
     {
         return $this->versions->firstWhere('type', $type);
     }
+
+    public function clientImageLinks(): HasMany
+    {
+        return $this->hasMany(FaceDetection::class);
+    }
+
+    public function clientsInImage()
+    {
+        return $this
+            ->belongsToMany(Client::class, 'clients_event_image_links')
+            ->withPivot(['event_id', 'matched_by', 'confidence', 'is_active'])
+            ->withTimestamps();
+    }
 }

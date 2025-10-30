@@ -3,10 +3,12 @@
 namespace App\Jobs;
 
 use App\Models\Event;
+use App\Models\FaceDetection;
 use App\Models\Image;
 use App\Services\ImageAnalysis\ImageAnalyzerFactory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class SortImage implements ShouldQueue
@@ -30,9 +32,49 @@ class SortImage implements ShouldQueue
             $imageAnalyzer = $imageAnalyzerFactory->make();
 
             $detections = $imageAnalyzer->findAllKnownFacesInPhoto($this->image->path);
+            $detections = collect($detections);
 
-            Log::info('all faces detected', $detections);
-            // TODO: separar a foto usando uma tabela pivó
+            $orgId = $this->event->contract->organization_id;
+            $clientsInEvent = $this->event->clients()->pluck('clients.id')->toBase();
+
+            $matchesInEvent = $detections->filter(
+                fn($d) => $clientsInEvent->contains($d['client_id'])
+            );
+//
+//            $matchesNotInEvent = $detections->filter(
+//                fn($d) => !$clientsInEvent->contains($d['client_id'])
+//            );
+
+
+            DB::transaction(function () use ($detections, $clientsInEvent) {
+                foreach ($detections as $detection) {
+                    $detectionModel = FaceDetection::firstOrCreate(
+                        [
+                            'event_id' => $this->event->id,
+                            'image_id' => $this->image->id,
+                            'box_x' => $detection['box']['left'],
+                            'box_y' => $detection['box']['top'],
+                            'box_w' => $detection['box']['width'],
+                            'box_h' => $detection['box']['height']
+                        ]
+                    );
+
+                    if ($clientsInEvent->contains($detection['client_id'])) {
+                        $detectionModel->resolved()->updateOrCreate(
+                            [
+                                'client_id' => $detection['client_id'],
+                                'event_id' => $this->event->id,
+                                'image_id' => $this->image->id,
+                            ],
+                            [
+                                'confidence' => $detection['confidence'],
+                            ]
+                        );
+                    }
+
+                }
+            });
+
         } catch (\Exception $e) {
             Log::error('Job SortImage falhou: '.$e->getMessage(), [
                 'image_id' => $this->image->id,

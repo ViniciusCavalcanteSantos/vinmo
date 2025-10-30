@@ -6,6 +6,7 @@ use App\Observers\ClientObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 #[ObservedBy([ClientObserver::class])]
@@ -63,5 +64,12 @@ class Client extends Model
     {
         return $this->belongsToMany(Event::class, 'clients_event_assignments')
             ->withTimestamps();
+    }
+
+    public function imagesInEvent($eventId): HasMany
+    {
+        return $this->hasMany(FaceDetection::class)
+            ->where('event_id', $eventId)
+            ->where('is_active', true);
     }
 }
