@@ -9,7 +9,7 @@
     "dev:turbo": "next dev --turbopack",
     "build:turbo": "next build --turbopack",
     "start": "next start",
-    "start-all": "concurrently \"cd ../server && php artisan serve\" \"npm run dev\" \"cd ../server && php artisan queue:listen\""
+    "start-all": "concurrently -n server,client,worker1,worker2,worker3 -c yellow,cyan,green,magenta,blue \"cd ../server && php artisan serve\" \"npm run dev\" \"cd ../server && php artisan queue:listen\" \"cd ../server && php artisan queue:listen\" \"cd ../server && php artisan queue:listen\""
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
