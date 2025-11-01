@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('face_detections', function (Blueprint $table) {
+        Schema::create('face_crops', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->foreignUlid('image_id')->constrained()->cascadeOnDelete();
@@ -32,6 +32,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('face_detections');
+        Schema::dropIfExists('face_crops');
     }
 };

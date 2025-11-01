@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Event;
-use App\Models\FaceDetection;
+use App\Models\FaceCrops;
 use App\Models\Image;
 use App\Services\ImageAnalysis\ImageAnalyzerFactory;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -38,7 +38,7 @@ class SortImage implements ShouldQueue
 
             DB::transaction(function () use ($detections, $clientsInEvent) {
                 foreach ($detections as $detection) {
-                    $detectionModel = FaceDetection::firstOrCreate(
+                    $detectionModel = FaceCrops::firstOrCreate(
                         [
                             'event_id' => $this->event->id,
                             'image_id' => $this->image->id,

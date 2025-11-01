@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class FaceDetection extends Model
+class FaceCrops extends Model
 {
     protected $fillable = [
         'event_id', 'image_id',
@@ -19,7 +19,7 @@ class FaceDetection extends Model
 
     public function resolved(): HasOne
     {
-        return $this->hasOne(ResolvedFace::class, 'face_detection_id');
+        return $this->hasOne(FaceCropMatch::class, 'face_detection_id');
     }
 
     public function event(): BelongsTo

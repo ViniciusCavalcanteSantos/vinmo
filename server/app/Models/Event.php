@@ -46,7 +46,7 @@ class Event extends Model
 
     public function clientImageLinks()
     {
-        return $this->hasMany(FaceDetection::class);
+        return $this->hasMany(FaceCrops::class);
     }
 
     protected function casts(): array

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ResolvedFace extends Model
+class FaceCropMatch extends Model
 {
     protected $fillable = [
         'client_id', 'event_id', 'image_id', 'confidence', 'matched_by'
@@ -18,7 +18,7 @@ class ResolvedFace extends Model
 
     public function detection(): BelongsTo
     {
-        return $this->belongsTo(FaceDetection::class, 'face_detection_id');
+        return $this->belongsTo(FaceCrops::class, 'face_detection_id');
     }
 
     public function client(): BelongsTo

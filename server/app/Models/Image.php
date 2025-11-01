@@ -57,7 +57,7 @@ class Image extends Model
 
     public function clientImageLinks(): HasMany
     {
-        return $this->hasMany(FaceDetection::class);
+        return $this->hasMany(FaceCrops::class);
     }
 
     public function clientsInImage()
