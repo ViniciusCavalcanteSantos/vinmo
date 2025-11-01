@@ -15,10 +15,17 @@ return new class extends Migration {
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->foreignUlid('image_id')->constrained()->cascadeOnDelete();
 
+            $table->ulid('original_image_id');
+            $table->foreign('original_image_id')->references('id')->on('images')->cascadeOnDelete();
+
             $table->integer('box_x');
             $table->integer('box_y');
             $table->integer('box_w');
             $table->integer('box_h');
+
+            $table->unsignedBigInteger('best_client_id')->nullable();
+            $table->foreign('best_client_id')->references('id')->on('clients');
+            $table->decimal('best_confidence', 6, 3)->nullable();
 
             $table->boolean('dismissed')->default(false);
             $table->timestamps();

@@ -68,7 +68,7 @@ class Client extends Model
 
     public function imagesInEvent($eventId): HasMany
     {
-        return $this->hasMany(FaceCrops::class)
+        return $this->hasMany(FaceCrop::class)
             ->where('event_id', $eventId)
             ->where('is_active', true);
     }

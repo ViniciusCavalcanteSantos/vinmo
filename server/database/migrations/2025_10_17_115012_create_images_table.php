@@ -17,7 +17,7 @@ return new class extends Migration {
 
             $table->string('disk')->default('s3');
             $table->string('path');
-            $table->enum('type', ['original', 'web', 'thumb', 'watermark'])->default('original');
+            $table->enum('type', ['original', 'web', 'thumb', 'watermark', 'crop'])->default('original');
 
             $table->unsignedBigInteger('size')->nullable();
             $table->string('mime_type')->nullable();

@@ -32,7 +32,8 @@
   },
   "autoload": {
     "files": [
-      "app/Helpers/LocationHelpers.php"
+      "app/Helpers/LocationHelpers.php",
+      "app/Helpers/AwsHelpers.php"
     ],
     "psr-4": {
       "App\\": "app/",

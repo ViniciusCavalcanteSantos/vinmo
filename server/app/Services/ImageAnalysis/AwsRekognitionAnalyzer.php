@@ -148,6 +148,8 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                                 'width' => $width,
                                 'height' => $height,
                             ],
+                            'details' => $face,
+                            'croppedImage' => $cropedImage,
                             'matched_by' => 'rekognition',
                         ];
                     }

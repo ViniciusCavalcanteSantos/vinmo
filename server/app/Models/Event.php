@@ -46,7 +46,7 @@ class Event extends Model
 
     public function clientImageLinks()
     {
-        return $this->hasMany(FaceCrops::class);
+        return $this->hasMany(FaceCrop::class);
     }
 
     protected function casts(): array

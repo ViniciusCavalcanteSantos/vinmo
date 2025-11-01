@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class FaceCrops extends Model
+class FaceCrop extends Model
 {
     protected $fillable = [
-        'event_id', 'image_id',
+        'event_id', 'image_id', 'original_image_id',
         'box_x', 'box_y', 'box_w', 'box_h',
-        'dismissed',
+        'dismissed', 'best_client_id', 'best_confidence'
     ];
 
     protected $casts = [
@@ -35,5 +35,10 @@ class FaceCrops extends Model
     public function image(): BelongsTo
     {
         return $this->belongsTo(Image::class);
+    }
+
+    public function saveFaceDetail($awsFace): FaceDetail
+    {
+        return saveFaceDetailFromAws($awsFace, $this->id);
     }
 }
