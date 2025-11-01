@@ -34,17 +34,7 @@ class SortImage implements ShouldQueue
             $detections = $imageAnalyzer->findAllKnownFacesInPhoto($this->image->path);
             $detections = collect($detections);
 
-            $orgId = $this->event->contract->organization_id;
             $clientsInEvent = $this->event->clients()->pluck('clients.id')->toBase();
-
-            $matchesInEvent = $detections->filter(
-                fn($d) => $clientsInEvent->contains($d['client_id'])
-            );
-//
-//            $matchesNotInEvent = $detections->filter(
-//                fn($d) => !$clientsInEvent->contains($d['client_id'])
-//            );
-
 
             DB::transaction(function () use ($detections, $clientsInEvent) {
                 foreach ($detections as $detection) {

@@ -35,7 +35,7 @@ class Event extends Model
 
     public function clients()
     {
-        return $this->belongsToMany(Client::class, 'clients_event_assignments')
+        return $this->belongsToMany(Client::class, 'client_event_assignments')
             ->withTimestamps();
     }
 

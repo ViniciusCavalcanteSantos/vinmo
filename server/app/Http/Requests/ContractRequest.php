@@ -30,7 +30,7 @@ class ContractRequest extends ApiFormRequest
         ];
 
         if ($this->isMethod('POST')) {
-            $rules['category'] = ['required', 'string', 'exists:contracts_categories,slug'];
+            $rules['category'] = ['required', 'string', 'exists:contract_categories,slug'];
             $rules['code'] = [
                 'required',
                 'string',

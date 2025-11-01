@@ -27,7 +27,7 @@ class EventRequest extends ApiFormRequest
             'event_type' => [
                 'required',
                 'integer',
-                Rule::exists('events_types', 'id')
+                Rule::exists('event_types', 'id')
                     ->where(function ($query) {
                         if ($contractId = $this->input('contract')) {
                             $contract = Contract::find($contractId);

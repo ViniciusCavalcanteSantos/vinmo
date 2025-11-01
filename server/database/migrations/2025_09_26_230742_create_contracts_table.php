@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('organization_id');
             $table->unsignedBigInteger('category_id');
             $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->foreign('category_id')->references('id')->on('contracts_categories');
+            $table->foreign('category_id')->references('id')->on('contract_categories');
             $table->string('code', 40);
             $table->string('title', 180);
 

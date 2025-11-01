@@ -4,14 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('contracts_graduation_details', function (Blueprint $table) {
+        Schema::create('contract_graduation_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('contract_id')->unique();
             $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contracts_graduation_details');
+        Schema::dropIfExists('contract_graduation_details');
     }
 };

@@ -10,7 +10,6 @@ class ClientRegisterLink extends Model
 {
     use HasUlids;
 
-    protected $table = 'clients_register_links';
     protected $fillable = [
         'organization_id',
         'title', 'max_registers', 'used_registers',

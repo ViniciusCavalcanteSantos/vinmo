@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('contract_id');
             $table->unsignedBigInteger('type_id');
             $table->foreign('contract_id')->references('id')->on('contracts');
-            $table->foreign('type_id')->references('id')->on('events_types');
+            $table->foreign('type_id')->references('id')->on('event_types');
             $table->date('event_date');
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();

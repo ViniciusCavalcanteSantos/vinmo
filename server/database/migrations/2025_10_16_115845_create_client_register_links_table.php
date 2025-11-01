@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('clients_register_links', function (Blueprint $table) {
+        Schema::create('client_register_links', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
             $table->string('title', 80);
@@ -28,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients_register_links');
+        Schema::dropIfExists('client_register_links');
     }
 };
