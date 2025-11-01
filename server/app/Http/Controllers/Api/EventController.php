@@ -32,6 +32,16 @@ class EventController extends Controller
                     ->where('organization_id', $organizationId);
             })
             ->with($load)
+            ->withCount([
+                'images as images_count' => function ($q) {
+                    $q->where('type', 'original');
+                }
+            ])
+            ->withSum([
+                'images as images_bytes' => function ($q) {
+                    $q->where('type', 'original');
+                }
+            ], 'size')
             ->latest();
 
         $eventsQuery->when($searchTerm, function ($query, $term) use ($withContract) {

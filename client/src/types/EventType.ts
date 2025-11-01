@@ -9,6 +9,8 @@ type EventType = {
   description?: string,
   createdAt: string,
   contract?: ContractType
+  totalImages: number,
+  totalSize: number,
   type: {
     id: number,
     name: string

@@ -15,6 +15,7 @@ import PageHeader from "@/components/PageHeader";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import Link from "next/link";
+import {filesize} from "filesize";
 
 export default function Page() {
   const {t} = useT();
@@ -108,7 +109,7 @@ export default function Page() {
     {
       title: t('uploaded_photos'),
       dataIndex: ['temp'],
-      render: () => 0
+      render: (_, record) => record.totalImages
     },
     {
       title: t('separated_photos'),
@@ -118,7 +119,7 @@ export default function Page() {
     {
       title: t('size'),
       dataIndex: ['temp'],
-      render: () => "0 MB"
+      render: (_, record) => filesize(record.totalSize)
     },
     {
       title: t('actions'),

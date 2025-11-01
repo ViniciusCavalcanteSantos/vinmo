@@ -22,6 +22,8 @@ class EventResource extends JsonResource
             'description' => $this->description,
             'createdAt' => $this->created_at->toIso8601String(),
             'contract' => new ContractResource($this->whenLoaded('contract')),
+            'totalImages' => $this->images_count,
+            'totalSize' => (int) $this->images_bytes,
             'type' => $this->whenLoaded('type', function ($type) {
                 $type->load('category');
                 return [
