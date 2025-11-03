@@ -40,7 +40,7 @@ class SortImage implements ShouldQueue
 
             $clientsInEvent = $this->event->clients()->pluck('clients.id')->toBase();
 
-            DB::transaction(function () use ($detections, $clientsInEvent, $pathsToDelete, $disk) {
+            DB::transaction(function () use ($detections, $clientsInEvent, $disk, &$pathsToDelete) {
                 foreach ($detections as $detection) {
                     $croppedImage = $detection['croppedImage'];
                     $croppedModel = $this->image->versions()->create([
@@ -53,6 +53,7 @@ class SortImage implements ShouldQueue
                         'size' => $croppedImage->size(),
                     ]);
                     $croppedPath = $this->generateVersionPath($this->image->path, "crop_{$croppedModel->id}");
+
                     $pathsToDelete[] = $croppedPath;
 
                     Storage::put($croppedPath, $croppedImage->toFilePointer());
@@ -88,7 +89,7 @@ class SortImage implements ShouldQueue
                 }
             });
 
-        } catch (\Exception $e) {
+        } catch (\Exception|\Throwable $e) {
             if (!empty($pathsToDelete)) {
                 Storage::disk($disk)->delete($pathsToDelete);
             }
