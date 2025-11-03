@@ -23,6 +23,8 @@ return new class extends Migration {
             $table->string('mime_type')->nullable();
             $table->string('hash')->nullable()->index();
 
+            $table->enum('status', ['ok', 'processing', 'failed'])->default('ok');
+
             $table->timestamps();
         });
     }

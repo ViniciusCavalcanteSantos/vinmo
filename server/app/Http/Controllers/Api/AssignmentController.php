@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ReconcilePendingFaces;
 use App\Models\Client;
+use App\Models\PendingFaceReconciliation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,7 +32,16 @@ class AssignmentController extends Controller
         $validated = $validator->validated();
 
         try {
+            $before = $client->events()->pluck('events.id')->all();
             $client->events()->sync($validated['assignments']);
+            $after = $client->events()->pluck('events.id')->all();
+
+            $added = array_values(array_diff($after, $before));
+
+            if (!empty($added)) {
+                $this->signalReconcileForEvents($added);
+            }
+
             return response()->json([
                 'status' => 'success',
                 'message' => __('Assignments updated')
@@ -40,6 +51,22 @@ class AssignmentController extends Controller
                 'status' => 'error',
                 'message' => __('Could not perform action')
             ]);
+        }
+    }
+
+    private function signalReconcileForEvents(array $eventIds, int $delaySeconds = 1): void
+    {
+        $eventIds = array_values(array_unique(array_filter($eventIds)));
+
+        foreach ($eventIds as $eventId) {
+            PendingFaceReconciliation::firstOrCreate([
+                'event_id' => $eventId,
+                'image_id' => null,
+                'reason' => 'client_linked',
+            ]);
+
+            ReconcilePendingFaces::dispatch($eventId)
+                ->delay(now()->addSeconds($delaySeconds));
         }
     }
 
@@ -62,6 +89,8 @@ class AssignmentController extends Controller
                 $client = Client::find($clientId);
                 $client->events()->syncWithoutDetaching($validated['assignments']);
             }
+
+            $this->signalReconcileForEvents($validated['assignments']);
 
             return response()->json([
                 'status' => 'success',

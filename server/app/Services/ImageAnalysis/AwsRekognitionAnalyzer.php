@@ -193,6 +193,44 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
         }
     }
 
+    public function searchSingleFaceCrop(string $s3ObjectKey, int $matchThreshold = 85): ?array
+    {
+        try {
+            $res = $this->client->searchFacesByImage([
+                'CollectionId' => $this->collectionId,
+                'FaceMatchThreshold' => $matchThreshold,
+                'Image' => [
+                    'S3Object' => [
+                        'Bucket' => $this->s3Bucket,
+                        'Name' => $this::fullS3Key($s3ObjectKey),
+                    ],
+                ],
+                'MaxFaces' => 1,
+                'QualityFilter' => 'AUTO',
+            ]);
+
+            $match = $res['FaceMatches'][0] ?? null;
+            if (!$match) {
+                return null;
+            }
+
+            $externalId = $match['Face']['ExternalImageId'] ?? null;
+            if ($externalId === null || $externalId === '') {
+                return null;
+            }
+
+            return [
+                'client_id' => (string) $externalId,
+                'confidence' => (float) ($match['Similarity'] ?? 0.0),
+                'face_id' => $match['Face']['FaceId'] ?? null,
+            ];
+
+        } catch (AwsException $e) {
+            throw new ImageAnalysisException(__('Failed to search for faces in the image')." ".$e->getAwsErrorMessage(),
+                $e->getCode(), $e);
+        }
+    }
+
     public function removeFace(string $faceId): bool
     {
         try {

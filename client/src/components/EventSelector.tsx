@@ -48,7 +48,7 @@ function EventSelector({value, onChange}: EventSelectorProps) {
       const contractEvents = events.filter(event => event.contractId === contract.id);
       if (contractEvents.length) {
         acc.push({
-          title: contract.title,
+          title: contract.code + ' - ' + contract.title,
           value: 'contract-' + contract.id,
           key: 'contract-' + contract.id,
           selectable: false,

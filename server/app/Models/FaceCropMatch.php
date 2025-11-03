@@ -18,7 +18,7 @@ class FaceCropMatch extends Model
 
     public function detection(): BelongsTo
     {
-        return $this->belongsTo(FaceCrop::class, 'face_detection_id');
+        return $this->belongsTo(FaceCrop::class, 'face_crop_id');
     }
 
     public function client(): BelongsTo

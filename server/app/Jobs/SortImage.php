@@ -89,6 +89,12 @@ class SortImage implements ShouldQueue
                 }
             });
 
+            \App\Models\PendingFaceReconciliation::firstOrCreate([
+                'event_id' => $this->event->id,
+                'image_id' => $this->image->id,
+                'reason' => 'image_ready',
+            ]);
+            ReconcilePendingFaces::dispatch($this->event->id)->delay(now()->addSeconds(45));
         } catch (\Exception|\Throwable $e) {
             if (!empty($pathsToDelete)) {
                 Storage::disk($disk)->delete($pathsToDelete);

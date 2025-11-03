@@ -19,7 +19,7 @@ class FaceCrop extends Model
 
     public function resolved(): HasOne
     {
-        return $this->hasOne(FaceCropMatch::class, 'face_detection_id');
+        return $this->hasOne(FaceCropMatch::class, 'face_crop_id');
     }
 
     public function event(): BelongsTo

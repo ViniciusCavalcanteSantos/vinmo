@@ -39,6 +39,16 @@ interface ImageAnalyzer
     public function findKnownFacesInPhoto(string $s3ObjectKey, int $matchThreshold = 85): array;
 
     /**
+     * Procura pelo rosto com a melhor correspondẽncia
+     *
+     * @param  string  $imageBytes  A chave do objeto da imagem do evento no S3.
+     * @param  int  $matchThreshold  A porcentagem mínima de similaridade (0-100).
+     * @return array Uma lista com as informações da imagem encontrada
+     * @throws ImageAnalysisException
+     */
+    public function searchSingleFaceCrop(string $s3ObjectKey, int $matchThreshold = 85): ?array;
+
+    /**
      * Remove uma face da collection de reconhecimento.
      *
      * @param  string  $faceId  O FaceId gerado pela AWS que foi salvo no seu banco.
