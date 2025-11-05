@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
 use App\Http\Resources\EventResource;
+use App\Http\Resources\ImageResource;
 use App\Models\Contract;
 use App\Models\Event;
 use App\Models\EventType;
@@ -165,6 +166,17 @@ class EventController extends Controller
             'status' => 'success',
             'message' => __('Event types retrieved'),
             'eventTypes' => $eventTypes
+        ]);
+    }
+
+    public function getImages(Event $event)
+    {
+        $images = $event->images()->versions('web')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Event images retrieved'),
+            'images' => ImageResource::collection($images)
         ]);
     }
 }

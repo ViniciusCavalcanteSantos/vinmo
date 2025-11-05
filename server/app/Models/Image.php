@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
@@ -39,6 +40,22 @@ class Image extends Model
     public function original(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'parent_id');
+    }
+
+    public function scopeOriginals($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    public function scopeVersions($query, string|array|Collection $version)
+    {
+        if (is_array($version) || $version instanceof Collection) {
+            $query->whereIn('type', $version);
+        } else {
+            $query->where('type', $version);
+        }
+
+        return $query;
     }
 
     public function getUrlAttribute(): string

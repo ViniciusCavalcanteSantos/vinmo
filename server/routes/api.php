@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('event/types/{contract}', [EventController::class, 'getEventTypes']);
     Route::apiResource('/event', EventController::class);
+    Route::get('event/{event}/images', [EventController::class, 'getImages']);
 
 
     Route::apiResource('/event/photo', EventPhotoController::class);

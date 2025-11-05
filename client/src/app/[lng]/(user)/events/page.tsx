@@ -44,12 +44,15 @@ export default function Page() {
   const ActionButtons = ({record}: { record: EventType }) => (
     <Space size="middle">
       <Tooltip title={t('view')} destroyOnHidden>
-        <Button
-          type="text"
-          shape="circle"
-          icon={<EyeOutlined/>}
-          onClick={() => (record)}
-        />
+        <Link href={`/events/${record.id}`}>
+          <Button
+            type="text"
+            shape="circle"
+            icon={<EyeOutlined/>}
+            onClick={() => (record)}
+          />
+        </Link>
+
       </Tooltip>
       <Tooltip title={t('edit')} destroyOnHidden>
         <Button

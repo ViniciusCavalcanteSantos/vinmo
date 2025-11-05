@@ -3,6 +3,7 @@ import EventType from "@/types/EventType";
 import {UploadFile} from "antd";
 import {objectToFormData} from "@/lib/objectToFormData";
 import {CreateClientResponse} from "@/lib/database/Client";
+import ImageType from "@/types/ImageType";
 
 export interface FetchEventsResponse {
   events: EventType[];
@@ -61,6 +62,14 @@ export async function fetchEvent(eventId: number, withContract: boolean = false)
   }
 
   return await apiFetch<FetchEventResponse>(`/event/${eventId}?${query.toString()}`, {
+    method: "GET",
+  });
+}
+
+export async function fetchEventImages(eventId: number) {
+  const query = new URLSearchParams();
+
+  return await apiFetch<{ images: ImageType[] }>(`/event/${eventId}/images`, {
     method: "GET",
   });
 }
