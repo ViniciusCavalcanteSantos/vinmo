@@ -13,13 +13,13 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import {useT} from "@/i18n/client";
-import useUser from "@/hooks/useUser";
 import UserAvatarDropdown from "@/components/UserAvatarDropdown";
 import {Button, Divider} from "antd";
 import theme from "@/theme";
+import {useUser} from "@/contexts/UserContext";
 
 export default function Header() {
-  const user = useUser();
+  const {user} = useUser();
   const [open, setOpen] = useState(false);
   const {t} = useT()
 

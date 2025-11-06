@@ -1,26 +1,24 @@
 import apiFetch from "@/lib/apiFetch";
 import {FullAddressType} from "@/types/AddressType";
+import User from "@/types/User";
 
 interface AuthSuccess {
-  token: string;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  };
+  user: User
+}
+
+async function fetchCSRF() {
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/sanctum/csrf-cookie`, {
+    credentials: 'include',
+  });
 }
 
 export async function login(email: string, password: string, remember_me: boolean) {
-  const data = await apiFetch<AuthSuccess>("/login", {
+  await fetchCSRF()
+
+  return await apiFetch<AuthSuccess>("/login", {
     method: "POST",
     body: JSON.stringify({email, password, remember_me}),
   });
-
-  if ("token" in data && typeof window !== "undefined") {
-    localStorage.setItem("token", data.token);
-  }
-
-  return data;
 }
 
 export async function send_code(email: string) {
@@ -38,16 +36,12 @@ export async function confirm_code(email: string, code: string) {
 }
 
 export async function register(name: string, email: string, password: string, password_confirmation: string, address: FullAddressType) {
-  const res = await apiFetch<AuthSuccess>("/register", {
+  await fetchCSRF()
+
+  return await apiFetch<AuthSuccess>("/register", {
     method: "POST",
     body: JSON.stringify({name, email, password, password_confirmation, address: address}),
   });
-
-  if ("token" in res && typeof window !== "undefined") {
-    localStorage.setItem("token", res.token);
-  }
-
-  return res;
 }
 
 export async function send_recovery_link(email: string) {
@@ -71,6 +65,6 @@ export async function change_password(email: string, token: string, password: st
   });
 }
 
-export async function getUser() {
-  return apiFetch("/user");
+export async function fetchUser() {
+  return apiFetch<{ user: User }>("/me");
 }

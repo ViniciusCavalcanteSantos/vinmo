@@ -1,23 +1,15 @@
-"use client"
+import {PropsWithChildren} from "react";
+import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
 
-import {PropsWithChildren, useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
-import Fallback from "@/components/Fallback";
+export default async function Layout({children}: PropsWithChildren) {
+  const cookieStore = await cookies();
+  const loggedIn = !!cookieStore.get('logged_in')?.value;
 
-export default function Layout({children}: PropsWithChildren) {
-  const router = useRouter();
-  const [checking, setChecking] = useState(true);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (token) router.replace("/home")
-    else {
-      setChecking(false);
-    }
-  }, [])
-
-  if (checking) return <Fallback/>;
-
+  if (loggedIn) {
+    redirect(`/home`);
+  }
+  
   return (
     <div className="h-full flex justify-center items-center bg-background">
       {children}

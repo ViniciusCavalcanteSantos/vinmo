@@ -11,7 +11,6 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -36,9 +35,8 @@ class AuthController extends Controller
         try {
             $code = str_pad(random_int(0, 99999999), 8, '0', STR_PAD_LEFT);
 
-            Cache::clear();
-            Cache::put('confirmation_code', $code);
-            Cache::put('confirmation_email', $request->email);
+            $request->session()->put('confirmation_code', $code);
+            $request->session()->put('confirmation_email', $request->email);
 
             Mail::to($request->email)->send(new EmailConfirmation($code));
 
@@ -195,7 +193,7 @@ class AuthController extends Controller
         }
 
         try {
-            $attempts = Cache::get('confirmation_attempts', 0);
+            $attempts = $request->session()->get('confirmation_attempts', 0);
             $attemptsMax = config('auth.max_email_confirmation_attempts');
             if ($attempts >= $attemptsMax) {
                 return response()->json([
@@ -207,8 +205,8 @@ class AuthController extends Controller
             $code = $request->code;
             $email = $request->email;
 
-            $codeSession = Cache::get('confirmation_code');
-            $emailSession = Cache::get('confirmation_email');
+            $codeSession = $request->session()->get('confirmation_code');
+            $emailSession = $request->session()->get('confirmation_email');
             if (!$codeSession || !$emailSession) {
                 return response()->json([
                     'status' => 'error',
@@ -216,7 +214,7 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            Cache::put('confirmation_attempts', $attempts + 1);
+            $request->session()->put('confirmation_attempts', $attempts + 1);
             if ($code !== $codeSession || $email !== $emailSession) {
                 return response()->json([
                     'status' => 'error',
@@ -224,7 +222,7 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            Cache::put('email_verified_at', now()->toDateTimeString());
+            $request->session()->put('email_verified_at', now()->toDateTimeString());
             return response()->json([
                 'status' => 'success',
                 'message' => __('Email verified successfully'),
@@ -241,8 +239,8 @@ class AuthController extends Controller
     {
 
         $request->merge([
-            'email' => Cache::get('confirmation_email'),
-            'email_verified_at' => Cache::get('email_verified_at'),
+            'email' => $request->session()->get('confirmation_email'),
+            'email_verified_at' => $request->session()->get('email_verified_at'),
         ]);
 
         $validator = Validator::make($request->all(), [
@@ -293,14 +291,15 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $token = $user->createToken('api_token')->plainTextToken;
+        Auth::login($user);
 
         return response()->json([
             'status' => 'success',
             'message' => __('Registration completed successfully'),
-            'token' => $token,
             'user' => new UserResource($user),
-        ]);
+        ])->cookie(
+            'logged_in', '1', 240, '/', null, true, false, false, 'Lax'
+        );
     }
 
     public function login(Request $request): JsonResponse
@@ -318,27 +317,28 @@ class AuthController extends Controller
             ], 422);
         }
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('email', 'password'), $request->remember_me)) {
             return response()->json([
                 'status' => 'error',
                 'message' => __('Email or Password is incorrect'),
             ], 401);
         }
 
-        $expiresAt = $request->remember_me
-            ? now()->addWeek()
-            : now()->addHours(2);
+        $request->session()->regenerate();
 
-        $user = Auth::user();
-        $user->load('address');
-        $token = $user->createToken('api_token', ['*'], $expiresAt);
+        $minutes = $request->remember_me
+            ? 60 * 24 * 7
+            : 60 * 2;
+
+        $user = Auth::user()->load('address');
 
         return response()->json([
             'status' => 'success',
             'message' => __('Login successfully'),
-            'token' => $token->plainTextToken,
             'user' => new UserResource($user),
-        ]);
+        ])->cookie(
+            'logged_in', '1', $minutes, '/', null, true, false, false, 'Lax'
+        );
     }
 
     public function me(Request $request): JsonResponse
@@ -348,5 +348,20 @@ class AuthController extends Controller
             'message' => __('User successfully obtained'),
             'user' => new UserResource($request->user())
         ]);
+    }
+
+    public function logout(Request $request): \Illuminate\Http\JsonResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Logout successfully'),
+        ])->cookie(
+            'logged_in', '', -1, '/', null, true, false, false, 'Lax'
+        );
     }
 }

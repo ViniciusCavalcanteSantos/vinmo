@@ -7,7 +7,6 @@ import {PrimaryButton} from "@/components/PrimaryButton";
 import Link from "next/link";
 import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
-import {useLocalStorage} from "react-use";
 import {useRouter} from "next/navigation";
 import {login} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
@@ -15,7 +14,6 @@ import {ApiStatus} from "@/types/ApiResponse";
 export default function SigninForm() {
   const {t} = useT()
   const notification = useNotification();
-  const [__, setUser] = useLocalStorage("user")
   const router = useRouter();
 
   const handleFinish = async (values: any) => {
@@ -27,8 +25,6 @@ export default function SigninForm() {
       return;
     }
 
-    localStorage.setItem("token", res.token);
-    setUser(res.user)
     router.push("/home")
   }
 

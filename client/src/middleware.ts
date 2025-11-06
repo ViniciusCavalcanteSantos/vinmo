@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
 import acceptLanguage from 'accept-language'
-import { fallbackLng, languages, cookieName, headerName } from '@/i18n/settings'
+import {cookieName, fallbackLng, headerName, languages} from '@/i18n/settings'
 
 acceptLanguage.languages(languages)
 
@@ -10,7 +10,9 @@ export const config = {
 }
 
 export function middleware(req: NextRequest) {
-  if (req.nextUrl.pathname.indexOf('icon') > -1 || req.nextUrl.pathname.indexOf('chrome') > -1) return NextResponse.next()
+  const pathname = req.nextUrl.pathname;
+
+  if (pathname.indexOf('icon') > -1 || pathname.indexOf('chrome') > -1) return NextResponse.next()
 
   let lng
   const cookie = req.cookies.get(cookieName);
@@ -18,25 +20,25 @@ export function middleware(req: NextRequest) {
   if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'))
   if (!lng) lng = fallbackLng
 
-  const lngInPath = languages.find(loc => req.nextUrl.pathname.startsWith(`/${loc}`))
+  const lngInPath = languages.find(loc => pathname.startsWith(`/${loc}`))
   const headers = new Headers(req.headers)
   headers.set(headerName, lngInPath || lng)
 
   if (
     !lngInPath &&
-    !req.nextUrl.pathname.startsWith('/_next')
+    !pathname.startsWith('/_next')
   ) {
-    return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url))
+    return NextResponse.redirect(new URL(`/${lng}${pathname}${req.nextUrl.search}`, req.url))
   }
 
   const referer = req.headers.get('referer')
   if (referer) {
     const refererUrl = new URL(referer)
     const lngInReferer = languages.find((l) => refererUrl.pathname.startsWith(`/${l}`))
-    const response = NextResponse.next({ headers })
+    const response = NextResponse.next({headers})
     if (lngInReferer) response.cookies.set(cookieName, lngInReferer)
     return response
   }
 
-  return NextResponse.next({ headers })
+  return NextResponse.next({headers})
 }

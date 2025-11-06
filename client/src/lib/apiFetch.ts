@@ -13,6 +13,16 @@ export interface ApiFetchOptions extends RequestInit {
 export type ApiFetchResponse<T = undefined> = ApiResponse &
   (T extends undefined ? {} : T);
 
+function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
+
+  const match = document.cookie.match(
+    new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)')
+  );
+
+  return match ? match[1] : null;
+}
+
 export default async function apiFetch<T = undefined>(
   path: string | URL | Request,
   options: ApiFetchOptions = {}
@@ -25,20 +35,33 @@ export default async function apiFetch<T = undefined>(
   const lang = i18next.language;
   const isFormData = options.body instanceof FormData;
   const driver = options.driver ?? "fetch";
+
+  const method = (options.method || "GET").toUpperCase();
+  const isMutatingMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
+
+  // pega XSRF só no browser e só para métodos mutáveis
+  let xsrfHeader: Record<string, string> = {};
+  if (typeof window !== "undefined" && isMutatingMethod) {
+    const xsrfCookie = getCookie("XSRF-TOKEN");
+    if (xsrfCookie) {
+      xsrfHeader["X-XSRF-TOKEN"] = decodeURIComponent(xsrfCookie);
+    }
+  }
+
   const headers = {
     ...(isFormData ? {} : {"Content-Type": "application/json"}),
     "Accept": "application/json",
     "Accept-Language": lang,
     ...(options.headers as Record<string, string> || {}),
-    ...(token ? {Authorization: `Bearer ${token}`} : {})
+    ...xsrfHeader
   };
 
   const handleNotAuthenticated = () => {
     if (typeof window !== "undefined") {
-      localStorage.clear();
-      window.location.href = "/";
+      document.cookie = 'logged_in=; Max-Age=0; Path=/; SameSite=Lax';
+      window.location.href = "/signin";
     } else {
-      redirect("/");
+      redirect("/signin");
     }
   }
 
@@ -60,6 +83,7 @@ export default async function apiFetch<T = undefined>(
         url,
         headers,
         data: options.body,
+        withCredentials: true,
         onUploadProgress: (event) => {
           if (event.total && options.onProgress) {
             const percent = Math.round((event.loaded / event.total) * 100);
@@ -88,7 +112,7 @@ export default async function apiFetch<T = undefined>(
     ...options,
     headers,
     cache: options.cache ?? "no-store",
-    credentials: 'omit'
+    credentials: 'include'
   });
 
   let data: any;

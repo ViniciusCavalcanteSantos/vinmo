@@ -19,7 +19,6 @@ import {FullAddressType} from "@/types/AddressType";
 export default function FinishForm() {
   const {t} = useT();
   const notification = useNotification();
-  const [__, setUser] = useLocalStorage("user")
   const [emailConfirmation] = useLocalStorage<string | null>('emailConfirmation', null)
   const [address, setAddress] = useLocalStorage<FullAddressType | null>("address")
   const [sending, setSending] = useState(false)
@@ -60,8 +59,6 @@ export default function FinishForm() {
       description: t('login.start_using_immediately')
     });
 
-    localStorage.setItem("token", res.token);
-    setUser(res.user)
     router.push("/home")
   }
 
