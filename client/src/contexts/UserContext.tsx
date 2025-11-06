@@ -52,13 +52,11 @@ export const UserProvider = ({children}: { children: React.ReactNode }) => {
   }, [setUserState]);
 
   const logout = useCallback(async () => {
-    console.log('logout')
     try {
       await apiFetch('/logout', {
         method: 'POST',
       });
     } catch (e) {
-      console.log(e)
     }
 
     setUserState(null);

@@ -44,7 +44,6 @@ export default function Address() {
   }, []);
 
   useEffect(() => {
-    console.log(emailConfirmation)
     if (!emailConfirmation) router.push('/signup');
   }, [emailConfirmation]);
 

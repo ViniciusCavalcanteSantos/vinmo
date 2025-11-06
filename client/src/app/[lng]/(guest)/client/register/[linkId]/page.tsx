@@ -85,7 +85,6 @@ const ManageClientPage: React.FC = () => {
     const loadClientData = async () => {
       setLoadingForm(true);
       const res = await fetchLinkInfo(linkId);
-      console.log(res)
       if (res.status === ApiStatus.SUCCESS) {
         setLinkInfo(res.linkInfo);
       } else {
