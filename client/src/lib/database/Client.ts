@@ -1,11 +1,11 @@
 import apiFetch from "@/lib/apiFetch";
-import ClientType from "@/types/ClientType";
+import Client from "@/types/Client";
 import {UploadFile} from "antd";
 import {objectToFormData} from "@/lib/objectToFormData";
 import {RegisterLinkType} from "@/types/RegisterLinkType";
 
 export interface FetchClientsResponse {
-  clients: ClientType[];
+  clients: Client[];
   meta: {
     current_page: number;
     last_page: number;
@@ -15,15 +15,15 @@ export interface FetchClientsResponse {
 }
 
 export interface FetchClientResponse {
-  client: ClientType;
+  client: Client;
 }
 
 export interface CreateClientResponse {
-  client: ClientType
+  client: Client
 }
 
 export interface UpdateClientResponse {
-  client: ClientType
+  client: Client
 }
 
 

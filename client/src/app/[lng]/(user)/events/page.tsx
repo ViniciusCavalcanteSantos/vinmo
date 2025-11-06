@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import {SorterResult} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
-import EventType from "@/types/EventType";
+import Event from "@/types/Event";
 import {DeleteOutlined, EditOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
 import {useEvents} from "@/contexts/EventsContext";
@@ -35,13 +35,13 @@ export default function Page() {
     total: 0,
   });
 
-  const [editingEvent, setEditingEvent] = useState<EventType>();
-  const editEvent = (event: EventType) => {
+  const [editingEvent, setEditingEvent] = useState<Event>();
+  const editEvent = (event: Event) => {
     setEditingEvent(event)
     setOpen(true)
   }
 
-  const ActionButtons = ({record}: { record: EventType }) => (
+  const ActionButtons = ({record}: { record: Event }) => (
     <Space size="middle">
       <Tooltip title={t('view')} destroyOnHidden>
         <Link href={`/events/${record.id}`}>
@@ -84,7 +84,7 @@ export default function Page() {
   )
 
 
-  const columns: TableColumnsType<EventType> = [
+  const columns: TableColumnsType<Event> = [
     {
       title: t('contract'),
       dataIndex: ['contract', "code"],
@@ -153,7 +153,7 @@ export default function Page() {
   const handleTableChange = (
     newPagination: TablePaginationConfig,
     filters: Record<string, any>,
-    sorter: SorterResult<EventType> | SorterResult<EventType>[]
+    sorter: SorterResult<Event> | SorterResult<Event>[]
   ) => {
     if (
       newPagination.current !== pagination.current ||
@@ -184,7 +184,7 @@ export default function Page() {
             <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
           </Flex>
         </Flex>
-        <Table<EventType>
+        <Table<Event>
           rowKey="id"
           columns={columns}
           dataSource={events}

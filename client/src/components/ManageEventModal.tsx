@@ -3,9 +3,9 @@ import {Col, DatePicker, Form, Modal, Row, Select, TimePicker,} from 'antd';
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
-import EventType from "@/types/EventType";
+import Event from "@/types/Event";
 import {useEvents} from "@/contexts/EventsContext";
-import ContractType from "@/types/ContractType";
+import Contract from "@/types/Contract";
 import {fetchContracts} from "@/lib/database/Contract";
 import {fetchEventTypes} from "@/lib/database/Event";
 import TextArea from "antd/es/input/TextArea";
@@ -14,9 +14,9 @@ import {useUser} from "@/contexts/UserContext";
 
 interface ManageEventModalProps {
   open: boolean;
-  event?: EventType;
-  onCreate: (values: EventType) => void;
-  onEdit: (values: EventType) => void;
+  event?: Event;
+  onCreate: (values: Event) => void;
+  onEdit: (values: Event) => void;
   onCancel: () => void;
 }
 
@@ -31,7 +31,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
   const [form] = Form.useForm();
 
   // Estados para os dados de localização
-  const [contracts, setContracts] = useState<ContractType[]>([]);
+  const [contracts, setContracts] = useState<Contract[]>([]);
   const [eventTypes, setEventTypes] = useState<{ id: number, name: string }[]>([]);
 
   useEffect(() => {

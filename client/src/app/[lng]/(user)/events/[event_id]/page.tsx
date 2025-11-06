@@ -3,11 +3,11 @@
 import {useParams, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {fetchEvent, fetchEventImages} from "@/lib/database/Event";
-import EventType from "@/types/EventType";
+import Event from "@/types/Event";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useT} from "@/i18n/client";
 import Fallback from "@/components/Fallback";
-import ImageType from "@/types/ImageType";
+import Image from "@/types/Image";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default function Page() {
@@ -16,8 +16,8 @@ export default function Page() {
   const router = useRouter();
   const params = useParams();
   const eventId = Number(params.event_id);
-  const [event, setEvent] = useState<EventType | null>(null);
-  const [images, setImages] = useState<ImageType[]>([])
+  const [event, setEvent] = useState<Event | null>(null);
+  const [images, setImages] = useState<Image[]>([])
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

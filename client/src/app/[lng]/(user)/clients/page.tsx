@@ -23,7 +23,7 @@ import {
 import React, {useEffect, useState} from "react";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
-import ClientType from "@/types/ClientType";
+import Client from "@/types/Client";
 import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, LinkOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
 import {useClients} from "@/contexts/ClientsContext";
@@ -100,7 +100,7 @@ export default function Page() {
     setAssignments([])
   }
 
-  const ActionButtons = ({record}: { record: ClientType }) => (
+  const ActionButtons = ({record}: { record: Client }) => (
     <Space size="middle">
       <Tooltip title={t('edit')} destroyOnHidden>
         <Link href={`/clients/manage/${record.id}`}>
@@ -131,7 +131,7 @@ export default function Page() {
     </Space>
   )
 
-  const columns: TableColumnsType<ClientType> = [
+  const columns: TableColumnsType<Client> = [
     {
       title: t('name'),
       dataIndex: 'name',
@@ -180,7 +180,7 @@ export default function Page() {
     }
   ];
 
-  const expandedRowRender = (record: ClientType) => (
+  const expandedRowRender = (record: Client) => (
     <div className="p-4 flex flex-wrap gap-4">
       {record.address && <div>
           <p><strong>{t('street')}:</strong> {record.address?.street}</p>
@@ -248,7 +248,7 @@ export default function Page() {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
-  const rowSelection: TableRowSelection<ClientType> = {
+  const rowSelection: TableRowSelection<Client> = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
@@ -290,7 +290,7 @@ export default function Page() {
             </Button>
           </Flex>
         </Flex>
-        <Table<ClientType>
+        <Table<Client>
           rowKey="id"
           title={header}
           rowSelection={rowSelection}

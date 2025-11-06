@@ -4,7 +4,7 @@ import {getCategories, getCities, getCountries, getStates} from "@/lib/database/
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
-import ContractType from "@/types/ContractType";
+import Contract from "@/types/Contract";
 import {useContracts} from "@/contexts/ContractsContext";
 import dayjs from "dayjs";
 import {InfoCircleOutlined} from "@ant-design/icons";
@@ -17,9 +17,9 @@ interface OptionType {
 // Props do componente
 interface ManageContractModalProps {
   open: boolean;
-  contract?: ContractType;
-  onCreate: (values: ContractType) => void;
-  onEdit: (values: ContractType) => void;
+  contract?: Contract;
+  onCreate: (values: Contract) => void;
+  onEdit: (values: Contract) => void;
   onCancel: () => void;
 }
 

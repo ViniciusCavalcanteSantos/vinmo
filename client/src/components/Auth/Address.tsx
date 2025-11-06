@@ -8,7 +8,7 @@ import {useLocalStorage} from "react-use";
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {getCities, getCountries, getStates} from "@/lib/database/Location";
-import {FullAddressType} from "@/types/AddressType";
+import {FullAddressType} from "@/types/Address";
 
 
 interface OptionType {

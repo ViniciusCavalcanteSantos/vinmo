@@ -11,11 +11,11 @@ import {
   UpdateEventResponse,
 } from "@/lib/database/Event";
 import {ApiStatus} from "@/types/ApiResponse";
-import EventType from "@/types/EventType";
+import Event from "@/types/Event";
 import {ApiFetchResponse} from "@/lib/apiFetch";
 
 interface UserDataContextType {
-  events: EventType[];
+  events: Event[];
   loadingEvents: boolean;
   fetchEvents: (...args: Parameters<typeof fetchEventsApi>) => Promise<ApiFetchResponse<FetchEventsResponse>>;
   createEvent: (...args: Parameters<typeof createEventApi>) => Promise<ApiFetchResponse<CreateEventResponse>>;
@@ -26,7 +26,7 @@ interface UserDataContextType {
 const EventsContext = createContext<UserDataContextType | undefined>(undefined);
 
 export const EventsProvider = ({children}: { children: React.ReactNode }) => {
-  const [events, setEvents] = useState<EventType[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
   const fetchEvents = useCallback(async (...args: Parameters<typeof fetchEventsApi>) => {

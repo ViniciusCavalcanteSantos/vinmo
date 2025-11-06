@@ -14,7 +14,7 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {register} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
-import {FullAddressType} from "@/types/AddressType";
+import {FullAddressType} from "@/types/Address";
 
 export default function FinishForm() {
   const {t} = useT();

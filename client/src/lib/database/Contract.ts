@@ -1,8 +1,8 @@
 import apiFetch from "@/lib/apiFetch";
-import ContractType from "@/types/ContractType";
+import Contract from "@/types/Contract";
 
 export interface FetchContractsResponse {
-  contracts: ContractType[];
+  contracts: Contract[];
   meta: {
     current_page: number;
     last_page: number;
@@ -12,11 +12,11 @@ export interface FetchContractsResponse {
 }
 
 export interface CreateContractResponse {
-  contract: ContractType
+  contract: Contract
 }
 
 export interface UpdateContractResponse {
-  contract: ContractType
+  contract: Contract
 }
 
 

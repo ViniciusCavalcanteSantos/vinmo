@@ -24,7 +24,7 @@ import {getCities, getCountries, getStates} from "@/lib/database/Location";
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
-import {guardianTypes} from "@/types/ClientType";
+import {guardianTypes} from "@/types/Client";
 import dayjs from "dayjs";
 import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";

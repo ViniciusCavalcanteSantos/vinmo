@@ -7,6 +7,7 @@ export const guardianTypes = [
   'sister', 'brother', 'godmother', 'godfather', 'other'
 ] as const satisfies readonly GuardianType[];
 
-export type ClientType = components["schemas"]["Client"]
+export type Client = components["schemas"]["Client"]
+export type ClientGuardian = components["schemas"]["ClientGuardian"]
 
-export default ClientType
+export default Client

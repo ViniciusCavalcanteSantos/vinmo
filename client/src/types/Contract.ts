@@ -1,6 +1,6 @@
 import {components} from "@/types/api";
 
-type ContractType = components['schemas']['Contract'];
+type Contract = components['schemas']['Contract'];
 export type ContractCategory = components["schemas"]["ContractCategory"];
 export type GraduationDetails = components["schemas"]["GraduationDetails"];
 
@@ -13,4 +13,4 @@ export type GraduationDetailsShift =
 export type GraduationDetailsSchoolLevel =
   components["schemas"]["GraduationDetails"]["schoolGradeLevel"];
 
-export default ContractType
+export default Contract
