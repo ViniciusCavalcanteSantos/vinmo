@@ -15,6 +15,7 @@ class Image extends Model
     use HasUlids;
 
     protected $fillable = [
+        'id',
         'imageable_id',
         'imageable_type',
         'parent_id',
@@ -35,6 +36,11 @@ class Image extends Model
     public function versions(): HasMany
     {
         return $this->hasMany(Image::class, 'parent_id');
+    }
+
+    public function metas(): HasMany
+    {
+        return $this->hasMany(ImageMeta::class);
     }
 
     public function original(): BelongsTo
@@ -83,5 +89,47 @@ class Image extends Model
             ->belongsToMany(Client::class, 'clients_event_image_links')
             ->withPivot(['event_id', 'matched_by', 'confidence', 'is_active'])
             ->withTimestamps();
+    }
+
+
+    public function storeExif(?array $exif)
+    {
+        if (!$exif) {
+            return;
+        }
+
+        $allowedSections = ['IFD0', 'EXIF', 'GPS'];
+        $maxEntries = 100;
+        $saved = 0;
+
+        foreach ($exif as $section => $data) {
+            if (!in_array($section, $allowedSections)) {
+                continue;
+            }
+
+            foreach ($data as $key => $value) {
+                if ($saved >= $maxEntries) {
+                    break 2;
+                }
+
+                if (str_starts_with($key, 'UndefinedTag')) {
+                    continue;
+                }
+
+                $val = is_array($value) ? json_encode($value) : (string) $value;
+
+                if (strlen($val) > 2000) {
+                    $val = substr($val, 0, 2000).'...';
+                }
+
+                ImageMeta::create([
+                    'image_id' => $this->id,
+                    'key' => $section.'.'.$key,
+                    'value' => $val,
+                ]);
+
+                $saved++;
+            }
+        }
     }
 }

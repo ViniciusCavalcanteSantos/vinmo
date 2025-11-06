@@ -35,6 +35,7 @@ class EventPhotoService
 
     public function processAndStorePhoto(Event $event, $uploaded)
     {
+        $exif = @exif_read_data($uploaded->getRealPath(), null, true);
         $processed = ImagePreparationService::from($uploaded)
             ->fixOrientation()
             ->limitDimensions()
@@ -50,6 +51,7 @@ class EventPhotoService
             'size' => 0,
             'mime_type' => '',
         ]);
+        $image->storeExif($exif);
 
         $path = StoragePathService::getEventPhotoFolder($event->id, "{$image->id}.{$ext}");
         if (!Storage::put($path, $bytes)) {

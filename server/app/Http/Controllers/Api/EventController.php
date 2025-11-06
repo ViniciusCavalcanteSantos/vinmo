@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
 use App\Http\Resources\EventResource;
+use App\Http\Resources\ImageMetaResource;
 use App\Http\Resources\ImageResource;
 use App\Models\Contract;
 use App\Models\Event;
 use App\Models\EventType;
+use App\Models\Image;
 use App\Services\EventService;
 use Illuminate\Http\Request;
 
@@ -178,5 +180,10 @@ class EventController extends Controller
             'message' => __('Event images retrieved'),
             'images' => ImageResource::collection($images)
         ]);
+    }
+
+    public function getImageMetadata(Image $image)
+    {
+        return new ImageMetaResource($image->metas);
     }
 }

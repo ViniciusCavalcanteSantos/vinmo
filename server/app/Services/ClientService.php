@@ -110,7 +110,7 @@ class ClientService
      */
     protected function processAndStoreProfile(Client $client, $uploaded, ?string $oldFaceId): void
     {
-        // 1) Processamento local (dimensão, formato, bytes)
+        $exif = @exif_read_data($uploaded->getRealPath(), null, true);
         $processed = ImagePreparationService::from($uploaded)
             ->fixOrientation()
             ->limitDimensions()
@@ -147,6 +147,7 @@ class ClientService
                     'mime_type' => '',
                 ]);
             }
+            $image->storeExif($exif);
             if ($image->path && $image->path !== $finalPath && Storage::exists($image->path)) {
                 Storage::delete($image->path);
             }
