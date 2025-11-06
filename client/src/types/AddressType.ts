@@ -1,22 +1,18 @@
-export type FullAddressType = {
-  granularity: string,
-  postalCode: string,
-  street: string,
-  number: string,
-  neighborhood: string,
-  complement?: string,
-  city: string,
-  state: string,
-  stateName?: string,
-  country: string,
-  countryName?: string,
+import {components} from "@/types/api";
+
+export type FullAddressType = components['schemas']['FullAddress']
+export type CityAreaAddressType = components['schemas']['CityAreaAddress']
+
+export type AddressType = components["schemas"]["Address"];
+
+export function isFullAddress(
+  address: AddressType | null | undefined
+): address is FullAddressType {
+  return !!address && address.granularity === "full_address";
 }
 
-export type CityAreaAddressType = {
-  granularity: string,
-  city: string,
-  state: string,
-  stateName?: string,
-  country: string,
-  countryName?: string,
+export function isCityAreaAddress(
+  address: AddressType | null | undefined
+): address is CityAreaAddressType {
+  return !!address && address.granularity === "city_area";
 }

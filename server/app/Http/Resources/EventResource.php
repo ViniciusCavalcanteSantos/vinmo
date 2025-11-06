@@ -5,6 +5,42 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *       schema="EventType",
+ *       type="object",
+ *       required={"id", "name", "category"},
+ *       @OA\Property(property="id", type="integer", example=3),
+ *       @OA\Property(property="name", type="string", example="Ensaio"),
+ *       @OA\Property(
+ *          property="category",
+ *          ref="#/components/schemas/ContractCategory",
+ *    )
+ * )
+ *
+ * @OA\Schema(
+ *   schema="Event",
+ *   type="object",
+ *   required={"id", "contractId", "eventDate", "type", "totalImages", "totalSize", "createdAt"},
+ *   @OA\Property(property="id", type="integer", example=12),
+ *   @OA\Property(property="contractId", type="integer", example=5),
+ *   @OA\Property(property="eventDate", type="string", format="date", example="2025-11-06"),
+ *   @OA\Property(property="startTime", type="string", format="time", nullable=true, example="14:30"),
+ *   @OA\Property(property="description", type="string", nullable=true, example="Cobertura da formatura"),
+ *   @OA\Property(property="createdAt", type="string", format="date-time", example="2025-11-06T12:00:00Z"),
+ *   @OA\Property(
+ *     property="contract",
+ *     ref="#/components/schemas/Contract",
+ *     nullable=true
+ *   ),
+ *   @OA\Property(property="totalImages", type="integer", example=120),
+ *   @OA\Property(property="totalSize", type="integer", example=34567890, description="bytes"),
+ *   @OA\Property(
+ *     property="type",
+ *     ref="#/components/schemas/EventType",
+ *   )
+ * )
+ */
 class EventResource extends JsonResource
 {
     /**

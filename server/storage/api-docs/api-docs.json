@@ -1,0 +1,577 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Vinmo API",
+        "description": "Documentação da API do Vinmo",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Servidor local"
+        }
+    ],
+    "paths": {
+        "/api/me": {
+            "get": {
+                "summary": "Current authenticated user",
+                "description": "Retorna o usuário autenticado.",
+                "operationId": "8367feff40ba10e43187792cad3132c1",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "user"
+                                    ],
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CityAreaAddress": {
+                "required": [
+                    "granularity",
+                    "country",
+                    "state",
+                    "city"
+                ],
+                "properties": {
+                    "granularity": {
+                        "type": "string",
+                        "enum": [
+                            "city_area"
+                        ],
+                        "example": "city_area"
+                    },
+                    "countryName": {
+                        "type": "string",
+                        "example": "Brasil"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "BR"
+                    },
+                    "stateName": {
+                        "type": "string",
+                        "example": "Pernambuco"
+                    },
+                    "state": {
+                        "type": "string",
+                        "example": "PE"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Recife"
+                    }
+                },
+                "type": "object"
+            },
+            "FullAddress": {
+                "required": [
+                    "granularity",
+                    "country",
+                    "state",
+                    "city",
+                    "street",
+                    "number",
+                    "neighborhood"
+                ],
+                "properties": {
+                    "granularity": {
+                        "type": "string",
+                        "enum": [
+                            "full_address"
+                        ],
+                        "example": "full_address"
+                    },
+                    "countryName": {
+                        "type": "string",
+                        "example": "Brasil"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "BR"
+                    },
+                    "stateName": {
+                        "type": "string",
+                        "example": "Pernambuco"
+                    },
+                    "state": {
+                        "type": "string",
+                        "example": "PE"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Recife"
+                    },
+                    "postalCode": {
+                        "type": "string",
+                        "example": "10001-1234"
+                    },
+                    "street": {
+                        "type": "string",
+                        "example": "Rua das Flores"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "123"
+                    },
+                    "neighborhood": {
+                        "type": "string",
+                        "example": "Centro"
+                    },
+                    "complement": {
+                        "type": "string",
+                        "example": "Apto 201",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Address": {
+                "discriminator": {
+                    "propertyName": "granularity",
+                    "mapping": {
+                        "city_area": "#/components/schemas/CityAreaAddress",
+                        "full_address": "#/components/schemas/FullAddress"
+                    }
+                },
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/CityAreaAddress"
+                    },
+                    {
+                        "$ref": "#/components/schemas/FullAddress"
+                    }
+                ]
+            },
+            "ContractCategory": {
+                "required": [
+                    "name",
+                    "slug"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Formatura"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "formatura"
+                    }
+                },
+                "type": "object"
+            },
+            "ClientProfileImage": {
+                "required": [
+                    "original",
+                    "web",
+                    "thumb"
+                ],
+                "properties": {
+                    "original": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://.../original.jpg"
+                    },
+                    "web": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://.../web.jpg"
+                    },
+                    "thumb": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://.../thumb.jpg"
+                    }
+                },
+                "type": "object"
+            },
+            "ClientGuardian": {
+                "required": [
+                    "name",
+                    "type"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Maria da Silva"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "mother",
+                            "father",
+                            "grandmother",
+                            "grandfather",
+                            "uncle",
+                            "aunt",
+                            "sister",
+                            "brother",
+                            "godmother",
+                            "godfather",
+                            "other"
+                        ],
+                        "example": "mother"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "mae@example.com",
+                        "nullable": true
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+55 81 99999-9999",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Client": {
+                "required": [
+                    "id",
+                    "profile",
+                    "name",
+                    "createdAt"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "CLI-0001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "João dos Testes"
+                    },
+                    "profile": {
+                        "$ref": "#/components/schemas/ClientProfileImage"
+                    },
+                    "birthdate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2015-03-25",
+                        "nullable": true
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+55 81 98888-7777",
+                        "nullable": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-06T12:00:00Z"
+                    },
+                    "address": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/FullAddress"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "guardian": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ClientGuardian"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Contract": {
+                "required": [
+                    "id",
+                    "code",
+                    "title",
+                    "category",
+                    "address",
+                    "createdAt"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "CONT-0001"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Formatura 3º Ano 2025"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-06T12:00:00Z"
+                    },
+                    "category": {
+                        "$ref": "#/components/schemas/ContractCategory"
+                    },
+                    "address": {
+                        "$ref": "#/components/schemas/CityAreaAddress"
+                    },
+                    "graduationDetails": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/GraduationDetails"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "EventType": {
+                "required": [
+                    "id",
+                    "name",
+                    "category"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Ensaio"
+                    },
+                    "category": {
+                        "$ref": "#/components/schemas/ContractCategory"
+                    }
+                },
+                "type": "object"
+            },
+            "Event": {
+                "required": [
+                    "id",
+                    "contractId",
+                    "eventDate",
+                    "type",
+                    "totalImages",
+                    "totalSize",
+                    "createdAt"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "contractId": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "eventDate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-11-06"
+                    },
+                    "startTime": {
+                        "type": "string",
+                        "format": "time",
+                        "example": "14:30",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Cobertura da formatura",
+                        "nullable": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-06T12:00:00Z"
+                    },
+                    "contract": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/Contract"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "totalImages": {
+                        "type": "integer",
+                        "example": 120
+                    },
+                    "totalSize": {
+                        "description": "bytes",
+                        "type": "integer",
+                        "example": 34567890
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/EventType"
+                    }
+                },
+                "type": "object"
+            },
+            "GraduationDetails": {
+                "required": [
+                    "type",
+                    "institutionName",
+                    "className",
+                    "shift",
+                    "conclusionYear"
+                ],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "university",
+                            "school"
+                        ],
+                        "example": "university"
+                    },
+                    "institutionName": {
+                        "type": "string",
+                        "example": "Universidade Federal de Pernambuco"
+                    },
+                    "institutionAcronym": {
+                        "type": "string",
+                        "example": "UFPE",
+                        "nullable": true
+                    },
+                    "className": {
+                        "type": "string",
+                        "example": "Turma 2025"
+                    },
+                    "shift": {
+                        "type": "string",
+                        "enum": [
+                            "morning",
+                            "afternoon",
+                            "night",
+                            "full_time"
+                        ],
+                        "example": "night"
+                    },
+                    "conclusionYear": {
+                        "type": "integer",
+                        "example": 2025
+                    },
+                    "universityCourse": {
+                        "type": "string",
+                        "example": "Sistemas de Informação",
+                        "nullable": true
+                    },
+                    "schoolGradeLevel": {
+                        "type": "string",
+                        "enum": [
+                            "elementary_school",
+                            "middle_school",
+                            "high_school"
+                        ],
+                        "example": "high_school",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Image": {
+                "required": [
+                    "id",
+                    "url",
+                    "type",
+                    "size",
+                    "mimeType",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01J5Q8V6WZ3QC4FJ0V5E5VQ7R9"
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://s3.amazonaws.com/bucket/image.jpg"
+                    },
+                    "type": {
+                        "description": "Versão da imagem (ex: original, web, thumb)",
+                        "type": "string",
+                        "example": "original"
+                    },
+                    "size": {
+                        "description": "Tamanho em bytes",
+                        "type": "integer",
+                        "example": 2456789
+                    },
+                    "mimeType": {
+                        "type": "string",
+                        "example": "image/jpeg"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "example": "2025-11-06 10:15:00"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "example": "2025-11-06 10:20:00"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "address"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Vinicius"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "vinicius@example.com"
+                    },
+                    "picture": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://.../picture.jpg",
+                        "nullable": true
+                    },
+                    "address": {
+                        "$ref": "#/components/schemas/FullAddress"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

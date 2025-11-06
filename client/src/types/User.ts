@@ -1,11 +1,5 @@
-import {FullAddressType} from "@/types/AddressType";
+import {components} from "@/types/api";
 
-type User = {
-  id: number,
-  name: string,
-  email: string,
-  picture?: string,
-  address: FullAddressType
-}
+type User = components['schemas']['User'];
 
 export default User

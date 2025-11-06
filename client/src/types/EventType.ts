@@ -1,21 +1,5 @@
-import ContractType, {ContractCategory} from "@/types/ContractType";
+import {components} from "@/types/api";
 
-type EventType = {
-  id: number,
-  contractId: number,
-  eventDate: string,
-  startTime?: string,
-  endTime?: string,
-  description?: string,
-  createdAt: string,
-  contract?: ContractType
-  totalImages: number,
-  totalSize: number,
-  type: {
-    id: number,
-    name: string
-    category: ContractCategory
-  }
-}
+type EventType = components['schemas']['Event']
 
 export default EventType

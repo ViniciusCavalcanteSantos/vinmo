@@ -1,11 +1,5 @@
-type ImageType = {
-  id: string,
-  url: string,
-  type: string,
-  size: number,
-  mimeType: string,
-  createdAt: string,
-  updatedAt: string,
-}
+import {components} from "@/types/api";
+
+type ImageType = components['schemas']['Image']
 
 export default ImageType;

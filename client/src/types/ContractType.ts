@@ -1,43 +1,16 @@
-import {CityAreaAddressType} from "@/types/AddressType";
+import {components} from "@/types/api";
 
-enum graduationDetailsType {
-  UNIVERSITY = 'university',
-  SCHOOL = 'school',
-}
+type ContractType = components['schemas']['Contract'];
+export type ContractCategory = components["schemas"]["ContractCategory"];
+export type GraduationDetails = components["schemas"]["GraduationDetails"];
 
-enum graduationDetailsShift {
-  MORNING = 'morning',
-  AFTERNOON = 'afternoon',
-  NIGHT = 'night',
-  FULL_TIME = 'full_time',
-}
+export type GraduationDetailsType =
+  components["schemas"]["GraduationDetails"]["type"];
 
-enum graduationDetailsSchoolLevel {
-  ELEMENTARY_SCHOOL = 'elementary_school',
-  MIDDLE_SCHOOL = 'middle_school',
-  HIGH_SCHOOL = 'high_school',
-}
+export type GraduationDetailsShift =
+  components["schemas"]["GraduationDetails"]["shift"];
 
-export type ContractCategory = {
-  name: string, slug: string,
-}
-
-type ContractType = {
-  id: number,
-  code: string,
-  title: string,
-  category: ContractCategory
-  address: CityAreaAddressType
-  graduationDetails?: {
-    type: graduationDetailsType,
-    institutionName: string,
-    institutionAcronym?: string,
-    className: string,
-    shift: graduationDetailsShift
-    conclusionYear: number,
-    universityCourse?: string,
-    schoolGradeLevel?: graduationDetailsSchoolLevel,
-  }
-}
+export type GraduationDetailsSchoolLevel =
+  components["schemas"]["GraduationDetails"]["schoolGradeLevel"];
 
 export default ContractType
