@@ -1,5 +1,5 @@
 import apiFetch from "@/lib/apiFetch";
-import {FullAddressType} from "@/types/AddressType";
+import {FullAddressType} from "@/types/Address";
 import User from "@/types/User";
 
 interface AuthSuccess {

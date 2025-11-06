@@ -341,12 +341,32 @@ class AuthController extends Controller
         );
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/me",
+     *     summary="Current authenticated user",
+     *     description="Retorna o usuário autenticado.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"user"},
+     *             @OA\Property(
+     *                 property="user",
+     *                 ref="#/components/schemas/User"
+     *             )
+     *         )
+     *     ),
+     *     security={{"sanctum": {}}}
+     * )
+     */
     public function me(Request $request): JsonResponse
     {
         return response()->json([
             'status' => 'success',
             'message' => __('User successfully obtained'),
-            'user' => new UserResource($request->user())
+            'user' => new UserResource($request->user()),
         ]);
     }
 

@@ -8,7 +8,7 @@ import PageHeader from "@/components/PageHeader";
 import Dropzone, {FileWithUploadData} from "@/components/Dropzone";
 import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
-import EventType from "@/types/EventType";
+import Event from "@/types/Event";
 import {eventPhotoUpload, fetchEvent} from "@/lib/database/Event";
 import {useParams, useRouter} from "next/navigation";
 
@@ -22,7 +22,7 @@ const Page: React.FC = () => {
   const [form] = Form.useForm();
   const [loadingForm] = useState(false);
 
-  const [event, setEvent] = useState<EventType | null>(null);
+  const [event, setEvent] = useState<Event | null>(null);
 
   const [files, setFiles] = useState<FileWithUploadData[]>([]);
   const [stats, setStats] = useState({

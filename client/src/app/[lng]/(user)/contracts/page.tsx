@@ -6,7 +6,7 @@ import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import ManageContractModal from "@/components/ManageContractModal";
 import {useT} from "@/i18n/client";
-import ContractType from "@/types/ContractType";
+import Contract from "@/types/Contract";
 import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from "@ant-design/icons";
 import {useDebounce} from "react-use";
 import {useContracts} from "@/contexts/ContractsContext";
@@ -32,13 +32,13 @@ export default function Page() {
     total: 0,
   });
 
-  const [editingContract, setEditingContract] = useState<ContractType>();
-  const editContract = (contract: ContractType) => {
+  const [editingContract, setEditingContract] = useState<Contract>();
+  const editContract = (contract: Contract) => {
     setEditingContract(contract)
     setOpen(true)
   }
 
-  const handleRemove = (record: ContractType) => {
+  const handleRemove = (record: Contract) => {
     modal.confirm({
       title: t('are_you_sure_to_delete_contract'),
       icon: <ExclamationCircleFilled/>,
@@ -69,7 +69,7 @@ export default function Page() {
     });
   };
 
-  const ActionButtons = ({record}: { record: ContractType }) => (
+  const ActionButtons = ({record}: { record: Contract }) => (
     <Space size="middle">
       <Tooltip title={t('edit')} destroyOnHidden>
         <Button
@@ -91,7 +91,7 @@ export default function Page() {
     </Space>
   );
 
-  const columns: TableColumnsType<ContractType> = [
+  const columns: TableColumnsType<Contract> = [
     {
       title: t('code'),
       dataIndex: 'code',
@@ -141,7 +141,7 @@ export default function Page() {
   const handleTableChange = (
     newPagination: TablePaginationConfig,
     filters: Record<string, any>,
-    sorter: SorterResult<ContractType> | SorterResult<ContractType>[]
+    sorter: SorterResult<Contract> | SorterResult<Contract>[]
   ) => {
     if (
       newPagination.current !== pagination.current ||
@@ -159,7 +159,7 @@ export default function Page() {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
-  const rowSelection: TableRowSelection<ContractType> = {
+  const rowSelection: TableRowSelection<Contract> = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
@@ -197,7 +197,7 @@ export default function Page() {
             <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
           </Flex>
         </Flex>
-        <Table<ContractType>
+        <Table<Contract>
           rowKey="id"
           title={header}
           rowSelection={rowSelection}

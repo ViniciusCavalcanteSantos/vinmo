@@ -13,11 +13,11 @@ import {
   UpdateClientResponse,
 } from "@/lib/database/Client";
 import {ApiStatus} from "@/types/ApiResponse";
-import ClientType from "@/types/ClientType";
+import Client from "@/types/Client";
 import {ApiFetchResponse} from "@/lib/apiFetch";
 
 interface UserDataContextType {
-  clients: ClientType[];
+  clients: Client[];
   loadingClients: boolean;
   fetchClients: (...args: Parameters<typeof fetchClientsApi>) => Promise<ApiFetchResponse<FetchClientsResponse>>;
   fetchClient: (...args: Parameters<typeof fetchClientApi>) => Promise<ApiFetchResponse<FetchClientResponse>>;
@@ -29,7 +29,7 @@ interface UserDataContextType {
 const ClientsContext = createContext<UserDataContextType | undefined>(undefined);
 
 export const ClientsProvider = ({children}: { children: React.ReactNode }) => {
-  const [clients, setClients] = useState<ClientType[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [loadingClients, setLoadingClients] = useState(true);
 
   const fetchClients = useCallback(async (...args: Parameters<typeof fetchClientsApi>) => {

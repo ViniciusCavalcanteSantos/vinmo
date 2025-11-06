@@ -5,6 +5,25 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *   schema="Image",
+ *   type="object",
+ *   required={"id", "url", "type", "size", "mimeType", "createdAt", "updatedAt"},
+ *   @OA\Property(property="id", type="string", example="01J5Q8V6WZ3QC4FJ0V5E5VQ7R9"),
+ *   @OA\Property(property="url", type="string", format="uri", example="https://s3.amazonaws.com/bucket/image.jpg"),
+ *   @OA\Property(
+ *     property="type",
+ *     type="string",
+ *     description="Versão da imagem (ex: original, web, thumb)",
+ *     example="original"
+ *   ),
+ *   @OA\Property(property="size", type="integer", example=2456789, description="Tamanho em bytes"),
+ *   @OA\Property(property="mimeType", type="string", example="image/jpeg"),
+ *   @OA\Property(property="createdAt", type="string", example="2025-11-06 10:15:00"),
+ *   @OA\Property(property="updatedAt", type="string", example="2025-11-06 10:20:00")
+ * )
+ */
 class ImageResource extends JsonResource
 {
     /**

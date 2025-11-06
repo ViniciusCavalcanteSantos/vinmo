@@ -12,11 +12,11 @@ import {
   UpdateContractResponse,
 } from "@/lib/database/Contract";
 import {ApiStatus} from "@/types/ApiResponse";
-import ContractType from "@/types/ContractType";
+import Contract from "@/types/Contract";
 import {ApiFetchResponse} from "@/lib/apiFetch";
 
 interface UserDataContextType {
-  contracts: ContractType[];
+  contracts: Contract[];
   loadingContracts: boolean;
   fetchContracts: (...args: Parameters<typeof fetchContractsApi>) => Promise<ApiFetchResponse<FetchContractsResponse>>;
   createContract: (...args: Parameters<typeof createContractApi>) => Promise<ApiFetchResponse<CreateContractResponse>>;
@@ -27,7 +27,7 @@ interface UserDataContextType {
 const ContractsContext = createContext<UserDataContextType | undefined>(undefined);
 
 export const ContractsProvider = ({children}: { children: React.ReactNode }) => {
-  const [contracts, setContracts] = useState<ContractType[]>([]);
+  const [contracts, setContracts] = useState<Contract[]>([]);
   const [loadingContracts, setLoadingContracts] = useState(true);
 
   const fetchContracts = useCallback(async (...args: Parameters<typeof fetchContractsApi>) => {

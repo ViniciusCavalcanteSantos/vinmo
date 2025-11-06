@@ -1,12 +1,12 @@
 import apiFetch from "@/lib/apiFetch";
-import EventType from "@/types/EventType";
+import Event from "@/types/Event";
 import {UploadFile} from "antd";
 import {objectToFormData} from "@/lib/objectToFormData";
 import {CreateClientResponse} from "@/lib/database/Client";
-import ImageType from "@/types/ImageType";
+import Image from "@/types/Image";
 
 export interface FetchEventsResponse {
-  events: EventType[];
+  events: Event[];
   meta: {
     current_page: number;
     last_page: number;
@@ -16,7 +16,7 @@ export interface FetchEventsResponse {
 }
 
 export interface FetchEventResponse {
-  event: EventType;
+  event: Event;
 }
 
 
@@ -28,11 +28,11 @@ export interface FetchEventTypesResponse {
 }
 
 export interface CreateEventResponse {
-  event: EventType
+  event: Event
 }
 
 export interface UpdateEventResponse {
-  event: EventType
+  event: Event
 }
 
 export async function fetchEvents(page: number = 1, pageSize: number = 15, searchTerm?: string, withContract: boolean = false) {
@@ -69,7 +69,7 @@ export async function fetchEvent(eventId: number, withContract: boolean = false)
 export async function fetchEventImages(eventId: number) {
   const query = new URLSearchParams();
 
-  return await apiFetch<{ images: ImageType[] }>(`/event/${eventId}/images`, {
+  return await apiFetch<{ images: Image[] }>(`/event/${eventId}/images`, {
     method: "GET",
   });
 }
