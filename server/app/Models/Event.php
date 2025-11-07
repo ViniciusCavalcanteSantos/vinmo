@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\DeleteStoragePaths;
 use App\Observers\EventObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,7 +29,8 @@ class Event extends Model
         parent::boot();
 
         static::deleting(function (Event $event) {
-            $event->images->each->delete();
+            $paths = $event->images()->pluck('path')->toArray();
+            DeleteStoragePaths::dispatch($paths);
         });
     }
 

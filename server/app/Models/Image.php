@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Jobs\DeleteImageFiles;
+use App\Jobs\DeleteStoragePaths;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,7 +36,7 @@ class Image extends Model
             $all = $image->allVersions();
             $paths = $all->pluck('path')->filter()->toArray();
 
-            DeleteImageFiles::dispatch($paths);
+            DeleteStoragePaths::dispatch($paths);
         });
     }
 

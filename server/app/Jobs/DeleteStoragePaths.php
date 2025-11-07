@@ -7,7 +7,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class DeleteImageFiles implements ShouldQueue
+class DeleteStoragePaths implements ShouldQueue
 {
     use Queueable;
 
