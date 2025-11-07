@@ -217,6 +217,41 @@ export interface components {
              */
             schoolGradeLevel?: "elementary_school" | "middle_school" | "high_school" | null;
         };
+        /** @description Metadados EXIF e técnicos da imagem */
+        ImageMeta: {
+            camera?: {
+                /** @example Canon */
+                make?: string;
+                /** @example Canon EOS 6D Mark II */
+                model?: string;
+                /** @example EF85mm f/1.8 USM */
+                lens?: string;
+                /** @example Adobe Lightroom Classic 14.5 */
+                software?: string;
+                /** @example 2025-08-03 21:30:33 */
+                capturedAt?: string;
+            };
+            exposure?: {
+                /** @example 1/160 */
+                exposureTime?: string;
+                /** @example f/2.5 */
+                fNumber?: string;
+                /** @example 320 */
+                iso?: number;
+                /** @example 85mm */
+                focalLength?: string;
+                /** @example 9 */
+                flash?: number;
+            };
+            location?: {
+                /** @example -8.3312 */
+                latitude?: number;
+                /** @example -36.4201 */
+                longitude?: number;
+            };
+            /** @description Metadados adicionais não padronizados */
+            other?: Record<string, never>;
+        };
         Image: {
             /** @example 01J5Q8V6WZ3QC4FJ0V5E5VQ7R9 */
             id: string;
@@ -235,6 +270,11 @@ export interface components {
              * @example 2456789
              */
             size: number;
+            /**
+             * @description Tamanho em bytes da imagem original (se houver)
+             * @example 2456789
+             */
+            sizeOriginal?: number | null;
             /** @example image/jpeg */
             mimeType: string;
             /** @example 2025-11-06 10:15:00 */

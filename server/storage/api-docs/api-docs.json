@@ -495,6 +495,79 @@
                 },
                 "type": "object"
             },
+            "ImageMeta": {
+                "description": "Metadados EXIF e técnicos da imagem",
+                "properties": {
+                    "camera": {
+                        "properties": {
+                            "make": {
+                                "type": "string",
+                                "example": "Canon"
+                            },
+                            "model": {
+                                "type": "string",
+                                "example": "Canon EOS 6D Mark II"
+                            },
+                            "lens": {
+                                "type": "string",
+                                "example": "EF85mm f/1.8 USM"
+                            },
+                            "software": {
+                                "type": "string",
+                                "example": "Adobe Lightroom Classic 14.5"
+                            },
+                            "capturedAt": {
+                                "type": "string",
+                                "example": "2025-08-03 21:30:33"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "exposure": {
+                        "properties": {
+                            "exposureTime": {
+                                "type": "string",
+                                "example": "1/160"
+                            },
+                            "fNumber": {
+                                "type": "string",
+                                "example": "f/2.5"
+                            },
+                            "iso": {
+                                "type": "integer",
+                                "example": 320
+                            },
+                            "focalLength": {
+                                "type": "string",
+                                "example": "85mm"
+                            },
+                            "flash": {
+                                "type": "integer",
+                                "example": 9
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "location": {
+                        "properties": {
+                            "latitude": {
+                                "type": "number",
+                                "example": -8.3312
+                            },
+                            "longitude": {
+                                "type": "number",
+                                "example": -36.4201
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "other": {
+                        "description": "Metadados adicionais não padronizados",
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "Image": {
                 "required": [
                     "id",
@@ -524,6 +597,12 @@
                         "description": "Tamanho em bytes",
                         "type": "integer",
                         "example": 2456789
+                    },
+                    "sizeOriginal": {
+                        "description": "Tamanho em bytes da imagem original (se houver)",
+                        "type": "integer",
+                        "example": 2456789,
+                        "nullable": true
                     },
                     "mimeType": {
                         "type": "string",
