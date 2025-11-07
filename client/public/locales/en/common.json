@@ -292,5 +292,11 @@
   "photo_upload": "Photo upload",
   "upload_photo_to_event": "Upload photo to event",
   "credits_per_photo": "{{value}} credits per photo",
-  "newly_added_photos_may_take_some_time_to_be_separated": "Newly added photos may take some time to be separated"
+  "newly_added_photos_may_take_some_time_to_be_separated": "Newly added photos may take some time to be separated",
+  "uploaded_at": "Uploaded at",
+  "upload_date": "Upload date",
+  "added_at": "Added at",
+  "download": "Download",
+  "view_metadata": "View metadata",
+  "clients_in_image": "Clients in image"
 }

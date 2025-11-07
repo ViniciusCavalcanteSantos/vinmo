@@ -292,5 +292,11 @@
   "photo_upload": "Enviar foto",
   "upload_photo_to_event": "Enviar fotos para o evento",
   "credits_per_photo": "{{value}} créditos por foto",
-  "newly_added_photos_may_take_some_time_to_be_separated": "Novas fotos adicionadas podem levar algum tempo para serem separadas"
+  "newly_added_photos_may_take_some_time_to_be_separated": "Novas fotos adicionadas podem levar algum tempo para serem separadas",
+  "uploaded_at": "Uploaded at",
+  "upload_date": "Data de envio",
+  "added_at": "Adicionado em",
+  "download": "Baixar",
+  "view_metadata": "Ver metadados",
+  "clients_in_image": "Clientes na foto"
 }

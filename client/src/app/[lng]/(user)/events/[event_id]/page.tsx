@@ -10,9 +10,10 @@ import Fallback from "@/components/Fallback";
 import ImageType from "@/types/Image";
 import {ApiStatus} from "@/types/ApiResponse";
 import {filesize} from "filesize";
-import {Image} from "antd";
+import {Button, Dropdown, Image, MenuProps, Tooltip} from "antd";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
+import {DeleteOutlined, DownloadOutlined, InfoCircleOutlined, MoreOutlined, TeamOutlined} from "@ant-design/icons";
 
 
 export default function Page() {
@@ -53,7 +54,30 @@ export default function Page() {
   }, [eventId])
 
   if (loading) return <Fallback/>
-
+  const menuFor = (img: ImageType): MenuProps => ({
+    onClick: async (info) => {
+      switch (info.key) {
+        case 'download':
+          // await handleDownloadImage(img)
+          break
+        case 'metadata':
+          // await handleOpenMetadata(img)
+          break
+        case 'clients':
+          // await handleOpenClients(img)
+          break
+        case 'delete':
+          // await handleDeleteImage(img)
+          break
+      }
+    },
+    items: [
+      {key: 'download', icon: <DownloadOutlined/>, label: t('download')},
+      {key: 'metadata', icon: <InfoCircleOutlined/>, label: t('view_metadata')},
+      {type: 'divider' as const},
+      {key: 'delete', icon: <DeleteOutlined/>, label: t('delete'), danger: true}
+    ]
+  })
   return (
     <div>
       <div className="mb-4 flex gap-4">
@@ -70,7 +94,7 @@ export default function Page() {
         {images.map(image => (
             <div key={image.id}>
               <div
-                className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm mx-auto">
+                className="max-w-sm bg-white border border-dark-muted rounded-lg shadow-sm mx-auto">
 
                 <div className="w-full pt-[67%] relative">
                   <div className="absolute top-0 left-0 w-full h-full [&>.ant-image]:w-full [&>.ant-image]:h-full">
@@ -78,10 +102,31 @@ export default function Page() {
                   </div>
                 </div>
 
-                <div className="p-5 flex flex-wrap gap-2">
+
+                <div className="p-4 flex flex-wrap gap-2">
 
                   <p><strong>{t('size')}:</strong> {filesize(image.sizeOriginal ?? 0)}</p>
-                  <p><strong>{t('added_at')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}</p>
+                  <p><strong>{t('upload_date')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}</p>
+                </div>
+
+                <div className='w-full h-[1px] bg-dark-muted'></div>
+
+                <div className="flex justify-end gap-4 p-4">
+                  <Tooltip title={t('clients_in_image')}>
+                    <Button type="text" shape="circle" aria-label={t('options')}
+                            className="!text-dark !text-2xl p-4">
+                      <TeamOutlined/>
+                    </Button>
+                  </Tooltip>
+
+
+                  <Dropdown menu={menuFor(image)} trigger={['click']}>
+                    <Button type="text" shape="circle" aria-label={t('options')}
+                            className="!text-dark !text-2xl">
+
+                      <MoreOutlined/>
+                    </Button>
+                  </Dropdown>
                 </div>
               </div>
             </div>
