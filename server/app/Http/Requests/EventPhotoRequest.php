@@ -23,7 +23,7 @@ class EventPhotoRequest extends FormRequest
     {
         return [
             'event_id' => 'required|integer|exists:events,id',
-            'photo' => 'required|file|image',
+            'photo' => 'required|file|image|max:25600',
         ];
     }
 }

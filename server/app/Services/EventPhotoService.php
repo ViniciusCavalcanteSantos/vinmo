@@ -38,9 +38,8 @@ class EventPhotoService
         $exif = @exif_read_data($uploaded->getRealPath(), null, true);
         $processed = ImagePreparationService::from($uploaded)
             ->fixOrientation()
-            ->limitDimensions()
             ->ensureFormat()
-            ->fitBytes();
+            ->fitBytes(25 * 1024 * 1024); // 25 MB
 
         $bytes = $processed->getAsBytes();
         $ext = $processed->getExtension();

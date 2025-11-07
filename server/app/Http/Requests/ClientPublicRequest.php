@@ -28,7 +28,7 @@ class ClientPublicRequest extends FormRequest
         $rules = [
             'code' => 'nullable|string|max:20|regex:/^[A-Z0-9_-]+$/i',
             'name' => 'required|string|max:60',
-            'profile' => 'required|file|image',
+            'profile' => 'required|file|image|max:25600',
             'birthdate' => 'required|date',
             'phone' => 'required|string|max:20',
 

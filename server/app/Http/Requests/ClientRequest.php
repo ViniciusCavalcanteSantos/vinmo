@@ -25,7 +25,7 @@ class ClientRequest extends ApiFormRequest
         $rules = [
             'code' => 'nullable|string|max:20|regex:/^[A-Z0-9_-]+$/i',
             'name' => 'required|string|max:60',
-            'profile' => $isEdit ? 'nullable|file|image' : 'required|file|image',
+            'profile' => $isEdit ? 'nullable|file|image|max:25600' : 'required|file|image|max:25600',
             'inform_address' => 'sometimes|boolean',
             'inform_guardian' => 'sometimes|boolean',
 
