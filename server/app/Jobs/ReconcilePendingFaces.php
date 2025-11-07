@@ -12,13 +12,15 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ReconcilePendingFaces implements ShouldQueue
 {
     use Queueable, Dispatchable, SerializesModels;
+
+    public int $tries = 5;
+    public int $backoff = 10;
 
     /**
      * Create a new job instance.
@@ -61,7 +63,7 @@ class ReconcilePendingFaces implements ShouldQueue
                         $imageIds = collect();
 
                         if ($pending->image_id) {
-                            $imageIds->push([$pending->image_id]);
+                            $imageIds->push($pending->image_id);
                         } else {
                             $imageIds = FaceCrop
                                 ::query()
@@ -72,60 +74,58 @@ class ReconcilePendingFaces implements ShouldQueue
                         }
 
                         $imageIds->chunk(50)->each(function ($ids) use ($event, $allowed, $analyzer) {
-                            Log::info('ids-', $ids->toArray());
+                            Log::debug('ids-', $ids->toArray());
 
                             FaceCrop::query()
                                 ->where('event_id', $this->eventId)
-                                ->whereIn('id', $ids)
+                                ->whereIn('original_image_id', $ids)
                                 ->whereDoesntHave('resolved')
                                 ->orderBy('id')
                                 ->chunkById(200, function ($faceCrops) use ($event, $allowed, $analyzer) {
-                                    DB::transaction(function () use ($faceCrops, $event, $allowed, $analyzer) {
-                                        foreach ($faceCrops as $faceCrop) {
-                                            $cropImage = $faceCrop->image;
+                                    foreach ($faceCrops as $faceCrop) {
+                                        $cropImage = $faceCrop->image;
 
-                                            if (!$cropImage) {
-                                                return;
-                                            }
+                                        if (!$cropImage) {
+                                            continue;
+                                        }
 
-                                            $disk = $cropImage->disk ?? config('filesystems.default');
-                                            if (!Storage::disk($disk)->exists($cropImage->path)) {
+                                        $disk = $cropImage->disk ?? config('filesystems.default');
+                                        if (!Storage::disk($disk)->exists($cropImage->path)) {
+                                            continue;
+                                        }
+
+                                        try {
+                                            $match = $analyzer->searchSingleFaceCrop($cropImage->path,
+                                                $this->threshold);
+
+                                            if (!$match || empty($match['client_id'])) {
                                                 continue;
                                             }
 
-                                            try {
-                                                $match = $analyzer->searchSingleFaceCrop($cropImage->path,
-                                                    $this->threshold);
-
-                                                if (!$match || empty($match['client_id'])) {
-                                                    continue;
-                                                }
-
-                                                $client_id = $match['client_id'];
-                                                if (!$allowed->contains($client_id)) {
-                                                    continue;
-                                                }
-
-                                                $faceCrop->resolved()->updateOrCreate(
-                                                    [
-                                                        'client_id' => $client_id,
-                                                        'event_id' => $this->eventId,
-                                                        'image_id' => $faceCrop->original_image_id
-                                                    ],
-                                                    [
-                                                        'confidence' => (float) $match['confidence'] ?? 0.00,
-                                                    ]
-                                                );
-
-                                            } catch (\Throwable|\Exception $e) {
-                                                Log::error('Reconcile error', [
-                                                    'face_crop_id' => $faceCrop->id,
-                                                    'event_id' => $event->id,
-                                                    'message' => $e->getMessage(),
-                                                ]);
+                                            $client_id = $match['client_id'];
+                                            if (!$allowed->contains($client_id)) {
+                                                continue;
                                             }
+
+                                            $faceCrop->resolved()->updateOrCreate(
+                                                [
+                                                    'client_id' => $client_id,
+                                                    'event_id' => $this->eventId,
+                                                    'image_id' => $faceCrop->original_image_id
+                                                ],
+                                                [
+                                                    'confidence' => (float) $match['confidence'] ?? 0.00,
+                                                ]
+                                            );
+
+                                        } catch (\Throwable|\Exception $e) {
+                                            Log::error('Reconcile error', [
+                                                'face_crop_id' => $faceCrop->id,
+                                                'event_id' => $event->id,
+                                                'message' => $e->getMessage(),
+                                            ]);
                                         }
-                                    });
+                                    }
                                 });
                         });
 
