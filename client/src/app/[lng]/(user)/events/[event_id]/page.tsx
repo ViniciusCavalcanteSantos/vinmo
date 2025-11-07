@@ -7,8 +7,13 @@ import Event from "@/types/Event";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useT} from "@/i18n/client";
 import Fallback from "@/components/Fallback";
-import Image from "@/types/Image";
+import ImageType from "@/types/Image";
 import {ApiStatus} from "@/types/ApiResponse";
+import {filesize} from "filesize";
+import {Image} from "antd";
+import dayjs from "dayjs";
+import {useUser} from "@/contexts/UserContext";
+
 
 export default function Page() {
   const {t} = useT()
@@ -17,12 +22,13 @@ export default function Page() {
   const params = useParams();
   const eventId = Number(params.event_id);
   const [event, setEvent] = useState<Event | null>(null);
-  const [images, setImages] = useState<Image[]>([])
+  const [images, setImages] = useState<ImageType[]>([])
   const [loading, setLoading] = useState<boolean>(true);
+  const {defaultDateFormat} = useUser();
 
   useEffect(() => {
     Promise.all([
-      fetchEvent(eventId),
+      fetchEvent(eventId, true),
       fetchEventImages(eventId)
     ])
       .then(res => {
@@ -49,40 +55,39 @@ export default function Page() {
   if (loading) return <Fallback/>
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
-      {images.map(image => (
-          <div>
+    <div>
+      <div className="mb-4 flex gap-4">
 
-            {/*<img src={image.url} alt={t('event_image')} key={image.id} width={300} height={300}/>*/}
+        <h1><strong>{t('contract')}:</strong> {event?.contract?.code} - {event?.contract?.title}</h1>
+        <h2><strong>{t('event')}:</strong> {event?.type.name}</h2>
+        <h2><strong>{t('total_photos')}:</strong> {event?.totalImages ?? 0}</h2>
+        <h2><strong>{t('size')}:</strong> {filesize(event?.totalSize ?? 0)}</h2>
 
-            <div
-              className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm ">
-              <a href="#">
-                <img className="rounded-t-lg" src={image.url} alt=""/>
-              </a>
-              <div className="p-5">
-                <a href="#">
-                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">Noteworthy
-                    technology acquisitions 2021</h5>
-                </a>
-                <p className="mb-3 font-normal text-gray-700 ">Here are the biggest enterprise
-                  technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                <a href="#"
-                   className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 ">
-                  Read more
-                  <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                       fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                  </svg>
-                </a>
+      </div>
+      <div
+        className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 justify-center content-center items-center">
+
+        {images.map(image => (
+            <div key={image.id}>
+              <div
+                className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm mx-auto">
+
+                <div className="w-full pt-[67%] relative">
+                  <div className="absolute top-0 left-0 w-full h-full [&>.ant-image]:w-full [&>.ant-image]:h-full">
+                    <Image src={image.url} className="rounded-t-lg object-contain !h-full "/>
+                  </div>
+                </div>
+
+                <div className="p-5 flex flex-wrap gap-2">
+
+                  <p><strong>{t('size')}:</strong> {filesize(image.sizeOriginal ?? 0)}</p>
+                  <p><strong>{t('added_at')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}</p>
+                </div>
               </div>
             </div>
-
-
-          </div>
-        )
-      )}
+          )
+        )}
+      </div>
     </div>
   )
 }

@@ -91,8 +91,10 @@ class EventController extends Controller
         }
     }
 
-    public function show(Request $request, Event $event)
+    public function show(Request $request, int $event_id)
     {
+        $organizationId = auth()->user()->organization_id;
+
         $load = ['type'];
 
         $withContract = $request->input('with_contract', false);
@@ -101,7 +103,26 @@ class EventController extends Controller
             $load[] = 'contract.category';
         }
 
-        $event->load($load);
+        $event = Event
+            ::whereIn('contract_id', function ($query) use ($organizationId) {
+                $query->select('id')
+                    ->from('contracts')
+                    ->where('organization_id', $organizationId);
+            })
+            ->where('id', $event_id)
+            ->with($load)
+            ->withCount([
+                'images as images_count' => function ($q) {
+                    $q->where('type', 'original');
+                }
+            ])
+            ->withSum([
+                'images as images_bytes' => function ($q) {
+                    $q->where('type', 'original');
+                }
+            ], 'size')
+            ->first();
+
 
         return response()->json([
             'status' => 'success',
@@ -173,7 +194,11 @@ class EventController extends Controller
 
     public function getImages(Event $event)
     {
-        $images = $event->images()->versions('web')->get();
+        $images = $event
+            ->images()
+            ->versions('web')
+            ->with('original')
+            ->get();
 
         return response()->json([
             'status' => 'success',
