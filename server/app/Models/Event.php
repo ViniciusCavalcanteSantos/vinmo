@@ -23,6 +23,15 @@ class Event extends Model
         'searchable'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (Event $event) {
+            $event->images->each->delete();
+        });
+    }
+
     public function contract(): BelongsTo
     {
         return $this->belongsTo(Contract::class);

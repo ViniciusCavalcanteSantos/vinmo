@@ -24,9 +24,17 @@ class Client extends Model
 
     public static function booted()
     {
+        parent::boot();
+
         static::creating(function ($client) {
             if (empty($client->code)) {
                 $client->code = self::generateNextCode();
+            }
+        });
+
+        static::deleting(function (Client $client) {
+            if ($client->image) {
+                $client->image->delete();
             }
         });
     }

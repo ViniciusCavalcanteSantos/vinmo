@@ -180,11 +180,6 @@ class ClientService
                 }
             }
 
-            $directoryPath = StoragePathService::getClientProfilePath($client->id);
-            if (Storage::directoryExists($directoryPath)) {
-                Storage::deleteDirectory($directoryPath);
-            }
-
             $client->delete();
         });
     }

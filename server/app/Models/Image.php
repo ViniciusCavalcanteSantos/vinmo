@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\DeleteImageFiles;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +28,17 @@ class Image extends Model
         'hash',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($image) {
+            $all = $image->allVersions();
+            $paths = $all->pluck('path')->filter()->toArray();
+
+            DeleteImageFiles::dispatch($paths);
+        });
+    }
 
     public function imageable(): MorphTo
     {
@@ -36,6 +48,11 @@ class Image extends Model
     public function versions(): HasMany
     {
         return $this->hasMany(Image::class, 'parent_id');
+    }
+
+    public function allVersions()
+    {
+        return $this->versions()->get()->prepend($this);
     }
 
     public function metas(): HasMany
