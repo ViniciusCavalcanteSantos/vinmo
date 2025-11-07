@@ -84,7 +84,7 @@ class Image extends Model
     public function getUrlAttribute(): string
     {
         if (config('app.image_proxy')) {
-            return route('images.proxy', ['id' => $this->id]);
+            return route('images.show', ['image' => $this->id]);
         }
 
         return Storage::disk($this->disk)->url($this->path);
