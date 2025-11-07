@@ -4,11 +4,11 @@ namespace App\Services\ImageAnalysis;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Intervention\Image\Drivers\SpecializableEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\Encoders\PngEncoder;
 use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Image as InterventionImage;
+use Intervention\Image\Interfaces\EncoderInterface;
 use Intervention\Image\Laravel\Facades\Image;
 
 class ImagePreparationService
@@ -67,7 +67,7 @@ class ImagePreparationService
      * Garante que a imagem esteja em um dos formatos permitidos,
      * * e define o formato-alvo para exportações futuras.
      */
-    public function ensureFormat(array $formats = ['image/jpeg', 'image/png'], int $quality = 90): self
+    public function ensureFormat(array $formats = ['image/jpeg', 'image/png', 'image/webp'], int $quality = 90): self
     {
         $this->quality = $quality;
         $currentFormat = $this->image->origin()->mimetype();
@@ -84,11 +84,11 @@ class ImagePreparationService
      * Reduz a imagem para que o tamanho final em bytes seja menor ou igual a $maxBytes.
      *
      * @param  int  $maxBytes  Tamanho máximo em bytes (padrão: 5MB)
-     * @param  int  $maxWidth  Largura máxima da imagem (padrão: 2000px)
+     * @param  ?int  $maxWidth  Largura máxima da imagem (padrão: null)
      * @return self
      * @throws Exception Se não for possível reduzir a imagem para o tamanho alvo.
      */
-    public function fitBytes(int $maxBytes = 5 * 1024 * 1024, int $maxWidth = 2000): self
+    public function fitBytes(int $maxBytes = 5 * 1024 * 1024, int $maxWidth = null): self
     {
         if ($this->getFileSize() <= $maxBytes) {
             return $this;
@@ -96,44 +96,45 @@ class ImagePreparationService
 
         $quality = $this->quality;
         $minQuality = 50;
-        $minWidth = 800;
-        $widthStep = 300;
         $qualityStep = 10;
 
-        $format = $this->getMimetype();
-        $encoderClass = match ($format) {
-            'image/webp' => WebpEncoder::class,
-            default => JpegEncoder::class,
-        };
+        $targetMime = $this->hasAlpha()
+            ? 'image/webp'
+            : 'image/jpeg';
+        $this->forcedFormat = $targetMime;
 
-        while (true) {
-            $clone = clone $this->image;
-            $clone->scaleDown($maxWidth);
-
-            $encoder = match ($encoderClass) {
-                WebpEncoder::class => new WebpEncoder(quality: $quality),
-                default => new JpegEncoder(quality: $quality),
-            };
-            $encoded = $clone->encode($encoder);
-
+        while ($quality >= $minQuality) {
+            $encoded = $this->image->encode($this->getEncoder($targetMime, $quality));
             if ($encoded->size() <= $maxBytes) {
-                $this->image = $clone;
                 $this->quality = $quality;
-                $this->forcedFormat = 'image/jpeg';
                 return $this;
             }
+            $quality -= $qualityStep;
+        }
 
-            if ($quality - $qualityStep >= $minQuality) {
-                $quality -= $qualityStep;
-            } elseif ($maxWidth - $widthStep >= $minWidth) {
-                $maxWidth -= $widthStep;
-                $quality = 90;
-            } else {
-                throw new Exception(
-                    "Não foi possível reduzir a imagem para o tamanho alvo de {$maxBytes} bytes. "
-                );
+        if ($maxWidth !== null) {
+            $currentWidth = $this->image->width();
+            $targetWidth = min($currentWidth, $maxWidth);
+            $minWidth = 800;
+            $widthStep = 300;
+
+            while ($targetWidth >= $minWidth) {
+                $clone = clone $this->image;
+                $clone->scaleDown($targetWidth);
+
+                $encoded = $clone->encode($this->getEncoder($targetMime, 85));
+                if ($encoded->size() <= $maxBytes) {
+                    $this->image = $clone;
+                    $this->quality = 85;
+                    return $this;
+                }
+
+                $targetWidth -= $widthStep;
             }
         }
+        throw new Exception(
+            "Não foi possível reduzir a imagem para o tamanho alvo de {$maxBytes} bytes. "
+        );
     }
 
     public function getFileSize()
@@ -149,21 +150,47 @@ class ImagePreparationService
     /**
      * Cria o encoder apropriado com base no formato definido.
      */
-    protected function getEncoder(): SpecializableEncoder
+    protected function getEncoder($mime = null, $quality = null): EncoderInterface
     {
-        $mime = $this->getMimetype();
+        $mimeFinal = $mime ?? $this->getMimetype();
+        $qualityFinal = $quality ?? $this->quality;
 
-        return match ($mime) {
+        return match ($mimeFinal) {
             'image/png' => new PngEncoder(false, true),
-            'image/webp' => new WebpEncoder(quality: $this->quality),
-            'image/jpeg' => new JpegEncoder(quality: $this->quality),
-            default => new JpegEncoder(quality: $this->quality),
+            'image/webp' => new WebpEncoder(quality: $qualityFinal),
+            'image/jpeg' => new JpegEncoder(quality: $qualityFinal),
+            default => new JpegEncoder(quality: $qualityFinal),
         };
     }
 
     public function getMimetype(): string
     {
         return $this->forcedFormat ?? $this->image->origin()->mimetype();
+    }
+
+    /**
+     * Detecta se a imagem possui canal alpha (transparência).
+     *
+     * - Se Imagick estiver disponível, faz detecção real via header/canais.
+     * - Caso contrário, assume true para PNG/WebP por segurança.
+     */
+    public function hasAlpha()
+    {
+        $mime = $this->getMimetype();
+        $hasAlpha = $mime === 'image/png' || $mime === 'image/webp';
+        try {
+            $core = $this->image->core();
+            if (method_exists($core, 'native')) {
+                $native = $core->native();
+                if ($native instanceof \Imagick) {
+                    $hasAlpha = $native->getImageAlphaChannel();
+                }
+            }
+        } catch (\Throwable $e) {
+        }
+
+        return $hasAlpha;
+
     }
 
     public function toFilePointer()
