@@ -107,14 +107,14 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                 $width += 100;
                 $height += 100;
                 $imageClone = clone $image;
-                $cropedImage = $imageClone->crop($width, $height, $left, $top)->encode();
+                $cropedBinary = $imageClone->crop($width, $height, $left, $top)->encode()->toString();
 
                 try {
                     $search = $this->client->searchFacesByImage([
                         'CollectionId' => $this->collectionId,
                         'FaceMatchThreshold' => $matchThreshold,
                         'Image' => [
-                            'Bytes' => $cropedImage->toString()
+                            'Bytes' => $cropedBinary
                         ],
                         'MaxFaces' => 5,
                         'QualityFilter' => 'AUTO',
@@ -149,7 +149,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                                 'height' => $height,
                             ],
                             'details' => $face,
-                            'croppedImage' => $cropedImage,
+                            'croppedImage' => $cropedBinary,
                             'matched_by' => 'rekognition',
                         ];
                     }

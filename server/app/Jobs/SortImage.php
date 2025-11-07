@@ -16,6 +16,9 @@ class SortImage implements ShouldQueue
 {
     use Queueable;
 
+    public int $tries = 5;
+    public array $backoff = [5, 10, 15, 20, 30];
+
     /**
      * Create a new job instance.
      */
@@ -40,9 +43,17 @@ class SortImage implements ShouldQueue
 
             $clientsInEvent = $this->event->clients()->pluck('clients.id')->toBase();
 
-            DB::transaction(function () use ($detections, $clientsInEvent, $disk, &$pathsToDelete) {
+            $faceCropsToSaveDetails = [];
+
+            DB::transaction(function () use (
+                $detections,
+                $clientsInEvent,
+                $disk,
+                &$pathsToDelete,
+                &$faceCropsToSaveDetails
+            ) {
                 foreach ($detections as $detection) {
-                    $croppedImage = $detection['croppedImage'];
+                    $cropedBinary = $detection['croppedImage'];
                     $croppedModel = $this->image->versions()->create([
                         'imageable_id' => $this->image->imageable_id,
                         'imageable_type' => $this->image->imageable_type,
@@ -50,17 +61,21 @@ class SortImage implements ShouldQueue
                         'type' => 'crop',
                         'disk' => $disk,
                         'path' => '',
-                        'size' => $croppedImage->size(),
+                        'size' => 0,
                     ]);
                     $croppedPath = $this->generateVersionPath($this->image->path, "crop_{$croppedModel->id}");
 
                     $pathsToDelete[] = $croppedPath;
 
-                    Storage::put($croppedPath, $croppedImage->toFilePointer());
+                    $size = strlen($cropedBinary);
+                    Storage::put($croppedPath, $cropedBinary);
 
-                    $croppedModel->update(['path' => $croppedPath]);
+                    $croppedModel->update([
+                        'path' => $croppedPath,
+                        'size' => $size,
+                    ]);
 
-                    $detectionModel = FaceCrop::firstOrCreate(
+                    $faceCrop = FaceCrop::firstOrCreate(
                         [
                             'event_id' => $this->event->id,
                             'image_id' => $croppedModel->id,
@@ -72,10 +87,9 @@ class SortImage implements ShouldQueue
                         ]
                     );
 
-                    $detectionModel->saveFaceDetail($detection['details']);
 
                     if ($clientsInEvent->contains($detection['client_id'])) {
-                        $detectionModel->resolved()->updateOrCreate(
+                        $faceCrop->resolved()->updateOrCreate(
                             [
                                 'client_id' => $detection['client_id'],
                                 'event_id' => $this->event->id,
@@ -86,8 +100,14 @@ class SortImage implements ShouldQueue
                             ]
                         );
                     }
+
+                    $faceCropsToSaveDetails[] = [$faceCrop, $detection['details']];
                 }
             });
+
+            foreach ($faceCropsToSaveDetails as [$faceCrop, $details]) {
+                $faceCrop->saveFaceDetail($details);
+            }
 
             \App\Models\PendingFaceReconciliation::firstOrCreate([
                 'event_id' => $this->event->id,
