@@ -7,6 +7,7 @@ export type ApiDriver = "fetch" | "axios";
 
 export interface ApiFetchOptions extends RequestInit {
   driver?: ApiDriver;
+  baseURL?: string;
   onProgress?: (progress: number) => void;
 }
 
@@ -27,14 +28,10 @@ export default async function apiFetch<T = undefined>(
   path: string | URL | Request,
   options: ApiFetchOptions = {}
 ): Promise<ApiFetchResponse<T>> {
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("token")
-      : null;
-
   const lang = i18next.language;
   const isFormData = options.body instanceof FormData;
   const driver = options.driver ?? "fetch";
+  const baseURL = typeof options.baseURL === 'string' ? options.baseURL : process.env.NEXT_PUBLIC_API_URL;
 
   const method = (options.method || "GET").toUpperCase();
   const isMutatingMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
@@ -76,7 +73,7 @@ export default async function apiFetch<T = undefined>(
   // 🚀 DRIVER: AXIOS
   // ======================================
   if (driver === "axios") {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/api${path}`;
+    const url = `${baseURL}/api${path}`;
     try {
       const res = await axios({
         method: options.method || "POST",
@@ -108,7 +105,7 @@ export default async function apiFetch<T = undefined>(
     }
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api${path}`, {
+  const res = await fetch(`${baseURL}/api${path}`, {
     ...options,
     headers,
     cache: options.cache ?? "no-store",
