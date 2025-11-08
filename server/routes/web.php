@@ -10,11 +10,6 @@ use App\Http\Controllers\Api\ImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-//    dd(\Illuminate\Support\Facades\Storage::disk('s3')->directories('/clients'));
-    dd(\Illuminate\Support\Facades\Storage::disk('s3')->files('/events/75/photos'));
-
-    dd(\App\Models\Client::find('51')->image->url);
-    dd(\App\Models\Image::find('01k90t0a5z4xjb9gc62swa6e3w')->url);
     return view('welcome');
 });
 
