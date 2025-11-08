@@ -17,7 +17,7 @@ const LandingPageHeader = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out px-4 md:px-8 bg-white shadow-md h-16 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out px-4 md:px-8 bg-ant-bg-elevated shadow-md h-16 ${
         isScrolled
           ? ''
           : ''
