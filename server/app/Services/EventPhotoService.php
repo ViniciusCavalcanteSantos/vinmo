@@ -50,7 +50,9 @@ class EventPhotoService
             'size' => 0,
             'mime_type' => '',
         ]);
-        $image->storeExif($exif);
+        if ($exif) {
+            $image->storeExif($exif);
+        }
 
         $path = StoragePathService::getEventPhotoFolder($event->id, "{$image->id}.{$ext}");
         if (!Storage::put($path, $bytes)) {

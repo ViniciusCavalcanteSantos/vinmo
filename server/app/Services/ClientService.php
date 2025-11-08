@@ -147,7 +147,10 @@ class ClientService
                     'mime_type' => '',
                 ]);
             }
-            $image->storeExif($exif);
+            if ($exif) {
+                $image->storeExif($exif);
+            }
+
             if ($image->path && $image->path !== $finalPath && Storage::exists($image->path)) {
                 Storage::delete($image->path);
             }
