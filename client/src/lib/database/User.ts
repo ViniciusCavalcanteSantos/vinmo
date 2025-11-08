@@ -7,7 +7,7 @@ interface AuthSuccess {
 }
 
 async function fetchCSRF() {
-  return fetch(`/sanctum/csrf-cookie`, {
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/sanctum/csrf-cookie`, {
     credentials: 'include',
   });
 }

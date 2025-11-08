@@ -49,7 +49,7 @@ return [
 
         's3' => [
             'driver' => 's3',
-            'collection_id' => env('AWS_COLLECTION_ID'),
+            'collection_id' => env('AWS_COLLECTION_ID', 'default'),
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
