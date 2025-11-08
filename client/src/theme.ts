@@ -3,7 +3,7 @@ import {AliasToken} from "antd/es/theme/interface";
 import {CSSProperties} from "react";
 
 const theme = {
-  primary: "#FFAA40",
+  primary: "#0C66E4", // #FFAA40
   secondary: "#9333EA",
 
   overlay: "#c8d1da66",
@@ -24,8 +24,7 @@ const themeAntdLight = {
 } as Partial<AliasToken>
 
 const themeAntdDark = {
-  ...themeAntd,
-  colorBgMask: 'red'
+  ...themeAntd
 } as Partial<AliasToken>
 
 export default theme
