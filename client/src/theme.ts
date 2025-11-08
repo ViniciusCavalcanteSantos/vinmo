@@ -3,7 +3,7 @@ import {AliasToken} from "antd/es/theme/interface";
 import {CSSProperties} from "react";
 
 const theme = {
-  primary: "#0c66e4",
+  primary: "#FFAA40",
   secondary: "#9333EA",
 
   overlay: "#c8d1da66",
@@ -18,5 +18,15 @@ const themeAntd = {
   fontFamily: "var(--font-geist-sans), sans-serif",
 } as Partial<AliasToken>
 
+const themeAntdLight = {
+  ...themeAntd,
+  colorBgMask: theme.overlay
+} as Partial<AliasToken>
+
+const themeAntdDark = {
+  ...themeAntd,
+  colorBgMask: 'red'
+} as Partial<AliasToken>
+
 export default theme
-export {themeBody, themeAntd}
+export {themeBody, themeAntd, themeAntdLight, themeAntdDark}

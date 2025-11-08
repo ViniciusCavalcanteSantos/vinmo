@@ -3,7 +3,7 @@
 import {AntdRegistry} from "@ant-design/nextjs-registry";
 import {PropsWithChildren, useMemo} from "react";
 import {App, ConfigProvider, theme} from "antd";
-import {themeAntd} from "@/theme";
+import {themeAntdDark, themeAntdLight} from "@/theme";
 import {NotificationProvider} from "@/contexts/NotificationContext";
 import en from 'antd/locale/en_US';
 import ptBR from 'antd/locale/pt_BR';
@@ -42,7 +42,7 @@ function ConfigProviderWrapper({children, lang}: PropsWithChildren<{ lang: strin
       locale={langMap[lang] ?? en}
       theme={{
         algorithm: algorithm,
-        token: themeAntd,
+        token: resolved === 'dark' ? themeAntdDark : themeAntdLight,
         cssVar: true
       }}
     >
