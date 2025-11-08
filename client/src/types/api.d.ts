@@ -270,13 +270,15 @@ export interface components {
              * @example 2456789
              */
             size: number;
+            /** @example image/jpeg */
+            mimeType: string;
+            /** @example IMG_1234 */
+            originalName?: string;
             /**
              * @description Tamanho em bytes da imagem original (se houver)
              * @example 2456789
              */
-            sizeOriginal?: number | null;
-            /** @example image/jpeg */
-            mimeType: string;
+            originalSize?: number | null;
             /** @example 2025-11-06 10:15:00 */
             createdAt: string;
             /** @example 2025-11-06 10:20:00 */

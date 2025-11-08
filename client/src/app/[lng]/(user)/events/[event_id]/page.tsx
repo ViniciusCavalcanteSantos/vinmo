@@ -108,10 +108,9 @@ export default function Page() {
                   </div>
                 </div>
 
-
                 <div className="p-4 flex flex-wrap gap-2">
-
-                  <p><strong>{t('size')}:</strong> {filesize(image.sizeOriginal ?? 0)}</p>
+                  <p className="w-full"><strong>{t('name')}:</strong> {image.originalName}</p>
+                  <p><strong>{t('size')}:</strong> {filesize(image.originalSize ?? 0)}</p>
                   <p><strong>{t('upload_date')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}</p>
                 </div>
 

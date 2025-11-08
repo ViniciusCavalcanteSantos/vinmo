@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->morphs('imageable');
             $table->foreignUlid('parent_id')->nullable()->constrained('images')->cascadeOnDelete();
 
+            $table->string('original_name')->nullable();
             $table->string('disk')->default('s3');
             $table->string('path');
             $table->enum('type', ['original', 'web', 'thumb', 'watermark', 'crop'])->default('original');

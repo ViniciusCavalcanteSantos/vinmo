@@ -49,6 +49,6 @@ class ImageController extends Controller
             $image = $image->original()->first();
         }
 
-        return $disk->download($image->path, 'download');
+        return $disk->download($image->path, basename($image->original_name));
     }
 }

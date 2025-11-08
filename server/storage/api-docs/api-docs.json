@@ -598,15 +598,19 @@
                         "type": "integer",
                         "example": 2456789
                     },
-                    "sizeOriginal": {
+                    "mimeType": {
+                        "type": "string",
+                        "example": "image/jpeg"
+                    },
+                    "originalName": {
+                        "type": "string",
+                        "example": "IMG_1234"
+                    },
+                    "originalSize": {
                         "description": "Tamanho em bytes da imagem original (se houver)",
                         "type": "integer",
                         "example": 2456789,
                         "nullable": true
-                    },
-                    "mimeType": {
-                        "type": "string",
-                        "example": "image/jpeg"
                     },
                     "createdAt": {
                         "type": "string",

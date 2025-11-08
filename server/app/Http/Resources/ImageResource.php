@@ -19,8 +19,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     example="original"
  *   ),
  *   @OA\Property(property="size", type="integer", example=2456789, description="Tamanho em bytes"),
- *   @OA\Property(property="sizeOriginal", type="integer", nullable=true, example=2456789, description="Tamanho em bytes da imagem original (se houver)"),
  *   @OA\Property(property="mimeType", type="string", example="image/jpeg"),
+ *   @OA\Property(property="originalName", type="string", example="IMG_1234"),
+ *   @OA\Property(property="originalSize", type="integer", nullable=true, example=2456789, description="Tamanho em bytes da imagem original (se houver)"),
  *   @OA\Property(property="createdAt", type="string", example="2025-11-06 10:15:00"),
  *   @OA\Property(property="updatedAt", type="string", example="2025-11-06 10:20:00")
  * )
@@ -44,8 +45,12 @@ class ImageResource extends JsonResource
             'updatedAt' => $this->updated_at->format('Y-m-d H:i:s')
         ];
 
-        if ($this->original) {
-            $data['sizeOriginal'] = $this->original->size;
+        if ($this->parent_id) {
+            $data['originalName'] = $this->original->original_name;
+            $data['originalSize'] = $this->original->size;
+        } else {
+            $data['originalName'] = $this->original_name;
+            $data['originalSize'] = $this->size;
         }
 
         return $data;

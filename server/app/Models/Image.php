@@ -21,6 +21,7 @@ class Image extends Model
         'imageable_id',
         'imageable_type',
         'parent_id',
+        'original_name',
         'disk',
         'path',
         'type',

@@ -47,6 +47,7 @@ class EventPhotoService
 
         $image = $event->images()->create([
             'organization_id' => auth()->user()->organization_id,
+            'original_name' => $uploaded->getClientOriginalName(),
             'path' => '',
             'size' => 0,
             'mime_type' => '',
