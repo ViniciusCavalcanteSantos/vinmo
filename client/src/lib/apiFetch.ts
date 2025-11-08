@@ -14,13 +14,13 @@ export type ApiFetchResponse<T = undefined> = ApiResponse &
   (T extends undefined ? {} : T);
 
 function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null;
+  if (typeof document === "undefined") return null;
+  const value = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(name + "="))
+    ?.split("=")[1];
 
-  const match = document.cookie.match(
-    new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)')
-  );
-
-  return match ? match[1] : null;
+  return value ? decodeURIComponent(value) : null;
 }
 
 export default async function apiFetch<T = undefined>(
