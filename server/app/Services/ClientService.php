@@ -142,6 +142,7 @@ class ClientService
             $image = $client->image()->first();
             if (!$image) {
                 $image = $client->image()->create([
+                    'organization_id' => auth()->user()->organization_id,
                     'path' => '',
                     'size' => 0,
                     'mime_type' => '',

@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('images', function (Blueprint $table) {
             $table->ulid('id')->primary();
+            $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
             $table->morphs('imageable');
             $table->foreignUlid('parent_id')->nullable()->constrained('images')->cascadeOnDelete();
 

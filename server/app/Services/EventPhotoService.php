@@ -46,6 +46,7 @@ class EventPhotoService
         $mime = $processed->getMimetype();
 
         $image = $event->images()->create([
+            'organization_id' => auth()->user()->organization_id,
             'path' => '',
             'size' => 0,
             'mime_type' => '',

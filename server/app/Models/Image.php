@@ -17,6 +17,7 @@ class Image extends Model
 
     protected $fillable = [
         'id',
+        'organization_id',
         'imageable_id',
         'imageable_type',
         'parent_id',
@@ -32,12 +33,23 @@ class Image extends Model
     {
         parent::boot();
 
-        static::deleting(function ($image) {
+        static::creating(function (Image $image) {
+            if ($image->parent_id) {
+                $image->organization_id = Image::find($image->parent_id)->organization_id;
+            }
+        });
+
+        static::deleting(function (Image $image) {
             $all = $image->allVersions();
             $paths = $all->pluck('path')->filter()->toArray();
 
             DeleteStoragePaths::dispatch($paths);
         });
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
     }
 
     public function imageable(): MorphTo

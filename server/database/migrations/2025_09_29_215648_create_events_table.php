@@ -9,9 +9,9 @@ return new class extends Migration {
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('contract_id');
+            $table->foreignId('organization_id')->constrained();
+            $table->foreignId('contract_id');
             $table->unsignedBigInteger('type_id');
-            $table->foreign('contract_id')->references('id')->on('contracts');
             $table->foreign('type_id')->references('id')->on('event_types');
             $table->date('event_date');
             $table->time('start_time')->nullable();

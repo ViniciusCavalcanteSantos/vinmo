@@ -16,12 +16,13 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = [
+        'organization_id',
         'contract_id',
         'type_id',
         'event_date',
         'start_time',
         'description',
-        'searchable'
+        'searchable',
     ];
 
     protected static function boot()
@@ -32,6 +33,11 @@ class Event extends Model
             $paths = $event->images()->pluck('path')->toArray();
             DeleteStoragePaths::dispatch($paths);
         });
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
     }
 
     public function contract(): BelongsTo

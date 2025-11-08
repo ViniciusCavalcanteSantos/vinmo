@@ -14,6 +14,7 @@ class EventService
 
         return DB::transaction(function () use ($validated) {
             $event = Event::create([
+                'organization_id' => auth()->user()->organization_id,
                 'contract_id' => $validated['contract'],
                 'type_id' => $validated['event_type'],
                 'event_date' => $validated['event_date'],

@@ -12,9 +12,8 @@ return new class extends Migration {
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('organization_id');
+            $table->foreignId('organization_id')->constrained();
             $table->unsignedBigInteger('category_id');
-            $table->foreign('organization_id')->references('id')->on('organizations');
             $table->foreign('category_id')->references('id')->on('contract_categories');
             $table->string('code', 40);
             $table->string('title', 180);
