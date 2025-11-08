@@ -23,6 +23,7 @@ Route::prefix('/api')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
+    Route::get('/images/{image}/download', [ImageController::class, 'download'])->name('images.show');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);

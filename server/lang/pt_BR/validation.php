@@ -252,6 +252,7 @@ return [
         'guardian_email' => 'Email do responsável',
         'guardian_phone' => 'Telefone do responsável',
         'client_ids' => 'Clientes',
+        'photo' => 'foto'
     ],
 
 ];

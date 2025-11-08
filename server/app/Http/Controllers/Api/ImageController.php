@@ -41,4 +41,14 @@ class ImageController extends Controller
             ]
         );
     }
+
+    public function download(Request $request, Image $image)
+    {
+        $disk = Storage::disk($image->disk);
+        if ($image->parent_id) {
+            $image = $image->original()->first();
+        }
+
+        return $disk->download($image->path, 'download');
+    }
 }

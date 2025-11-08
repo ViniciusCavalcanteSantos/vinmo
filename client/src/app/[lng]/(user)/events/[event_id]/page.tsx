@@ -14,6 +14,7 @@ import {Button, Dropdown, Image, MenuProps, Tooltip} from "antd";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {DeleteOutlined, DownloadOutlined, InfoCircleOutlined, MoreOutlined, TeamOutlined} from "@ant-design/icons";
+import downloadFile from "@/lib/download";
 
 
 export default function Page() {
@@ -54,11 +55,16 @@ export default function Page() {
   }, [eventId])
 
   if (loading) return <Fallback/>
+
+  const handleDownloadImage = (image: ImageType) => {
+    downloadFile(`${process.env.NEXT_PUBLIC_API_URL}/api/images/${image.id}/download`)
+  }
+
   const menuFor = (img: ImageType): MenuProps => ({
     onClick: async (info) => {
       switch (info.key) {
         case 'download':
-          // await handleDownloadImage(img)
+          handleDownloadImage(img)
           break
         case 'metadata':
           // await handleOpenMetadata(img)
