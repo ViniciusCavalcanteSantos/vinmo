@@ -1,10 +1,11 @@
 import '@ant-design/v5-patch-for-react-19';
 import type {Metadata, ResolvingMetadata} from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import {themeBody} from "@/theme";
 import {languages} from "@/i18n/settings";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
@@ -21,12 +22,12 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  { params }: { params: Promise<any> },
+  {params}: { params: Promise<any> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const parentMetadata = await parent;
   const baseUrl = parentMetadata.alternates?.canonical?.url || process.env.NEXT_PUBLIC_APP_URL || "https://vinmo.org";
-  const { lng } = await params;
+  const {lng} = await params;
 
   return {
     alternates: {
@@ -40,24 +41,25 @@ export async function generateMetadata(
   };
 }
 
-async function LocaleLayout({
-  children,
-  params
-}: Readonly<{
-  children: React.ReactNode;
-  params: Promise<any>;
-}>) {
-  const { lng } = await params;
+async function LocaleLayout(
+  {
+    children,
+    params
+  }: Readonly<{
+    children: React.ReactNode;
+    params: Promise<any>;
+  }>) {
+  const {lng} = await params;
   return (
-    <html lang={lng} className="h-full">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
-        style={themeBody}
-      >
-        <Providers lang={lng}>
-            {children}
-        </Providers>
-      </body>
+    <html lang={lng} className="h-full" suppressHydrationWarning>
+    <body
+      className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-app-bg dark:bg-app-bg-dark`}
+      style={themeBody}
+    >
+    <Providers lang={lng}>
+      {children}
+    </Providers>
+    </body>
     </html>
   );
 }

@@ -81,21 +81,27 @@ export default function Address() {
 
   return (
     <Form
-      className="!w-full max-w-120 bg-white !px-10 !py-8 rounded-sm shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+      className="
+        !w-full max-w-140
+        bg-ant-bg-elevated
+        border border-ant-border-sec
+        !px-10 !py-8 rounded-sm
+        shadow-[0_0_10px_rgba(0,0,0,0.1)]
+      "
       form={form}
       initialValues={{remember: true}}
       onFinish={handleFinish}
       requiredMark={false}
       layout="vertical"
     >
-      <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
+      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
         <Logo width={40}/>
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
-      <h1 className="text-center font-semibold text-lead-dark text-xl">
+      <h1 className="text-center font-semibold text-ant-text-sec text-xl">
         {t('address')}
       </h1>
-      <p className="text-center text-lead-lighter text-sm mb-2">{t('login.please_inform_your_address')}</p>
+      <p className="text-center text-ant-text-ter text-sm mb-2">{t('login.please_inform_your_address')}</p>
 
       <Form.Item
         layout="vertical"

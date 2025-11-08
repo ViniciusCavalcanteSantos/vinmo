@@ -269,8 +269,9 @@ const ManageClientPage: React.FC = () => {
       <PageHeader title={isEditMode ? t('edit_client') : t('create_new_client')}/>
 
       <div className="flex flex-col items-start gap-4 lg:flex-row">
-        <div className="w-fit p-2 shadow-[0_4px_12px_rgba(0,0,0,0.1)] rounded-lg">
-          <div className="mb-2 text-dark flex items-center">
+        <div
+          className="w-fit p-2 bg-ant-bg shadow-[0_4px_12px_rgba(0,0,0,0.1)] border border-ant-border-sec rounded-lg">
+          <div className="mb-2 flex items-center">
           <span
             className="inline-block text-sm text-[#ff4d4f] mr-1"
             style={{fontFamily: 'SimSun, sans-serif'}}
@@ -291,14 +292,14 @@ const ManageClientPage: React.FC = () => {
               {fileList.length >= 1 ? null : (
                 <button style={{border: 0, background: 'none'}} type="button">
                   <PlusOutlined/>
-                  <div style={{marginTop: 8}}>Upload</div>
+                  <div className='mt-2 text-ant-text-sec'>Upload</div>
                 </button>
               )}
             </Upload>
           </div>
 
           {uploadRequired &&
-              <div className="text-[#ff4d4f]">
+              <div className="text-ant-error">
                 {t('select_a_photo')}
               </div>
           }

@@ -196,7 +196,7 @@ const ManageClientPage: React.FC = () => {
 
         <div className="flex flex-col items-start gap-4 lg:flex-row">
           <div className="w-fit p-2 shadow-[0_4px_12px_rgba(0,0,0,0.1)] rounded-lg">
-            <div className="mb-2 text-dark flex items-center">
+            <div className="mb-2 text-ant-text flex items-center">
           <span
             className="inline-block text-sm text-[#ff4d4f] mr-1"
             style={{fontFamily: 'SimSun, sans-serif'}}

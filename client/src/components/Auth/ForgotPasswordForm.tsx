@@ -40,16 +40,22 @@ export default function ForgotPasswordForm() {
 
   return (
     <Form
-      className="!w-full max-w-100 bg-white !px-10 !py-8 rounded-sm shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+      className="
+        !w-full max-w-100
+        bg-ant-bg-elevated
+        border border-ant-border-sec
+        !px-10 !py-8 rounded-sm
+        shadow-[0_0_10px_rgba(0,0,0,0.1)]
+      "
       initialValues={{remember: true}}
       onFinish={handleFinish}
       requiredMark={false}
     >
-      <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
+      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
         <Logo width={40}/>
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
-      <h1 className="text-center mb-4 font-semibold text-lead-dark text-base">{t('login.cant_log_in')}</h1>
+      <h1 className="text-center mb-4 font-semibold text-ant-text-sec text-base">{t('login.cant_log_in')}</h1>
 
       <Form.Item
         layout="vertical"

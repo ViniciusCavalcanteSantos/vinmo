@@ -43,23 +43,29 @@ export default function RecoverySentForm() {
 
   return (
     <Form
-      className="!w-full max-w-100 bg-white !px-10 !py-8 rounded-sm shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+      className="
+        !w-full max-w-100
+        bg-ant-bg-elevated
+        border border-ant-border-sec
+        !px-10 !py-8 rounded-sm
+        shadow-[0_0_10px_rgba(0,0,0,0.1)]
+      "
       initialValues={{remember: true}}
       onFinish={handleFinish}
       requiredMark={false}
     >
 
-      <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
+      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
         <Logo width={40}/>
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
-      <h1 className="text-center mb-4 font-semibold text-lead-dark text-base">{t('login.cant_log_in')}</h1>
+      <h1 className="text-center mb-4 font-semibold text-ant-text-sec text-base">{t('login.cant_log_in')}</h1>
 
       <Image src={email} alt={t('login.email_envelope_icon')} width={100} className="mx-auto mb-5"/>
 
       <div className='mb-2'>
-        <p className="text-lead-lighter text-sm mb-2">{t('login.we_sent_recovery_link')}</p>
-        <p id="emailVerified" className='text-sm text-lead-dark font-bold'>{emailRecovery}</p>
+        <p className="text-ant-text-sec text-sm mb-2">{t('login.we_sent_recovery_link')}</p>
+        <p id="emailVerified" className='text-sm text-ant-text-sec font-bold'>{emailRecovery}</p>
       </div>
 
       <p className='text-lead-light text-xs mb-8'>
@@ -75,7 +81,7 @@ export default function RecoverySentForm() {
         <Link href="/forgot-password">
           <span className="underline underline-offset-2">{t('login.return_to_log_in')}</span>
         </Link>
-        <span className="px-2 text-lead-dark">•</span>
+        <span className="px-2 text-ant-text-sec">•</span>
         <button className='font-medium text-blue-600 hover:text-blue-400 cursor-pointer transition-colors duration-300'
                 type="submit" disabled={sending}>
           <span className="underline underline-offset-2">{t('login.resend_recovery_link')}</span>

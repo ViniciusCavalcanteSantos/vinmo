@@ -65,18 +65,24 @@ export default function ConfirmCodeForm() {
 
   return (
     <Form
-      className="!w-full max-w-100 bg-white !px-10 !py-8 rounded-sm shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+      className="
+        !w-full max-w-100
+        bg-ant-bg-elevated
+        border border-ant-border-sec
+        !px-10 !py-8 rounded-sm
+        shadow-[0_0_10px_rgba(0,0,0,0.1)]
+      "
       initialValues={{remember: true}}
       onFinish={handleFinish}
       requiredMark={false}
     >
-      <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
+      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
         <Logo width={40}/>
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
-      <h1 className="text-center mb-4 font-semibold text-lead-dark text-2xl">{t('login.we_emailed_you')}</h1>
-      <p className="text-lead-lighter text-sm mb-2">{t('login.to_complete_account_setup')}</p>
-      <p className="text-lead-lighter font-bold text-base mb-2">{emailConfirmation}</p>
+      <h1 className="text-center mb-4 font-semibold text-ant-text-sec text-2xl">{t('login.we_emailed_you')}</h1>
+      <p className="text-ant-text-sec text-sm mb-2">{t('login.to_complete_account_setup')}</p>
+      <p className="text-ant-text-sec font-bold text-base mb-2">{emailConfirmation}</p>
 
       <Form.Item
         layout="vertical"
@@ -95,7 +101,7 @@ export default function ConfirmCodeForm() {
       </Form.Item>
 
       <div className="flex justify-center">
-        <button className='font-medium text-blue-600 dark:text-blue-500 cursor-pointer' onClick={sendCode}
+        <button className='font-medium text-ant-primary hover:text-ant-primary-hover cursor-pointer' onClick={sendCode}
                 type="button">
           <span className="underline underline-offset-2">{t('login.didnt_receive_an_email')}</span>
         </button>

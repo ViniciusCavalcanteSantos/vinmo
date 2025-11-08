@@ -1,35 +1,56 @@
 'use client'
 
 import {AntdRegistry} from "@ant-design/nextjs-registry";
-import {PropsWithChildren} from "react";
-import {App, ConfigProvider} from "antd";
+import {PropsWithChildren, useMemo} from "react";
+import {App, ConfigProvider, theme} from "antd";
 import {themeAntd} from "@/theme";
 import {NotificationProvider} from "@/contexts/NotificationContext";
 import en from 'antd/locale/en_US';
 import ptBR from 'antd/locale/pt_BR';
 import {Locale} from "antd/es/locale";
+import {ThemeProvider, useTheme} from "@/contexts/AppThemeContext";
 
 
 export default function Providers({children, lang}: PropsWithChildren<{ lang: string }>) {
+
+  return (
+    <AntdRegistry>
+      <ThemeProvider>
+        <ConfigProviderWrapper lang={lang}>
+          {children}
+        </ConfigProviderWrapper>
+      </ThemeProvider>
+    </AntdRegistry>
+  );
+}
+
+function ConfigProviderWrapper({children, lang}: PropsWithChildren<{ lang: string }>) {
+  const {resolved} = useTheme()
+
+  const algorithm = useMemo(
+    () => (resolved === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm),
+    [resolved]
+  )
+
   const langMap: Record<string, Locale> = {
     'en': en,
     'pt-BR': ptBR
   }
 
   return (
-    <AntdRegistry>
-      <ConfigProvider
-        locale={langMap[lang] ?? en}
-        theme={{
-          token: themeAntd
-        }}
-      >
-        <App className="h-full">
-          <NotificationProvider>
-            {children}
-          </NotificationProvider>
-        </App>
-      </ConfigProvider>
-    </AntdRegistry>
-  );
+    <ConfigProvider
+      locale={langMap[lang] ?? en}
+      theme={{
+        algorithm: algorithm,
+        token: themeAntd,
+        cssVar: true
+      }}
+    >
+      <App className="h-full">
+        <NotificationProvider>
+          {children}
+        </NotificationProvider>
+      </App>
+    </ConfigProvider>
+  )
 }

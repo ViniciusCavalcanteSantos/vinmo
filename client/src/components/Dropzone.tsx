@@ -1,6 +1,6 @@
 "use client";
 
-import {DeleteOutlined, InboxOutlined,} from "@ant-design/icons";
+import {DeleteOutlined, InboxOutlined} from "@ant-design/icons";
 import {Button, Image, Progress} from "antd";
 import {useDropzone} from "react-dropzone";
 import {useT} from "@/i18n/client";
@@ -32,14 +32,14 @@ export default function Dropzone(
     onFilesAdded,
     onFilesRemoved,
     files = [],
-    icon = <InboxOutlined className="!text-primary text-5xl"/>,
+    icon = <InboxOutlined className="!text-ant-primary text-5xl"/>,
     title,
     description,
   }: DropzoneProps
 ) {
   const {t} = useT();
-  title = title ?? t('dropzone.title')
-  description = description ?? t('dropzone.description')
+  title = title ?? t('dropzone.title');
+  description = description ?? t('dropzone.description');
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     accept: {
@@ -55,12 +55,6 @@ export default function Dropzone(
       );
       onFilesAdded(filesWithProgress);
     },
-    onDragEnter: () => {
-    },
-    onDragLeave: () => {
-    },
-    onDragOver: () => {
-    },
     multiple: true,
   });
 
@@ -71,25 +65,28 @@ export default function Dropzone(
   return (
     <div
       {...getRootProps()}
-      className={`transition-colors duration-200 border-2 border-dashed rounded-lg p-4 text-center cursor-pointer bg-neutral-50 hover:border-blue-500
-      ${isDragActive ? "border-blue-500 !bg-blue-50" : "border-gray-300"}`}
+      className={`
+        transition-colors duration-200
+        border-2 border-dashed rounded-lg p-4 text-center cursor-pointer
+        bg-app-bg dark:bg-app-bg-dark
+        hover:border-ant-primary
+        ${isDragActive ? "border-ant-primary !bg-ant-primary/10 dark:!bg-ant-fill-sec" : "border-gray-300 dark:border-ant-border-sec"}
+      `}
     >
       <input {...getInputProps()} />
       <div className="flex flex-col items-center justify-center h-full min-h-[200px]">
         <p className="ant-upload-drag-icon mb-4">
           {icon}
         </p>
-        <p className="ant-upload-text !text-black/88 text-base mb-1">
+        <p className="ant-upload-text text-ant-text text-base mb-1">
           {title}
         </p>
-        <p className="ant-upload-hint !text-black/45">
+        <p className="ant-upload-hint text-ant-text-sec">
           {description}
         </p>
       </div>
       {files.length > 0 && (
-        <ul
-          className="mt-4"
-        >
+        <ul className="mt-4">
           {files.map((file: FileWithUploadData, index: number) => {
             if (!(file instanceof Blob)) return null;
             const url = URL.createObjectURL(file);
@@ -97,7 +94,13 @@ export default function Dropzone(
             return (
               <li
                 key={index}
-                className="flex items-center gap-6 bg-white shadow-[0_1px_3px_rgba(27,23,30,.1)] py-2 px-4 text-start rounded-lg mb-2"
+                className="
+                  flex items-center gap-6
+                  bg-ant-bg-elevated
+                  border border-ant-border-sec
+                  shadow-ant-1
+                  py-2 px-4 text-start rounded-lg mb-2
+                "
               >
                 <Image
                   className="rounded-avatar"
@@ -108,7 +111,9 @@ export default function Dropzone(
                 />
 
                 <div className="flex-1">
-                  <h4 className="text-black/48">{file.name} ({filesize(file.size, {locale: i18next.language})})</h4>
+                  <h4 className="text-ant-text-sec text-sm">
+                    {file.name} ({filesize(file.size, {locale: i18next.language})})
+                  </h4>
 
                   <Progress
                     percent={file.progress}
@@ -120,7 +125,9 @@ export default function Dropzone(
                     }
                   />
                   {file.status === 'error' && (
-                    <span className="text-red-500">{t("Falha no envio")}</span>
+                    <span className="text-[var(--color-ant-error)]">
+                      {t("Falha no envio")}
+                    </span>
                   )}
                 </div>
 

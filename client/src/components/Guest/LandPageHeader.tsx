@@ -1,7 +1,7 @@
 'use client';
 
-import {Button, Space, Avatar, Divider} from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import {Avatar, Button, Divider, Space} from 'antd';
+import {UserOutlined} from '@ant-design/icons';
 import Link from 'next/link';
 import {useWindowScroll} from "react-use";
 import Logo from "@/components/Logo";
@@ -9,8 +9,8 @@ import {useT} from "@/i18n/client";
 import {useRouter} from "next/navigation";
 
 const LandingPageHeader = () => {
-  const { t } = useT()
-  const { y } = useWindowScroll();
+  const {t} = useT()
+  const {y} = useWindowScroll();
   const isScrolled = y > 50;
   const isAuthenticated = false
   const router = useRouter();
@@ -31,23 +31,25 @@ const LandingPageHeader = () => {
               isScrolled ? 'text-gray-800' : 'text-white'
             }`}
           >
-            <div className="flex items-center justify-center text-4xl text-lead-light font-normal">
-              <Logo width={40} />
-              <h1 className="-translate-x-1"><span className="sr-only">V</span><span className='hidden xs:inline-flex'>inmo</span></h1>
+            <div className="flex items-center justify-center text-4xl text-ant-text-sec font-normal">
+              <Logo width={40}/>
+              <h1 className="-translate-x-1"><span className="sr-only">V</span><span
+                className='hidden xs:inline-flex'>inmo</span></h1>
             </div>
           </Link>
         </div>
 
         <div>
           {isAuthenticated ? (
-            <Avatar size="large" icon={<UserOutlined />} className="cursor-pointer" />
+            <Avatar size="large" icon={<UserOutlined/>} className="cursor-pointer"/>
           ) : (
             <Space>
               <Button onClick={() => router.push('signup')}>{t('login.sign_up')}</Button>
 
-              <Divider type="vertical" style={{height:'2rem'}}  />
+              <Divider type="vertical" style={{height: '2rem'}}/>
 
-              <Link href="/signin" className='text-primary font-semibold py-2 px-3 hover:bg-[#091E420F] text-base transition-colors duration-200'>{t('login.sign_in')}</Link>
+              <Link href="/signin"
+                    className='text-primary font-semibold py-2 px-3 hover:bg-[#091E420F] text-base transition-colors duration-200'>{t('login.sign_in')}</Link>
             </Space>
           )}
         </div>

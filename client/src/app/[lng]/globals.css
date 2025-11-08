@@ -8,34 +8,118 @@
     --foreground: #f6f8fa;
 }
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 @theme inline {
+    --color-app-bg: #f5f5f5;
+    --color-app-bg-dark: #0f0f0f;
+
+    /* ALIAS PARA O ANTD */
+    /* ----- Fundo ----- */
+    --color-ant-bg: var(--ant-color-bg-container);
+    --color-ant-bg-elevated: var(--ant-color-bg-elevated);
+    --color-ant-bg-base: var(--ant-color-bg-base);
+    --color-ant-bg-layout: var(--ant-color-bg-layout);
+    --color-ant-bg-spotlight: var(--ant-color-bg-spotlight, var(--ant-color-bg-elevated));
+    --color-ant-bg-mask: var(--ant-color-bg-mask);
+
+
+    /* ----- Texto ----- */
+    --color-ant-text: var(--ant-color-text);
+    --color-ant-text-sec: var(--ant-color-text-secondary);
+    --color-ant-text-ter: var(--ant-color-text-tertiary);
+    --color-ant-text-quat: var(--ant-color-text-quaternary);
+    --color-ant-text-placeholder: var(--ant-color-text-placeholder);
+
+    /* ----- Ícone ----- */
+    --color-ant-icon: var(--ant-color-icon, var(--ant-color-text-secondary));
+    --color-ant-icon-hover: var(--ant-color-icon-hover, var(--ant-color-text));
+
+    /* ----- Borda / Split ----- */
+    --color-ant-border: var(--ant-color-border);
+    --color-ant-border-sec: var(--ant-color-border-secondary);
+    --color-ant-split: var(--ant-color-split, var(--ant-color-border-secondary));
+
+    /* ----- Preenchimentos “muted” (chips, hovers suaves) ----- */
+    --color-ant-fill: var(--ant-color-fill);
+    --color-ant-fill-sec: var(--ant-color-fill-secondary);
+    --color-ant-fill-ter: var(--ant-color-fill-tertiary);
+    --color-ant-fill-quat: var(--ant-color-fill-quaternary);
+
+    /* ----- Marca / Ações principais ----- */
+    --color-ant-primary: var(--ant-color-primary);
+    --color-ant-primary-hover: var(--ant-color-primary-hover);
+    --color-ant-primary-active: var(--ant-color-primary-active);
+    --color-ant-primary-text: var(--ant-color-primary-text, var(--ant-color-primary));
+
+    /* ----- Estados (sucesso/aviso/erro/info) ----- */
+    --color-ant-success: var(--ant-color-success);
+    --color-ant-success-hover: var(--ant-color-success-hover);
+    --color-ant-success-active: var(--ant-color-success-active);
+
+    --color-ant-warning: var(--ant-color-warning);
+    --color-ant-warning-hover: var(--ant-color-warning-hover);
+    --color-ant-warning-active: var(--ant-color-warning-active);
+
+    --color-ant-error: var(--ant-color-error);
+    --color-ant-error-hover: var(--ant-color-error-hover);
+    --color-ant-error-active: var(--ant-color-error-active);
+
+    --color-ant-info: var(--ant-color-info);
+    --color-ant-info-hover: var(--ant-color-info-hover);
+    --color-ant-info-active: var(--ant-color-info-active);
+
+    /* ----- Links ----- */
+    --color-ant-link: var(--ant-color-link, var(--ant-color-primary));
+    --color-ant-link-hover: var(--ant-color-link-hover, var(--ant-color-primary-hover));
+    --color-ant-link-active: var(--ant-color-link-active, var(--ant-color-primary-active));
+
+    /* ----- Sombras ----- */
+    --shadow-ant-1: var(--ant-box-shadow);
+    --shadow-ant-2: var(--ant-box-shadow-secondary);
+    --shadow-ant-3: var(--ant-box-shadow-tertiary);
+
+    /* ----- Dimensões / Raio / Largura de borda ----- */
+    --radius-ant: var(--ant-border-radius);
+    --radius-ant-lg: var(--ant-border-radius-lg);
+    --radius-ant-sm: var(--ant-border-radius-sm);
+    --radius-ant-xs: var(--ant-border-radius-xs);
+
+    --line-ant: var(--ant-line-width);
+    --line-ant-bold: var(--ant-line-width-bold);
+
+    --control-ant-h: var(--ant-control-height);
+    --control-ant-h-lg: var(--ant-control-height-lg);
+    --control-ant-h-sm: var(--ant-control-height-sm);
+    --control-ant-h-xs: var(--ant-control-height-xs);
+
+    /* ----- Espaçamentos úteis ----- */
+    --space-ant: var(--ant-padding);
+    --space-ant-lg: var(--ant-padding-lg);
+    --space-ant-sm: var(--ant-padding-sm);
+    --space-ant-xs: var(--ant-padding-xs);
+
     --breakpoint-xss: 380px;
     --breakpoint-xs: 480px;
-    --color-primary: var(--primary);
-    --color-secondary: var(--secondary);
-    --color-lead-dark: var(--lead-dark);
-    --color-lead-light: var(--lead-light);
-    --color-lead-lighter: var(--lead-lighter);
-
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-
-    --color-muted: var(--muted);
-    --color-muted-dark: var(--muted-dark);
-
-    --color-neutral-emphasis: var(--neutral-emphasis);
-    --color-neutral-muted: var(--neutral-muted);
-
-    --color-dark: var(--dark);
-    --color-dark-muted: var(--dark-muted);
-
-    --color-border: var(--border);
-    --color-border-muted: var(--border-muted);
 
     --color-overlay: var(--overlay);
 
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
+}
+
+@layer utilities {
+    .shadow-ant-1 {
+        box-shadow: var(--shadow-ant-1);
+    }
+
+    .shadow-ant-2 {
+        box-shadow: var(--shadow-ant-2);
+    }
+
+    .shadow-ant-3 {
+        box-shadow: var(--shadow-ant-3);
+    }
 }
 
 body {

@@ -64,26 +64,32 @@ export default function FinishForm() {
 
   return (
     <Form
-      className="!w-full max-w-100 bg-white !px-10 !py-8 rounded-sm shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+      className="
+        !w-full max-w-100
+        bg-ant-bg-elevated
+        border border-ant-border-sec
+        !px-10 !py-8 rounded-sm
+        shadow-[0_0_10px_rgba(0,0,0,0.1)]
+      "
       initialValues={{remember: true}}
       onFinish={handleFinish}
       requiredMark={false}
     >
-      <div className="flex items-center justify-center text-4xl text-lead-dark mb-6">
+      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
         <Logo width={40}/>
         <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
       </div>
-      <h1 className="text-center font-semibold text-lead-dark text-base">
+      <h1 className="text-center font-semibold text-ant-text-sec text-base">
         {t('login.email_verified')}
-        <CheckCircleFilled className="!text-green-700 text-sm ml-1"/>
+        <CheckCircleFilled className="!text-ant-success text-sm ml-1"/>
       </h1>
       <h1
-        className="text-center mb-4 font-semibold text-lead-dark text-xs">{t('login.finish_setting_up_your_account')}</h1>
+        className="text-center mb-4 font-semibold text-ant-text-sec  text-xs">{t('login.finish_setting_up_your_account')}</h1>
 
       <div className='mb-2'>
         <label htmlFor="email-verified"
-               className='text-xs text-lead-light font-semibold'>{t('login.email_address')}</label>
-        <p id="emailVerified" className='text-sm text-lead-dark font-bold'>{emailConfirmation}</p>
+               className='text-xs text-ant-text-sec font-semibold'>{t('login.email_address')}</label>
+        <p id="emailVerified" className='text-sm text-ant-text-sec font-bold'>{emailConfirmation}</p>
       </div>
 
       <Form.Item
@@ -119,7 +125,7 @@ export default function FinishForm() {
                         style={{padding: "10px 16px"}} type="password"/>
       </Form.Item>
 
-      <p className='text-lead-light text-xs mb-2 px-2'>
+      <p className='text-ant-text-sec  text-xs mb-2 px-2'>
         <Trans
           i18nKey="login.signup_terms"
           components={{

@@ -9,9 +9,9 @@ export default async function Layout({children}: PropsWithChildren) {
   if (loggedIn) {
     redirect(`/home`);
   }
-  
+
   return (
-    <div className="h-full flex justify-center items-center bg-background">
+    <div className="h-full flex justify-center items-center ">
       {children}
     </div>
   );

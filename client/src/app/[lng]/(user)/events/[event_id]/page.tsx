@@ -10,12 +10,11 @@ import Fallback from "@/components/Fallback";
 import ImageType from "@/types/Image";
 import {ApiStatus} from "@/types/ApiResponse";
 import {filesize} from "filesize";
-import {Button, Dropdown, Image, MenuProps, Tooltip} from "antd";
+import {Button, Dropdown, Image, Modal, Tooltip} from "antd";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {DeleteOutlined, DownloadOutlined, InfoCircleOutlined, MoreOutlined, TeamOutlined} from "@ant-design/icons";
 import downloadFile from "@/lib/download";
-
 
 export default function Page() {
   const {t} = useT()
@@ -27,6 +26,9 @@ export default function Page() {
   const [images, setImages] = useState<ImageType[]>([])
   const [loading, setLoading] = useState<boolean>(true);
   const {defaultDateFormat} = useUser();
+
+  const [metadataOpen, setMetadataOpen] = useState(true);
+  // se você quiser abrir só quando clicar, muda pra false ↑
 
   useEffect(() => {
     Promise.all([
@@ -60,14 +62,18 @@ export default function Page() {
     downloadFile(`${process.env.NEXT_PUBLIC_API_URL}/api/images/${image.id}/download`)
   }
 
-  const menuFor = (img: ImageType): MenuProps => ({
-    onClick: async (info) => {
+  const handleOpenMetadata = (image: ImageType) => {
+    setMetadataOpen(true)
+  }
+
+  const menuFor = (img: ImageType) => ({
+    onClick: async (info: { key: string }) => {
       switch (info.key) {
         case 'download':
           handleDownloadImage(img)
           break
         case 'metadata':
-          // await handleOpenMetadata(img)
+          handleOpenMetadata(img)
           break
         case 'clients':
           // await handleOpenClients(img)
@@ -84,60 +90,135 @@ export default function Page() {
       {key: 'delete', icon: <DeleteOutlined/>, label: t('delete'), danger: true}
     ]
   })
+
   return (
-    <div>
-      <div className="mb-4 flex gap-4">
-
-        <h1><strong>{t('contract')}:</strong> {event?.contract?.code} - {event?.contract?.title}</h1>
-        <h2><strong>{t('event')}:</strong> {event?.type.name}</h2>
-        <h2><strong>{t('total_photos')}:</strong> {event?.totalImages ?? 0}</h2>
-        <h2><strong>{t('size')}:</strong> {filesize(event?.totalSize ?? 0)}</h2>
-
+    <div className="space-y-4">
+      {/* header das infos do evento */}
+      <div className="flex flex-wrap gap-4 text-ant-text">
+        <p><strong>{t('contract')}:</strong> {event?.contract?.code} - {event?.contract?.title}</p>
+        <p><strong>{t('event')}:</strong> {event?.type.name}</p>
+        <p><strong>{t('total_photos')}:</strong> {event?.totalImages ?? 0}</p>
+        <p><strong>{t('size')}:</strong> {filesize(event?.totalSize ?? 0)}</p>
       </div>
-      <div
-        className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 justify-center content-center items-center">
 
+      {/* grid de imagens */}
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
         {images.map(image => (
-            <div key={image.id}>
-              <div
-                className="max-w-sm bg-white border border-dark-muted rounded-lg shadow-sm mx-auto">
-
-                <div className="w-full pt-[67%] relative">
-                  <div className="absolute top-0 left-0 w-full h-full [&>.ant-image]:w-full [&>.ant-image]:h-full">
-                    <Image src={image.url} className="rounded-t-lg object-contain !h-full "/>
-                  </div>
+          <div key={image.id}>
+            <div
+              className="
+                max-w-sm mx-auto
+                bg-ant-bg-elevated
+                border border-ant-border-sec
+                rounded-lg
+                shadow-ant-1
+              "
+            >
+              {/* wrapper da imagem */}
+              <div className="w-full pt-[67%] relative">
+                <div className="absolute top-0 left-0 w-full h-full [&>.ant-image]:w-full [&>.ant-image]:h-full">
+                  <Image src={image.url} className="rounded-t-lg object-contain !h-full"/>
                 </div>
+              </div>
 
-                <div className="p-4 flex flex-wrap gap-2">
-                  <p className="w-full"><strong>{t('name')}:</strong> {image.originalName}</p>
-                  <p><strong>{t('size')}:</strong> {filesize(image.originalSize ?? 0)}</p>
-                  <p><strong>{t('upload_date')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}</p>
+              {/* infos da imagem */}
+              <div className="p-4 flex flex-wrap gap-2 text-ant-text">
+                <p className="w-full">
+                  <strong>{t('name')}:</strong> {image.originalName}
+                </p>
+                <p>
+                  <strong>{t('size')}:</strong> {filesize(image.originalSize ?? 0)}
+                </p>
+                <p>
+                  <strong>{t('upload_date')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}
+                </p>
+              </div>
+
+              {/* linha separadora */}
+              <div className="w-full h-px bg-ant-border-sec"></div>
+
+              {/* ações */}
+              <div className="flex justify-end gap-4 p-4">
+                <Tooltip title={t('clients_in_image')}>
+                  <Button
+                    type="text"
+                    shape="circle"
+                    aria-label={t('options')}
+                    className="
+                      !text-2xl
+                      !text-ant-text-sec
+                    "
+                  >
+                    <TeamOutlined/>
+                  </Button>
+                </Tooltip>
+
+                <Dropdown menu={menuFor(image)} trigger={['click']}>
+                  <Button
+                    type="text"
+                    shape="circle"
+                    aria-label={t('options')}
+                    className="
+                      !text-2xl
+                      !text-ant-text-sec
+                    "
+                  >
+                    <MoreOutlined/>
+                  </Button>
+                </Dropdown>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* modal de metadados */}
+      <Modal
+        open={metadataOpen}
+        title={t('metadata')}
+        okText={false as unknown as string}
+        cancelText={t('cancel')}
+        width={800}
+        onCancel={() => setMetadataOpen(false)}
+        destroyOnClose
+        modalRender={(node) => {
+          // ignorei o "node" porque você já faz seu próprio conteúdo
+          return (
+            <div
+              className="
+                bg-ant-bg
+                text-ant-text
+                max-w-[40rem]
+                mx-auto p-6
+                rounded-2xl
+                shadow-ant-2
+                border border-ant-border-sec
+              "
+            >
+              <h2 className="text-[16px] font-medium text-center mb-4">
+                {t('metadata')}
+              </h2>
+
+              <div className="flex flex-col gap-2 w-full">
+                <div
+                  className="bg-ant-bg-elevated border border-ant-border-sec h-20 rounded-lg flex items-center justify-center">
+                  TESTE 1
                 </div>
-
-                <div className='w-full h-[1px] bg-dark-muted'></div>
-
-                <div className="flex justify-end gap-4 p-4">
-                  <Tooltip title={t('clients_in_image')}>
-                    <Button type="text" shape="circle" aria-label={t('options')}
-                            className="!text-dark !text-2xl p-4">
-                      <TeamOutlined/>
-                    </Button>
-                  </Tooltip>
-
-
-                  <Dropdown menu={menuFor(image)} trigger={['click']}>
-                    <Button type="text" shape="circle" aria-label={t('options')}
-                            className="!text-dark !text-2xl">
-
-                      <MoreOutlined/>
-                    </Button>
-                  </Dropdown>
+                <div
+                  className="bg-ant-bg-elevated border border-ant-border-sec h-20 rounded-lg flex items-center justify-center">
+                  TESTE 2
+                </div>
+                <div
+                  className="bg-ant-bg-elevated border border-ant-border-sec h-20 rounded-lg flex items-center justify-center">
+                  TESTE 3
                 </div>
               </div>
             </div>
           )
-        )}
-      </div>
+        }}
+      >
+        {/* se você não vai usar o conteúdo padrão do modal, pode deixar vazio */}
+      </Modal>
     </div>
   )
 }
