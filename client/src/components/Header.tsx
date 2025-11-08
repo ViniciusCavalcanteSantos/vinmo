@@ -38,7 +38,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-ant-bg-elevated border-b border-ant-border-sec">
+    <header className="bg-ant-bg-elevated border-b border-ant-border">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         <div className="flex lg:flex-1 items-center">
           <div className="mr-4">
@@ -78,7 +78,7 @@ export default function Header() {
             transition-transform duration-300 ${open ? '' : '-translate-x-full'} ease-in-out
             h-full w-full max-w-80 fixed left-0 rounded-l-xl
             max-xss:!w-[calc(100%-2rem)]
-            bg-ant-bg border-r border-ant-border-secondary shadow-ant-2
+            bg-ant-bg border-r border-ant-border-sec shadow-ant-2
           `}
         >
           <h1 id="global-navigation-id" className="sr-only">
@@ -120,7 +120,7 @@ export default function Header() {
               </ul>
 
               <div className="px-2">
-                <Divider className="!my-4 !border-ant-border-secondary"/>
+                <Divider className="!my-4 !border-ant-border-sec"/>
               </div>
             </nav>
           </div>
