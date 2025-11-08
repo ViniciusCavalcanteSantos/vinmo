@@ -27,8 +27,15 @@ export default function Providers({children, lang}: PropsWithChildren<{ lang: st
 function ConfigProviderWrapper({children, lang}: PropsWithChildren<{ lang: string }>) {
   const {resolved} = useTheme()
 
-  const algorithm = useMemo(
-    () => (resolved === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm),
+  const {algorithm, token} = useMemo(
+    () => {
+      const isDark = resolved === 'dark';
+
+      return {
+        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        token: isDark ? themeAntdDark : themeAntdLight
+      }
+    },
     [resolved]
   )
 
@@ -42,7 +49,7 @@ function ConfigProviderWrapper({children, lang}: PropsWithChildren<{ lang: strin
       locale={langMap[lang] ?? en}
       theme={{
         algorithm: algorithm,
-        token: resolved === 'dark' ? themeAntdDark : themeAntdLight,
+        token: token,
         cssVar: true
       }}
     >
