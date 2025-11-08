@@ -31,7 +31,9 @@ export default async function apiFetch<T = undefined>(
   const lang = i18next.language;
   const isFormData = options.body instanceof FormData;
   const driver = options.driver ?? "fetch";
-  const baseURL = typeof options.baseURL === 'string' ? options.baseURL : process.env.NEXT_PUBLIC_API_URL;
+  const isBrowser = typeof document !== "undefined";
+
+  const baseURL = isBrowser ? '' : process.env.NEXT_PUBLIC_API_URL;
 
   const method = (options.method || "GET").toUpperCase();
   const isMutatingMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
