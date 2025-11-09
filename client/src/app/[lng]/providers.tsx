@@ -50,7 +50,10 @@ function ConfigProviderWrapper({children, lang}: PropsWithChildren<{ lang: strin
       theme={{
         algorithm: algorithm,
         token: token,
-        cssVar: true
+        cssVar: {
+          prefix: 'ant',
+          key: 'ant'
+        }
       }}
     >
       <App className="h-full">

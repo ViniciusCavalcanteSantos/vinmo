@@ -20,7 +20,7 @@ const themeAntd = {
 
 const themeAntdLight = {
   ...themeAntd,
-  colorBgMask: theme.overlay
+  colorBgMask: theme.overlay,
 } as Partial<AliasToken>
 
 const themeAntdDark = {

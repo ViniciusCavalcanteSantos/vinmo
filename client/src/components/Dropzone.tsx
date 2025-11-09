@@ -68,7 +68,7 @@ export default function Dropzone(
       className={`
         transition-colors duration-200
         border-2 border-dashed rounded-lg p-4 text-center cursor-pointer
-        bg-app-bg dark:bg-app-bg-dark
+        bg-app-bg
         hover:border-ant-primary
         ${isDragActive ? "border-ant-primary !bg-ant-primary/10 dark:!bg-ant-fill-sec" : "border-gray-300 dark:border-ant-border-sec"}
       `}

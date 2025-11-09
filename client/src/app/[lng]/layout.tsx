@@ -53,7 +53,7 @@ async function LocaleLayout(
   return (
     <html lang={lng} className="h-full" suppressHydrationWarning>
     <body
-      className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-app-bg dark:bg-app-bg-dark`}
+      className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-app-bg`}
       style={themeBody}
     >
     <Providers lang={lng}>
