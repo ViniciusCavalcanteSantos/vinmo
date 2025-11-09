@@ -299,5 +299,29 @@
   "download": "Download",
   "view_metadata": "View metadata",
   "clients_in_image": "Clients in image",
-  "toggle_theme": "Toggle theme"
+  "toggle_theme": "Toggle theme",
+  "metadata": "Metadata",
+  "software": "Software",
+  "latitude": "Latitude",
+  "longitude": "Longitude",
+  "image_meta": {
+    "camera_make": "Camera brand",
+    "camera_model": "Camera model",
+    "exposure_time": "Exposure time",
+    "lens": "Lens",
+    "aperture": "Aperture value",
+    "iso": "ISO speed rate",
+    "flash_fired": "Flash fired",
+    "focal_length": "Focal length",
+    "captured_on": "Captured on",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "flash": {
+      "fired_auto": "Yes, automatic",
+      "fired_forced": "Yes, forced",
+      "not_fired_auto": "No, automatic",
+      "not_fired_forced": "No, forced",
+      "red_eye": "with red-eye reduction"
+    }
+  }
 }

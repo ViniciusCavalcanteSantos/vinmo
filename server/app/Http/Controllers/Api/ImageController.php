@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ImageMetaResource;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -50,5 +51,19 @@ class ImageController extends Controller
         }
 
         return $disk->download($image->path, basename($image->original_name));
+    }
+
+
+    public function metadata(Image $image)
+    {
+        if ($image->parent_id) {
+            $image = $image->original()->first();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Event images retrieved'),
+            'metadata' => new ImageMetaResource($image->metas)
+        ]);
     }
 }

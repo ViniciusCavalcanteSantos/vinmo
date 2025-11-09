@@ -298,6 +298,28 @@
   "added_at": "Adicionado em",
   "download": "Baixar",
   "view_metadata": "Ver metadados",
+  "metadata": "Metadados",
   "clients_in_image": "Clientes na foto",
-  "toggle_theme": "Alternar tema"
+  "toggle_theme": "Alternar tema",
+  "software": "Software",
+  "image_meta": {
+    "camera_make": "Marca da câmera",
+    "camera_model": "Modelo da câmera",
+    "exposure_time": "Tempo de exposição",
+    "lens": "Lente",
+    "aperture": "Valor de abertura",
+    "iso": "Taxa de velocidade ISO",
+    "flash_fired": "Flash disparado",
+    "focal_length": "Distância focal",
+    "captured_on": "Capturado em",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "flash": {
+      "fired_auto": "Sim, automático",
+      "fired_forced": "Sim, forçado",
+      "notFired_auto": "Não, automático",
+      "notFired_forced": "Não, forçado",
+      "redEye": "com redução de olhos vermelhos"
+    }
+  }
 }

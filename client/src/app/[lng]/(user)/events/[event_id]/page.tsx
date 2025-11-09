@@ -15,6 +15,8 @@ import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {DeleteOutlined, DownloadOutlined, InfoCircleOutlined, MoreOutlined, TeamOutlined} from "@ant-design/icons";
 import downloadFile from "@/lib/download";
+import {fetchImageMetadata} from "@/lib/database/Image";
+import {formatImageMeta, FormattedMetaItem} from "@/lib/formatImageMeta";
 
 export default function Page() {
   const {t} = useT()
@@ -27,8 +29,8 @@ export default function Page() {
   const [loading, setLoading] = useState<boolean>(true);
   const {defaultDateFormat} = useUser();
 
-  const [metadataOpen, setMetadataOpen] = useState(true);
-  // se você quiser abrir só quando clicar, muda pra false ↑
+  const [metadata, setMetadata] = useState<FormattedMetaItem[]>([]);
+  const [metadataOpen, setMetadataOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -63,7 +65,13 @@ export default function Page() {
   }
 
   const handleOpenMetadata = (image: ImageType) => {
-    setMetadataOpen(true)
+    fetchImageMetadata(image.id)
+      .then(res => {
+        if (res.status === ApiStatus.SUCCESS) {
+          setMetadata(formatImageMeta(res.metadata, t))
+          setMetadataOpen(true)
+        }
+      })
   }
 
   const menuFor = (img: ImageType) => ({
@@ -172,17 +180,14 @@ export default function Page() {
         ))}
       </div>
 
-      {/* modal de metadados */}
       <Modal
         open={metadataOpen}
-        title={t('metadata')}
         okText={false as unknown as string}
         cancelText={t('cancel')}
         width={800}
         onCancel={() => setMetadataOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         modalRender={(node) => {
-          // ignorei o "node" porque você já faz seu próprio conteúdo
           return (
             <div
               className="
@@ -200,24 +205,16 @@ export default function Page() {
               </h2>
 
               <div className="flex flex-col gap-2 w-full">
-                <div
-                  className="bg-ant-bg-elevated border border-ant-border-sec h-20 rounded-lg flex items-center justify-center">
-                  TESTE 1
-                </div>
-                <div
-                  className="bg-ant-bg-elevated border border-ant-border-sec h-20 rounded-lg flex items-center justify-center">
-                  TESTE 2
-                </div>
-                <div
-                  className="bg-ant-bg-elevated border border-ant-border-sec h-20 rounded-lg flex items-center justify-center">
-                  TESTE 3
-                </div>
+                {metadata.map(meta => {
+                  return (
+                    <h2><strong>{meta.label}</strong> | {meta.value}</h2>
+                  );
+                })}
               </div>
             </div>
           )
         }}
       >
-        {/* se você não vai usar o conteúdo padrão do modal, pode deixar vazio */}
       </Modal>
     </div>
   )

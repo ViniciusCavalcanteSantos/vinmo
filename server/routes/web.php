@@ -24,6 +24,7 @@ Route::prefix('/api')->group(function () {
 
     Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
     Route::get('/images/{image}/download', [ImageController::class, 'download'])->name('images.show');
+    Route::get('/images/{image}/metadata', [ImageController::class, 'metadata'])->name('images.show');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
