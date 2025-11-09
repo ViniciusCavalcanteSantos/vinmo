@@ -3,16 +3,18 @@
 import User from "@/types/User";
 import {useEffect, useState} from "react";
 import {Button, Divider, Dropdown} from "antd";
-import {LogoutOutlined, UserOutlined} from "@ant-design/icons";
+import {LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined} from "@ant-design/icons";
 import UserAvatar from "@/components/UserAvatar";
 import Link from "next/link";
 import {useT} from "@/i18n/client";
 import {useUser} from "@/contexts/UserContext";
+import {useTheme} from "@/contexts/AppThemeContext";
 
 export default function UserAvatarDropdown({user}: { user: User | null }) {
   const {logout} = useUser();
   const [mounted, setMounted] = useState(false);
   const {t} = useT();
+  const {theme, setTheme} = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -45,6 +47,14 @@ export default function UserAvatarDropdown({user}: { user: User | null }) {
             {t('profile')}
           </Button>
         </Link>
+
+        <Button
+          className="!p-2 w-full !justify-start" type="text"
+          icon={theme === 'dark' ? <SunOutlined/> : <MoonOutlined/>}
+          onClick={() => theme === 'dark' ? setTheme('light') : setTheme('dark')}
+        >
+          {t('toggle_theme')}
+        </Button>
 
         <Link href="/signin" onClick={handleLogout}>
           <Button className="!p-2 w-full !justify-start" type="text" icon={<LogoutOutlined/>}>

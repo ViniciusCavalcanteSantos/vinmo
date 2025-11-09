@@ -298,5 +298,6 @@
   "added_at": "Added at",
   "download": "Download",
   "view_metadata": "View metadata",
-  "clients_in_image": "Clients in image"
+  "clients_in_image": "Clients in image",
+  "toggle_theme": "Toggle theme"
 }
