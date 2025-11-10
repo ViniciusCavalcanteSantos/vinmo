@@ -316,6 +316,18 @@
     "captured_on": "Captured on",
     "latitude": "Latitude",
     "longitude": "Longitude",
+    "exposure_program": {
+      "name": "Exposure program",
+      "0": "Não definido",
+      "1": "Manual",
+      "2": "Programa automático (Padrão)",
+      "3": "Prioridade de abertura (A)",
+      "4": "Prioridade de obturador (S)",
+      "5": "Programa criativo (ênfase na profundidade de campo)",
+      "6": "Programa ação (ênfase em alta velocidade do obturador)",
+      "7": "Modo retrato (fundo desfocado)",
+      "8": "Modo paisagem (fundo nítido)"
+    },
     "flash": {
       "fired_auto": "Yes, automatic",
       "fired_forced": "Yes, forced",

@@ -232,6 +232,8 @@ export interface components {
                 capturedAt?: string;
             };
             exposure?: {
+                /** @example 1 */
+                exposureProgram?: string;
                 /** @example 1/160 */
                 exposureTime?: string;
                 /** @example f/2.5 */

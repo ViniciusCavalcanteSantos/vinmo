@@ -10,6 +10,13 @@ export type FormattedMetaItem = {
   value: string;
 };
 
+function formatExposureProgram(value: string, t: TFunction): string {
+  const valueNumber = Number(value);
+  if (Number.isNaN(valueNumber) || valueNumber < 0 || valueNumber > 8) return t('image_meta.exposure_program.0');
+
+  return t(`image_meta.exposure_program.${valueNumber}`)
+}
+
 function describeFlash(value: number, t: TFunction) {
   const FIRED_MASK = 0x01
   const AUTO_MASK = 0x08
@@ -110,6 +117,13 @@ export function formatImageMeta(meta: ImageMeta, t: TFunction): FormattedMetaIte
     items.push({
       label: t('image_meta.exposure_time'),
       value: `${meta.exposure.exposureTime} s`,
+    });
+  }
+
+  if (meta.exposure?.exposureTime) {
+    items.push({
+      label: t('image_meta.exposure_program.name'),
+      value: formatExposureProgram(meta.exposure.exposureProgram ?? '', t),
     });
   }
 

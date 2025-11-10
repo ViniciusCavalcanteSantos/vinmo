@@ -18,6 +18,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="capturedAt", type="string", example="2025-08-03 21:30:33")
  *   ),
  *   @OA\Property(property="exposure", type="object",
+ *     @OA\Property(property="exposureProgram", type="string", example="1"),
  *     @OA\Property(property="exposureTime", type="string", example="1/160"),
  *     @OA\Property(property="fNumber", type="string", example="f/2.5"),
  *     @OA\Property(property="iso", type="integer", example=320),
@@ -68,6 +69,7 @@ class ImageMetaResource extends JsonResource
     protected function exposureGroup(array $flat): array
     {
         return array_filter([
+            'exposureProgram' => $flat['EXIF.ExposureProgram'] ?? null,
             'exposureTime' => $flat['EXIF.ExposureTime'] ?? null,
             'fNumber' => $flat['EXIF.FNumber'] ?? null,
             'iso' => $flat['EXIF.ISOSpeedRatings'] ?? null,
@@ -88,8 +90,8 @@ class ImageMetaResource extends JsonResource
     {
         $known = [
             'IFD0.Make', 'IFD0.Model', 'IFD0.Software', 'IFD0.DateTime',
-            'EXIF.DateTimeOriginal', 'EXIF.ExposureTime', 'EXIF.FNumber',
-            'EXIF.ISOSpeedRatings', 'EXIF.FocalLength', 'EXIF.Flash',
+            'EXIF.DateTimeOriginal', 'EXIF.ExposureProgram', 'EXIF.ExposureTime',
+            'EXIF.FNumber', 'EXIF.ISOSpeedRatings', 'EXIF.FocalLength', 'EXIF.Flash',
             'EXIF.UndefinedTag:0xA434', 'GPS.GPSLatitude', 'GPS.GPSLongitude',
         ];
 

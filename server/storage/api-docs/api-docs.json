@@ -525,6 +525,10 @@
                     },
                     "exposure": {
                         "properties": {
+                            "exposureProgram": {
+                                "type": "string",
+                                "example": "1"
+                            },
                             "exposureTime": {
                                 "type": "string",
                                 "example": "1/160"
