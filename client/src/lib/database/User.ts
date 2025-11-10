@@ -22,14 +22,14 @@ export async function login(email: string, password: string, remember_me: boolea
 }
 
 export async function send_code(email: string) {
-  return await apiFetch("/send_code", {
+  return await apiFetch("/send-code", {
     method: "POST",
     body: JSON.stringify({email}),
   });
 }
 
 export async function confirm_code(email: string, code: string) {
-  return await apiFetch("/confirm_code", {
+  return await apiFetch("/confirm-code", {
     method: "POST",
     body: JSON.stringify({email, code}),
   });
@@ -45,21 +45,21 @@ export async function register(name: string, email: string, password: string, pa
 }
 
 export async function send_recovery_link(email: string) {
-  return await apiFetch("/send_recovery_link", {
+  return await apiFetch("/send-recovery-link", {
     method: "POST",
     body: JSON.stringify({email}),
   });
 }
 
 export async function validate_recovery_token(email: string, token: string) {
-  return await apiFetch("/validate_recovery_token", {
+  return await apiFetch("/validate-recovery-token", {
     method: "POST",
     body: JSON.stringify({email, token}),
   });
 }
 
 export async function change_password(email: string, token: string, password: string, password_confirmation: string) {
-  return await apiFetch("/change_password", {
+  return await apiFetch("/change-password", {
     method: "POST",
     body: JSON.stringify({email, token, password, password_confirmation}),
   });
