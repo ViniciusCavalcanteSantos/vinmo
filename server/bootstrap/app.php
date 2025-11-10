@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,15 +19,26 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(LanguageSelector::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (AuthenticationException $e, $request) {
+        $exceptions->renderable(function (AuthenticationException $e, $request) {
             return response()->json([
                 'status' => 'not_authenticated',
                 'message' => 'Usuário não autenticado.',
             ], 401);
         });
 
+        $exceptions->renderable(function (AccessDeniedHttpException $e, $request) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'status' => 'forbidden',
+                    'message' => $e->getMessage() ?: 'Ação não autorizada.',
+                ], 403);
+            }
+
+            return null;
+        });
+
         $exceptions->renderable(function (ValidationException $e, $request) {
-            if ($request->wantsJson() || $request->is('api/*')) {
+            if ($request->expectsJson() || $request->is('api/*')) {
                 $firstError = collect($e->errors())->first()[0];
 
                 return response()->json([
@@ -35,5 +47,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     'errors' => $e->errors(),
                 ], 422);
             }
+
+            return null;
         });
     })->create();

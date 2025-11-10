@@ -9,6 +9,7 @@ use App\Models\Contract;
 use App\Models\ContractCategory;
 use App\Services\ContractService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ContractController extends Controller
 {
@@ -51,6 +52,8 @@ class ContractController extends Controller
      */
     public function store(ContractRequest $request, ContractService $contractService)
     {
+        Gate::authorize('create', Contract::class);
+
         try {
             $contract = $contractService->createContract($request);
             $contract->load('category', 'address', 'graduationDetail');
@@ -72,6 +75,8 @@ class ContractController extends Controller
      */
     public function show(Contract $contract)
     {
+        Gate::authorize('view', $contract);
+
         return response()->json([
             'status' => 'success',
             'message' => __('Contract retrieved'),
@@ -84,6 +89,8 @@ class ContractController extends Controller
      */
     public function update(ContractRequest $request, Contract $contract, ContractService $contractService)
     {
+        Gate::authorize('update', $contract);
+
         try {
             $contract = $contractService->updateContract($contract, $request);
             $contract->load('category', 'address', 'graduationDetail');
@@ -105,15 +112,9 @@ class ContractController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Contract $contract)
     {
-        $contract = Contract::find($id);
-        if (!$contract) {
-            return response()->json([
-                'status' => 'error',
-                'message' => __('Contract not found')
-            ], 404);
-        }
+        Gate::authorize('delete', $contract);
 
         if (!$contract->delete()) {
             return response()->json([

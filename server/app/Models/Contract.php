@@ -3,17 +3,21 @@
 namespace App\Models;
 
 use App\Observers\ContractObserver;
+use App\Policies\ContractPolicy;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 
+#[UsePolicy(ContractPolicy::class)]
 #[ObservedBy([ContractObserver::class])]
 class Contract extends Model
 {
-    use HasFactory;
+    use HasFactory, Authorizable;
 
     protected $fillable = ['organization_id', 'category_id', 'code', 'title', 'searchable'];
 

@@ -22,30 +22,38 @@ class ContractRequest extends ApiFormRequest
     public function rules(): array
     {
         $organizationId = $this->user()->organization_id;
-        $rules = [
-            'title' => ['required', 'string', 'max:180'],
-            'country' => ['required', 'string', 'size:2', 'alpha'],
-            'state' => ['required', 'string', 'max:12'],
-            'city' => ['required', 'string', 'max:40'],
-        ];
 
         if ($this->isMethod('POST')) {
-            $rules['category'] = ['required', 'string', 'exists:contract_categories,slug'];
-            $rules['code'] = [
-                'required',
-                'string',
-                'max:40',
-                Rule::unique('contracts', 'code')->where('organization_id', $organizationId)
+            $rules = [
+                'title' => ['required', 'string', 'max:180'],
+                'country' => ['required', 'string', 'size:2', 'alpha'],
+                'state' => ['required', 'string', 'max:12'],
+                'city' => ['required', 'string', 'max:40'],
+
+                'category' => ['required', 'string', 'exists:contract_categories,slug'],
+                'code' => [
+                    'required',
+                    'string',
+                    'max:40',
+                    Rule::unique('contracts', 'code')->where('organization_id', $organizationId),
+                ],
             ];
         } else {
             $contractId = $this->route('contract')->id;
-            $rules['code'] = [
-                'required',
-                'string',
-                'max:40',
-                Rule::unique('contracts', 'code')
-                    ->where('organization_id', $organizationId)
-                    ->ignore($contractId)
+            $rules = [
+                'title' => ['sometimes', 'string', 'max:180'],
+                'country' => ['sometimes', 'string', 'size:2', 'alpha'],
+                'state' => ['sometimes', 'string', 'max:12'],
+                'city' => ['sometimes', 'string', 'max:40'],
+
+                'code' => [
+                    'sometimes',
+                    'string',
+                    'max:40',
+                    Rule::unique('contracts', 'code')
+                        ->where('organization_id', $organizationId)
+                        ->ignore($contractId),
+                ],
             ];
         }
 
