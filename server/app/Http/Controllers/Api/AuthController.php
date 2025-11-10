@@ -153,7 +153,7 @@ class AuthController extends Controller
                 $request->only('email', 'password', 'password_confirmation', 'token'),
                 function ($user, $password) {
                     $user->forceFill([
-                        'password' => bcrypt($password),
+                        'password' => Hash::make($password),
                     ])->save();
 
                     event(new PasswordReset($user));
