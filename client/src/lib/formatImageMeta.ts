@@ -26,15 +26,14 @@ function describeFlash(value: number, t: TFunction) {
   const auto = (value & AUTO_MASK) !== 0;
   const redEye = (value & REDEYE_MASK) !== 0;
 
-  let text = '';
-  if (fired && auto) text = t('image_meta.flash.fired_auto');
-  else if (fired && !auto) t('image_meta.flash.fired_forced');
-  else if (!fired && auto) t('image_meta.flash.not_fired_auto');
-  else text = t('image_meta.flash.not_fired_forced');
-
-  if (redEye) {
-    text += ` ${t('image_meta.flash.red_eye')}`;
+  let text: string;
+  if (fired) {
+    text = auto ? t('image_meta.flash.fired_auto') : t('image_meta.flash.fired_forced');
+  } else {
+    text = auto ? t('image_meta.flash.not_fired_auto') : t('image_meta.flash.not_fired_forced');
   }
+
+  if (redEye) text += ` ${t('image_meta.flash.red_eye')}`;
 
   return text;
 }
@@ -99,13 +98,6 @@ function formatFocalLength(focal: string): string {
 export function formatImageMeta(meta: ImageMeta, t: TFunction): FormattedMetaItem[] {
   const items: FormattedMetaItem[] = [];
 
-  if (meta.camera?.make) {
-    items.push({
-      label: t('image_meta.camera_make'),
-      value: meta.camera.make,
-    });
-  }
-
   if (meta.camera?.model) {
     items.push({
       label: t('image_meta.camera_make'),
@@ -120,7 +112,7 @@ export function formatImageMeta(meta: ImageMeta, t: TFunction): FormattedMetaIte
     });
   }
 
-  if (meta.exposure?.exposureTime) {
+  if (meta.exposure?.exposureProgram) {
     items.push({
       label: t('image_meta.exposure_program.name'),
       value: formatExposureProgram(meta.exposure.exposureProgram ?? '', t),
