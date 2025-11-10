@@ -32,7 +32,12 @@ return new class extends Migration {
             $table->string('guardian_phone', 20)->nullable();
 
             $table->text('searchable')->nullable();
-            $table->fullText('searchable');
+            if (DB::connection()->getDriverName() !== 'sqlite') {
+                $table->fullText('searchable');
+            } else {
+                $table->index('searchable');
+            }
+            
             $table->timestamps();
         });
     }
