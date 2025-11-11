@@ -11,6 +11,7 @@ use App\Models\Event;
 use App\Models\EventType;
 use App\Services\EventService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
 {
@@ -73,6 +74,8 @@ class EventController extends Controller
 
     public function store(EventRequest $request, EventService $eventService)
     {
+        Gate::authorize('create', Event::class);
+
         try {
             $event = $eventService->createEvent($request);
             $event->load('type');
@@ -89,48 +92,38 @@ class EventController extends Controller
         }
     }
 
-    public function show(Request $request, int $event_id)
+    public function show(Request $request, Event $event)
     {
-        $organizationId = auth()->user()->organization_id;
+        Gate::authorize('view', $event);
 
         $load = ['type'];
-
-        $withContract = $request->input('with_contract', false);
-        if ($withContract) {
+        if ($request->boolean('with_contract')) {
             $load[] = 'contract';
             $load[] = 'contract.category';
         }
 
-        $event = Event
-            ::whereIn('contract_id', function ($query) use ($organizationId) {
-                $query->select('id')
-                    ->from('contracts')
-                    ->where('organization_id', $organizationId);
-            })
-            ->where('id', $event_id)
+        $event = Event::query()
+            ->whereKey($event->getKey())
             ->with($load)
             ->withCount([
-                'images as images_count' => function ($q) {
-                    $q->where('type', 'original');
-                }
+                'images as images_count' => fn($q) => $q->where('type', 'original'),
             ])
             ->withSum([
-                'images as images_bytes' => function ($q) {
-                    $q->where('type', 'original');
-                }
+                'images as images_bytes' => fn($q) => $q->where('type', 'original'),
             ], 'size')
-            ->first();
-
+            ->firstOrFail();
 
         return response()->json([
             'status' => 'success',
             'message' => __('Event retrieved'),
-            'event' => new EventResource($event)
+            'event' => new EventResource($event),
         ]);
     }
 
     public function update(EventRequest $request, EventService $eventService, Event $event)
     {
+        Gate::authorize('update', $event);
+
         try {
             $event = $eventService->updateEvent($event, $request);
             $event->load('type');
@@ -150,6 +143,8 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
+        Gate::authorize('delete', $event);
+
         if (!$event->delete()) {
             return response()->json([
                 'status' => 'error',
@@ -163,15 +158,9 @@ class EventController extends Controller
         ]);
     }
 
-    public function getEventTypes(\Request $request, $contract_id)
+    public function getEventTypes(\Request $request, Contract $contract)
     {
-        $contract = Contract::find($contract_id);
-        if (!$contract) {
-            return response()->json([
-                'success' => false,
-                'message' => __('Not found')
-            ], 404);
-        }
+        Gate::authorize('view', $contract);
 
         $eventTypes = EventType
             ::where('category_id', $contract->category_id)
@@ -192,6 +181,8 @@ class EventController extends Controller
 
     public function getImages(Event $event)
     {
+        Gate::authorize('view', $event);
+
         $images = $event
             ->images()
             ->versions('web')
