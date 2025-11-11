@@ -3,15 +3,21 @@
 namespace App\Models;
 
 use App\Observers\ClientObserver;
+use App\Policies\ClientPolicy;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
+#[UsePolicy(ClientPolicy::class)]
 #[ObservedBy([ClientObserver::class])]
 class Client extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'organization_id',
         'code', 'name', 'birthdate', 'email', 'phone', 'rekognition_face_id',
