@@ -22,26 +22,51 @@ class EventRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        return [
-            'contract' => ['required', 'integer', 'exists:contracts,id'],
-            'title' => ['required', 'string', 'max:180'],
-            'event_type' => [
-                'required',
-                'integer',
-                Rule::exists('event_types', 'id')
-                    ->where(function ($query) {
-                        if ($contractId = $this->input('contract')) {
-                            $contract = Contract::find($contractId);
+        if ($this->isMethod('POST')) {
+            $rules = [
+                'contract' => ['required', 'integer', 'exists:contracts,id'],
+                'title' => ['required', 'string', 'max:180'],
+                'event_type' => [
+                    'required',
+                    'integer',
+                    Rule::exists('event_types', 'id')
+                        ->where(function ($query) {
+                            if ($contractId = $this->input('contract')) {
+                                $contract = Contract::find($contractId);
 
-                            if ($contract) {
-                                $query->where('category_id', $contract->category_id);
+                                if ($contract) {
+                                    $query->where('category_id', $contract->category_id);
+                                }
                             }
-                        }
-                    })
-            ],
-            'event_date' => ['required', 'date'],
-            'event_start_time' => ['nullable', 'date_format:H:i'],
-            'description' => ['nullable', 'string', 'max:300'],
-        ];
+                        })
+                ],
+                'event_date' => ['required', 'date'],
+            ];
+        } else {
+            $rules = [
+                'contract' => ['sometimes', 'integer', 'exists:contracts,id'],
+                'title' => ['sometimes', 'string', 'max:180'],
+                'event_type' => [
+                    'sometimes',
+                    'integer',
+                    Rule::exists('event_types', 'id')
+                        ->where(function ($query) {
+                            if ($contractId = $this->input('contract')) {
+                                $contract = Contract::find($contractId);
+
+                                if ($contract) {
+                                    $query->where('category_id', $contract->category_id);
+                                }
+                            }
+                        })
+                ],
+                'event_date' => ['sometimes', 'date'],
+            ];
+        }
+
+        return array_merge($rules, [
+            'event_start_time' => ['sometimes', 'date_format:H:i'],
+            'description' => ['sometimes', 'string', 'max:300'],
+        ]);
     }
 }

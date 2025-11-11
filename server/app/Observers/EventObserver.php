@@ -29,6 +29,7 @@ class EventObserver
         $type = $event->type?->name;
         $category = $event->type?->category->name;
         $searchableContent = collect([
+            $event->title,
             $date->format('Y-m-d'),
             $date->format('d/m/Y'),
             $date->format('m/d/Y'),

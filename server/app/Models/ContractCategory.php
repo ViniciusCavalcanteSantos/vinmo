@@ -14,4 +14,9 @@ class ContractCategory extends Model
     {
         return $this->hasMany(EventType::class);
     }
+
+    public function contracts(): hasMany
+    {
+        return $this->hasMany(Contract::class);
+    }
 }

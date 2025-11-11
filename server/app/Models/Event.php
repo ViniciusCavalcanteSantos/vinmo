@@ -4,12 +4,15 @@ namespace App\Models;
 
 use App\Jobs\DeleteStoragePaths;
 use App\Observers\EventObserver;
+use App\Policies\EventPolicy;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+#[UsePolicy(EventPolicy::class)]
 #[ObservedBy([EventObserver::class])]
 class Event extends Model
 {
