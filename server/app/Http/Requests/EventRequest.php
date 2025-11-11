@@ -24,6 +24,7 @@ class EventRequest extends ApiFormRequest
     {
         return [
             'contract' => ['required', 'integer', 'exists:contracts,id'],
+            'title' => ['required', 'string', 'max:180'],
             'event_type' => [
                 'required',
                 'integer',

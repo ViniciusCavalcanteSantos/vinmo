@@ -165,6 +165,11 @@ export interface components {
             contractId: number;
             /**
              * Format: date
+             * @example Salão Nobre – 13/12
+             */
+            title?: string;
+            /**
+             * Format: date
              * @example 2025-11-06
              */
             eventDate: string;

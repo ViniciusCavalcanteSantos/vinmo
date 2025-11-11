@@ -104,7 +104,7 @@ export default function Page() {
       {/* header das infos do evento */}
       <div className="flex flex-wrap gap-4 text-ant-text">
         <p><strong>{t('contract')}:</strong> {event?.contract?.code} - {event?.contract?.title}</p>
-        <p><strong>{t('event')}:</strong> {event?.type.name}</p>
+        <p><strong>{t('event')}:</strong> {event?.type.name}: {event?.title}</p>
         <p><strong>{t('total_photos')}:</strong> {event?.totalImages ?? 0}</p>
         <p><strong>{t('size')}:</strong> {filesize(event?.totalSize ?? 0)}</p>
       </div>

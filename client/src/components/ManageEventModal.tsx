@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, DatePicker, Form, Modal, Row, Select, TimePicker,} from 'antd';
+import {Col, DatePicker, Form, Input, Modal, Row, Select, TimePicker,} from 'antd';
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
@@ -51,6 +51,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
       if (isEditMode && event) {
         form.setFieldsValue({
           contract: event.contractId,
+          title: event.title,
           event_date: dayjs(event.eventDate),
           event_start_time: event.startTime ? dayjs(event.startTime, "HH:mm") : null,
           description: event.description,
@@ -163,6 +164,10 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
             </Form.Item>
           </Col>
         </Row>
+
+        <Form.Item name="title" label={t('event_title')} rules={[{required: true, message: t('enter_title')}]}>
+          <Input placeholder={t('event_title_ex')}/>
+        </Form.Item>
 
         <Row gutter={16}>
           <Col span={12}>

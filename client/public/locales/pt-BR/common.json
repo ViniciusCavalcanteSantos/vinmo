@@ -112,6 +112,8 @@
   "contract_code_ex": "Ex: CONTR-00123",
   "contract_title": "Título do contrato",
   "contract_title_ex": "Formatura de Direito da UFPE",
+  "event_title": "Título do evento",
+  "event_title_ex": "Salão Nobre – 13 de Dezembro de 2025",
   "enter_title": "Insira o título!",
   "country": "País",
   "select_country": "Selecione o país",

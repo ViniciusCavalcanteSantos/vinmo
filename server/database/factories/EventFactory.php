@@ -22,11 +22,13 @@ class EventFactory extends Factory
         $contract = Contract::inRandomOrder()->first() ?? Contract::factory();
         $startTime = Carbon::parse($this->faker->time());
         $endTime = $startTime->copy()->addHours($this->faker->numberBetween(1, 4));
+        $title = $this->faker->sentence(2);
 
         return [
             'organization_id' => $contract->organization_id,
             'contract_id' => $contract->id,
             'type_id' => EventType::inRandomOrder()->first()->id ?? 1,
+            'title' => $title,
             'event_date' => $this->faker->dateTimeBetween('-3 months', '+6 months')->format('Y-m-d'),
             'start_time' => $startTime->format('H:i'),
             'end_time' => $endTime->format('H:i'),

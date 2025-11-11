@@ -389,6 +389,11 @@
                         "type": "integer",
                         "example": 5
                     },
+                    "title": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "Salão Nobre – 13/12"
+                    },
                     "eventDate": {
                         "type": "string",
                         "format": "date",

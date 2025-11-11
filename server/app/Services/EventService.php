@@ -17,6 +17,7 @@ class EventService
                 'organization_id' => auth()->user()->organization_id,
                 'contract_id' => $validated['contract'],
                 'type_id' => $validated['event_type'],
+                'title' => $validated['title'],
                 'event_date' => $validated['event_date'],
                 'start_time' => $validated['event_start_time'] ?? null,
                 'description' => $validated['description'] ?? null,
@@ -34,6 +35,7 @@ class EventService
             $event->update([
                 'contract_id' => $validated['contract'],
                 'type_id' => $validated['event_type'],
+                'title' => $validated['title'],
                 'event_date' => $validated['event_date'],
                 'start_time' => $validated['event_start_time'] ?? null,
                 'description' => $validated['description'] ?? null,

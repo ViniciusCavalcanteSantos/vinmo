@@ -24,6 +24,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   required={"id", "contractId", "eventDate", "type", "totalImages", "totalSize", "createdAt"},
  *   @OA\Property(property="id", type="integer", example=12),
  *   @OA\Property(property="contractId", type="integer", example=5),
+ *   @OA\Property(property="title", type="string", format="date", example="Salão Nobre – 13/12"),
  *   @OA\Property(property="eventDate", type="string", format="date", example="2025-11-06"),
  *   @OA\Property(property="startTime", type="string", format="time", nullable=true, example="14:30"),
  *   @OA\Property(property="description", type="string", nullable=true, example="Cobertura da formatura"),
@@ -53,6 +54,7 @@ class EventResource extends JsonResource
         return [
             'id' => $this->id,
             'contractId' => $this->contract_id,
+            'title' => $this->title,
             'eventDate' => $this->event_date->format('Y-m-d'),
             'startTime' => $this->start_time?->format('H:i'),
             'description' => $this->description,

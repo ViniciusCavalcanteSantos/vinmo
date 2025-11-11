@@ -86,20 +86,22 @@ export default function Page() {
 
   const columns: TableColumnsType<Event> = [
     {
-      title: t('contract'),
-      dataIndex: ['contract', "code"],
-      sorter: (a, b) => a.contract?.code.localeCompare(b.contract?.code ?? '') ?? 0
-    },
-    {
-      title: t('event_name'),
-      dataIndex: ['type', "name"],
-      sorter: (a, b) => a.type.name.localeCompare(b.type.name)
-    },
-    {
-      title: t('event_category'),
+      title: t('category'),
       dataIndex: ['type', 'category', "name"],
       sorter: (a, b) => a.type.category.name.localeCompare(b.type.category.name)
     },
+    {
+      title: t('contract'),
+      sorter: (a, b) => a.contract?.code.localeCompare(b.contract?.code ?? '') ?? 0,
+      render: (_, record) => `${record.contract?.code}`
+    },
+    {
+      title: t('evente'),
+      dataIndex: ['type', "name"],
+      sorter: (a, b) => a.type.name.localeCompare(b.type.name),
+      render: (_, record) => `${record.type.name}: ${record.title}`
+    },
+
     {
       title: t('event_date'),
       dataIndex: 'eventDate',

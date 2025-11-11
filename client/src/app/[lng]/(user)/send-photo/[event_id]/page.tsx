@@ -132,7 +132,7 @@ const Page: React.FC = () => {
               </span>
 
               <span>
-                <strong>{t('event')}:</strong> {event?.contract?.category.name}: {event?.type.name}
+                <strong>{t('event')}:</strong> {event?.type.name}: {event?.title}
               </span>
 
               <span>

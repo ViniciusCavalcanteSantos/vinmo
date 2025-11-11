@@ -19,6 +19,7 @@ class Event extends Model
         'organization_id',
         'contract_id',
         'type_id',
+        'title',
         'event_date',
         'start_time',
         'description',

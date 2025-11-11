@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->foreignId('contract_id');
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('id')->on('event_types');
+            $table->string('title', 180);
             $table->date('event_date');
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
