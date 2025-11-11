@@ -6,7 +6,7 @@ use App\Models\ContractCategory;
 use App\Models\EventType;
 use Illuminate\Database\Seeder;
 
-class EventTypeSeed extends Seeder
+class EventTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
