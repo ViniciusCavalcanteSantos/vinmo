@@ -10,6 +10,7 @@ use App\Models\Client;
 use App\Models\ClientRegisterLink;
 use App\Services\ClientService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -55,6 +56,8 @@ class ClientController extends Controller
      */
     public function store(ClientRequest $request, ClientService $clientService)
     {
+        Gate::authorize('create', Client::class);
+
         try {
             $client = $clientService->createClient($request);
             $client->load('address');
@@ -111,6 +114,8 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
+        Gate::authorize('view', $client);
+
         $client->load('address');
         return response()->json([
             'status' => 'success',
@@ -124,6 +129,8 @@ class ClientController extends Controller
      */
     public function update(ClientRequest $request, Client $client, ClientService $clientService)
     {
+        Gate::authorize('update', $client);
+
         try {
             $client = $clientService->updateClient($client, $request);
             $client->load('address');
@@ -145,15 +152,9 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ClientService $clientService, string $id)
+    public function destroy(ClientService $clientService, Client $client)
     {
-        $client = Client::find($id);
-        if (!$client) {
-            return response()->json([
-                'status' => 'success',
-                'message' => __('Client deleted')
-            ]);
-        }
+        Gate::authorize('delete', $client);
 
         try {
             $clientService->deleteClient($client);
@@ -190,7 +191,7 @@ class ClientController extends Controller
         try {
             $registerLink = ClientRegisterLink::create([
                 ...$validated,
-                'default_assignments' => $validated['assignments'],
+                'default_assignments' => $validated['assignments'] ?? null,
                 'organization_id' => auth()->user()->organization_id,
             ]);
 
