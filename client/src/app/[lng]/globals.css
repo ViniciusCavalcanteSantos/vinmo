@@ -71,6 +71,8 @@
     --shadow-ant-2: var(--ant-box-shadow-secondary);
     --shadow-ant-3: var(--ant-box-shadow-tertiary);
 
+    --shadow-border: 0 0 10px 2px rgb(0 0 0 / 15%);
+
     /* ----- Dimensões / Raio / Largura de borda ----- */
     --radius-ant: var(--ant-border-radius);
     --radius-ant-lg: var(--ant-border-radius-lg);
@@ -102,15 +104,19 @@
 
 @layer utilities {
     .shadow-ant-1 {
-        box-shadow: var(--shadow-ant-1);
+        box-shadow: var(--shadow-ant-1) !important;
     }
 
     .shadow-ant-2 {
-        box-shadow: var(--shadow-ant-2);
+        box-shadow: var(--shadow-ant-2) !important;
     }
 
     .shadow-ant-3 {
-        box-shadow: var(--shadow-ant-3);
+        box-shadow: var(--shadow-ant-3) !important;
+    }
+
+    .shadow-border {
+        box-shadow: var(--shadow-border) !important;
     }
 }
 

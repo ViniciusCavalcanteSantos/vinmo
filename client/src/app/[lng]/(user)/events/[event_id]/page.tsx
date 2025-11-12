@@ -17,6 +17,7 @@ import {DeleteOutlined, DownloadOutlined, InfoCircleOutlined, MoreOutlined, Team
 import downloadFile from "@/lib/download";
 import {fetchImageMetadata} from "@/lib/database/Image";
 import {formatImageMeta, FormattedMetaItem} from "@/lib/formatImageMeta";
+import {MetadataModal} from "@/components/MetadataModal";
 
 export default function Page() {
   const {t} = useT()
@@ -180,42 +181,8 @@ export default function Page() {
         ))}
       </div>
 
-      <Modal
-        open={metadataOpen}
-        okText={false as unknown as string}
-        cancelText={t('cancel')}
-        width={800}
-        onCancel={() => setMetadataOpen(false)}
-        destroyOnHidden
-        modalRender={(node) => {
-          return (
-            <div
-              className="
-                bg-ant-bg
-                text-ant-text
-                max-w-[40rem]
-                mx-auto p-6
-                rounded-2xl
-                shadow-ant-2
-                border border-ant-border-sec
-              "
-            >
-              <h2 className="text-[16px] font-medium text-center mb-4">
-                {t('metadata')}
-              </h2>
+      <MetadataModal open={metadataOpen} onClose={() => setMetadataOpen(false)} metadata={metadata}/>
 
-              <div className="flex flex-col gap-2 w-full">
-                {metadata.map(meta => {
-                  return (
-                    <h2><strong>{meta.label}</strong> | {meta.value}</h2>
-                  );
-                })}
-              </div>
-            </div>
-          )
-        }}
-      >
-      </Modal>
     </div>
   )
 }
