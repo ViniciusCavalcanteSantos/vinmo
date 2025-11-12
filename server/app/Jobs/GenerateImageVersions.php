@@ -3,13 +3,12 @@
 namespace App\Jobs;
 
 use App\Models\Image;
+use App\Services\ImageAnalysis\ImagePreparationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Encoders\WebpEncoder;
-use Intervention\Image\Laravel\Facades\Image as InterventionImage;
 
 class GenerateImageVersions implements ShouldQueue
 {
@@ -38,22 +37,23 @@ class GenerateImageVersions implements ShouldQueue
         $pathsToDelete = [];
         try {
             $originalContents = Storage::disk($disk)->get($originalPath);
-            $interventionImage = InterventionImage::read($originalContents);
 
             $webPath = $this->generateVersionPath($originalPath, self::TYPE_WEB, 'webp');
-            $webImage = (clone $interventionImage)
-                ->scaleDown(self::WEB_WIDTH);
-            $this->stripMetadata($webImage);
-            $webImage = $webImage->encode(new WebpEncoder(quality: 80));
+            $webImage = ImagePreparationService::from($originalContents)
+                ->limitDimensions(self::WEB_WIDTH, self::WEB_WIDTH)
+                ->ensureFormat(['image/webp'], 80)
+                ->fitBytes()
+                ->clearMetadata();
 
             Storage::disk($disk)->put($webPath, $webImage->toFilePointer());
             $pathsToDelete[] = $webPath;
 
             $thumbPath = $this->generateVersionPath($originalPath, self::TYPE_THUMB, 'webp');
-            $thumbImage = (clone $interventionImage)
-                ->scaleDown(self::THUMB_WIDTH);
-            $this->stripMetadata($thumbImage);
-            $thumbImage = $thumbImage->encode(new WebpEncoder(quality: 75));
+            $thumbImage = ImagePreparationService::from($originalContents)
+                ->limitDimensions(self::THUMB_WIDTH, self::THUMB_WIDTH)
+                ->ensureFormat(['image/webp'], 70)
+                ->fitBytes()
+                ->clearMetadata();
 
             Storage::disk($disk)->put($thumbPath, $thumbImage->toFilePointer());
             $pathsToDelete[] = $thumbPath;
@@ -65,7 +65,7 @@ class GenerateImageVersions implements ShouldQueue
                     'disk' => $disk,
                     'path' => $webPath,
                     'type' => self::TYPE_WEB,
-                    'size' => $webImage->size(),
+                    'size' => $webImage->getFileSize(),
                     'mime_type' => 'image/webp',
                 ]);
 
@@ -75,7 +75,7 @@ class GenerateImageVersions implements ShouldQueue
                     'disk' => $disk,
                     'path' => $thumbPath,
                     'type' => self::TYPE_THUMB,
-                    'size' => $thumbImage->size(),
+                    'size' => $thumbImage->getFileSize(),
                     'mime_type' => 'image/webp',
                 ]);
             });
@@ -90,15 +90,6 @@ class GenerateImageVersions implements ShouldQueue
             ]);
 
             throw $e;
-        }
-    }
-
-    private function stripMetadata($img): void
-    {
-        $core = $img->core()->native();
-
-        if ($core instanceof \Imagick) {
-            $core->stripImage();
         }
     }
 

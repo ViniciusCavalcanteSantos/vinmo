@@ -14,6 +14,7 @@ use Intervention\Image\Laravel\Facades\Image;
 class ImagePreparationService
 {
     protected InterventionImage $image;
+    protected mixed $native = null;
     protected ?string $forcedFormat = null;
     protected int $quality = 90;
 
@@ -178,19 +179,44 @@ class ImagePreparationService
     {
         $mime = $this->getMimetype();
         $hasAlpha = $mime === 'image/png' || $mime === 'image/webp';
+
+        $native = $this->native();
+        if ($native instanceof \Imagick) {
+            $hasAlpha = $native->getImageAlphaChannel();
+        }
+
+        return $hasAlpha;
+    }
+
+    /**
+     * @throws \ImagickException
+     */
+    public function clearMetadata(): self
+    {
+        $native = $this->native();
+        if ($native instanceof \Imagick) {
+            $native->stripImage();
+        }
+
+        return $this;
+    }
+
+    public function native(): mixed
+    {
+        if ($this->native) {
+            return $this->native;
+        }
+
         try {
             $core = $this->image->core();
             if (method_exists($core, 'native')) {
-                $native = $core->native();
-                if ($native instanceof \Imagick) {
-                    $hasAlpha = $native->getImageAlphaChannel();
-                }
+                $this->native = $core->native();
+                return $this->native;
             }
         } catch (\Throwable $e) {
         }
 
-        return $hasAlpha;
-
+        return null;
     }
 
     public function toFilePointer()
@@ -210,7 +236,7 @@ class ImagePreparationService
 
     public function height()
     {
-        return $this->image->width();
+        return $this->image->height();
     }
 
     /**
