@@ -147,7 +147,7 @@ const Page: React.FC = () => {
             <Dropzone
               onFilesAdded={onFilesAdded}
               onFilesRemoved={onFilesRemoved} files={files}
-              icon={<UserOutlined className="!text-primary text-5xl"/>}
+              icon={<UserOutlined className="!text-ant-primary text-5xl"/>}
               title={t('click_or_drag_photo_to_create_client')}
               description={t('click_or_drag_photo_to_create_client_example')}
             />
