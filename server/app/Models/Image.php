@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Jobs\DeleteStoragePaths;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,16 +36,9 @@ class Image extends Model
         parent::boot();
 
         static::creating(function (Image $image) {
-            if ($image->parent_id) {
+            if ($image->parent_id && empty($image->organization_id)) {
                 $image->organization_id = Image::find($image->parent_id)->organization_id;
             }
-        });
-
-        static::deleting(function (Image $image) {
-            $all = $image->allVersions();
-            $paths = $all->pluck('path')->filter()->toArray();
-
-            DeleteStoragePaths::dispatch($paths);
         });
     }
 

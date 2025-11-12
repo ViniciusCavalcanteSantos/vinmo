@@ -62,6 +62,7 @@ class GenerateImageVersions implements ShouldQueue
                 $this->image->versions()->create([
                     'imageable_id' => $this->image->imageable_id,
                     'imageable_type' => $this->image->imageable_type,
+                    'organization_id' => $this->image->organization_id,
                     'disk' => $disk,
                     'path' => $webPath,
                     'type' => self::TYPE_WEB,
@@ -72,6 +73,7 @@ class GenerateImageVersions implements ShouldQueue
                 $this->image->versions()->create([
                     'imageable_id' => $this->image->imageable_id,
                     'imageable_type' => $this->image->imageable_type,
+                    'organization_id' => $this->image->organization_id,
                     'disk' => $disk,
                     'path' => $thumbPath,
                     'type' => self::TYPE_THUMB,
