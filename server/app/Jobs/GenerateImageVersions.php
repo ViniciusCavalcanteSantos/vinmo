@@ -42,16 +42,18 @@ class GenerateImageVersions implements ShouldQueue
 
             $webPath = $this->generateVersionPath($originalPath, self::TYPE_WEB, 'webp');
             $webImage = (clone $interventionImage)
-                ->scaleDown(self::WEB_WIDTH)
-                ->encode(new WebpEncoder(quality: 80));
+                ->scaleDown(self::WEB_WIDTH);
+            $this->stripMetadata($webImage);
+            $webImage = $webImage->encode(new WebpEncoder(quality: 80));
 
             Storage::disk($disk)->put($webPath, $webImage->toFilePointer());
             $pathsToDelete[] = $webPath;
 
             $thumbPath = $this->generateVersionPath($originalPath, self::TYPE_THUMB, 'webp');
             $thumbImage = (clone $interventionImage)
-                ->scaleDown(self::THUMB_WIDTH)
-                ->encode(new WebpEncoder(quality: 75));
+                ->scaleDown(self::THUMB_WIDTH);
+            $this->stripMetadata($thumbImage);
+            $thumbImage = $thumbImage->encode(new WebpEncoder(quality: 75));
 
             Storage::disk($disk)->put($thumbPath, $thumbImage->toFilePointer());
             $pathsToDelete[] = $thumbPath;
@@ -88,6 +90,15 @@ class GenerateImageVersions implements ShouldQueue
             ]);
 
             throw $e;
+        }
+    }
+
+    private function stripMetadata($img): void
+    {
+        $core = $img->core()->native();
+
+        if ($core instanceof \Imagick) {
+            $core->stripImage();
         }
     }
 
