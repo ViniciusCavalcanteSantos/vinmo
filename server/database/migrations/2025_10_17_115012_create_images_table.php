@@ -21,13 +21,18 @@ return new class extends Migration {
             $table->string('path');
             $table->enum('type', ['original', 'web', 'thumb', 'watermark', 'crop'])->default('original');
 
-            $table->unsignedBigInteger('size')->nullable();
+            $table->unsignedInteger('size')->nullable();
+            $table->unsignedMediumInteger('width')->nullable();
+            $table->unsignedMediumInteger('height')->nullable();
             $table->string('mime_type')->nullable();
             $table->string('hash')->nullable()->index();
 
             $table->enum('status', ['ok', 'processing', 'failed'])->default('ok');
 
             $table->timestamps();
+
+            $table->index(['imageable_id', 'imageable_type']);
+            $table->unique(['organization_id', 'hash', 'type']);
         });
     }
 

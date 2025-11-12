@@ -41,6 +41,8 @@ class EventPhotoService
             ->ensureFormat()
             ->fitBytes(25 * 1024 * 1024); // 25 MB
 
+        $width = $processed->width();
+        $height = $processed->height();
         $bytes = $processed->getAsBytes();
         $ext = $processed->getExtension();
         $mime = $processed->getMimetype();
@@ -65,6 +67,8 @@ class EventPhotoService
             $image->fill([
                 'path' => $path,
                 'size' => strlen($bytes),
+                'width' => $width,
+                'height' => $height,
                 'mime_type' => $mime,
             ])->save();
 

@@ -26,6 +26,8 @@ class Image extends Model
         'path',
         'type',
         'size',
+        'width',
+        'height',
         'mime_type',
         'hash',
     ];

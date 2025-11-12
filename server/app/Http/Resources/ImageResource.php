@@ -19,6 +19,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     example="original"
  *   ),
  *   @OA\Property(property="size", type="integer", example=2456789, description="Tamanho em bytes"),
+ *   @OA\Property(property="width", type="integer", example=1980, description="Largura da imagem"),
+ *   @OA\Property(property="height", type="integer", example=1080, description="Altura da imagem"),
  *   @OA\Property(property="mimeType", type="string", example="image/jpeg"),
  *   @OA\Property(property="originalName", type="string", example="IMG_1234"),
  *   @OA\Property(property="originalSize", type="integer", nullable=true, example=2456789, description="Tamanho em bytes da imagem original (se houver)"),
@@ -39,7 +41,9 @@ class ImageResource extends JsonResource
             'id' => $this->id,
             'url' => $this->url,
             'type' => $this->type,
-            'size' => $this->size,
+            'size' => (int) $this->size,
+            'width' => (int) $this->width,
+            'height' => (int) $this->height,
             'mimeType' => $this->mime_type,
             'createdAt' => $this->created_at->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at->format('Y-m-d H:i:s')

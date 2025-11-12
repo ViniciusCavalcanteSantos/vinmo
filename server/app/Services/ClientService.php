@@ -117,6 +117,8 @@ class ClientService
             ->ensureFormat()
             ->fitBytes();
 
+        $width = $processed->width();
+        $height = $processed->height();
         $bytes = $processed->getAsBytes();
         $ext = $processed->getExtension();
         $mime = $processed->getMimetype();
@@ -160,6 +162,8 @@ class ClientService
             $image->fill([
                 'path' => $finalPath,
                 'size' => strlen($bytes),
+                'width' => $width,
+                'height' => $height,
                 'mime_type' => $mime,
             ])->save();
 

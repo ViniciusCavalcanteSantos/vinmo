@@ -203,6 +203,16 @@ class ImagePreparationService
         return $this->image;
     }
 
+    public function width()
+    {
+        return $this->image->width();
+    }
+
+    public function height()
+    {
+        return $this->image->width();
+    }
+
     /**
      * Retorna a extensão do arquivo com base no MIME type da imagem atual.
      */
