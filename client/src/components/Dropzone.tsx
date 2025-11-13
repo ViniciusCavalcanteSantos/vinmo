@@ -16,6 +16,7 @@ export interface FileWithUploadData extends File {
   progress?: number;
   status?: FileStatus;
   clientId?: number;
+  imageId?: string;
 }
 
 interface DropzoneProps {

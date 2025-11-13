@@ -6,6 +6,7 @@ use App\Http\Requests\EventPhotoRequest;
 use App\Jobs\GenerateImageVersions;
 use App\Jobs\SortImage;
 use App\Models\Event;
+use App\Models\Image;
 use App\Services\ImageAnalysis\ImageAnalyzerFactory;
 use App\Services\ImageAnalysis\ImagePreparationService;
 use App\Services\ImageAnalysis\Interfaces\ImageAnalyzer;
@@ -22,14 +23,14 @@ class EventPhotoService
         $this->imageAnalyzer = $analyzerFactory->make();
     }
 
-    public function uploadPhoto(EventPhotoRequest $request, Event $event)
+    public function uploadPhoto(EventPhotoRequest $request, Event $event): Image
     {
         $photo = $request->file('photo');
 
         return DB::transaction(function () use ($event, $photo) {
-            $this->processAndStorePhoto($event, $photo);
+            $image = $this->processAndStorePhoto($event, $photo);
 
-            return $event->fresh();
+            return $image->fresh();
         });
     }
 
@@ -74,6 +75,7 @@ class EventPhotoService
 
             SortImage::dispatch($image, $event);
             GenerateImageVersions::dispatch($image);
+            return $image;
         } catch (\Exception $e) {
             Storage::delete($path);
             throw ValidationException::withMessages(['photo_upload' => $e->getMessage()]);

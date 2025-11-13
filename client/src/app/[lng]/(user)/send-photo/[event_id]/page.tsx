@@ -11,6 +11,7 @@ import Link from "next/link";
 import Event from "@/types/Event";
 import {eventPhotoUpload, fetchEvent} from "@/lib/database/Event";
 import {useParams, useRouter} from "next/navigation";
+import {removeImage} from "@/lib/database/Image";
 
 const Page: React.FC = () => {
   const {t} = useT();
@@ -99,6 +100,7 @@ const Page: React.FC = () => {
       setFiles(prev =>
         prev.map(f => {
           if (f.id === file.id) {
+            f.imageId = res.image.id
             f.status = 'success'
             f.progress = 100
           }
@@ -116,7 +118,19 @@ const Page: React.FC = () => {
   };
 
   const onFilesRemoved = async (file: FileWithUploadData) => {
-    // TODO: implementa remmoção de fotos upadas
+    if (!file.imageId) return
+
+    try {
+      const res = await removeImage(file.imageId);
+      if (res.status !== ApiStatus.SUCCESS) {
+        notification.warning({message: res.message})
+        return
+      }
+
+      notification.success({message: res.message})
+      setFiles(prev => prev.filter(f => f.id !== file.id));
+    } catch (err) {
+    }
   }
 
   return (

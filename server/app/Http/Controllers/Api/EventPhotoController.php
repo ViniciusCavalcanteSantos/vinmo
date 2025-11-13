@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventPhotoRequest;
+use App\Http\Resources\ImageResource;
 use App\Models\Event;
 use App\Services\EventPhotoService;
 use Illuminate\Validation\ValidationException;
@@ -23,11 +24,12 @@ class EventPhotoController extends Controller
         }
 
         try {
-            $eventService->uploadPhoto($request, $event);
+            $image = $eventService->uploadPhoto($request, $event);
             $event->load('type');
             return response()->json([
                 'status' => 'success',
                 'message' => __('Photo uploaded'),
+                'image' => new ImageResource($image)
             ]);
         } catch (ValidationException $e) {
             throw $e;

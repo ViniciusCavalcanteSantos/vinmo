@@ -73,7 +73,7 @@ class ImageResource extends JsonResource
                 'size' => $this->size,
                 'width' => $this->width,
                 'height' => $this->height,
-                'mimeType' => $this->original->mime_type,
+                'mimeType' => $this->mime_type,
             ];
         }
 

@@ -66,4 +66,23 @@ class ImageController extends Controller
             'metadata' => new ImageMetaResource($image->metas)
         ]);
     }
+
+    public function destroy(Image $image)
+    {
+        if ($image->parent_id) {
+            $image = $image->original()->first();
+        }
+
+        if (!$image->delete()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Could not perform action')
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Image deleted')
+        ]);
+    }
 }

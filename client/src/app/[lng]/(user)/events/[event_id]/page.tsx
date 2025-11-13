@@ -14,8 +14,7 @@ import {Button, Dropdown, Image, Tooltip} from "antd";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {DeleteOutlined, DownloadOutlined, InfoCircleOutlined, MoreOutlined, TeamOutlined} from "@ant-design/icons";
-import downloadFile from "@/lib/download";
-import {fetchImageMetadata} from "@/lib/database/Image";
+import {downloadImage, fetchImageMetadata, removeImage} from "@/lib/database/Image";
 import {formatImageMeta, FormattedMetaItem} from "@/lib/formatImageMeta";
 import {MetadataModal} from "@/components/MetadataModal";
 
@@ -27,6 +26,7 @@ export default function Page() {
   const eventId = Number(params.event_id);
   const [event, setEvent] = useState<Event | null>(null);
   const [images, setImages] = useState<ImageType[]>([])
+  const [imagesSize, setImagesSize] = useState(0)
   const [loading, setLoading] = useState<boolean>(true);
   const {defaultDateFormat} = useUser();
 
@@ -59,10 +59,24 @@ export default function Page() {
 
   }, [eventId])
 
+  useEffect(() => {
+    const size = images.reduce((acc, image) => acc + (image.original?.size ?? 0), 0)
+    setImagesSize(size)
+  }, [images.length]);
+
   if (loading) return <Fallback/>
 
   const handleDownloadImage = (image: ImageType) => {
-    downloadFile(`${process.env.NEXT_PUBLIC_API_URL}/api/images/${image.id}/download`)
+    downloadImage(image.id)
+  }
+
+  const handleDeleteImage = (image: ImageType) => {
+    removeImage(image.id)
+      .then(res => {
+        if (res.status === ApiStatus.SUCCESS) {
+          setImages(images.filter(i => i.id !== image.id))
+        }
+      })
   }
 
   const handleOpenMetadata = (image: ImageType) => {
@@ -106,7 +120,7 @@ export default function Page() {
           // await handleOpenClients(img)
           break
         case 'delete':
-          // await handleDeleteImage(img)
+          handleDeleteImage(img)
           break
       }
     },
@@ -124,8 +138,8 @@ export default function Page() {
       <div className="flex flex-wrap gap-4 text-ant-text">
         <p><strong>{t('contract')}:</strong> {event?.contract?.code} - {event?.contract?.title}</p>
         <p><strong>{t('event')}:</strong> {event?.type.name}: {event?.title}</p>
-        <p><strong>{t('total_photos')}:</strong> {event?.totalImages ?? 0}</p>
-        <p><strong>{t('size')}:</strong> {filesize(event?.totalSize ?? 0)}</p>
+        <p><strong>{t('total_photos')}:</strong> {images.length}</p>
+        <p><strong>{t('size')}:</strong> {filesize(imagesSize ?? 0)}</p>
       </div>
 
       {/* grid de imagens */}
