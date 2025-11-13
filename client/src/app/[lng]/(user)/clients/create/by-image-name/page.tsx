@@ -30,23 +30,19 @@ const Page: React.FC = () => {
 
   const [assignments, setAssignments] = useState<number[]>([]);
 
-  const updateStats = (currentFiles?: FileWithUploadData[]) => {
-    currentFiles = currentFiles ?? files
-    const totalSelected = currentFiles.length;
-    const totalSuccess = currentFiles.filter((f) => f.status === 'success').length;
-    const totalError = currentFiles.filter((f) => f.status === 'error').length;
-    const totalPending = totalSelected - totalSuccess - totalError;
-
-    setStats({
-      totalSelected,
-      totalSuccess,
-      totalError,
-      totalPending,
-    });
-  };
-
   useEffect(() => {
-    updateStats()
+    const next = files.reduce(
+      (acc, f) => {
+        acc.totalSelected++;
+        if (f.status === 'success') acc.totalSuccess++;
+        else if (f.status === 'error') acc.totalError++;
+        else acc.totalPending++;
+        return acc;
+      },
+      {totalSelected: 0, totalSuccess: 0, totalError: 0, totalPending: 0}
+    );
+
+    setStats(next);
   }, [files]);
 
   const handleUpload = async (file: FileWithUploadData) => {
@@ -60,13 +56,10 @@ const Page: React.FC = () => {
 
     const res = await createClient({name: fileName, assignments: assignments}, file, (progress) => {
       setFiles(prev =>
-        prev.map(f => {
-          if (f.id === file.id) {
-            f.progress = Math.min(progress, 90);
-          }
-          return f;
-        })
-      );
+        prev.map(f =>
+          f.id === file.id ? {...f, progress: Math.min(progress, 90)} : f
+        )
+      )
     })
 
     if (res.status !== ApiStatus.SUCCESS) {

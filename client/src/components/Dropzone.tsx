@@ -4,7 +4,7 @@ import {DeleteOutlined, InboxOutlined} from "@ant-design/icons";
 import {Button, Image, Progress} from "antd";
 import {useDropzone} from "react-dropzone";
 import {useT} from "@/i18n/client";
-import React from "react";
+import React, {useEffect} from "react";
 import {filesize} from "filesize";
 import i18next from "@/i18n/i18next";
 import {v4 as uuidv4} from "uuid";
@@ -17,6 +17,7 @@ export interface FileWithUploadData extends File {
   status?: FileStatus;
   clientId?: number;
   imageId?: string;
+  preview?: string;
 }
 
 interface DropzoneProps {
@@ -27,6 +28,70 @@ interface DropzoneProps {
   title?: string,
   description?: string,
 }
+
+const DropzoneItem = React.memo(({file, onRemove}: {
+  file: FileWithUploadData,
+  onRemove: (file: FileWithUploadData) => void
+}) => {
+  if (!(file instanceof Blob)) return null;
+  const url = file.preview;
+
+  const {t} = useT();
+
+  return (
+    <li
+      className="
+                  flex items-center gap-6
+                  bg-ant-bg-elevated
+                  border border-ant-border-sec
+                  shadow-ant-1
+                  py-2 px-4 text-start rounded-lg mb-2
+                "
+    >
+      <Image
+        className="rounded-avatar"
+        src={url}
+        width={32}
+        height={32}
+        preview={false}
+      />
+
+      <div className="flex-1">
+        <h4 className="text-ant-text-sec text-sm">
+          {file.name} ({filesize(file.size, {locale: i18next.language})})
+        </h4>
+
+        <Progress
+          percent={file.progress}
+          status={
+            file.status === 'uploading'
+              ? 'active'
+              : file.status === 'success'
+                ? 'success' : 'exception'
+          }
+        />
+        {file.status === 'error' && (
+          <span className="text-[var(--color-ant-error)]">
+                      {t("Falha no envio")}
+                    </span>
+        )}
+      </div>
+
+      <Button
+        shape="circle"
+        icon={<DeleteOutlined/>}
+        danger
+        disabled={file.status !== 'success'}
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove(file);
+        }}
+      >
+      </Button>
+    </li>
+  )
+})
+
 
 export default function Dropzone(
   {
@@ -42,6 +107,12 @@ export default function Dropzone(
   title = title ?? t('dropzone.title');
   description = description ?? t('dropzone.description');
 
+  useEffect(() => {
+    return () => {
+      files.forEach(file => file.preview && URL.revokeObjectURL(file.preview))
+    }
+  }, [files]);
+
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     accept: {
       'image/*': []
@@ -52,6 +123,7 @@ export default function Dropzone(
           id: uuidv4(),
           progress: 0,
           status: 'uploading' as FileStatus,
+          preview: URL.createObjectURL(file),
         })
       );
       onFilesAdded(filesWithProgress);
@@ -60,6 +132,7 @@ export default function Dropzone(
   });
 
   const removeFile = (file: FileWithUploadData) => {
+    if (file.preview) URL.revokeObjectURL(file.preview);
     onFilesRemoved?.(file);
   };
 
@@ -88,62 +161,10 @@ export default function Dropzone(
       </div>
       {files.length > 0 && (
         <ul className="mt-4">
-          {files.map((file: FileWithUploadData, index: number) => {
-            if (!(file instanceof Blob)) return null;
-            const url = URL.createObjectURL(file);
+          {files.map((file: FileWithUploadData) => {
 
             return (
-              <li
-                key={index}
-                className="
-                  flex items-center gap-6
-                  bg-ant-bg-elevated
-                  border border-ant-border-sec
-                  shadow-ant-1
-                  py-2 px-4 text-start rounded-lg mb-2
-                "
-              >
-                <Image
-                  className="rounded-avatar"
-                  src={url}
-                  width={32}
-                  height={32}
-                  preview={false}
-                />
-
-                <div className="flex-1">
-                  <h4 className="text-ant-text-sec text-sm">
-                    {file.name} ({filesize(file.size, {locale: i18next.language})})
-                  </h4>
-
-                  <Progress
-                    percent={file.progress}
-                    status={
-                      file.status === 'uploading'
-                        ? 'active'
-                        : file.status === 'success'
-                          ? 'success' : 'exception'
-                    }
-                  />
-                  {file.status === 'error' && (
-                    <span className="text-[var(--color-ant-error)]">
-                      {t("Falha no envio")}
-                    </span>
-                  )}
-                </div>
-
-                <Button
-                  shape="circle"
-                  icon={<DeleteOutlined/>}
-                  danger
-                  disabled={file.status !== 'success'}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeFile(file);
-                  }}
-                >
-                </Button>
-              </li>
+              <DropzoneItem key={file.id} file={file} onRemove={removeFile}/>
             )
           })}
         </ul>
@@ -151,3 +172,4 @@ export default function Dropzone(
     </div>
   );
 }
+
