@@ -98,9 +98,16 @@ function formatFocalLength(focal: string): string {
 export function formatImageMeta(meta: ImageMeta, t: TFunction): FormattedMetaItem[] {
   const items: FormattedMetaItem[] = [];
 
-  if (meta.camera?.model) {
+  if (meta.camera?.make) {
     items.push({
       label: t('image_meta.camera_make'),
+      value: meta.camera.make,
+    });
+  }
+
+  if (meta.camera?.model) {
+    items.push({
+      label: t('image_meta.camera_model'),
       value: meta.camera.model,
     });
   }

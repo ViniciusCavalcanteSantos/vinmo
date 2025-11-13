@@ -304,6 +304,12 @@
   "clients_in_image": "Clientes na foto",
   "toggle_theme": "Alternar tema",
   "software": "Software",
+  "latitude": "Latitude",
+  "longitude": "Longitude",
+  "image_type": "Tipo de imagem",
+  "width": "Largura",
+  "height": "Altura",
+  "unknown": "Desconhecido",
   "image_meta": {
     "camera_make": "Marca da câmera",
     "camera_model": "Modelo da câmera",

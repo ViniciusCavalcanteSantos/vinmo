@@ -259,6 +259,27 @@ export interface components {
             /** @description Metadados adicionais não padronizados */
             other?: Record<string, never>;
         };
+        OriginalImageInfo: {
+            /** @example IMG_1234 */
+            name: string;
+            /**
+             * @description Tamanho em bytes da imagem original (se houver)
+             * @example 2456789
+             */
+            size: number | null;
+            /**
+             * @description Largura da imagem original
+             * @example 1980
+             */
+            width: number;
+            /**
+             * @description Altura da imagem original
+             * @example 1080
+             */
+            height: number;
+            /** @example image/jpeg */
+            mimeType: string;
+        };
         Image: {
             /** @example 01J5Q8V6WZ3QC4FJ0V5E5VQ7R9 */
             id: string;
@@ -277,15 +298,19 @@ export interface components {
              * @example 2456789
              */
             size: number;
+            /**
+             * @description Largura da imagem
+             * @example 1980
+             */
+            width?: number;
+            /**
+             * @description Altura da imagem
+             * @example 1080
+             */
+            height?: number;
             /** @example image/jpeg */
             mimeType: string;
-            /** @example IMG_1234 */
-            originalName?: string;
-            /**
-             * @description Tamanho em bytes da imagem original (se houver)
-             * @example 2456789
-             */
-            originalSize?: number | null;
+            original?: components["schemas"]["OriginalImageInfo"];
             /** @example 2025-11-06 10:15:00 */
             createdAt: string;
             /** @example 2025-11-06 10:20:00 */

@@ -7,6 +7,17 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @OA\Schema(
+ *    schema="OriginalImageInfo",
+ *    type="object",
+ *    required={"name", "size", "width", "height", "mimeType"},
+ *    @OA\Property(property="name", type="string", example="IMG_1234"),
+ *    @OA\Property(property="size", type="integer", nullable=true, example=2456789, description="Tamanho em bytes da imagem original (se houver)"),
+ *    @OA\Property(property="width", type="integer", example=1980, description="Largura da imagem original"),
+ *    @OA\Property(property="height", type="integer", example=1080, description="Altura da imagem original"),
+ *    @OA\Property(property="mimeType", type="string", example="image/jpeg"),
+ * )
+ *
+ * @OA\Schema(
  *   schema="Image",
  *   type="object",
  *   required={"id", "url", "type", "size", "mimeType", "createdAt", "updatedAt"},
@@ -22,8 +33,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   @OA\Property(property="width", type="integer", example=1980, description="Largura da imagem"),
  *   @OA\Property(property="height", type="integer", example=1080, description="Altura da imagem"),
  *   @OA\Property(property="mimeType", type="string", example="image/jpeg"),
- *   @OA\Property(property="originalName", type="string", example="IMG_1234"),
- *   @OA\Property(property="originalSize", type="integer", nullable=true, example=2456789, description="Tamanho em bytes da imagem original (se houver)"),
+ *   @OA\Property(property="original", ref="#/components/schemas/OriginalImageInfo"),
  *   @OA\Property(property="createdAt", type="string", example="2025-11-06 10:15:00"),
  *   @OA\Property(property="updatedAt", type="string", example="2025-11-06 10:20:00")
  * )
@@ -50,11 +60,21 @@ class ImageResource extends JsonResource
         ];
 
         if ($this->parent_id) {
-            $data['originalName'] = $this->original->original_name;
-            $data['originalSize'] = $this->original->size;
+            $data['original'] = [
+                'name' => $this->original->original_name,
+                'size' => $this->original->size,
+                'width' => $this->original->width,
+                'height' => $this->original->height,
+                'mimeType' => $this->original->mime_type,
+            ];
         } else {
-            $data['originalName'] = $this->original_name;
-            $data['originalSize'] = $this->size;
+            $data['original'] = [
+                'name' => $this->original_name,
+                'size' => $this->size,
+                'width' => $this->width,
+                'height' => $this->height,
+                'mimeType' => $this->original->mime_type,
+            ];
         }
 
         return $data;

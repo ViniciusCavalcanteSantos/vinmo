@@ -13,6 +13,8 @@ export function MetadataModal({open, onClose, metadata}: Props) {
   const {t} = useT()
   const {token} = theme.useToken();
 
+  metadata.unshift()
+
   return (
     <Modal
       open={open}

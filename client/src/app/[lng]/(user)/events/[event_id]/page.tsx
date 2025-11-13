@@ -10,7 +10,7 @@ import Fallback from "@/components/Fallback";
 import ImageType from "@/types/Image";
 import {ApiStatus} from "@/types/ApiResponse";
 import {filesize} from "filesize";
-import {Button, Dropdown, Image, Modal, Tooltip} from "antd";
+import {Button, Dropdown, Image, Tooltip} from "antd";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {DeleteOutlined, DownloadOutlined, InfoCircleOutlined, MoreOutlined, TeamOutlined} from "@ant-design/icons";
@@ -69,7 +69,25 @@ export default function Page() {
     fetchImageMetadata(image.id)
       .then(res => {
         if (res.status === ApiStatus.SUCCESS) {
-          setMetadata(formatImageMeta(res.metadata, t))
+          const metadataArray = formatImageMeta(res.metadata, t)
+          if (image.original?.height) metadataArray.unshift({
+            label: t('height'),
+            value: `${image.original?.height} pixels`
+          })
+          if (image.original?.width) metadataArray.unshift({
+            label: t('width'),
+            value: `${image.original?.width} pixels`
+          })
+
+          const mime = image.original?.mimeType ?? "";
+          const subtype = mime.includes("/") ? mime.split("/")[1] : mime;
+          if (image.original?.mimeType) metadataArray.unshift({
+            label: t('image_type'),
+            value: subtype.toUpperCase() || t("unknown").toUpperCase()
+          })
+
+
+          setMetadata(metadataArray)
           setMetadataOpen(true)
         }
       })
@@ -133,10 +151,10 @@ export default function Page() {
               {/* infos da imagem */}
               <div className="p-4 flex flex-wrap gap-2 text-ant-text">
                 <p className="w-full">
-                  <strong>{t('name')}:</strong> {image.originalName}
+                  <strong>{t('name')}:</strong> {image.original?.name}
                 </p>
                 <p>
-                  <strong>{t('size')}:</strong> {filesize(image.originalSize ?? 0)}
+                  <strong>{t('size')}:</strong> {filesize(image.original?.size ?? 0)}
                 </p>
                 <p>
                   <strong>{t('upload_date')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}

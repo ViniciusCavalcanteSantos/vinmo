@@ -577,6 +577,42 @@
                 },
                 "type": "object"
             },
+            "OriginalImageInfo": {
+                "required": [
+                    "name",
+                    "size",
+                    "width",
+                    "height",
+                    "mimeType"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "IMG_1234"
+                    },
+                    "size": {
+                        "description": "Tamanho em bytes da imagem original (se houver)",
+                        "type": "integer",
+                        "example": 2456789,
+                        "nullable": true
+                    },
+                    "width": {
+                        "description": "Largura da imagem original",
+                        "type": "integer",
+                        "example": 1980
+                    },
+                    "height": {
+                        "description": "Altura da imagem original",
+                        "type": "integer",
+                        "example": 1080
+                    },
+                    "mimeType": {
+                        "type": "string",
+                        "example": "image/jpeg"
+                    }
+                },
+                "type": "object"
+            },
             "Image": {
                 "required": [
                     "id",
@@ -607,19 +643,22 @@
                         "type": "integer",
                         "example": 2456789
                     },
+                    "width": {
+                        "description": "Largura da imagem",
+                        "type": "integer",
+                        "example": 1980
+                    },
+                    "height": {
+                        "description": "Altura da imagem",
+                        "type": "integer",
+                        "example": 1080
+                    },
                     "mimeType": {
                         "type": "string",
                         "example": "image/jpeg"
                     },
-                    "originalName": {
-                        "type": "string",
-                        "example": "IMG_1234"
-                    },
-                    "originalSize": {
-                        "description": "Tamanho em bytes da imagem original (se houver)",
-                        "type": "integer",
-                        "example": 2456789,
-                        "nullable": true
+                    "original": {
+                        "$ref": "#/components/schemas/OriginalImageInfo"
                     },
                     "createdAt": {
                         "type": "string",

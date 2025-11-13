@@ -306,6 +306,10 @@
   "software": "Software",
   "latitude": "Latitude",
   "longitude": "Longitude",
+  "image_type": "Image type",
+  "width": "Width",
+  "height": "Height",
+  "unknown": "Unknown",
   "image_meta": {
     "camera_make": "Camera brand",
     "camera_model": "Camera model",
