@@ -341,5 +341,7 @@
       "notFired_forced": "Não, forçado",
       "redEye": "com redução de olhos vermelhos"
     }
-  }
+  },
+  "no_photos_in_event_yet": "Este evento ainda não possui fotos",
+  "add_photos": "Adicionar fotos"
 }

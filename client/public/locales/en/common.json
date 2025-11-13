@@ -341,5 +341,7 @@
       "not_fired_forced": "No, forced",
       "red_eye": "with red-eye reduction"
     }
-  }
+  },
+  "no_photos_in_event_yet": "No photos in this event yet",
+  "add_photos": "Add photos"
 }

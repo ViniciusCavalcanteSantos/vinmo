@@ -10,13 +10,21 @@ import Fallback from "@/components/Fallback";
 import ImageType from "@/types/Image";
 import {ApiStatus} from "@/types/ApiResponse";
 import {filesize} from "filesize";
-import {Button, Dropdown, Image, Tooltip} from "antd";
+import {Button, Dropdown, Empty, Image, Tooltip, Typography} from "antd";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
-import {DeleteOutlined, DownloadOutlined, InfoCircleOutlined, MoreOutlined, TeamOutlined} from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  DownloadOutlined,
+  InboxOutlined,
+  InfoCircleOutlined,
+  MoreOutlined,
+  TeamOutlined
+} from "@ant-design/icons";
 import {downloadImage, fetchImageMetadata, removeImage} from "@/lib/database/Image";
 import {formatImageMeta, FormattedMetaItem} from "@/lib/formatImageMeta";
 import {MetadataModal} from "@/components/MetadataModal";
+import Link from "next/link";
 
 export default function Page() {
   const {t} = useT()
@@ -143,75 +151,88 @@ export default function Page() {
       </div>
 
       {/* grid de imagens */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
-        {images.map(image => (
-          <div key={image.id}>
-            <div
-              className="
+      {images.length > 0 ? (
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+          {images.map(image => (
+            <div key={image.id}>
+              <div
+                className="
                 max-w-sm mx-auto
                 bg-ant-bg-elevated
                 border border-ant-border-sec
                 rounded-lg
                 shadow-ant-1
               "
-            >
-              {/* wrapper da imagem */}
-              <div className="w-full pt-[67%] relative">
-                <div className="absolute top-0 left-0 w-full h-full [&>.ant-image]:w-full [&>.ant-image]:h-full">
-                  <Image src={image.url} className="rounded-t-lg object-contain !h-full"/>
+              >
+                {/* wrapper da imagem */}
+                <div className="w-full pt-[67%] relative">
+                  <div className="absolute top-0 left-0 w-full h-full [&>.ant-image]:w-full [&>.ant-image]:h-full">
+                    <Image src={image.url} className="rounded-t-lg object-contain !h-full"/>
+                  </div>
+                </div>
+
+                {/* infos da imagem */}
+                <div className="p-4 flex flex-wrap gap-2 text-ant-text">
+                  <p className="w-full">
+                    <strong>{t('name')}:</strong> {image.original?.name}
+                  </p>
+                  <p>
+                    <strong>{t('size')}:</strong> {filesize(image.original?.size ?? 0)}
+                  </p>
+                  <p>
+                    <strong>{t('upload_date')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}
+                  </p>
+                </div>
+
+                {/* linha separadora */}
+                <div className="w-full h-px bg-ant-border-sec"></div>
+
+                {/* ações */}
+                <div className="flex justify-end gap-4 p-4">
+                  <Tooltip title={t('clients_in_image')}>
+                    <Button
+                      type="text"
+                      shape="circle"
+                      aria-label={t('options')}
+                      className="
+                      !text-2xl
+                      !text-ant-text-sec
+                    "
+                    >
+                      <TeamOutlined/>
+                    </Button>
+                  </Tooltip>
+
+                  <Dropdown menu={menuFor(image)} trigger={['click']}>
+                    <Button
+                      type="text"
+                      shape="circle"
+                      aria-label={t('options')}
+                      className="
+                      !text-2xl
+                      !text-ant-text-sec
+                    "
+                    >
+                      <MoreOutlined/>
+                    </Button>
+                  </Dropdown>
                 </div>
               </div>
-
-              {/* infos da imagem */}
-              <div className="p-4 flex flex-wrap gap-2 text-ant-text">
-                <p className="w-full">
-                  <strong>{t('name')}:</strong> {image.original?.name}
-                </p>
-                <p>
-                  <strong>{t('size')}:</strong> {filesize(image.original?.size ?? 0)}
-                </p>
-                <p>
-                  <strong>{t('upload_date')}:</strong> {dayjs(image.createdAt).format(defaultDateFormat)}
-                </p>
-              </div>
-
-              {/* linha separadora */}
-              <div className="w-full h-px bg-ant-border-sec"></div>
-
-              {/* ações */}
-              <div className="flex justify-end gap-4 p-4">
-                <Tooltip title={t('clients_in_image')}>
-                  <Button
-                    type="text"
-                    shape="circle"
-                    aria-label={t('options')}
-                    className="
-                      !text-2xl
-                      !text-ant-text-sec
-                    "
-                  >
-                    <TeamOutlined/>
-                  </Button>
-                </Tooltip>
-
-                <Dropdown menu={menuFor(image)} trigger={['click']}>
-                  <Button
-                    type="text"
-                    shape="circle"
-                    aria-label={t('options')}
-                    className="
-                      !text-2xl
-                      !text-ant-text-sec
-                    "
-                  >
-                    <MoreOutlined/>
-                  </Button>
-                </Dropdown>
-              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-16">
+          <Empty
+            image={<InboxOutlined className="!text-8xl !text-ant-primary"/>}
+            description={<Typography.Text>{t('no_photos_in_event_yet')}</Typography.Text>}
+          >
+            <Link href={`/send-photo/${event?.id}`}>
+              <Button type='primary'>{t('add_photos')}</Button>
+            </Link>
+          </Empty>
+        </div>
+      )}
 
       <MetadataModal open={metadataOpen} onClose={() => setMetadataOpen(false)} metadata={metadata}/>
 
