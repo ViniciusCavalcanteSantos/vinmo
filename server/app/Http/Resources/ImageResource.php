@@ -35,7 +35,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   @OA\Property(property="mimeType", type="string", example="image/jpeg"),
  *   @OA\Property(property="original", ref="#/components/schemas/OriginalImageInfo"),
  *   @OA\Property(property="createdAt", type="string", example="2025-11-06 10:15:00"),
- *   @OA\Property(property="updatedAt", type="string", example="2025-11-06 10:20:00")
+ *   @OA\Property(property="updatedAt", type="string", example="2025-11-06 10:20:00"),
+ *   @OA\Property(property="clientsOnImageCount", type="integer", example=3, description="Quantidade de clientes detectados na imagem", nullable=true)
  * )
  */
 class ImageResource extends JsonResource
@@ -75,6 +76,10 @@ class ImageResource extends JsonResource
                 'height' => $this->height,
                 'mimeType' => $this->mime_type,
             ];
+        }
+
+        if ($this->clients_on_image_count !== null) {
+            $data['clientsOnImageCount'] = (int) $this->clients_on_image_count;
         }
 
         return $data;

@@ -667,6 +667,12 @@
                     "updatedAt": {
                         "type": "string",
                         "example": "2025-11-06 10:20:00"
+                    },
+                    "clientsOnImageCount": {
+                        "description": "Quantidade de clientes detectados na imagem",
+                        "type": "integer",
+                        "example": 3,
+                        "nullable": true
                     }
                 },
                 "type": "object"

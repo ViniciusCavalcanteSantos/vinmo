@@ -114,14 +114,26 @@ class Image extends Model
         return $this->hasMany(FaceCrop::class);
     }
 
-    public function clientsInImage()
+    public function getClientsOnOriginalImageAttribute()
     {
-        return $this
-            ->belongsToMany(Client::class, 'clients_event_image_links')
-            ->withPivot(['event_id', 'matched_by', 'confidence', 'is_active'])
-            ->withTimestamps();
+        $imageReference = $this->parent_id
+            ? ($this->relationLoaded('original') ? $this->original : $this->original()->first())
+            : $this;
+
+        if ($imageReference->relationLoaded('clientsOnThisImage')) {
+            return $imageReference->clientsOnThisImage;
+        }
+
+        return $imageReference->clientsOnThisImage()->get();
     }
 
+    public function clientsOnThisImage()
+    {
+        return $this
+            ->belongsToMany(Client::class, 'face_crop_matches')
+            ->withPivot(['event_id', 'matched_by', 'confidence'])
+            ->withTimestamps();
+    }
 
     public function storeExif(?array $exif)
     {

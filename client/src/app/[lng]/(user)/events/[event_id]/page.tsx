@@ -10,7 +10,7 @@ import Fallback from "@/components/Fallback";
 import ImageType from "@/types/Image";
 import {ApiStatus} from "@/types/ApiResponse";
 import {filesize} from "filesize";
-import {Button, Dropdown, Empty, Image, Tooltip, Typography} from "antd";
+import {Badge, Button, Dropdown, Empty, Image, Tooltip, Typography} from "antd";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {
@@ -190,17 +190,23 @@ export default function Page() {
                 {/* ações */}
                 <div className="flex justify-end gap-4 p-4">
                   <Tooltip title={t('clients_in_image')}>
-                    <Button
-                      type="text"
-                      shape="circle"
-                      aria-label={t('options')}
-                      className="
+                    <Badge
+                      count={image.clientsOnImageCount}
+                      size="small" style={{fontSize: 10, background: "var(--ant-color-primary)"}}
+                      offset={[-4, 4]}
+                    >
+                      <Button
+                        type="text"
+                        shape="circle"
+                        aria-label={t('options')}
+                        className="
                       !text-2xl
                       !text-ant-text-sec
                     "
-                    >
-                      <TeamOutlined/>
-                    </Button>
+                      >
+                        <TeamOutlined/>
+                      </Button>
+                    </Badge>
                   </Tooltip>
 
                   <Dropdown menu={menuFor(image)} trigger={['click']}>

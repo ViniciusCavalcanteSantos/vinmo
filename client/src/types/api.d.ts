@@ -315,6 +315,11 @@ export interface components {
             createdAt: string;
             /** @example 2025-11-06 10:20:00 */
             updatedAt: string;
+            /**
+             * @description Quantidade de clientes detectados na imagem
+             * @example 3
+             */
+            clientsOnImageCount?: number | null;
         };
         User: {
             /** @example 1 */

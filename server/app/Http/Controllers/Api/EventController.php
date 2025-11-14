@@ -186,8 +186,12 @@ class EventController extends Controller
         $images = $event
             ->images()
             ->versions('web')
-            ->with('original')
+            ->with('original.clientsOnThisImage')
             ->get();
+
+        foreach ($images as $image) {
+            $image->clients_on_image_count = $image->original->clientsOnThisImage->unique()->count();
+        }
 
         return response()->json([
             'status' => 'success',
