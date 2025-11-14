@@ -113,7 +113,7 @@ class ClientService
         $exif = @exif_read_data($uploaded->getRealPath(), null, true);
         $processed = ImagePreparationService::from($uploaded)
             ->fixOrientation()
-            ->limitDimensions()
+            ->limitDimensions(1980, 1980)
             ->ensureFormat()
             ->fitBytes();
 

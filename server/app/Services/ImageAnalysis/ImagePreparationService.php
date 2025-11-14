@@ -16,7 +16,9 @@ class ImagePreparationService
     protected InterventionImage $image;
     protected mixed $native = null;
     protected ?string $forcedFormat = null;
+    protected array $acceptedFormats = ['image/jpeg', 'image/png'];
     protected int $quality = 90;
+    protected ?int $originalSizeBytes = null;
 
     /**
      * Cria uma instância a partir de um arquivo ou caminho de arquivo.
@@ -33,6 +35,11 @@ class ImagePreparationService
     {
         $instance = new self();
         $instance->image = Image::read($source);
+        if ($source instanceof UploadedFile) {
+            $instance->originalSizeBytes = $source->getSize();
+        } else {
+            $instance->originalSizeBytes = @filesize($source);
+        }
         return $instance;
     }
 
@@ -68,8 +75,9 @@ class ImagePreparationService
      * Garante que a imagem esteja em um dos formatos permitidos,
      * * e define o formato-alvo para exportações futuras.
      */
-    public function ensureFormat(array $formats = ['image/jpeg', 'image/png', 'image/webp'], int $quality = 90): self
+    public function ensureFormat(array $formats = ['image/jpeg', 'image/png'], int $quality = 90): self
     {
+        $this->acceptedFormats = $formats;
         $this->quality = $quality;
         $currentFormat = $this->image->origin()->mimetype();
         if (!in_array($currentFormat, $formats)) {
@@ -99,7 +107,7 @@ class ImagePreparationService
         $minQuality = 50;
         $qualityStep = 10;
 
-        $targetMime = $this->hasAlpha()
+        $targetMime = $this->hasAlpha() && in_array('image/webp', $this->acceptedFormats)
             ? 'image/webp'
             : 'image/jpeg';
         $this->forcedFormat = $targetMime;
@@ -157,7 +165,7 @@ class ImagePreparationService
         $qualityFinal = $quality ?? $this->quality;
 
         return match ($mimeFinal) {
-            'image/png' => new PngEncoder(false, true),
+            'image/png' => new PngEncoder(false, false),
             'image/webp' => new WebpEncoder(quality: $qualityFinal),
             'image/jpeg' => new JpegEncoder(quality: $qualityFinal),
             default => new JpegEncoder(quality: $qualityFinal),
