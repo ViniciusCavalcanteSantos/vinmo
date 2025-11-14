@@ -96,7 +96,7 @@ export default function Page() {
       render: (_, record) => `${record.contract?.code}`
     },
     {
-      title: t('evente'),
+      title: t('event'),
       dataIndex: ['type', "name"],
       sorter: (a, b) => a.type.name.localeCompare(b.type.name),
       render: (_, record) => `${record.type.name}: ${record.title}`

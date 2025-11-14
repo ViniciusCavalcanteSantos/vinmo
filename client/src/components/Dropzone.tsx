@@ -4,7 +4,7 @@ import {DeleteOutlined, InboxOutlined} from "@ant-design/icons";
 import {Button, Image, Progress} from "antd";
 import {useDropzone} from "react-dropzone";
 import {useT} from "@/i18n/client";
-import React, {useEffect} from "react";
+import React, {useCallback, useRef} from "react";
 import {filesize} from "filesize";
 import i18next from "@/i18n/i18next";
 import {v4 as uuidv4} from "uuid";
@@ -27,6 +27,7 @@ interface DropzoneProps {
   icon?: React.ReactNode,
   title?: string,
   description?: string,
+  onUploadFile?: (file: FileWithUploadData) => Promise<void>;
 }
 
 const DropzoneItem = React.memo(({file, onRemove}: {
@@ -35,7 +36,6 @@ const DropzoneItem = React.memo(({file, onRemove}: {
 }) => {
   if (!(file instanceof Blob)) return null;
   const url = file.preview;
-
   const {t} = useT();
 
   return (
@@ -92,6 +92,7 @@ const DropzoneItem = React.memo(({file, onRemove}: {
   )
 })
 
+const MAX_CONCURRENT = 4;
 
 export default function Dropzone(
   {
@@ -101,17 +102,35 @@ export default function Dropzone(
     icon = <InboxOutlined className="!text-ant-primary text-5xl"/>,
     title,
     description,
+    onUploadFile
   }: DropzoneProps
 ) {
   const {t} = useT();
   title = title ?? t('dropzone.title');
   description = description ?? t('dropzone.description');
+  const queueRef = useRef<FileWithUploadData[]>([]);
+  const runningRef = useRef(0);
 
-  useEffect(() => {
-    return () => {
-      files.forEach(file => file.preview && URL.revokeObjectURL(file.preview))
+  const processQueue = useCallback(() => {
+    if (!onUploadFile) return;
+
+    while (
+      runningRef.current < MAX_CONCURRENT &&
+      queueRef.current.length > 0
+      ) {
+      const file = queueRef.current.shift()!;
+      runningRef.current++;
+
+      onUploadFile(file)
+        .catch(() => {
+        })
+        .finally(() => {
+          runningRef.current--;
+          processQueue();
+        });
     }
-  }, [files]);
+  }, [onUploadFile]);
+
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     accept: {
@@ -127,6 +146,8 @@ export default function Dropzone(
         })
       );
       onFilesAdded(filesWithProgress);
+      queueRef.current.push(...filesWithProgress);
+      processQueue();
     },
     multiple: true,
   });

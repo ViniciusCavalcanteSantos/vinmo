@@ -33,6 +33,16 @@ const Page: React.FC = () => {
     totalPending: 0,
   });
 
+  const updateFile = (fileId: string, patch: Partial<FileWithUploadData>) => {
+    setFiles(prev =>
+      prev.map(f => {
+        if (f.id !== fileId) return f;
+        Object.assign(f, patch);
+        return f;
+      })
+    );
+  };
+
   useEffect(() => {
     if (!eventId) return;
     fetchEvent(Number(eventId), true)
@@ -71,43 +81,25 @@ const Page: React.FC = () => {
       .trim();
     if (!fileName) fileName = "Sem nome";
 
+
     const res = await eventPhotoUpload(eventId, file, (progress) => {
-      setFiles(prev =>
-        prev.map(f =>
-          f.id === file.id ? {...f, progress: Math.min(progress, 90)} : f
-        )
-      )
+      updateFile(file.id, {progress: Math.min(progress, 90)});
     })
 
     if (res.status !== ApiStatus.SUCCESS) {
       notification.warning({message: res.message})
-      setFiles(prev =>
-        prev.map(f => {
-          if (f.id === file.id) {
-            f.status = 'error'
-          }
-          return f
-        })
-      )
+      updateFile(file.id, {status: 'error'});
     } else {
-      setFiles(prev =>
-        prev.map(f => {
-          if (f.id === file.id) {
-            f.imageId = res.image.id
-            f.status = 'success'
-            f.progress = 100
-          }
-          return f
-        })
-      )
+      updateFile(file.id, {
+        imageId: res.image.id,
+        status: 'success',
+        progress: 100,
+      });
     }
   }
 
   const onFilesAdded = (newFiles: FileWithUploadData[]) => {
     setFiles(prev => [...newFiles, ...prev]);
-    newFiles.forEach(async (file) => {
-      await handleUpload(file)
-    })
   };
 
   const onFilesRemoved = async (file: FileWithUploadData) => {
@@ -151,6 +143,7 @@ const Page: React.FC = () => {
             <Dropzone
               onFilesAdded={onFilesAdded}
               onFilesRemoved={onFilesRemoved} files={files}
+              onUploadFile={handleUpload}
               description={t('newly_added_photos_may_take_some_time_to_be_separated')}
             />
 

@@ -30,6 +30,16 @@ const Page: React.FC = () => {
 
   const [assignments, setAssignments] = useState<number[]>([]);
 
+  const updateFile = (fileId: string, patch: Partial<FileWithUploadData>) => {
+    setFiles(prev =>
+      prev.map(f => {
+        if (f.id !== fileId) return f;
+        Object.assign(f, patch);
+        return f;
+      })
+    );
+  };
+
   useEffect(() => {
     const next = files.reduce(
       (acc, f) => {
@@ -55,42 +65,23 @@ const Page: React.FC = () => {
     if (!fileName) fileName = "Sem nome";
 
     const res = await createClient({name: fileName, assignments: assignments}, file, (progress) => {
-      setFiles(prev =>
-        prev.map(f =>
-          f.id === file.id ? {...f, progress: Math.min(progress, 90)} : f
-        )
-      )
+      updateFile(file.id, {progress: Math.min(progress, 90)});
     })
 
     if (res.status !== ApiStatus.SUCCESS) {
       notification.warning({message: res.message})
-      setFiles(prev =>
-        prev.map(f => {
-          if (f.id === file.id) {
-            f.status = 'error'
-          }
-          return f
-        })
-      )
+      updateFile(file.id, {status: 'error'});
     } else {
-      setFiles(prev =>
-        prev.map(f => {
-          if (f.id === file.id) {
-            f.clientId = res.client.id
-            f.status = 'success'
-            f.progress = 100
-          }
-          return f
-        })
-      )
+      updateFile(file.id, {
+        clientId: res.client.id,
+        status: 'success',
+        progress: 100,
+      });
     }
   }
 
   const onFilesAdded = (newFiles: FileWithUploadData[]) => {
     setFiles(prev => [...newFiles, ...prev]);
-    newFiles.forEach(async (file) => {
-      await handleUpload(file)
-    })
   };
 
   const onFilesRemoved = async (file: FileWithUploadData) => {
@@ -140,6 +131,7 @@ const Page: React.FC = () => {
             <Dropzone
               onFilesAdded={onFilesAdded}
               onFilesRemoved={onFilesRemoved} files={files}
+              onUploadFile={handleUpload}
               icon={<UserOutlined className="!text-ant-primary text-5xl"/>}
               title={t('click_or_drag_photo_to_create_client')}
               description={t('click_or_drag_photo_to_create_client_example')}

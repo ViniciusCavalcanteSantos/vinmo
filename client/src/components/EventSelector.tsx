@@ -53,7 +53,7 @@ function EventSelector({value, onChange}: EventSelectorProps) {
           key: 'contract-' + contract.id,
           selectable: false,
           children: contractEvents.map(event => ({
-            title: event.type.name,
+            title: event.type.name + ': ' + event.title,
             value: event.id,
             key: event.id,
           })),
