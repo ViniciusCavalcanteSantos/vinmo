@@ -8,6 +8,12 @@ export async function fetchImageMetadata(imageId: string) {
   });
 }
 
+export async function fetchImageClients(imageId: string) {
+  return await apiFetch(`/images/${imageId}/clients`, {
+    method: "GET",
+  });
+}
+
 export function downloadImage(imageId: string) {
   downloadFile(`${process.env.NEXT_PUBLIC_API_URL}/api/images/${imageId}/download`)
 }

@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class FaceCropMatch extends Model
+class FaceCropMatch extends Pivot
 {
+    protected $table = 'face_crop_matches';
+    protected $with = ['faceCrop'];
+    
     protected $fillable = [
-        'client_id', 'event_id', 'image_id', 'confidence', 'matched_by'
+        'face_crop_id', 'client_id', 'event_id', 'image_id', 'confidence', 'matched_by'
     ];
 
     protected $casts = [
@@ -16,7 +19,8 @@ class FaceCropMatch extends Model
         'confidence' => 'float',
     ];
 
-    public function detection(): BelongsTo
+
+    public function faceCrop(): BelongsTo
     {
         return $this->belongsTo(FaceCrop::class, 'face_crop_id');
     }

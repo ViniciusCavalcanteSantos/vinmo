@@ -109,9 +109,14 @@ class Image extends Model
         return $this->versions->firstWhere('type', $type);
     }
 
-    public function clientImageLinks(): HasMany
+    public function faceCrops(): HasMany
     {
-        return $this->hasMany(FaceCrop::class);
+        return $this->hasMany(FaceCrop::class, 'image_id');
+    }
+
+    public function faceCropMatches()
+    {
+        return $this->hasMany(FaceCropMatch::class, 'image_id');
     }
 
     public function getClientsOnOriginalImageAttribute()
@@ -131,7 +136,9 @@ class Image extends Model
     {
         return $this
             ->belongsToMany(Client::class, 'face_crop_matches')
-            ->withPivot(['event_id', 'matched_by', 'confidence'])
+            ->using(FaceCropMatch::class)
+            ->as('match')
+            ->withPivot(['face_crop_id', 'event_id', 'matched_by', 'confidence'])
             ->withTimestamps();
     }
 

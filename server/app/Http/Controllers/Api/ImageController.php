@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ClientResource;
 use App\Http\Resources\ImageMetaResource;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -64,6 +65,17 @@ class ImageController extends Controller
             'status' => 'success',
             'message' => __('Event images retrieved'),
             'metadata' => new ImageMetaResource($image->metas)
+        ]);
+    }
+
+    public function clientOnImage(Image $image)
+    {
+        $image = $image->parent_id ? $image->original : $image;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Image deleted'),
+            'clients' => ClientResource::collection($image->clientsOnThisImage)
         ]);
     }
 

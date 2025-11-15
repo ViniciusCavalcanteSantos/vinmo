@@ -80,6 +80,11 @@ class Client extends Model
             ->withTimestamps();
     }
 
+    public function faceCropMatches(): HasMany
+    {
+        return $this->hasMany(FaceCropMatch::class);
+    }
+
     public function imagesInEvent($eventId): HasMany
     {
         return $this->hasMany(FaceCrop::class)
