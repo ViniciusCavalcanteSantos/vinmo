@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\ImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    $res = Storage::directories('/');
+    dd($res);
     return view('welcome');
 });
 

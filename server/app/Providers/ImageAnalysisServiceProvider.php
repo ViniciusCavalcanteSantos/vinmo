@@ -21,10 +21,10 @@ class ImageAnalysisServiceProvider extends ServiceProvider
         $this->app->bind(AwsRekognitionAnalyzer::class, function ($app) {
             $client = new RekognitionClient([
                 'version' => 'latest',
-                'region' => config('filesystems.disks.s3.region'),
+                'region' => config('rekognition.region'),
                 'credentials' => [
-                    'key' => config('filesystems.disks.s3.key'),
-                    'secret' => config('filesystems.disks.s3.secret'),
+                    'key' => config('rekognition.key'),
+                    'secret' => config('rekognition.secret'),
                 ]
             ]);
 
