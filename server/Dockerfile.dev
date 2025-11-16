@@ -1,0 +1,38 @@
+FROM php:8.2-cli-alpine
+
+# libs e extensões PHP
+RUN apk add --no-cache \
+        git \
+        unzip \
+        icu-dev \
+        libzip-dev \
+        oniguruma-dev \
+        zlib-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype-dev \
+        imagemagick \
+        imagemagick-dev \
+        $PHPIZE_DEPS \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" intl zip pdo_mysql exif gd pcntl \
+    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && rm composer-setup.php
+
+# Config PHP (tamanhos de upload / POST e memória)
+RUN { \
+    echo "upload_max_filesize=30M"; \
+    echo "post_max_size=35M"; \
+    echo "memory_limit=512M"; \
+} > /usr/local/etc/php/conf.d/app-size-limits.ini
+
+WORKDIR /var/www
+
+ENV TZ=UTC
+
+CMD ["php", "-v"]

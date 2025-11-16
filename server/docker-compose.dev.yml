@@ -1,0 +1,107 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /var/www
+    command: php artisan serve --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+      - mailpit
+      - minio
+      - minio-setup
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /var/www
+    command: php artisan queue:work --sleep=1 --tries=3
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    depends_on:
+      - app
+      - redis
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /var/www
+    command: php artisan schedule:work
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    depends_on:
+      - app
+
+  composer:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    entrypoint: [ "composer", "--ansi", "--no-interaction", "--no-progress" ]
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: vinmo
+      MYSQL_USER: vinmo
+      MYSQL_PASSWORD: vinmo
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:8-alpine
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - 8025:8025
+    environment:
+      MP_MAX_MESSAGES: 5000
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio12345
+    ports:
+      - "9000:9000" # API
+      - "9001:9001" # Console
+    volumes:
+      - minio-data:/data
+
+  # CRIA O BUCKET
+  minio-setup:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      sh -c "
+        mc alias set local http://minio:9000 minio minio12345 &&
+        mc mb -p local/vinmo-dev || true
+      "
+    environment:
+      MC_HOST_local: http://minio:minio12345@minio:9000
+
+volumes:
+  mysql-data:
+  minio-data:
+  composer-cache:
