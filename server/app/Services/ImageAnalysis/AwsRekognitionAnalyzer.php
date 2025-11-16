@@ -14,12 +14,34 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
     protected RekognitionClient $client;
     protected string $collectionId;
     protected string $s3Bucket;
+    protected bool $useS3Object;
+    protected string $disk;
 
     public function __construct(RekognitionClient $client)
     {
         $this->client = $client;
-        $this->collectionId = config('filesystems.disks.s3.collection_id');
-        $this->s3Bucket = config('filesystems.disks.s3.bucket');
+        $this->collectionId = config('rekognition.collection_id');
+        $this->s3Bucket = config('rekognition.bucket');
+        $this->useS3Object = (bool) config('rekognition.use_s3_object', true);
+        $this->disk = config('rekognition.disk');
+    }
+
+    protected function makeImageParamFromKey(string $key): array
+    {
+        if ($this->useS3Object) {
+            return [
+                'S3Object' => [
+                    'Bucket' => $this->s3Bucket,
+                    'Name' => self::fullS3Key($key),
+                ],
+            ];
+        }
+
+        $bytes = Storage::disk($this->disk)->get($key);
+
+        return [
+            'Bytes' => $bytes,
+        ];
     }
 
     public function indexFace(string $s3ObjectKey, int|string $id): array
@@ -29,12 +51,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                 'CollectionId' => $this->collectionId,
                 'DetectionAttributes' => [],
                 'ExternalImageId' => (string) $id,
-                'Image' => [
-                    'S3Object' => [
-                        'Bucket' => $this->s3Bucket,
-                        'Name' => $this::fullS3Key($s3ObjectKey),
-                    ],
-                ],
+                'Image' => $this->makeImageParamFromKey($s3ObjectKey),
                 'MaxFaces' => 1,
                 'QualityFilter' => 'AUTO',
             ]);
@@ -67,12 +84,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
     {
         try {
             $detect = $this->client->detectFaces([
-                'Image' => [
-                    'S3Object' => [
-                        'Bucket' => $this->s3Bucket,
-                        'Name' => $this::fullS3Key($s3ObjectKey),
-                    ],
-                ],
+                'Image' => $this->makeImageParamFromKey($s3ObjectKey),
                 'Attributes' => ['ALL'],
             ]);
 
@@ -169,12 +181,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
             $result = $this->client->searchFacesByImage([
                 'CollectionId' => $this->collectionId,
                 'FaceMatchThreshold' => $matchThreshold,
-                'Image' => [
-                    'S3Object' => [
-                        'Bucket' => $this->s3Bucket,
-                        'Name' => $this::fullS3Key($s3ObjectKey),
-                    ],
-                ],
+                'Image' => $this->makeImageParamFromKey($s3ObjectKey),
                 'MaxFaces' => 100,
             ]);
 
@@ -199,12 +206,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
             $res = $this->client->searchFacesByImage([
                 'CollectionId' => $this->collectionId,
                 'FaceMatchThreshold' => $matchThreshold,
-                'Image' => [
-                    'S3Object' => [
-                        'Bucket' => $this->s3Bucket,
-                        'Name' => $this::fullS3Key($s3ObjectKey),
-                    ],
-                ],
+                'Image' => $this->makeImageParamFromKey($s3ObjectKey),
                 'MaxFaces' => 1,
                 'QualityFilter' => 'AUTO',
             ]);
@@ -250,12 +252,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
     {
         try {
             $result = $this->client->detectFaces([
-                'Image' => [
-                    'S3Object' => [
-                        'Bucket' => $this->s3Bucket,
-                        'Name' => $this::fullS3Key($s3ObjectKey),
-                    ],
-                ],
+                'Image' => $this->makeImageParamFromKey($s3ObjectKey),
             ]);
             return count($result['FaceDetails'] ?? []);
         } catch (AwsException $e) {
