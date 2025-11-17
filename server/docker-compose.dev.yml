@@ -17,7 +17,11 @@ services:
       - mailpit
       - minio
       - minio-setup
-
+    environment:
+      PHP_IDE_CONFIG: "serverName=docker-xdebug"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  
   queue:
     build:
       context: .
