@@ -104,8 +104,58 @@ class Image extends Model
         return Storage::disk($this->disk)->url($this->path);
     }
 
+    public function getUrlsAttribute(): array
+    {
+        $originalUrl = $this->url;
+        $webUrl = null;
+        $thumbUrl = null;
+
+        if (is_null($this->parent_id)) {
+            $web = $this->getPreloadedVersion('web');
+            $thumb = $this->getPreloadedVersion('thumb');
+
+            return [
+                'original' => $originalUrl,
+                'web' => $web?->url ?? $originalUrl,
+                'thumb' => $thumb?->url ?? $web?->url ?? $originalUrl,
+            ];
+        }
+
+        if ($this->relationLoaded('original')) {
+            $original = $this->original;
+            $originalUrl = $original->url;
+
+            if ($original->relationLoaded('versions')) {
+                $web = $original->versions->firstWhere('type', 'web');
+                $thumb = $original->versions->firstWhere('type', 'thumb');
+
+                $webUrl = $web?->url;
+                $thumbUrl = $thumb?->url;
+            }
+        }
+
+        return [
+            'original' => $originalUrl,
+            'web' => $webUrl ?? $originalUrl,
+            'thumb' => $thumbUrl ?? $webUrl ?? $originalUrl,
+        ];
+    }
+
     public function getVersion(string $type): ?self
     {
+        if ($this->relationLoaded('versions')) {
+            return $this->versions->firstWhere('type', $type);
+        }
+
+        return $this->versions()->where('type', $type)->first();
+    }
+
+    protected function getPreloadedVersion(string $type): ?self
+    {
+        if (!$this->relationLoaded('versions')) {
+            return null;
+        }
+
         return $this->versions->firstWhere('type', $type);
     }
 

@@ -259,6 +259,23 @@ export interface components {
             /** @description Metadados adicionais não padronizados */
             other?: Record<string, never>;
         };
+        URLs: {
+            /**
+             * Format: uri
+             * @example https://s3.amazonaws.com/bucket/image.jpg
+             */
+            original?: string;
+            /**
+             * Format: uri
+             * @example https://s3.amazonaws.com/bucket/image_webp.webp
+             */
+            web?: string;
+            /**
+             * Format: uri
+             * @example https://s3.amazonaws.com/bucket/image_thum_webp
+             */
+            thumb?: string;
+        };
         OriginalImageInfo: {
             /** @example IMG_1234 */
             name: string;
@@ -288,6 +305,7 @@ export interface components {
              * @example https://s3.amazonaws.com/bucket/image.jpg
              */
             url: string;
+            urls?: components["schemas"]["URLs"];
             /**
              * @description Versão da imagem (ex: original, web, thumb)
              * @example original

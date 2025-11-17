@@ -7,6 +7,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @OA\Schema(
+ *    schema="URLs",
+ *    type="object",
+ *    @OA\Property(property="original", type="string", format="uri", example="https://s3.amazonaws.com/bucket/image.jpg"),
+ *    @OA\Property(property="web", type="string", format="uri", example="https://s3.amazonaws.com/bucket/image_webp.webp"),
+ *    @OA\Property(property="thumb", type="string", format="uri", example="https://s3.amazonaws.com/bucket/image_thum_webp"),
+ * )
+ *
+ * @OA\Schema(
  *    schema="OriginalImageInfo",
  *    type="object",
  *    required={"name", "size", "width", "height", "mimeType"},
@@ -23,6 +31,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   required={"id", "url", "type", "size", "mimeType", "createdAt", "updatedAt"},
  *   @OA\Property(property="id", type="string", example="01J5Q8V6WZ3QC4FJ0V5E5VQ7R9"),
  *   @OA\Property(property="url", type="string", format="uri", example="https://s3.amazonaws.com/bucket/image.jpg"),
+ *   @OA\Property(property="urls", ref="#/components/schemas/URLs"),
  *   @OA\Property(
  *     property="type",
  *     type="string",
@@ -81,6 +90,8 @@ class ImageResource extends JsonResource
         if ($this->clients_on_image_count !== null) {
             $data['clientsOnImageCount'] = (int) $this->clients_on_image_count;
         }
+
+        $data['urls'] = $this->urls;
 
         return $data;
     }

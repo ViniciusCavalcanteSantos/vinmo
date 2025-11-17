@@ -185,12 +185,15 @@ class EventController extends Controller
 
         $images = $event
             ->images()
-            ->versions('web')
-            ->with('original.clientsOnThisImage')
+            ->originals()
+            ->with([
+                'versions' => fn($q) => $q->whereIn('type', ['web', 'thumb']),
+                'clientsOnThisImage'
+            ])
             ->get();
 
         foreach ($images as $image) {
-            $image->clients_on_image_count = $image->original->clientsOnThisImage->unique()->count();
+            $image->clients_on_image_count = $image->clientsOnThisImage->unique()->count();
         }
 
         return response()->json([

@@ -577,6 +577,26 @@
                 },
                 "type": "object"
             },
+            "URLs": {
+                "properties": {
+                    "original": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://s3.amazonaws.com/bucket/image.jpg"
+                    },
+                    "web": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://s3.amazonaws.com/bucket/image_webp.webp"
+                    },
+                    "thumb": {
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://s3.amazonaws.com/bucket/image_thum_webp"
+                    }
+                },
+                "type": "object"
+            },
             "OriginalImageInfo": {
                 "required": [
                     "name",
@@ -632,6 +652,9 @@
                         "type": "string",
                         "format": "uri",
                         "example": "https://s3.amazonaws.com/bucket/image.jpg"
+                    },
+                    "urls": {
+                        "$ref": "#/components/schemas/URLs"
                     },
                     "type": {
                         "description": "Versão da imagem (ex: original, web, thumb)",

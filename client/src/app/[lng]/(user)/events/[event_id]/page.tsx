@@ -167,7 +167,7 @@ export default function Page() {
                 {/* wrapper da imagem */}
                 <div className="w-full pt-[67%] relative">
                   <div className="absolute top-0 left-0 w-full h-full [&>.ant-image]:w-full [&>.ant-image]:h-full">
-                    <Image src={image.url} className="rounded-t-lg object-contain !h-full"/>
+                    <Image src={image.urls?.web} className="rounded-t-lg object-contain !h-full"/>
                   </div>
                 </div>
 
