@@ -128,7 +128,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                         'Image' => [
                             'Bytes' => $cropedBinary
                         ],
-                        'MaxFaces' => 5,
+                        'MaxFaces' => 1,
                         'QualityFilter' => 'AUTO',
                     ]);
                 } catch (AwsException $e) {
