@@ -106,20 +106,16 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                     continue;
                 }
 
-                $left = max(0, (int) round(($bbox['Left'] ?? 0) * $W));
-                $top = max(0, (int) round(($bbox['Top'] ?? 0) * $H));
-                $width = max(1, (int) round(($bbox['Width'] ?? 0) * $W));
-                $height = max(1, (int) round(($bbox['Height'] ?? 0) * $H));
+                $faceWidthPx = (int) round(($bbox['Width'] ?? 0) * $W);
+                $faceHeightPx = (int) round(($bbox['Height'] ?? 0) * $H);
+                $paddingX = (int) round($faceWidthPx * 0.25);
+                $paddingY = (int) round($faceHeightPx * 0.25);
 
-                $left = min($left, max(0, $W - 1));
-                $top = min($top, max(0, $H - 1));
-                $width = min($width, $W - $left);
-                $height = min($height, $H - $top);
+                $faceBox = $this->getFaceBox($bbox, $W, $H, $paddingX, $paddingY);
 
-                $width += 100;
-                $height += 100;
                 $imageClone = clone $image;
-                $cropedBinary = $imageClone->crop($width, $height, $left, $top)->encode()->toString();
+                $cropedBinary = $imageClone->crop($faceBox['width'], $faceBox['height'], $faceBox['left'],
+                    $faceBox['top'])->encode()->toString();
 
                 try {
                     $search = $this->client->searchFacesByImage([
@@ -154,12 +150,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
                         $bestByClient[$clientId] = [
                             'client_id' => $clientId,
                             'confidence' => $similarity,
-                            'box' => [
-                                'left' => $left,
-                                'top' => $top,
-                                'width' => $width,
-                                'height' => $height,
-                            ],
+                            'box' => $faceBox,
                             'details' => $face,
                             'croppedImage' => $cropedBinary,
                             'matched_by' => 'rekognition',
@@ -170,7 +161,7 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
 
             return array_values($bestByClient);
         } catch (\Exception $e) {
-            throw new ImageAnalysisException(__('Failed to search for faces in the image')." ".$e->getAwsErrorMessage(),
+            throw new ImageAnalysisException(__('Failed to search for faces in the image')." ".$e->getMessage(),
                 $e->getCode(), $e);
         }
     }
@@ -275,5 +266,30 @@ class AwsRekognitionAnalyzer implements ImageAnalyzer
             throw new ImageAnalysisException(__('Failed to parse image with AWS service:')." ".$e->getAwsErrorMessage(),
                 $e->getCode(), $e);
         }
+    }
+
+    private function getFaceBox($bbox, $W, $H, $px = 0, $py = 0)
+    {
+        $left = max(0, (int) round(($bbox['Left'] ?? 0) * $W));
+        $top = max(0, (int) round(($bbox['Top'] ?? 0) * $H));
+        $width = max(1, (int) round(($bbox['Width'] ?? 0) * $W));
+        $height = max(1, (int) round(($bbox['Height'] ?? 0) * $H));
+
+        $left = min($left, max(0, $W - 1));
+        $top = min($top, max(0, $H - 1));
+        $width = min($width, $W - $left);
+        $height = min($height, $H - $top);
+
+        $left = max(0, $left - round($px / 2));
+        $top = max(0, $top - round($py / 2));
+        $width = min($width + $px, $W - $left);
+        $height = min($height + $py, $H - $top);
+
+        return [
+            'left' => $left,
+            'top' => $top,
+            'width' => $width,
+            'height' => $height
+        ];
     }
 }
