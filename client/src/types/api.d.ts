@@ -195,6 +195,81 @@ export interface components {
             totalSize: number;
             type: components["schemas"]["EventType"];
         };
+        FaceCropMatch: {
+            /** @example 2 */
+            id: number;
+            /** @example 2 */
+            faceCropId: number;
+            /** @example 18 */
+            clientId: number;
+            /** @example 01kabknvc1fy2cvgen915mb0t3 */
+            imageId: string;
+            /**
+             * @example rekognition
+             * @enum {string}
+             */
+            matchedBy: "rekognition" | "manual";
+            /**
+             * Format: float
+             * @example 99.97
+             */
+            confidence: number;
+            /** @example null */
+            notes?: string | null;
+            /** @example null */
+            createdBy?: number | null;
+            /** @example null */
+            aprovedBy?: number | null;
+            /**
+             * Format: date-time
+             * @example 2025-11-18T13:50:17.000000Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2025-11-18T13:50:17.000000Z
+             */
+            updatedAt?: string;
+            faceCrop?: components["schemas"]["FaceCrop"] | null;
+        };
+        FaceCrop: {
+            /** @example 2 */
+            id: number;
+            /** @example 90 */
+            eventId: number;
+            /** @example 01kabknvc1fy2cvgen915mb0t3 */
+            originalImageId: string;
+            /** @example 1388 */
+            boxX: number;
+            /** @example 195 */
+            boxY: number;
+            /** @example 440 */
+            boxW: number;
+            /** @example 195 */
+            boxH: number;
+            /** @example null */
+            bestClientId?: number | null;
+            /**
+             * Format: float
+             * @example null
+             */
+            bestConfidence?: number | null;
+            /**
+             * @description 0 para false, 1 para true
+             * @example 0
+             */
+            dismissed: number;
+            /**
+             * Format: date-time
+             * @example 2025-11-18T13:50:17.000000Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2025-11-18T13:50:17.000000Z
+             */
+            updatedAt?: string;
+        };
         GraduationDetails: {
             /**
              * @example university

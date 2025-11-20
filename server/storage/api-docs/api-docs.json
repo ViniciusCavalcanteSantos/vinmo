@@ -438,6 +438,150 @@
                 },
                 "type": "object"
             },
+            "FaceCropMatch": {
+                "required": [
+                    "id",
+                    "faceCropId",
+                    "clientId",
+                    "imageId",
+                    "matchedBy",
+                    "confidence"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "faceCropId": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "clientId": {
+                        "type": "integer",
+                        "example": 18
+                    },
+                    "imageId": {
+                        "type": "string",
+                        "example": "01kabknvc1fy2cvgen915mb0t3"
+                    },
+                    "matchedBy": {
+                        "type": "string",
+                        "enum": [
+                            "rekognition",
+                            "manual"
+                        ],
+                        "example": "rekognition"
+                    },
+                    "confidence": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 99.97
+                    },
+                    "notes": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "createdBy": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "aprovedBy": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-18T13:50:17.000000Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-18T13:50:17.000000Z"
+                    },
+                    "faceCrop": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/FaceCrop"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "FaceCrop": {
+                "required": [
+                    "id",
+                    "eventId",
+                    "originalImageId",
+                    "boxX",
+                    "boxY",
+                    "boxW",
+                    "boxH",
+                    "dismissed"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "eventId": {
+                        "type": "integer",
+                        "example": 90
+                    },
+                    "originalImageId": {
+                        "type": "string",
+                        "example": "01kabknvc1fy2cvgen915mb0t3"
+                    },
+                    "boxX": {
+                        "type": "integer",
+                        "example": 1388
+                    },
+                    "boxY": {
+                        "type": "integer",
+                        "example": 195
+                    },
+                    "boxW": {
+                        "type": "integer",
+                        "example": 440
+                    },
+                    "boxH": {
+                        "type": "integer",
+                        "example": 195
+                    },
+                    "bestClientId": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "bestConfidence": {
+                        "type": "number",
+                        "format": "float",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "dismissed": {
+                        "description": "0 para false, 1 para true",
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-18T13:50:17.000000Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-18T13:50:17.000000Z"
+                    }
+                },
+                "type": "object"
+            },
             "GraduationDetails": {
                 "required": [
                     "type",

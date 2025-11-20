@@ -1,6 +1,8 @@
 import apiFetch from "@/lib/apiFetch";
 import {ImageMeta} from "@/types/Image";
 import downloadFile from "@/lib/download";
+import Client from "@/types/Client";
+import {FaceCropMatch} from "@/types/FaceCrop";
 
 export async function fetchImageMetadata(imageId: string) {
   return await apiFetch<{ metadata: ImageMeta }>(`/images/${imageId}/metadata`, {
@@ -9,7 +11,13 @@ export async function fetchImageMetadata(imageId: string) {
 }
 
 export async function fetchImageClients(imageId: string) {
-  return await apiFetch(`/images/${imageId}/clients`, {
+  return await apiFetch<{ clients: Client[] }>(`/images/${imageId}/clients`, {
+    method: "GET",
+  });
+}
+
+export async function fetchClientCrop(imageId: string, clientId: number) {
+  return await apiFetch<{ faceMatch: FaceCropMatch }>(`/images/${imageId}/clients/crop/${clientId}`, {
     method: "GET",
   });
 }

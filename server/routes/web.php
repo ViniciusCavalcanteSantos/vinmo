@@ -26,6 +26,9 @@ Route::prefix('/api')->group(function () {
     Route::get('/images/{image}/download', [ImageController::class, 'download'])->name('images.download');
     Route::get('/images/{image}/metadata', [ImageController::class, 'metadata'])->name('images.metadata');
     Route::get('/images/{image}/clients', [ImageController::class, 'clientOnImage'])->name('images.clients');
+    Route::get('/images/{image}/clients/crop/{client}',
+        [ImageController::class, 'getClientCrop'])->name('images.clients.crop');
+
     Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.delete');
 
     Route::middleware('auth:sanctum')->group(function () {

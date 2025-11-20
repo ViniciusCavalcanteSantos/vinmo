@@ -1,6 +1,7 @@
 @layer theme, base, antd, components, utilities;
 @import "tailwindcss";
 
+@custom-variant light (&:where([data-theme=light], [data-theme=light] *));
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme inline {
@@ -13,6 +14,8 @@
     --color-ant-bg-base: var(--ant-color-bg-base);
     --color-ant-bg-layout: var(--ant-color-bg-layout);
     --color-ant-bg-spotlight: var(--ant-color-bg-spotlight, var(--ant-color-bg-elevated));
+    --color-ant-bg-blur: var(--ant-color-bg-blur);
+
     --color-ant-bg-mask: var(--ant-color-bg-mask);
 
 

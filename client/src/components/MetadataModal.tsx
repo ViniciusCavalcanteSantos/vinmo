@@ -44,7 +44,7 @@ export function MetadataModal({open, onClose, metadata}: Props) {
           return (
             <p
               key={meta.value}
-              className="bg-ant-bg-spotlight px-4 py-3"
+              className="bg-ant-fill-ter px-4 py-3"
             >
               <strong>{meta.label}</strong> | {meta.value}
             </p>

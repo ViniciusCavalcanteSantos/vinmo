@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClientResource;
+use App\Http\Resources\FaceCropMatchResource;
 use App\Http\Resources\ImageMetaResource;
+use App\Models\Client;
+use App\Models\FaceCropMatch;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -74,8 +77,21 @@ class ImageController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => __('Image deleted'),
+            'message' => __('Client on image retrieved successfully'),
             'clients' => ClientResource::collection($image->clientsOnThisImage)
+        ]);
+    }
+
+
+    public function getClientCrop(Image $image, Client $client)
+    {
+        $image = $image->parent_id ? $image->original : $image;
+        $faceCropMatch = FaceCropMatch::where('image_id', $image->id)->where('client_id', $client->id)->first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Client on image retrieved successfully'),
+            'faceMatch' => new FaceCropMatchResource($faceCropMatch)
         ]);
     }
 

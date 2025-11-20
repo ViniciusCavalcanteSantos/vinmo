@@ -1,7 +1,7 @@
 'use client'
 
 import {useParams, useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {fetchEvent, fetchEventImages} from "@/lib/database/Event";
 import Event from "@/types/Event";
 import {useNotification} from "@/contexts/NotificationContext";
@@ -21,10 +21,12 @@ import {
   MoreOutlined,
   TeamOutlined
 } from "@ant-design/icons";
-import {downloadImage, fetchImageMetadata, removeImage} from "@/lib/database/Image";
+import {downloadImage, fetchImageClients, fetchImageMetadata, removeImage} from "@/lib/database/Image";
 import {formatImageMeta, FormattedMetaItem} from "@/lib/formatImageMeta";
 import {MetadataModal} from "@/components/MetadataModal";
 import Link from "next/link";
+import Client from "@/types/Client";
+import {ClientsOnImageModal} from "@/components/ClientsOnImageModal";
 
 export default function Page() {
   const {t} = useT()
@@ -40,6 +42,10 @@ export default function Page() {
 
   const [metadata, setMetadata] = useState<FormattedMetaItem[]>([]);
   const [metadataOpen, setMetadataOpen] = useState(false);
+
+  const [imageSelected, seImageSelected] = useState<ImageType | null>(null)
+  const [clients, setClients] = useState<Client[]>([])
+  const [clientsOpen, setClientsOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -115,6 +121,17 @@ export default function Page() {
       })
   }
 
+  const handleOpenClients = (image: ImageType) => {
+    fetchImageClients(image.id)
+      .then(res => {
+        if (res.status === ApiStatus.SUCCESS) {
+          seImageSelected(image)
+          setClients(res.clients)
+          setClientsOpen(true)
+        }
+      })
+  }
+
   const menuFor = (img: ImageType) => ({
     onClick: async (info: { key: string }) => {
       switch (info.key) {
@@ -125,7 +142,7 @@ export default function Page() {
           handleOpenMetadata(img)
           break
         case 'clients':
-          // await handleOpenClients(img)
+          handleOpenClients(img)
           break
         case 'delete':
           handleDeleteImage(img)
@@ -196,13 +213,14 @@ export default function Page() {
                       offset={[-4, 4]}
                     >
                       <Button
+                        onClick={() => menuFor(image).onClick({key: 'clients'})}
                         type="text"
                         shape="circle"
                         aria-label={t('options')}
                         className="
-                      !text-2xl
-                      !text-ant-text-sec
-                    "
+                          !text-2xl
+                          !text-ant-text-sec
+                        "
                       >
                         <TeamOutlined/>
                       </Button>
@@ -242,6 +260,8 @@ export default function Page() {
 
       <MetadataModal open={metadataOpen} onClose={() => setMetadataOpen(false)} metadata={metadata}/>
 
+      <ClientsOnImageModal open={clientsOpen} onClose={() => setClientsOpen(false)} clients={clients}
+                           image={imageSelected}/>
     </div>
   )
 }
