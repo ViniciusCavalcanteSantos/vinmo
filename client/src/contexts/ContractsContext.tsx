@@ -30,7 +30,11 @@ export const ContractsProvider = ({children}: { children: React.ReactNode }) => 
   const [contracts, setContracts] = useState<Contract[]>([]);
   const [loadingContracts, setLoadingContracts] = useState(true);
 
+  const [lastFetchArgs, setLastFetchArgs] = useState<Parameters<typeof fetchContractsApi>>([] as unknown as Parameters<typeof fetchContractsApi>);
+
   const fetchContracts = useCallback(async (...args: Parameters<typeof fetchContractsApi>) => {
+    setLastFetchArgs(args)
+
     setLoadingContracts(true);
     const res = await fetchContractsApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
@@ -43,18 +47,18 @@ export const ContractsProvider = ({children}: { children: React.ReactNode }) => 
   const createContract = useCallback(async (...args: Parameters<typeof createContractApi>) => {
     const res = await createContractApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
-      await fetchContracts();
+      await fetchContracts(...lastFetchArgs);
     }
     return res;
-  }, [fetchContracts]);
+  }, [fetchContracts, lastFetchArgs]);
 
   const updateContract = useCallback(async (...args: Parameters<typeof updateContractApi>) => {
     const res = await updateContractApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
-      await fetchContracts();
+      await fetchContracts(...lastFetchArgs);
     }
     return res;
-  }, [fetchContracts]);
+  }, [fetchContracts, lastFetchArgs]);
 
   const removeContract = useCallback(async (...args: Parameters<typeof removeContractApi>) => {
     const res = await removeContractApi(...args);

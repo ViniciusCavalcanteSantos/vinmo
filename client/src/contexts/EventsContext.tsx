@@ -29,7 +29,11 @@ export const EventsProvider = ({children}: { children: React.ReactNode }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
+  const [lastFetchArgs, setLastFetchArgs] = useState<Parameters<typeof fetchEventsApi>>([] as unknown as Parameters<typeof fetchEventsApi>);
+
   const fetchEvents = useCallback(async (...args: Parameters<typeof fetchEventsApi>) => {
+    setLastFetchArgs(args);
+
     setLoadingEvents(true);
     const res = await fetchEventsApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
@@ -42,18 +46,18 @@ export const EventsProvider = ({children}: { children: React.ReactNode }) => {
   const createEvent = useCallback(async (...args: Parameters<typeof createEventApi>) => {
     const res = await createEventApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
-      await fetchEvents();
+      await fetchEvents(...lastFetchArgs);
     }
     return res;
-  }, [fetchEvents]);
+  }, [fetchEvents, lastFetchArgs]);
 
   const updateEvent = useCallback(async (...args: Parameters<typeof updateEventApi>) => {
     const res = await updateEventApi(...args);
     if (res.status === ApiStatus.SUCCESS) {
-      await fetchEvents();
+      await fetchEvents(...lastFetchArgs);
     }
     return res;
-  }, [fetchEvents]);
+  }, [fetchEvents, lastFetchArgs]);
 
   const removeEvent = useCallback(async (...args: Parameters<typeof removeEventApi>) => {
     const res = await removeEventApi(...args);
