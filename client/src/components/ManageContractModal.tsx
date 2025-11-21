@@ -224,7 +224,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
                   {t('category')}&nbsp;
                   {isEditMode && (
                     <Tooltip title={t('cant_edit_contract_category')}>
-                      <InfoCircleOutlined style={{color: 'rgba(0,0,0,.45)'}}/>
+                      <InfoCircleOutlined className="!text-ant-primary"/>
                     </Tooltip>
                   )}
                 </span>

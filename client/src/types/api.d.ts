@@ -193,6 +193,11 @@ export interface components {
              * @example 34567890
              */
             totalSize: number;
+            /**
+             * @description Informa se o evento vai atribuir clientes automaticamente
+             * @example false
+             */
+            autoAssignClients: boolean;
             type: components["schemas"]["EventType"];
         };
         FaceCropMatch: {

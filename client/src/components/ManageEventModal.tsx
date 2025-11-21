@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, DatePicker, Form, Input, Modal, Row, Select, TimePicker,} from 'antd';
+import {Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, TimePicker, Tooltip,} from 'antd';
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
@@ -11,6 +11,7 @@ import {fetchEventTypes} from "@/lib/database/Event";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
+import {InfoCircleOutlined} from "@ant-design/icons";
 
 interface ManageEventModalProps {
   open: boolean;
@@ -55,6 +56,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
           event_date: dayjs(event.eventDate),
           event_start_time: event.startTime ? dayjs(event.startTime, "HH:mm") : null,
           description: event.description,
+          auto_assign_clients: event.autoAssignClients
         });
 
         await handleContractChange(event.contractId);
@@ -139,7 +141,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
       onOk={handleOk}
       destroyOnHidden
     >
-      <Form form={form} layout="vertical" name="form_in_modal" preserve={false}>
+      <Form form={form} layout="vertical" name="form_in_modal">
         {/* CAMPOS COMUNS */}
         <Row gutter={16}>
           <Col span={12}>
@@ -189,10 +191,24 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
           </Col>
         </Row>
 
-        <Form.Item name="description" label={t('description_optional')} rules={[]}>
+        <Form.Item
+          name="description" label={t('description_optional')} rules={[]} className="!mb-2">
           <TextArea placeholder={t('description')}/>
         </Form.Item>
 
+        <Form.Item
+          name="auto_assign_clients"
+          valuePropName="checked"
+          initialValue={false}
+          style={{marginBottom: 10}}
+        >
+          <Checkbox>
+            {t('auto_assign_clients_to_event')}&nbsp;
+            <Tooltip title={t('auto_assign_clients_to_event_explanation')}>
+              <InfoCircleOutlined className="!text-ant-primary"/>
+            </Tooltip>
+          </Checkbox>
+        </Form.Item>
       </Form>
     </Modal>
   );

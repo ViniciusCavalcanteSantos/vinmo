@@ -27,6 +27,7 @@ class Event extends Model
         'start_time',
         'description',
         'searchable',
+        'auto_assign_clients'
     ];
 
     protected static function boot()

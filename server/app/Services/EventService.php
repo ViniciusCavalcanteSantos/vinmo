@@ -21,6 +21,7 @@ class EventService
                 'event_date' => $validated['event_date'],
                 'start_time' => $validated['event_start_time'] ?? null,
                 'description' => $validated['description'] ?? null,
+                'auto_assign_clients' => $validated['auto_assign_clients'] ?? false
             ]);
 
             return $event;
@@ -39,6 +40,7 @@ class EventService
                 'event_date' => $validated['event_date'],
                 'start_time' => $validated['event_start_time'] ?? null,
                 'description' => $validated['description'] ?? null,
+                'auto_assign_clients' => $validated['auto_assign_clients'] ?? false
             ]);
 
             return $event;

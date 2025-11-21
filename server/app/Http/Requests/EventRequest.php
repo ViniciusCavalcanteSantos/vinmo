@@ -41,6 +41,7 @@ class EventRequest extends ApiFormRequest
                         })
                 ],
                 'event_date' => ['required', 'date'],
+                'auto_assign_clients' => ['sometimes', 'boolean']
             ];
         } else {
             $rules = [
@@ -61,12 +62,14 @@ class EventRequest extends ApiFormRequest
                         })
                 ],
                 'event_date' => ['sometimes', 'date'],
+                'auto_assign_clients' => ['sometimes', 'boolean']
+
             ];
         }
 
         return array_merge($rules, [
-            'event_start_time' => ['sometimes', 'date_format:H:i'],
-            'description' => ['sometimes', 'string', 'max:300'],
+            'event_start_time' => ['nullable', 'date_format:H:i'],
+            'description' => ['nullable', 'string', 'max:300'],
         ]);
     }
 }

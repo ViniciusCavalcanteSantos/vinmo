@@ -378,7 +378,8 @@
                     "type",
                     "totalImages",
                     "totalSize",
-                    "createdAt"
+                    "createdAt",
+                    "autoAssignClients"
                 ],
                 "properties": {
                     "id": {
@@ -431,6 +432,11 @@
                         "description": "bytes",
                         "type": "integer",
                         "example": 34567890
+                    },
+                    "autoAssignClients": {
+                        "description": "Informa se o evento vai atribuir clientes automaticamente",
+                        "type": "boolean",
+                        "example": false
                     },
                     "type": {
                         "$ref": "#/components/schemas/EventType"

@@ -221,7 +221,7 @@ export default function Page() {
           event={editingEvent}
           onCreate={handleClose}
           onEdit={handleClose}
-          onCancel={() => setOpen(false)}
+          onCancel={handleClose}
         />
       </Card>
     </>

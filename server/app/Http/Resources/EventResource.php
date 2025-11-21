@@ -21,7 +21,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @OA\Schema(
  *   schema="Event",
  *   type="object",
- *   required={"id", "contractId", "eventDate", "type", "totalImages", "totalSize", "createdAt"},
+ *   required={"id", "contractId", "eventDate", "type", "totalImages", "totalSize", "createdAt", "autoAssignClients"},
  *   @OA\Property(property="id", type="integer", example=12),
  *   @OA\Property(property="contractId", type="integer", example=5),
  *   @OA\Property(property="title", type="string", format="date", example="Salão Nobre – 13/12"),
@@ -36,6 +36,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   ),
  *   @OA\Property(property="totalImages", type="integer", example=120),
  *   @OA\Property(property="totalSize", type="integer", example=34567890, description="bytes"),
+ *   @OA\Property(property="autoAssignClients", type="boolean", example=false, description="Informa se o evento vai atribuir clientes automaticamente"),
  *   @OA\Property(
  *     property="type",
  *     ref="#/components/schemas/EventType",
@@ -62,6 +63,7 @@ class EventResource extends JsonResource
             'contract' => new ContractResource($this->whenLoaded('contract')),
             'totalImages' => $this->images_count,
             'totalSize' => (int) $this->images_bytes,
+            'autoAssignClients' => (bool) $this->auto_assign_clients,
             'type' => $this->whenLoaded('type', function ($type) {
                 $type->load('category');
                 return [

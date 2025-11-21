@@ -88,17 +88,25 @@ class SortImage implements ShouldQueue
                     );
 
 
-                    if ($clientsInEvent->contains($detection['client_id'])) {
-                        $faceCrop->resolved()->updateOrCreate(
-                            [
-                                'client_id' => $detection['client_id'],
-                                'event_id' => $this->event->id,
-                                'image_id' => $this->image->id,
-                            ],
-                            [
-                                'confidence' => $detection['confidence'],
-                            ]
-                        );
+                    if (!empty($detection['client_id'])) {
+                        $isClientInEvent = $clientsInEvent->contains($detection['client_id']);
+
+                        if (!$isClientInEvent && $this->event->auto_assign_clients) {
+                            $this->event->clients()->attach($detection['client_id']);
+                            $clientsInEvent->push($detection['client_id']);
+                            $isClientInEvent = true;
+                        }
+
+                        if ($isClientInEvent) {
+                            $faceCrop->resolved()->updateOrCreate(
+                                [
+                                    'client_id' => $detection['client_id'],
+                                    'event_id' => $this->event->id,
+                                    'image_id' => $this->image->id,
+                                ],
+                                ['confidence' => $detection['confidence']]
+                            );
+                        }
                     }
 
                     $faceCropsToSaveDetails[] = [$faceCrop, $detection['details']];

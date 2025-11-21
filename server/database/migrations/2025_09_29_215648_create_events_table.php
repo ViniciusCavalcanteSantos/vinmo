@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->string('description', 300)->nullable();
+            $table->boolean('auto_assign_clients')->default(false);
 
             $table->text('searchable')->nullable();
             if (DB::connection()->getDriverName() !== 'sqlite') {

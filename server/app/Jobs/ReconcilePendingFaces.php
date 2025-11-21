@@ -103,7 +103,12 @@ class ReconcilePendingFaces implements ShouldQueue
                                             }
 
                                             $client_id = $match['client_id'];
-                                            if (!$allowed->contains($client_id)) {
+                                            $isClientInEvent = $allowed->contains($client_id);
+
+                                            if (!$isClientInEvent && $event->auto_assign_clients) {
+                                                $event->clients()->attach($client_id);
+                                                $allowed->push($client_id);
+                                            } else if (!$isClientInEvent) {
                                                 continue;
                                             }
 
