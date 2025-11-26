@@ -2,7 +2,7 @@
 
 import {CSSProperties, useState} from "react";
 import Link from "next/link";
-import Logo from "@/components/Logo";
+import Title from "@/components/Title";
 import {
   AliwangwangOutlined,
   CalendarOutlined,
@@ -16,6 +16,8 @@ import {useT} from "@/i18n/client";
 import UserAvatarDropdown from "@/components/UserAvatarDropdown";
 import {Button, Divider} from "antd";
 import {useUser} from "@/contexts/UserContext";
+import logo from "@/assets/logos/logo.svg"
+import Image from "next/image";
 
 export default function Header() {
   const {user} = useUser();
@@ -41,7 +43,7 @@ export default function Header() {
     <header className="bg-ant-bg-elevated border-b border-ant-border">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         <div className="flex lg:flex-1 items-center">
-          <div className="mr-4">
+          <div className="mr-2">
             <button
               className="rounded-md cursor-pointer border border-ant-border bg-ant-bg hover:bg-ant-fill-sec"
               onClick={() => setOpen(true)}
@@ -52,9 +54,8 @@ export default function Header() {
           </div>
 
           <Link href="/home" className="-m-1.5 p-1.5">
-            <div className="flex items-center justify-center text-[28px] text-ant-text">
-              <Logo width={32}/>
-              <div className="-translate-x-1"><span className="sr-only">V</span>inmo</div>
+            <div className="flex items-center justify-center text-2xl text-ant-text">
+              <Title/>
             </div>
           </Link>
         </div>
@@ -88,8 +89,8 @@ export default function Header() {
           <div className="h-full w-full flex flex-col p-2">
             <div className="flex justify-between items-center px-2 pt-2 pb-6">
               <div>
-                <span className="sr-only">Vinmo</span>
-                <Logo width={32}/>
+                <span className="sr-only">{process.env.NEXT_PUBLIC_APP_NAME}</span>
+                <Image src={logo} width={35} height={35} alt="Title"/>
               </div>
 
               <Button

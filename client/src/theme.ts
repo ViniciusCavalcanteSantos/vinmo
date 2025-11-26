@@ -3,8 +3,8 @@ import {AliasToken} from "antd/es/theme/interface";
 import {CSSProperties} from "react";
 
 const theme = {
-  primary: "#0C66E4", // #FFAA40
-  secondary: "#9333EA",
+  primary: "#0C66E4", // #FFAA40,fbbf24, ea580cff, f4d666ff
+  secondary: "#78ebff",
 
   overlay: "#c8d1da66",
 } as const;

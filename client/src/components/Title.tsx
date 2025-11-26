@@ -1,4 +1,5 @@
-import theme from "@/theme";
+import {Saira_Stencil_One} from "next/font/google";
+import {ComponentPropsWithoutRef} from "react";
 
 function LogoPart1({color, animated}: { color: string; animated: boolean }) {
   return (
@@ -34,46 +35,26 @@ function LogoPart2({color, animated}: { color: string; animated: boolean }) {
   );
 }
 
-interface LogoProps {
-  width: number;
-  color1?: string;
-  color2?: string;
-  animated?: boolean;
-}
+export const sairaStencil = Saira_Stencil_One({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+})
 
-export default function Logo({ width, color1 = theme.primary, color2 = theme.primary, animated = false }: LogoProps) {
+export default function Title({className, ...props}: ComponentPropsWithoutRef<'p'>) {
 
   return (
     <>
-      {animated && <style>
-        {`
-          @keyframes logoPart1 {
-            0% { transform: translate(-200%, 200%); opacity: 0; }
-            100% { transform: translate(0, 0); opacity: 1; }
-          }
-          @keyframes logoPart2 {
-            0% { transform: translate(200%, -200%); opacity: 0; }
-            100% { transform: translate(0, 0); opacity: 1; }
-          }
-          .logo-part1-animate {
-            animation: logoPart1 700ms ease-out forwards;
-          }
-          .logo-part2-animate {
-            animation: logoPart2 700ms ease-out forwards;
-          }
+      <p
+        className={`
+          text-transparent bg-clip-text font-extrabold bg-gradient-to-l from-ant-primary to-[#78ebff] p-2 tracking-wider
+          ${className}
         `}
-      </style>}
-
-      <div
-        className="relative inline-block"
-        style={{
-          width: `${width}px`,
-          height: `${(width * 61) / 80}px`,
-        }}
+        {...props}
       >
-        <LogoPart1 color={color1} animated={animated}/>
-        <LogoPart2 color={color2} animated={animated}/>
-      </div>
+        <span className={sairaStencil.className}>P</span>
+        HOTON
+      </p>
     </>
   );
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import {AutoComplete, Col, Form, Input, Row, Select} from "antd";
-import Logo from "@/components/Logo";
+import Title from "@/components/Title";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useT} from "@/i18n/client";
 import {useLocalStorage} from "react-use";
@@ -94,9 +94,8 @@ export default function Address() {
       requiredMark={false}
       layout="vertical"
     >
-      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
-        <Logo width={40}/>
-        <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
+      <div className="flex items-center justify-center text-3xl text-ant-text mb-6">
+        <Title/>
       </div>
       <h1 className="text-center font-semibold text-ant-text-sec text-xl">
         {t('address')}

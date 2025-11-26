@@ -1,6 +1,6 @@
 "use client"
 
-import Logo from "@/components/Logo";
+import Title from "@/components/Title";
 import {Form, Input} from "antd";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useT} from "@/i18n/client";
@@ -76,9 +76,8 @@ export default function ConfirmCodeForm() {
       onFinish={handleFinish}
       requiredMark={false}
     >
-      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
-        <Logo width={40}/>
-        <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
+      <div className="flex items-center justify-center text-3xl text-ant-text mb-6">
+        <Title/>
       </div>
       <h1 className="text-center mb-4 font-semibold text-ant-text-sec text-2xl">{t('login.we_emailed_you')}</h1>
       <p className="text-ant-text-sec text-sm mb-2">{t('login.to_complete_account_setup')}</p>

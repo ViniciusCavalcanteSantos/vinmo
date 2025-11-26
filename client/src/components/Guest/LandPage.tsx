@@ -1,4 +1,5 @@
 import LandingPageHeader from "@/components/Guest/LandPageHeader";
+import Fallback from "@/components/Fallback";
 
 export default function LandPage() {
   return (
@@ -6,6 +7,7 @@ export default function LandPage() {
       <LandingPageHeader/>
 
       <main className="pt-16">
+        <Fallback/>
       </main>
     </div>
   )

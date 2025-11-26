@@ -4,7 +4,7 @@ import {Avatar, Button, Divider, Space} from 'antd';
 import {UserOutlined} from '@ant-design/icons';
 import Link from 'next/link';
 import {useWindowScroll} from "react-use";
-import Logo from "@/components/Logo";
+import Title from "@/components/Title";
 import {useT} from "@/i18n/client";
 import {useRouter} from "next/navigation";
 
@@ -31,10 +31,8 @@ const LandingPageHeader = () => {
               isScrolled ? 'text-gray-800' : 'text-white'
             }`}
           >
-            <div className="flex items-center justify-center text-4xl text-ant-text-sec font-normal">
-              <Logo width={40}/>
-              <h1 className="-translate-x-1"><span className="sr-only">V</span><span
-                className='hidden xs:inline-flex'>inmo</span></h1>
+            <div className="flex items-center justify-center text-2xl text-ant-text-sec font-normal">
+              <Title/>
             </div>
           </Link>
         </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import Logo from "@/components/Logo";
+import Title from "@/components/Title";
 import {Form, Input} from "antd";
 import {MailOutlined} from "@ant-design/icons";
 import {PrimaryButton} from "@/components/PrimaryButton";
@@ -63,9 +63,8 @@ export default function ResetPasswordForm() {
       onFinish={handleFinish}
       requiredMark={false}
     >
-      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
-        <Logo width={40}/>
-        <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
+      <div className="flex items-center justify-center text-3xl text-ant-text mb-6">
+        <Title/>
       </div>
       <h1 className="text-center mb-4 font-semibold text-ant-text-sec text-base">{t('login.cant_log_in')}</h1>
 

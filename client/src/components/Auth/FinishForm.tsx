@@ -1,7 +1,7 @@
 "use client"
 
 import {Form, Input} from "antd";
-import Logo from "@/components/Logo";
+import Title from "@/components/Title";
 import {CheckCircleFilled, LockOutlined, UserOutlined} from "@ant-design/icons";
 import {Trans} from "react-i18next";
 import Link from "next/link";
@@ -75,9 +75,8 @@ export default function FinishForm() {
       onFinish={handleFinish}
       requiredMark={false}
     >
-      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
-        <Logo width={40}/>
-        <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
+      <div className="flex items-center justify-center text-3xl text-ant-text mb-6">
+        <Title/>
       </div>
       <h1 className="text-center font-semibold text-ant-text-sec text-base">
         {t('login.email_verified')}

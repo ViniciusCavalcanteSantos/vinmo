@@ -1,6 +1,6 @@
 "use client"
 
-import Logo from "@/components/Logo";
+import Title from "@/components/Title";
 import Image from "next/image";
 import email from "@/assets/email.png";
 import {Trans} from "react-i18next";
@@ -55,9 +55,8 @@ export default function RecoverySentForm() {
       requiredMark={false}
     >
 
-      <div className="flex items-center justify-center text-4xl text-ant-text mb-6">
-        <Logo width={40}/>
-        <h1 className="-translate-x-1"><span className="sr-only">V</span>inmo</h1>
+      <div className="flex items-center justify-center text-3xl text-ant-text mb-6">
+        <Title/>
       </div>
       <h1 className="text-center mb-4 font-semibold text-ant-text-sec text-base">{t('login.cant_log_in')}</h1>
 
