@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -46,6 +47,20 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => $firstError,
                     'errors' => $e->errors(),
                 ], 422);
+            }
+
+            return null;
+        });
+
+        $exceptions->renderable(function (HttpException $e, $request) {
+            if ($e->getStatusCode() === 419) {
+
+                if ($request->expectsJson() || $request->is('api/*')) {
+                    return response()->json([
+                        'status' => 'csrf_mismatch',
+                        'message' => $e->getMessage()
+                    ], 419);
+                }
             }
 
             return null;

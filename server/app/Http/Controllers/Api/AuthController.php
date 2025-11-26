@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -33,7 +34,7 @@ class AuthController extends Controller
         }
 
         try {
-            $code = str_pad(random_int(0, 99999999), 8, '0', STR_PAD_LEFT);
+            $code = strtoupper(Str::random(6));
 
             $request->session()->put('confirmation_code', $code);
             $request->session()->put('confirmation_email', $request->email);
@@ -183,7 +184,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255|unique:users',
-            'code' => 'required|digits:8',
+            'code' => 'required|string|size:6|alpha_num',
         ]);
         if ($validator->fails()) {
             return response()->json([

@@ -90,7 +90,13 @@ export default function ConfirmCodeForm() {
         rules={[{required: true, max: 255}]}
         style={{marginBottom: 20}}
       >
-        <Input.OTP length={8} disabled={sending} onChange={(value) => handleFinish({code: value})}/>
+        <Input.OTP
+          length={6}
+          formatter={(str) => str.trim().toUpperCase()}
+          disabled={sending}
+          size='large'
+          onChange={(value) => handleFinish({code: value})}
+        />
       </Form.Item>
 
       <Form.Item>

@@ -47,7 +47,7 @@ export default function Title({className, ...props}: ComponentPropsWithoutRef<'p
     <>
       <p
         className={`
-          text-transparent bg-clip-text font-extrabold bg-gradient-to-l from-ant-primary to-[#78ebff] p-2 tracking-wider
+          text-transparent bg-clip-text font-extrabold bg-gradient-to-l from-ant-primary to-[#78ebff] p-2 tracking-wide
           ${className}
         `}
         {...props}

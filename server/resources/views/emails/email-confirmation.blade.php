@@ -9,7 +9,8 @@
 <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f6f8; padding: 40px 0;">
     <tr>
         <td align="center">
-            <table width="400" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+            <table width="400" cellpadding="0" cellspacing="0"
+                   style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
 
                 <!-- Header -->
                 <tr>
@@ -26,7 +27,7 @@
                             Para continuar seu cadastro, utilize o código abaixo:
                         </p>
                         <p style="font-size: 32px; font-weight: bold; color: #4f46e5; margin: 20px 0; letter-spacing: 4px;">
-                            {{ $code }}
+                            <span style="margin-right: 15px">{{ substr($code, 0, 3) }}</span>{{ substr($code, 3, 3) }}
                         </p>
                         <p style="font-size: 14px; color: #666666; line-height: 1.5;">
                             Insira este código no formulário para verificar seu e-mail. <br>
