@@ -9,6 +9,7 @@ import en from 'antd/locale/en_US';
 import ptBR from 'antd/locale/pt_BR';
 import {Locale} from "antd/es/locale";
 import {ThemeProvider, useTheme} from "@/contexts/AppThemeContext";
+import {PhotonSpin} from "@/components/Fallback";
 
 
 export default function Providers({children, lang}: PropsWithChildren<{ lang: string }>) {
@@ -65,7 +66,10 @@ function ConfigProviderWrapper({children, lang}: PropsWithChildren<{ lang: strin
         cssVar: {
           prefix: 'ant',
           key: 'ant'
-        }
+        },
+      }}
+      spin={{
+        indicator: <PhotonSpin size='default'/>
       }}
     >
       <App className="h-full">

@@ -4,9 +4,18 @@ interface PhotonSpinProps {
   className?: string;
   style?: React.CSSProperties;
   size?: 'small' | 'default' | 'large';
+  scale?: number;
+  animationDuration?: number;
 }
 
-export function PhotonSpin({className, style, size = 'default'}: PhotonSpinProps) {
+export function PhotonSpin(
+  {
+    className,
+    style,
+    size = 'default',
+    scale = 1,
+    animationDuration = 1.5,
+  }: PhotonSpinProps) {
   const sizeConfig = {
     small: {
       container: 'h-4 w-4',
@@ -29,23 +38,36 @@ export function PhotonSpin({className, style, size = 'default'}: PhotonSpinProps
 
   return (
     <div
-      className={`relative flex animate-spin items-center justify-center [animation-duration:1.5s] ${config.container} ${className || ''}`}
-      style={style}
+      className={`inline-block ${className || ''}`}
+      style={{
+        ...style,
+        transform: `scale(${scale})`,
+        willChange: 'transform'
+      }}
     >
-      {/* O Rastro do Fóton (Cauda) */}
-      <div className="absolute inset-0 rounded-full blur-[1px]
+      <div
+        className={`relative flex animate-spin items-center justify-center [animation-duration:1.5s] ${config.container}`}
+        style={{
+          ...style,
+          animationDuration: `${animationDuration}s`,
+        }}
+      >
+        {/* O Rastro do Fóton (Cauda) */}
+        <div className="absolute inset-0 rounded-full blur-[1px]
              bg-[conic-gradient(from_0deg,transparent_0%,transparent_55%,rgba(12,102,228,0.9)_100%)]
              mask-[radial-gradient(closest-side,transparent_85%,black_87%)]
              Webkit-mask-[radial-gradient(closest-side,transparent_85%,black_87%)]">
-      </div>
+        </div>
 
-      {/* A Partícula (Fóton) */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className={`rounded-full bg-blue-50 relative ${config.ball}`}>
-          <div className={`absolute inset-0 rounded-full ${config.shadow}`}></div>
+        {/* A Partícula (Fóton) */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className={`rounded-full bg-blue-50 relative ${config.ball}`}>
+            <div className={`absolute inset-0 rounded-full ${config.shadow}`}></div>
+          </div>
         </div>
       </div>
     </div>
+
   );
 }
 
