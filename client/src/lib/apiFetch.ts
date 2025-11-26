@@ -9,6 +9,7 @@ export interface ApiFetchOptions extends RequestInit {
   driver?: ApiDriver;
   baseURL?: string;
   onProgress?: (progress: number) => void;
+  _retry?: boolean;
 }
 
 export type ApiFetchResponse<T = undefined> = ApiResponse &
@@ -32,7 +33,7 @@ export default async function apiFetch<T = undefined>(
   const isFormData = options.body instanceof FormData;
   const driver = options.driver ?? "fetch";
 
-  const baseURL = typeof options.baseURL === 'string' ? options.baseURL : process.env.NEXT_PUBLIC_API_URL;
+  const baseURL = typeof options.baseURL === 'string' ? options.baseURL : process.env.NEXT_PUBLIC_API_URL + '/api';
 
   const method = (options.method || "GET").toUpperCase();
   const isMutatingMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
@@ -54,6 +55,19 @@ export default async function apiFetch<T = undefined>(
     ...xsrfHeader
   };
 
+  const handleCsrfRetry = async () => {
+    if (options._retry) {
+      return null;
+    }
+
+    await apiFetch('/sanctum/csrf-cookie', {
+      method: 'GET',
+      baseURL: process.env.NEXT_PUBLIC_API_URL
+    });
+
+    return apiFetch<T>(path, {...options, _retry: true});
+  }
+
   const handleNotAuthenticated = () => {
     if (typeof window !== "undefined") {
       document.cookie = 'logged_in=; Max-Age=0; Path=/; SameSite=Lax';
@@ -74,7 +88,7 @@ export default async function apiFetch<T = undefined>(
   // 🚀 DRIVER: AXIOS
   // ======================================
   if (driver === "axios") {
-    const url = `${baseURL}/api${path}`;
+    const url = `${baseURL}${path}`;
     try {
       const res = await axios({
         method: options.method || "POST",
@@ -102,11 +116,16 @@ export default async function apiFetch<T = undefined>(
         return handleUnexpectedError(error.status)
       }
 
+      if (error.response.status === 419 || data.status === 'csrf_mismatch') {
+        const retryResult = await handleCsrfRetry();
+        if (retryResult) return retryResult;
+      }
+
       return data;
     }
   }
 
-  const res = await fetch(`${baseURL}/api${path}`, {
+  const res = await fetch(`${baseURL}${path}`, {
     ...options,
     headers,
     cache: options.cache ?? "no-store",
@@ -122,6 +141,11 @@ export default async function apiFetch<T = undefined>(
 
   if (!data || !("status" in data) || !("message" in data)) {
     return handleUnexpectedError(res.status)
+  }
+
+  if (res.status === 419 || data.status === 'csrf_mismatch') {
+    const retryResult = await handleCsrfRetry();
+    if (retryResult) return retryResult;
   }
 
   if (data.status === ApiStatus.NOT_AUTHENTICATED) {
