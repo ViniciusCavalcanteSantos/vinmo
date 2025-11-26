@@ -1,6 +1,7 @@
 import {PropsWithChildren} from "react";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
+import Providers from "@/app/[lng]/(auth)/providers";
 
 export default async function Layout({children}: PropsWithChildren) {
   const cookieStore = await cookies();
@@ -11,8 +12,11 @@ export default async function Layout({children}: PropsWithChildren) {
   }
 
   return (
-    <div className="h-full flex justify-center items-center ">
-      {children}
-    </div>
+    <Providers>
+      <div className="h-full flex justify-center items-center ">
+        {children}
+      </div>
+    </Providers>
+
   );
 }
