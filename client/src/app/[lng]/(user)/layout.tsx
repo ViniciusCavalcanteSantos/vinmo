@@ -2,6 +2,8 @@ import Header from "@/components/Header";
 import Providers from "@/app/[lng]/(user)/providers";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
+import {fetchUserServerSide} from "@/lib/database/server/User";
+import {ApiStatus} from "@/types/ApiResponse";
 
 export default async function Layout({children}: { children: React.ReactNode }) {
   const cookieStore = await cookies();
@@ -11,8 +13,13 @@ export default async function Layout({children}: { children: React.ReactNode }) 
     redirect(`/signin`);
   }
 
+  const {status, user} = await fetchUserServerSide()
+  if (status !== ApiStatus.SUCCESS || !user) {
+    redirect(`/signin`);
+  }
+
   return (
-    <Providers>
+    <Providers user={user}>
       <div>
         <Header/>
 
