@@ -26,9 +26,16 @@
                             Olá! 👋 <br>
                             Para continuar seu cadastro, utilize o código abaixo:
                         </p>
-                        <p style="font-size: 32px; font-weight: bold; color: #4f46e5; margin: 20px 0; letter-spacing: 4px;">
-                            <span style="margin-right: 15px">{{ substr($code, 0, 3) }}</span>{{ substr($code, 3, 3) }}
-                        </p>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                            <tbody>
+                            <tr>
+                                <td align="center"><span
+                                            style="font-size:32px;font-weight:bold;color:#4f46e5;margin:20px 0;letter-spacing:4px;padding-right: 5px">{{ substr($code, 0, 3) }}</span><span
+                                            style="font-size:32px;font-weight:bold;color:#4f46e5;margin:20px 0;letter-spacing:4px;padding-left: 5px">{{ substr($code, 3, 3) }}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                         <p style="font-size: 14px; color: #666666; line-height: 1.5;">
                             Insira este código no formulário para verificar seu e-mail. <br>
                             Se você não solicitou este e-mail, apenas ignore.
