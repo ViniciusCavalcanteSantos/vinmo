@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Mail\EmailConfirmation;
 use App\Mail\EmailPasswordReset;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
@@ -248,15 +249,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'email_verified_at' => 'required|date_format:Y-m-d H:i:s',
-            'address.postal_code' => 'required|string|max:12',
-            'address.street' => 'required|string|max:120',
-            'address.number' => 'required|string|max:10',
-            'address.neighborhood' => 'required|string|max:40',
-            'address.complement' => 'nullable|string|max:120',
-            'address.city' => 'required|string|max:40',
-            'address.state' => 'required|string|max:12',
-            'address.country' => 'required|string|size:2',
+            'email_verified_at' => 'required|date_format:Y-m-d H:i:s'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -269,7 +262,7 @@ class AuthController extends Controller
 
         try {
             $user = DB::transaction(function () use ($validated) {
-                $organization = \App\Models\Organization::create();
+                $organization = Organization::create();
                 $user = User::create([
                     'organization_id' => $organization->id,
                     'name' => $validated['name'],
@@ -277,11 +270,6 @@ class AuthController extends Controller
                     'email_verified_at' => $validated['email_verified_at'],
                     'password' => Hash::make($validated['password']),
                 ]);
-
-                $user->address()->create(array_merge($validated['address'], [
-                    'label' => 'User Address',
-                    'granularity' => 'full_address'
-                ]));
 
                 return $user;
             });

@@ -14,37 +14,26 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {register} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
-import {FullAddressType} from "@/types/Address";
 
 export default function FinishForm() {
   const {t} = useT();
   const notification = useNotification();
   const [emailConfirmation] = useLocalStorage<string | null>('emailConfirmation', null)
-  const [address, setAddress] = useLocalStorage<FullAddressType | null>("address")
   const [sending, setSending] = useState(false)
   const router = useRouter();
 
   useEffect(() => {
     if (!emailConfirmation) {
-      setAddress(null)
       router.push("/signup");
       return;
     }
-
-    if (!address) {
-      notification.warning({message: t('login.we_need_your_address')})
-      router.push("/signup/address");
-    }
-  }, [emailConfirmation, address]);
+  }, [emailConfirmation]);
 
   const handleFinish = async (values: any) => {
-    if (!address) return;
-
     setSending(true)
     const res = await register(
       values.name, emailConfirmation ?? "",
-      values.password, values.password_confirmation,
-      address
+      values.password, values.password_confirmation
     )
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)

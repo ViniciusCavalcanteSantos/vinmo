@@ -1,5 +1,4 @@
 import apiFetch from "@/lib/apiFetch";
-import {FullAddressType} from "@/types/Address";
 import User from "@/types/User";
 
 interface AuthSuccess {
@@ -35,12 +34,12 @@ export async function confirm_code(email: string, code: string) {
   });
 }
 
-export async function register(name: string, email: string, password: string, password_confirmation: string, address: FullAddressType) {
+export async function register(name: string, email: string, password: string, password_confirmation: string) {
   await fetchCSRF()
 
   return await apiFetch<AuthSuccess>("/register", {
     method: "POST",
-    body: JSON.stringify({name, email, password, password_confirmation, address: address}),
+    body: JSON.stringify({name, email, password, password_confirmation}),
   });
 }
 

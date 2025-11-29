@@ -60,7 +60,7 @@ export default function ConfirmCodeForm() {
       message: t('login.email_verified_successfully'),
       description: t('login.you_can_proceed_with_registration')
     });
-    router.push('/signup/address')
+    router.push('/signup/finish')
   }
 
   return (
