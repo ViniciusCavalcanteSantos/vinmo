@@ -34,7 +34,8 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'address' => new AddressResource($this->whenLoaded('address'))
+            'address' => new AddressResource($this->whenLoaded('address')),
+            'picture' => $this->profile->path ?? null
         ];
     }
 }

@@ -84,6 +84,7 @@ class AuthController extends Controller
             ::where('provider_name', $provider)
             ->where('provider_id', $providerUser->getId())
             ->first();
+        $avatarUrl = $providerUser->getAvatar();
 
         if ($socialIdentity) {
             $user = $socialIdentity->user;
@@ -114,6 +115,14 @@ class AuthController extends Controller
                     return $newUser;
                 });
             }
+        }
+
+        if ($avatarUrl && !$user->profile) {
+            $user->profile()->updateOrCreate([
+                'organization_id' => $user->organization_id,
+                'path' => $avatarUrl,
+                'disk' => 'external'
+            ]);
         }
 
         Auth::login($user, true);

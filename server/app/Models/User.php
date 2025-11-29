@@ -52,6 +52,8 @@ class User extends Authenticatable
         ];
     }
 
+    protected $with = ['profile'];
+
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
@@ -68,5 +70,10 @@ class User extends Authenticatable
     public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'addressable');
+    }
+
+    public function profile(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
     }
 }
