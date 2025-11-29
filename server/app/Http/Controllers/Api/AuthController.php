@@ -31,6 +31,10 @@ class AuthController extends Controller
             $available[] = 'google';
         }
 
+        if (config('services.microsoft.client_id') && config('services.microsoft.client_secret')) {
+            $available[] = 'microsoft';
+        }
+
         return $available;
     }
 

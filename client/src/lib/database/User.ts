@@ -11,8 +11,8 @@ async function fetchCSRF() {
   });
 }
 
-export async function googleRedirect() {
-  return await apiFetch<{ url: string }>("/auth/google/redirect", {
+export async function socialRedirect(socialMedia: string) {
+  return await apiFetch<{ url: string }>(`/auth/${socialMedia}/redirect`, {
     method: "GET",
   });
 }

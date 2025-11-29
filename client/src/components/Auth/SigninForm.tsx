@@ -8,7 +8,7 @@ import Link from "next/link";
 import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useRouter} from "next/navigation";
-import {login} from "@/lib/database/User";
+import {login, socialRedirect} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default function SigninForm() {
@@ -25,14 +25,14 @@ export default function SigninForm() {
     router.push("/home");
   };
 
-  const handleGoogleLogin = async () => {
-    // const res = await googleRedirect()
-    // if (res.status !== ApiStatus.SUCCESS) {
-    //   notification.info({message: res.message});
-    //   return;
-    // }
+  const handleSocialogin = async (socialMedia: string) => {
+    const res = await socialRedirect(socialMedia)
+    if (res.status !== ApiStatus.SUCCESS) {
+      notification.info({message: res.message});
+      return;
+    }
 
-    // window.location.href = res.url
+    window.location.href = res.url
   };
 
   return (
@@ -98,12 +98,12 @@ export default function SigninForm() {
         <Divider className='!text-sm !font-semibold  !text-ant-text-sec'>Ou prossiga com:</Divider>
       </h1>
 
-      <ul className='mb-4'>
+      <ul className='mb-6 flex flex-col gap-4 '>
         <li>
           <button
             type='button'
-            onClick={handleGoogleLogin}
-            className="flex items-center justify-center w-full px-4 py-2 mt-4 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
+            onClick={() => handleSocialogin('google')}
+            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24">
               <path
@@ -124,6 +124,23 @@ export default function SigninForm() {
               />
             </svg>
             <span className='text-ant-text-sec font-semibold text-base'>Google</span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            type='button'
+            onClick={() => handleSocialogin('microsoft')}
+            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
+          >
+            <svg className="w-6 h-6" viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="1" width="10" height="10" fill="#F25022"/>
+              <rect x="12" y="1" width="10" height="10" fill="#7FBA00"/>
+              <rect x="1" y="12" width="10" height="10" fill="#00A4EF"/>
+              <rect x="12" y="12" width="10" height="10" fill="#FFB900"/>
+            </svg>
+
+            <span className='text-ant-text-sec font-semibold text-base'>Microsoft</span>
           </button>
         </li>
       </ul>
