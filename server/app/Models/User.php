@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -38,19 +39,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function organization(): BelongsTo
-    {
-        return $this->belongsTo(Organization::class);
-    }
-
-    /**
-     * Um Usuário deve ter um endereço.
-     */
-    public function address(): MorphOne
-    {
-        return $this->morphOne(Address::class, 'addressable');
-    }
-
     /**
      * Get the attributes that should be cast.
      *
@@ -62,5 +50,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    public function socialIdentities(): HasMany
+    {
+        return $this->hasMany(UserSocialIdentity::class);
+    }
+
+    /**
+     * Um Usuário pode ter um endereço.
+     */
+    public function address(): MorphOne
+    {
+        return $this->morphOne(Address::class, 'addressable');
     }
 }

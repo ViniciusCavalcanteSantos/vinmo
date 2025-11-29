@@ -8,6 +8,7 @@ use App\Mail\EmailConfirmation;
 use App\Mail\EmailPasswordReset;
 use App\Models\Organization;
 use App\Models\User;
+use App\Models\UserSocialIdentity;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,9 +19,88 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
+    private function getProvidersAvailable(): array
+    {
+        $available = [];
+
+        if (config('services.google.client_id') && config('services.google.client_secret')) {
+            $available[] = 'google';
+        }
+
+        return $available;
+    }
+
+    public function redirectToProvider($provider)
+    {
+        if (!in_array($provider, $this->getProvidersAvailable())) {
+            return response()->json(['error' => 'Provider not supported'], 400);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Url obtained successfully'),
+            'url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl(),
+        ]);
+    }
+
+    public function handleProviderCallback($provider)
+    {
+        if (!in_array($provider, $this->getProvidersAvailable())) {
+            return redirect(config('app.url_client').'/signin?error=invalid_provider');
+        }
+
+        try {
+            $providerUser = Socialite::driver($provider)->stateless()->user();
+        } catch (\Exception $e) {
+            return redirect(config('app.url_client').'/signin?error=auth_failed');
+        }
+
+        $socialIdentity = UserSocialIdentity
+            ::where('provider_name', $provider)
+            ->where('provider_id', $providerUser->getId())
+            ->first();
+
+        if ($socialIdentity) {
+            $user = $socialIdentity->user;
+        } else {
+            $user = User::where('email', $providerUser->getEmail())->first();
+            if ($user) {
+                $user->socialIdentities()->create([
+                    'provider_name' => $provider,
+                    'provider_id' => $providerUser->getId(),
+                ]);
+            } else {
+                $user = DB::transaction(function () use ($providerUser, $provider) {
+                    $organization = Organization::create();
+
+                    $newUser = User::create([
+                        'organization_id' => $organization->id,
+                        'name' => $providerUser->getName(),
+                        'email' => $providerUser->getEmail(),
+                        'email_verified_at' => now(),
+                        'password' => Hash::make(Str::random(32)),
+                    ]);
+
+                    $newUser->socialIdentities()->create([
+                        'provider_name' => $provider,
+                        'provider_id' => $providerUser->getId(),
+                    ]);
+
+                    return $newUser;
+                });
+            }
+        }
+
+        Auth::login($user, true);
+        return redirect(config('app.url_client').'/home')
+            ->withCookie(
+                'logged_in', '1', 60 * 24 * 7, '/', null, true, false, false, 'Lax'
+            );
+    }
 
     public function send_code(Request $request)
     {

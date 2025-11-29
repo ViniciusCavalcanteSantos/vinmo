@@ -19,8 +19,14 @@ Route::prefix('/api')->group(function () {
     Route::post('/validate-recovery-token', [AuthController::class, 'validate_recovery_token']);
     Route::post('/change-password', [AuthController::class, 'change_password']);
     Route::post('/confirm-code', [AuthController::class, 'confirm_code']);
+
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+
+    Route::prefix('/auth')->group(function () {
+        Route::get('/{provider}/redirect', [AuthController::class, 'redirectToProvider']);
+        Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
+    });
 
     Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
     Route::get('/images/{image}/download', [ImageController::class, 'download'])->name('images.download');

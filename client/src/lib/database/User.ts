@@ -11,6 +11,12 @@ async function fetchCSRF() {
   });
 }
 
+export async function googleRedirect() {
+  return await apiFetch<{ url: string }>("/auth/google/redirect", {
+    method: "GET",
+  });
+}
+
 export async function login(email: string, password: string, remember_me: boolean) {
   await fetchCSRF()
 
