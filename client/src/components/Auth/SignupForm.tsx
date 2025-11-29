@@ -12,6 +12,7 @@ import {useState} from "react";
 import {useRouter} from "next/navigation";
 import {send_code} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
+import SocialMediaAuth from "@/components/Auth/SocialMediaAuth";
 
 export default function SignupForm() {
   const {t} = useT()
@@ -73,6 +74,8 @@ export default function SignupForm() {
           {t('login.register')}
         </PrimaryButton>
       </Form.Item>
+
+      <SocialMediaAuth/>
 
       <div className="flex justify-center">
         <Link href="/signin">
