@@ -35,13 +35,21 @@ class AuthController extends Controller
             $available[] = 'microsoft';
         }
 
+
+        if (config('services.linkedin.client_id') && config('services.linkedin.client_secret')) {
+            $available[] = 'linkedin';
+        }
+
         return $available;
     }
 
     public function redirectToProvider($provider)
     {
         if (!in_array($provider, $this->getProvidersAvailable())) {
-            return response()->json(['error' => 'Provider not supported'], 400);
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Provider not supported')
+            ], 400);
         }
 
         return response()->json([

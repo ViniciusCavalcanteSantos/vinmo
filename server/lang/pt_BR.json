@@ -287,5 +287,7 @@
   "This link expires in <strong>:minutes minutes</strong>.": "Este link expira em <strong>:minutes minutos</strong>.",
   "The :app Team": "A Equipe :app",
   "Use the link below to reset your password:": "Use o link abaixo para redefinir sua senha:",
-  "If you didn't request the reset, ignore this message.": "Se você não pediu a redefinição, ignore esta mensagem."
+  "If you didn't request the reset, ignore this message.": "Se você não pediu a redefinição, ignore esta mensagem.",
+  "Provider not supported": "Provedor não suportado",
+  "Url obtained successfully": "URL obtida com sucesso"
 }

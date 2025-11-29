@@ -12,6 +12,7 @@ import {login, socialRedirect} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
 import IconGoogle from "@/components/Icons/IconGoogle";
 import IconMicrosoft from "@/components/Icons/IconMicrosoft";
+import IconLinkedin from "@/components/Icons/IconLinkedin";
 
 export default function SigninForm() {
   const {t} = useT();
@@ -122,6 +123,18 @@ export default function SigninForm() {
             <IconMicrosoft/>
 
             <span className='text-ant-text-sec font-semibold text-base'>Microsoft</span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            type='button'
+            onClick={() => handleSocialogin('linkedin')}
+            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
+          >
+            <IconLinkedin/>
+
+            <span className='text-ant-text-sec font-semibold text-base'>Linkedin</span>
           </button>
         </li>
       </ul>

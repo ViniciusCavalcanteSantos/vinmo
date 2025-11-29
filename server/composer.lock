@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd2cb0b66851052468c41465cfeb246c",
+    "content-hash": "9498d422940b01838ed3f18b44b3bf3a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4851,6 +4851,56 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.1"
             },
             "time": "2025-09-04T20:59:21+00:00"
+        },
+        {
+            "name": "socialiteproviders/linkedin",
+            "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SocialiteProviders/LinkedIn.git",
+                "reference": "963ae7908116215eb470c3751c41fab04b01ed05"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SocialiteProviders/LinkedIn/zipball/963ae7908116215eb470c3751c41fab04b01ed05",
+                "reference": "963ae7908116215eb470c3751c41fab04b01ed05",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^8.0",
+                "socialiteproviders/manager": "^4.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SocialiteProviders\\LinkedIn\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brian Faust",
+                    "email": "hello@brianfaust.de"
+                }
+            ],
+            "description": "LinkedIn OAuth2 Provider for Laravel Socialite",
+            "keywords": [
+                "laravel",
+                "linkedin",
+                "oauth",
+                "provider",
+                "socialite"
+            ],
+            "support": {
+                "docs": "https://socialiteproviders.com/linkedin",
+                "issues": "https://github.com/socialiteproviders/providers/issues",
+                "source": "https://github.com/socialiteproviders/providers"
+            },
+            "time": "2024-11-27T10:35:28+00:00"
         },
         {
             "name": "socialiteproviders/manager",
