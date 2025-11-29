@@ -23,6 +23,7 @@ export function middleware(req: NextRequest) {
   const lngInPath = languages.find(loc => pathname.startsWith(`/${loc}`))
   const headers = new Headers(req.headers)
   headers.set(headerName, lngInPath || lng)
+  headers.set("x-pathname", req.nextUrl.pathname)
 
   if (
     !lngInPath &&
