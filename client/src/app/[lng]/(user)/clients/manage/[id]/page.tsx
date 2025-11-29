@@ -320,13 +320,13 @@ const ManageClientPage: React.FC = () => {
         <Card loading={loadingForm} variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)] w-full">
           <Form form={form} layout="vertical" name="manage_client_form" onFinish={handleSubmit}>
             <Row gutter={16}>
-              <Col span={12}>
+              <Col xs={24} md={12}>
                 <Form.Item name="name" label={t('name')} rules={[{required: true, message: t('enter_name')}]}>
                   <Input placeholder={t('name')} maxLength={60}/>
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
+              <Col xs={24} md={12}>
                 <Form.Item name="code" label={t('code')}
                            rules={[{message: t('enter_code')}]}>
                   <Input placeholder={t('code')} maxLength={20}/>
@@ -335,13 +335,13 @@ const ManageClientPage: React.FC = () => {
             </Row>
 
             <Row gutter={16}>
-              <Col span={12}>
+              <Col xs={24} md={12}>
                 <Form.Item name="birthdate" label={t('birthdate')} rules={[]}>
                   <DatePicker picker="date" style={{width: '100%'}} maxDate={dayjs()} format={defaultDateFormat}/>
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
+              <Col xs={24} md={12}>
                 <Form.Item name="phone" label={t('phone')} rules={[]}>
                   <InputPhone placeholder={t('phone')}/>
                 </Form.Item>
@@ -399,14 +399,14 @@ const ManageClientPage: React.FC = () => {
                 <Row gutter={16}>
                   <Divider>{t('guardian')}</Divider>
 
-                  <Col span={16}>
+                  <Col xs={24} md={16}>
                     <Form.Item name="guardian_name" label={t('guardian_name')}
                                rules={[{required: true, message: t('enter_guardian_name')}]}>
                       <Input placeholder={t('enter_guardian_name')} maxLength={60}/>
                     </Form.Item>
                   </Col>
 
-                  <Col span={8}>
+                  <Col xs={24} md={8}>
                     <Form.Item name="guardian_type" label={t('guardian_type')}
                                rules={[{required: true, message: t('select_guardian_type')}]}>
                       <Select
@@ -423,14 +423,14 @@ const ManageClientPage: React.FC = () => {
                 </Row>
 
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="guardian_email" label={t('guardian_email')}
                                rules={[{required: true, message: t('enter_guardian_email'), type: 'email'}]}>
                       <Input placeholder={t('enter_guardian_email')} maxLength={60}/>
                     </Form.Item>
                   </Col>
 
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="guardian_phone" label={t('guardian_phone')}
                                rules={[{required: true, message: t('enter_guardian_phone')}]}>
                       <InputPhone placeholder={t('enter_guardian_phone')} maxLength={20}/>
@@ -445,7 +445,7 @@ const ManageClientPage: React.FC = () => {
                 <Divider>{t('address')}</Divider>
 
                 <Row gutter={16}>
-                  <Col span={6}>
+                  <Col xs={24} sm={12} md={6}>
                     <Form.Item name="postal_code" label={t('postal_code')}
                                rules={[{required: true, message: t('enter_postal_code')}]}>
                       <Input placeholder={t('postal_code')} maxLength={12}/>
@@ -454,13 +454,13 @@ const ManageClientPage: React.FC = () => {
                 </Row>
 
                 <Row gutter={16}>
-                  <Col span={16}>
+                  <Col xs={24} md={16}>
                     <Form.Item name="street" label={t('street')} rules={[{required: true, message: t('enter_street')}]}>
                       <Input placeholder={t('street')} maxLength={120}/>
                     </Form.Item>
                   </Col>
 
-                  <Col span={8}>
+                  <Col xs={24} md={8}>
                     <Form.Item name="number" label={t('number')} rules={[{required: true, message: t('enter_number')}]}>
                       <Input placeholder={t('number')} maxLength={10}/>
                     </Form.Item>
@@ -474,7 +474,7 @@ const ManageClientPage: React.FC = () => {
 
                 {/* CAMPOS DE LOCALIZAÇÃO */}
                 <Row gutter={16}>
-                  <Col span={8}>
+                  <Col xs={24} md={8}>
                     <Form.Item name="country" label={t('country')}
                                rules={[{required: true, message: t('select_country')}]}>
                       <Select showSearch placeholder={t('select_country')}
@@ -485,7 +485,7 @@ const ManageClientPage: React.FC = () => {
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+                  <Col xs={24} md={8}>
                     <Form.Item name="state" label={t('state_province')}
                                rules={[{required: true, message: t('select_state')}]}>
                       <Select showSearch placeholder={t('select_state')}
@@ -497,7 +497,7 @@ const ManageClientPage: React.FC = () => {
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+                  <Col xs={24} md={8}>
                     <Form.Item name="city" label={t('city')} rules={[{required: true, message: t('enter_city')}]}>
                       <AutoComplete placeholder={t('enter_or_select')}
                                     disabled={!state}

@@ -1,7 +1,7 @@
 "use client"
 
-import {App, Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
-import {useEffect, useState} from "react";
+import {App, Button, Card, Empty, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
+import React, {useEffect, useState} from "react";
 import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import ManageContractModal from "@/components/ManageContractModal";
@@ -190,13 +190,15 @@ export default function Page() {
       <PageHeader title={t('contracts')}/>
 
       <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-        <Flex justify="end" align="center" style={{marginBottom: 16}}>
-          <Flex gap="small">
-            <Search placeholder={t('search_contract')} style={{width: 240}} loading={loadingContracts}
-                    onChange={e => setSearchTerm(e.target.value)}/>
-            <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
-          </Flex>
-        </Flex>
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mb-4">
+          <Search placeholder={t('search_contract')} className="w-full sm:max-w-60" loading={loadingContracts}
+                  onChange={e => setSearchTerm(e.target.value)}/>
+          <Button type="primary" onClick={() => setOpen(true)} className="w-full sm:w-auto">
+            {t('add_new_contract')}
+          </Button>
+        </div>
+
+
         <Table<Contract>
           rowKey="id"
           title={header}

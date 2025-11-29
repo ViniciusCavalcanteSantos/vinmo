@@ -1,7 +1,7 @@
 "use client"
 
-import {Button, Card, Empty, Flex, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
-import {useEffect, useState} from "react";
+import {Button, Card, Empty, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
+import React, {useEffect, useState} from "react";
 import {SorterResult} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
@@ -179,13 +179,14 @@ export default function Page() {
       <PageHeader title={t('events')}/>
 
       <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-        <Flex justify="end" align="center" style={{marginBottom: 16}}>
-          <Flex gap="small">
-            <Search placeholder={t('search_event')} style={{width: 240}} loading={loadingEvents}
-                    onChange={e => setSearchTerm(e.target.value)}/>
-            <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
-          </Flex>
-        </Flex>
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mb-4">
+          <Search placeholder={t('search_event')} className="w-full sm:max-w-60" loading={loadingEvents}
+                  onChange={e => setSearchTerm(e.target.value)}/>
+          <Button type="primary" onClick={() => setOpen(true)} className="w-full sm:w-auto">
+            {t('add_new_event')}
+          </Button>
+        </div>
+
         <Table<Event>
           rowKey="id"
           columns={columns}

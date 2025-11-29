@@ -136,7 +136,6 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
       title={isEditMode ? t('edit_event') : t('create_new_event')}
       okText={t('save_event')}
       cancelText={t('cancel')}
-      width={800}
       onCancel={handleCancel}
       onOk={handleOk}
       destroyOnHidden
@@ -144,7 +143,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
       <Form form={form} layout="vertical" name="form_in_modal">
         {/* CAMPOS COMUNS */}
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} md={12}>
             <Form.Item name="contract" label={t('contract')}
                        rules={[{required: true, message: t('select_contract') + "!"}]}>
               <Select placeholder={t('select_contract')}
@@ -154,7 +153,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
                       })}/>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} md={12}>
             <Form.Item name="event_type" label={t('event')}
                        rules={[{required: true, message: t('select_event')}]}>
 
@@ -172,7 +171,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
         </Form.Item>
 
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} md={12}>
             <Form.Item
               name="event_date" label={t('event_date')} rules={[{required: true, message: t('enter_date')}]}>
               <DatePicker
@@ -183,7 +182,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
             </Form.Item>
           </Col>
 
-          <Col span={12}>
+          <Col xs={24} md={12}>
             <Form.Item
               name="event_start_time" label={t('event_hour_optional')} rules={[]}>
               <TimePicker style={{width: '100%'}} format="HH:mm"/>

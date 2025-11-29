@@ -345,5 +345,8 @@
   "no_photos_in_event_yet": "Este evento ainda não possui fotos",
   "add_photos": "Adicionar fotos",
   "auto_assign_clients_to_event": "Atribuir clientes automaticamente ao evento",
-  "auto_assign_clients_to_event_explanation": "Se ativado, ao carregar uma foto para o evento, o cliente será automaticamente atribuído se seu rosto for detectado."
+  "auto_assign_clients_to_event_explanation": "Se ativado, ao carregar uma foto para o evento, o cliente será automaticamente atribuído se seu rosto for detectado.",
+  "university": "Universidade",
+  "school": "Escola",
+  "untitled": "Sem nome"
 }

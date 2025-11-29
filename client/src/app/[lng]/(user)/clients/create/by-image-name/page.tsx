@@ -62,7 +62,7 @@ const Page: React.FC = () => {
       .replace(/[^\p{L}\p{N}\p{M}\s'-]/gu, "")
       .replace(/\s+/g, " ")
       .trim();
-    if (!fileName) fileName = "Sem nome";
+    if (!fileName) fileName = t('untitled');
 
     const res = await createClient({name: fileName, assignments: assignments}, file, (progress) => {
       updateFile(file.id, {progress: Math.min(progress, 90)});
@@ -137,39 +137,48 @@ const Page: React.FC = () => {
               description={t('click_or_drag_photo_to_create_client_example')}
             />
 
-            <Row gutter={16} className="mt-4">
-              <Col span={6}>
-                <Card>
+            <Row gutter={[16, 16]} className="mt-4">
+              <Col xs={24} sm={12} lg={6}>
+                <Card style={{height: '100%'}}>
                   <Statistic
                     title={t('total_photos')}
                     value={stats.totalSelected}
                   />
                 </Card>
               </Col>
-              <Col span={6}>
-                <Card>
+              <Col xs={24} sm={12} lg={6}>
+                <Card style={{height: '100%'}}>
                   <Statistic
                     title={t('photos_uploaded_successfully')}
                     value={stats.totalSuccess}
                     valueStyle={{color: "#3f8600"}}
+                    valueRender={(node) => {
+                      return <span className='text-ant-success'>{node}</span>;
+                    }}
                   />
                 </Card>
               </Col>
-              <Col span={6}>
-                <Card>
+              <Col xs={24} sm={12} lg={6}>
+                <Card style={{height: '100%'}}>
                   <Statistic
                     title={t('photos_pending_for_submission')}
                     value={stats.totalPending}
                     valueStyle={{color: "#faad14"}}
+                    valueRender={(node) => {
+                      return <span className='text-ant-warning'>{node}</span>;
+                    }}
                   />
                 </Card>
               </Col>
-              <Col span={6}>
-                <Card>
+              <Col xs={24} sm={12} lg={6}>
+                <Card style={{height: '100%'}}>
                   <Statistic
                     title={t('photos_with_error')}
                     value={stats.totalError}
                     valueStyle={{color: "#cf1322"}}
+                    valueRender={(node) => {
+                      return <span className='text-ant-error'>{node}</span>;
+                    }}
                   />
                 </Card>
               </Col>

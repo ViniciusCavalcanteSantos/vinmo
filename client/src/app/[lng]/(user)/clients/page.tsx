@@ -6,7 +6,6 @@ import {
   Checkbox,
   Divider,
   Empty,
-  Flex,
   Form,
   Image,
   Input,
@@ -257,10 +256,10 @@ export default function Page() {
 
   const header = hasSelected ? () => {
     return (
-      <div className="flex items-center">
-        <h3 className="mr-4 font-medium">{selectedRowKeys.length} Selecionados</h3>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+        <h3 className="mr-4 font-medium">{t('items_selected', {count: selectedRowKeys.length})}</h3>
 
-        <Button type="primary" className="mr-2" onClick={() => openAssignBulk()}>
+        <Button type="primary" onClick={() => openAssignBulk()}>
           {t('assign')}
         </Button>
 
@@ -280,16 +279,14 @@ export default function Page() {
       <PageHeader title={t('clients')}/>
 
       <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-        <Flex justify="end" align="center" style={{marginBottom: 16}}>
-          <Flex gap="small">
-            <Search placeholder={t('search_client')} style={{width: 240}} loading={loadingClients}
-                    onChange={e => setSearchTerm(e.target.value)}/>
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mb-4">
+          <Search placeholder={t('search_client')} className="w-full sm:max-w-60" loading={loadingClients}
+                  onChange={e => setSearchTerm(e.target.value)}/>
+          <Button type="primary" onClick={() => setOpenModalRegister(true)} className="w-full sm:w-auto">
+            {t('add_new_client')}
+          </Button>
+        </div>
 
-            <Button type="primary" onClick={() => setOpenModalRegister(true)}>
-              {t('add_new_client')}
-            </Button>
-          </Flex>
-        </Flex>
         <Table<Client>
           rowKey="id"
           title={header}

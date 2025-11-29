@@ -160,7 +160,7 @@ export default function Page() {
   return (
     <div className="space-y-4">
       {/* header das infos do evento */}
-      <div className="flex flex-wrap gap-4 text-ant-text">
+      <div className="flex flex-wrap gap-x-4 gap-y-1 text-ant-text">
         <p><strong>{t('contract')}:</strong> {event?.contract?.code} - {event?.contract?.title}</p>
         <p><strong>{t('event')}:</strong> {event?.type.name}: {event?.title}</p>
         <p><strong>{t('total_photos')}:</strong> {images.length}</p>
@@ -170,7 +170,7 @@ export default function Page() {
       {/* grid de imagens */}
       {images.length > 0 ? (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
-          {images.map(image => (
+          {images.map(image => ( // O card é um flex container para que o conteúdo se estique
             <div key={image.id}>
               <div
                 className="
@@ -179,6 +179,8 @@ export default function Page() {
                 border border-ant-border-sec
                 rounded-lg
                 shadow-ant-1
+                flex flex-col
+                h-full
               "
               >
                 {/* wrapper da imagem */}
@@ -189,7 +191,7 @@ export default function Page() {
                 </div>
 
                 {/* infos da imagem */}
-                <div className="p-4 flex flex-wrap gap-2 text-ant-text">
+                <div className="p-4 flex flex-wrap gap-2 text-ant-text flex-grow">
                   <p className="w-full">
                     <strong>{t('name')}:</strong> {image.original?.name}
                   </p>

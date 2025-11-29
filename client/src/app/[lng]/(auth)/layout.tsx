@@ -13,7 +13,7 @@ export default async function Layout({children}: PropsWithChildren) {
 
   return (
     <Providers>
-      <div className="h-full flex justify-center items-center ">
+      <div className="flex justify-center items-center py-16">
         {children}
       </div>
     </Providers>

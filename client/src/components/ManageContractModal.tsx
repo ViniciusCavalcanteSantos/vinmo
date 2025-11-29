@@ -207,7 +207,6 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
       title={isEditMode ? t('edit_contract') : t('create_new_contract')}
       okText={t('save_contract')}
       cancelText={t('cancel')}
-      width={800}
       onCancel={handleCancel}
       onOk={handleOk}
       destroyOnHidden
@@ -215,7 +214,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
       <Form form={form} layout="vertical" name="form_in_modal">
         {/* CAMPOS COMUNS */}
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} md={12}>
             <Form.Item
               name="category"
               rules={[{required: true, message: t('select_category') + "!"}]}
@@ -239,7 +238,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
                 })}/>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} md={12}>
             <Form.Item name="code" label={t('contract_code')}
                        rules={[{required: true, message: t('enter_contract_code')}]}>
               <Input placeholder={t('contract_code_ex')}/>
@@ -252,7 +251,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
 
         {/* CAMPOS DE LOCALIZAÇÃO */}
         <Row gutter={16}>
-          <Col span={8}>
+          <Col xs={24} md={8}>
             <Form.Item name="country" label={t('country')} rules={[{required: true, message: t('select_country')}]}>
               <Select showSearch placeholder={t('select_country')}
                       loading={loadingCountries}
@@ -262,7 +261,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col xs={24} md={8}>
             <Form.Item name="state" label={t('state_province')} rules={[{required: true, message: t('select_state')}]}>
               <Select showSearch placeholder={t('select_state')}
                       loading={loadingStates}
@@ -273,7 +272,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col xs={24} md={8}>
             <Form.Item name="city" label={t('city')} rules={[{required: true, message: t('enter_city')}]}>
               <AutoComplete placeholder={t('enter_or_select')}
                             disabled={!state}
@@ -299,26 +298,26 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
             {graduationType && (
               <>
                 <Row gutter={16}>
-                  <Col span={16}>
+                  <Col xs={24} md={16}>
                     <Form.Item name="institution_name" label={t('institution_name')}
                                rules={[{required: true, message: t('enter_institution_name')}]}>
                       <Input/>
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+                  <Col xs={24} md={8}>
                     <Form.Item name="institution_acronym" label={t('acronym_optional')}>
                       <Input/>
                     </Form.Item>
                   </Col>
                 </Row>
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="class" label={t('class')}
                                rules={[{required: true, message: t('enter_class')}]}>
                       <Input/>
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="shift" label={t('shift')}
                                rules={[{required: true, message: t('select_shift')}]}>
                       <Select placeholder={t('select')} options={[
@@ -331,7 +330,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
                   </Col>
                 </Row>
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="conclusion_year" label={t('conclusion_year')}
                                rules={[{required: true, message: t('select_year')}]}>
                       <DatePicker picker="year" style={{width: '100%'}}/>
@@ -339,7 +338,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
                   </Col>
 
                   {graduationType === 'university' && (
-                    <Col span={12}>
+                    <Col xs={24} md={12}>
                       <Form.Item name="university_course" label={t('course_name')}
                                  rules={[{required: true, message: t('enter_course_name')}]}>
                         <Input/>
@@ -348,7 +347,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
                   )}
 
                   {graduationType === 'school' && (
-                    <Col span={12}>
+                    <Col xs={24} md={12}>
                       <Form.Item name="school_grade_level" label={t('grade_level')}
                                  rules={[{required: true, message: t('select_grade_level')}]}>
                         <Select placeholder={t('select')} options={[

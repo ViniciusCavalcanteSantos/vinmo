@@ -23,7 +23,7 @@ export default function InputPhone({defaultCountryCode, ...props}: InputPhonePro
 
     if (safeUser?.user) {
       const countryCode =
-        getPhoneCountries().includes(safeUser?.user?.address.country as CountryCode)
+        getPhoneCountries().includes(safeUser?.user?.address?.country as CountryCode)
           ? safeUser?.user?.address.country as CountryCode
           : "US"
       setCountryCode(countryCode);

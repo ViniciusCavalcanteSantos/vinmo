@@ -345,5 +345,8 @@
   "no_photos_in_event_yet": "No photos in this event yet",
   "add_photos": "Add photos",
   "auto_assign_clients_to_event": "Automatically assign clients to the event",
-  "auto_assign_clients_to_event_explanation": "If enabled, when uploading a photo to the event the client will be automatically assigned if their face is detected."
+  "auto_assign_clients_to_event_explanation": "If enabled, when uploading a photo to the event the client will be automatically assigned if their face is detected.",
+  "university": "University",
+  "school": "School",
+  "untitled": "Untitled"
 }
