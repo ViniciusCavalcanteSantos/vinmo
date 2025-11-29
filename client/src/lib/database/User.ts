@@ -11,6 +11,12 @@ async function fetchCSRF() {
   });
 }
 
+export async function fetchAvailableProviders() {
+  return await apiFetch<{ providers: Array<string> }>(`/auth/available-providers`, {
+    method: "GET",
+  });
+}
+
 export async function socialRedirect(socialMedia: string) {
   return await apiFetch<{ url: string }>(`/auth/${socialMedia}/redirect`, {
     method: "GET",

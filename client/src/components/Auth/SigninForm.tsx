@@ -8,16 +8,27 @@ import Link from "next/link";
 import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useRouter} from "next/navigation";
-import {login, socialRedirect} from "@/lib/database/User";
+import {fetchAvailableProviders, login, socialRedirect} from "@/lib/database/User";
 import {ApiStatus} from "@/types/ApiResponse";
 import IconGoogle from "@/components/Icons/IconGoogle";
 import IconMicrosoft from "@/components/Icons/IconMicrosoft";
 import IconLinkedin from "@/components/Icons/IconLinkedin";
+import {useEffect, useState} from "react";
 
 export default function SigninForm() {
   const {t} = useT();
   const notification = useNotification();
   const router = useRouter();
+  const [availableProviders, setAvailableProviders] = useState<string[]>([])
+
+  useEffect(() => {
+    fetchAvailableProviders()
+      .then(res => {
+        if (res.status === ApiStatus.SUCCESS) {
+          setAvailableProviders(res.providers)
+        }
+      })
+  }, []);
 
   const handleFinish = async (values: any) => {
     const res = await login(values.email, values.password, values.remember_me);
@@ -97,47 +108,58 @@ export default function SigninForm() {
         </PrimaryButton>
       </Form.Item>
 
-      <h1>
-        <Divider className='!text-sm !font-semibold  !text-ant-text-sec'>Ou prossiga com:</Divider>
-      </h1>
+      {availableProviders.length > 0 &&
+          <div>
+              <h1>
+                  <Divider className='!text-sm !font-semibold  !text-ant-text-sec'>Ou prossiga com:</Divider>
+              </h1>
 
-      <ul className='mb-6 flex flex-col gap-4 '>
-        <li>
-          <button
-            type='button'
-            onClick={() => handleSocialogin('google')}
-            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
-          >
-            <IconGoogle/>
+              <ul className='mb-6 flex flex-col gap-4 '>
+                {availableProviders.includes('google') &&
+                    <li>
+                        <button
+                            type='button'
+                            onClick={() => handleSocialogin('google')}
+                            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
+                        >
+                            <IconGoogle/>
 
-            <span className='text-ant-text-sec font-semibold text-base'>Google</span>
-          </button>
-        </li>
+                            <span className='text-ant-text-sec font-semibold text-base'>Google</span>
+                        </button>
+                    </li>
+                }
 
-        <li>
-          <button
-            type='button'
-            onClick={() => handleSocialogin('microsoft')}
-            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
-          >
-            <IconMicrosoft/>
 
-            <span className='text-ant-text-sec font-semibold text-base'>Microsoft</span>
-          </button>
-        </li>
+                {availableProviders.includes('microsoft') &&
+                    <li>
+                        <button
+                            type='button'
+                            onClick={() => handleSocialogin('microsoft')}
+                            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
+                        >
+                            <IconMicrosoft/>
 
-        <li>
-          <button
-            type='button'
-            onClick={() => handleSocialogin('linkedin')}
-            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
-          >
-            <IconLinkedin/>
+                            <span className='text-ant-text-sec font-semibold text-base'>Microsoft</span>
+                        </button>
+                    </li>
+                }
 
-            <span className='text-ant-text-sec font-semibold text-base'>Linkedin</span>
-          </button>
-        </li>
-      </ul>
+                {availableProviders.includes('linkedin') &&
+                    <li>
+                        <button
+                            type='button'
+                            onClick={() => handleSocialogin('linkedin')}
+                            className="flex items-center justify-center w-full px-4 py-2 space-x-2 transition-colors border border-ant-border rounded-md hover:bg-ant-fill-ter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ant-border-sec cursor-pointer"
+                        >
+                            <IconLinkedin/>
+
+                            <span className='text-ant-text-sec font-semibold text-base'>Linkedin</span>
+                        </button>
+                    </li>
+                }
+              </ul>
+          </div>
+      }
 
       {/* links */}
       <div className="flex justify-center text-sm text-ant-text-sec">

@@ -43,6 +43,15 @@ class AuthController extends Controller
         return $available;
     }
 
+    public function availableProviders()
+    {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Available providers obtained successfully',
+            'providers' => $this->getProvidersAvailable()
+        ]);
+    }
+
     public function redirectToProvider($provider)
     {
         if (!in_array($provider, $this->getProvidersAvailable())) {

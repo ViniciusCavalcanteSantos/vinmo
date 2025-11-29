@@ -24,6 +24,7 @@ Route::prefix('/api')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::prefix('/auth')->group(function () {
+        Route::get('/available-providers', [AuthController::class, 'availableProviders']);
         Route::get('/{provider}/redirect', [AuthController::class, 'redirectToProvider']);
         Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
     });
