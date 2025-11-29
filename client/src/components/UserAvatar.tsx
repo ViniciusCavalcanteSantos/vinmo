@@ -2,14 +2,25 @@
 
 import User from "@/types/User";
 import {Avatar, AvatarProps} from "antd";
-import {useState,useEffect} from "react";
+import {useEffect, useState} from "react";
 
-interface UserAvatarInterface extends AvatarProps{
+const AVATAR_COLORS = [
+  '#f56a00', // Orange
+  '#7265e6', // Purple
+  '#ffbf00', // Gold
+  '#00a2ae', // Cyan
+  '#1890ff', // Blue (Ant Default)
+  '#52c41a', // Green
+  '#eb2f96', // Magenta
+  '#f5222d', // Red
+];
+
+interface UserAvatarInterface extends AvatarProps {
   user?: User
 }
 
 export default function UserAvatar(props: UserAvatarInterface) {
-  const { user, ...avatarProps } = props;
+  const {user, ...avatarProps} = props;
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -19,13 +30,13 @@ export default function UserAvatar(props: UserAvatarInterface) {
     return <Avatar size="large" className="cursor-pointer uppercase" {...avatarProps} />;
   }
 
-  const bgColor = stringToColor(user.name);
+  const bgColor = getStandardColor(user.name);
   return (
     <Avatar
       size="large"
-      className="cursor-pointer uppercase"
+      className="cursor-pointer uppercase !border-ant-fill"
       {...avatarProps}
-      style={{ backgroundColor: user.picture ? undefined : bgColor }}
+      style={{backgroundColor: user.picture ? undefined : bgColor}}
       src={user.picture}
     >
       {!user.picture && user.name[0]}
@@ -33,12 +44,12 @@ export default function UserAvatar(props: UserAvatarInterface) {
   );
 }
 
-function stringToColor(str: string) {
+function getStandardColor(str: string) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
-  // 360° no círculo HSL -> gera cores diferentes
-  const hue = hash % 360;
-  return `hsl(${hue}, 70%, 50%)`;
+
+  const index = Math.abs(hash) % AVATAR_COLORS.length;
+  return AVATAR_COLORS[index];
 }
