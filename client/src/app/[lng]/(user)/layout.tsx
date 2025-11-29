@@ -15,8 +15,9 @@ export default async function Layout({children}: { children: React.ReactNode }) 
 
   const {status, user} = await fetchUserServerSide()
   if (status !== ApiStatus.SUCCESS || !user) {
-    redirect(`/signin`);
+    redirect(`/api/auth/logout`);
   }
+
 
   return (
     <Providers user={user}>
