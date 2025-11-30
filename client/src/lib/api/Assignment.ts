@@ -11,7 +11,6 @@ export async function fetchAssignments(clientId: number | string) {
   });
 }
 
-
 export async function assignClient(clientId: number | string, assignments: number[]) {
   return await apiFetch(`/assignment/client/${clientId}`, {
     method: "POST",

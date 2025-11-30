@@ -11,7 +11,7 @@ import {useUser} from "@/contexts/UserContext";
 import {InfoCircleOutlined} from "@ant-design/icons";
 import {useCreateEvent} from "@/lib/queries/event/useCreateEvent";
 import {useUpdateEvent} from "@/lib/queries/event/useUpdateEvent";
-import {fetchContracts} from "@/lib/api/contracts/fetchContracts";
+import {fetchContracts} from "@/lib/api/contract/fetchContracts";
 import {fetchEventTypes} from "@/lib/api/event/fetchEventTypes";
 
 interface ManageEventModalProps {
