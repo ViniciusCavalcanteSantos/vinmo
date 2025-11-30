@@ -5,14 +5,14 @@ import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import Event from "@/types/Event";
 import Contract from "@/types/Contract";
-import {fetchContracts} from "@/lib/api/Contract";
-import {fetchEventTypes} from "@/lib/api/Event";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {InfoCircleOutlined} from "@ant-design/icons";
 import {useCreateEvent} from "@/lib/queries/event/useCreateEvent";
 import {useUpdateEvent} from "@/lib/queries/event/useUpdateEvent";
+import {fetchContracts} from "@/lib/api/contracts/fetchContracts";
+import {fetchEventTypes} from "@/lib/api/event/fetchEventTypes";
 
 interface ManageEventModalProps {
   open: boolean;

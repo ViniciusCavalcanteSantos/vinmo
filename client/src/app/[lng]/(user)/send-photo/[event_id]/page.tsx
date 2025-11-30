@@ -8,10 +8,10 @@ import PageHeader from "@/components/PageHeader";
 import Dropzone, {FileWithUploadData} from "@/components/Dropzone";
 import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
-import {eventPhotoUpload} from "@/lib/api/Event";
 import {useParams, useRouter} from "next/navigation";
 import {useRemoveImage} from "@/lib/queries/images/useRemoveImage";
 import {useEvent} from "@/lib/queries/event/useEvent";
+import {uploadEventPhoto} from "@/lib/api/event/uploadEventPhoto";
 
 const Page: React.FC = () => {
   const {t} = useT();
@@ -69,7 +69,7 @@ const Page: React.FC = () => {
     if (!fileName) fileName = t('untitled');
 
 
-    const res = await eventPhotoUpload(eventId, file, (progress) => {
+    const res = await uploadEventPhoto(eventId, file, (progress) => {
       updateFile(file.id, {progress: Math.min(progress, 90)});
     })
 

@@ -3,11 +3,11 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {TreeSelect} from 'antd';
 import {t} from "i18next";
-import {fetchContracts} from "@/lib/api/Contract";
-import {fetchEvents} from "@/lib/api/Event";
 import Contract from "@/types/Contract";
 import Event from "@/types/Event";
 import {ApiStatus} from "@/types/ApiResponse";
+import {fetchContracts} from "@/lib/api/contracts/fetchContracts";
+import {fetchEvents} from "@/lib/api/event/fetchEvents";
 
 interface EventSelectorProps {
   value?: number[];

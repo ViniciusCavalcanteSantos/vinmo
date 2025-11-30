@@ -1,5 +1,6 @@
 import apiFetch from "@/lib/apiFetch";
 import Event from "@/types/Event";
+import {buildUrl} from "@/lib/http/buildUrl";
 
 export interface FetchEventsResponse {
   events: Event[];
@@ -11,6 +12,15 @@ export interface FetchEventsResponse {
   };
 }
 
-export async function fetchEvents(params?: any) {
-  return apiFetch<FetchEventsResponse>("/event?" + new URLSearchParams(params).toString());
+export async function fetchEvents(page: number = 1, pageSize: number = 15, searchTerm?: string, withContract: boolean = false) {
+  const url = buildUrl('/event', {
+    page: String(page),
+    per_page: String(pageSize),
+    search: searchTerm,
+    with_contract: withContract
+  })
+
+  return await apiFetch<FetchEventsResponse>(url, {
+    method: "GET",
+  });
 }
