@@ -18,21 +18,16 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $organizationId = auth()->user()->organization_id;
-        $perPage = $request->input('per_page', 15);
-        $searchTerm = $request->input('search');
-
+        $perPage = $request->integer('per_page', 15);
+        $searchTerm = $request->string('search');
         $load = ['type'];
-        $withContract = $request->input('with_contract', false);
+        $withContract = $request->boolean('with_contract');
         if ($withContract) {
             $load[] = 'contract';
         }
 
         $eventsQuery = Event
-            ::whereIn('contract_id', function ($query) use ($organizationId) {
-                $query->select('id')
-                    ->from('contracts')
-                    ->where('organization_id', $organizationId);
-            })
+            ::where('events.organization_id', $organizationId)
             ->with($load)
             ->withCount([
                 'images as images_count' => function ($q) {
@@ -46,14 +41,17 @@ class EventController extends Controller
             ], 'size')
             ->latest();
 
-        $eventsQuery->when($searchTerm, function ($query, $term) use ($withContract) {
-            $query->where('searchable', "LIKE", "%{$term}%");
+        $eventsQuery->when($searchTerm->isNotEmpty(), function ($query) use ($searchTerm, $withContract) {
+            $query->where(function ($q) use ($searchTerm, $withContract) {
+                $term = "%{$searchTerm}%";
+                $q->where('searchable', 'LIKE', $term);
 
-            if ($withContract) {
-                $query->orWhereHas('contract', function ($q) use ($term) {
-                    $q->where('searchable', "LIKE", "%{$term}%");
-                });
-            }
+                if ($withContract) {
+                    $q->orWhereHas('contract', function ($q2) use ($term) {
+                        $q2->where('searchable', 'LIKE', $term);
+                    });
+                }
+            });
         });
 
         $events = $eventsQuery->paginate($perPage);

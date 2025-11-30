@@ -1,9 +1,7 @@
 'use client'
 
 import {useParams, useRouter} from "next/navigation";
-import React, {useEffect, useState} from "react";
-import {fetchEvent, fetchEventImages} from "@/lib/api/Event";
-import Event from "@/types/Event";
+import React, {useEffect, useMemo, useState} from "react";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useT} from "@/i18n/client";
 import Fallback from "@/components/Fallback";
@@ -21,12 +19,17 @@ import {
   MoreOutlined,
   TeamOutlined
 } from "@ant-design/icons";
-import {downloadImage, fetchImageClients, fetchImageMetadata, removeImage} from "@/lib/api/Image";
 import {formatImageMeta, FormattedMetaItem} from "@/lib/formatImageMeta";
 import {MetadataModal} from "@/components/MetadataModal";
 import Link from "next/link";
 import Client from "@/types/Client";
 import {ClientsOnImageModal} from "@/components/ClientsOnImageModal";
+import {useFetchEvent} from "@/lib/queries/event/useEvent";
+import {useFetchEventImages} from "@/lib/queries/event/useEventImages";
+import {fetchImageMetadata} from "@/lib/api/image/fetchImageMetadata";
+import {downloadImage} from "@/lib/api/image/downloadImage";
+import {fetchImageClients} from "@/lib/api/image/fetchImageClients";
+import {useRemoveImage} from "@/lib/queries/images/useRemoveImage";
 
 export default function Page() {
   const {t} = useT()
@@ -34,10 +37,6 @@ export default function Page() {
   const router = useRouter();
   const params = useParams();
   const eventId = Number(params.event_id);
-  const [event, setEvent] = useState<Event | null>(null);
-  const [images, setImages] = useState<ImageType[]>([])
-  const [imagesSize, setImagesSize] = useState(0)
-  const [loading, setLoading] = useState<boolean>(true);
   const {defaultDateFormat} = useUser();
 
   const [metadata, setMetadata] = useState<FormattedMetaItem[]>([]);
@@ -47,36 +46,35 @@ export default function Page() {
   const [clients, setClients] = useState<Client[]>([])
   const [clientsOpen, setClientsOpen] = useState(false);
 
-  useEffect(() => {
-    Promise.all([
-      fetchEvent(eventId, true),
-      fetchEventImages(eventId)
-    ])
-      .then(res => {
-        const eventRes = res[0]
-        const imageRes = res[1]
+  const {
+    data: event,
+    isLoading: loadingEvent,
+    isError: eventError,
+    error: eventErr,
+  } = useFetchEvent(eventId, true);
 
-        if (eventRes.status === ApiStatus.SUCCESS && imageRes.status === ApiStatus.SUCCESS) {
-          setEvent(eventRes.event)
-          setImages(imageRes.images)
-          setLoading(false)
-          return;
-        }
+  const {
+    data: images,
+    isLoading: loadingImages,
+    isError: imagesError,
+    error: imagesErr,
+  } = useFetchEventImages(eventId);
 
-        notification.warning({message: t('unable_to_load_event')})
-        router.push("/events");
-      })
-      .catch(() => {
-        notification.warning({message: t('unable_to_load_event')})
-        router.push("/events");
-      })
+  const removeImage = useRemoveImage(eventId);
 
-  }, [eventId])
+  const loading = loadingEvent || loadingImages;
+  const isError = eventError || imagesError;
 
   useEffect(() => {
-    const size = images.reduce((acc, image) => acc + (image.original?.size ?? 0), 0)
-    setImagesSize(size)
-  }, [images.length]);
+    if (isError) {
+      notification.warning({message: t("unable_to_load_event")});
+      router.push("/events");
+    }
+  }, [isError, notification, t, router]);
+
+  const imagesSize = useMemo(() => {
+    return images?.reduce((acc, image) => acc + (image.original?.size ?? 0), 0) ?? 0
+  }, [images])
 
   if (loading) return <Fallback/>
 
@@ -85,12 +83,15 @@ export default function Page() {
   }
 
   const handleDeleteImage = (image: ImageType) => {
-    removeImage(image.id)
-      .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          setImages(images.filter(i => i.id !== image.id))
+    try {
+      removeImage.mutate(image.id, {
+        onSuccess: (res) => {
+          notification.success({message: res.message});
         }
-      })
+      });
+    } catch (err: any) {
+      notification.warning({message: err?.message || t('unable_to_delete')});
+    }
   }
 
   const handleOpenMetadata = (image: ImageType) => {
@@ -163,12 +164,12 @@ export default function Page() {
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-ant-text">
         <p><strong>{t('contract')}:</strong> {event?.contract?.code} - {event?.contract?.title}</p>
         <p><strong>{t('event')}:</strong> {event?.type.name}: {event?.title}</p>
-        <p><strong>{t('total_photos')}:</strong> {images.length}</p>
+        <p><strong>{t('total_photos')}:</strong> {images?.length ?? 0}</p>
         <p><strong>{t('size')}:</strong> {filesize(imagesSize ?? 0)}</p>
       </div>
 
       {/* grid de imagens */}
-      {images.length > 0 ? (
+      {images?.length ? (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
           {images.map(image => ( // O card é um flex container para que o conteúdo se estique
             <div key={image.id}>

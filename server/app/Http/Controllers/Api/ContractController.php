@@ -19,15 +19,15 @@ class ContractController extends Controller
     public function index(Request $request)
     {
         $organizationId = auth()->user()->organization_id;
-        $perPage = $request->input('per_page', 15);
-        $searchTerm = $request->input('search');
+        $perPage = $request->integer('per_page', 15);
+        $searchTerm = $request->string('search');
 
         $contractsQuery = Contract
             ::where('organization_id', $organizationId)
             ->with(['category', 'address', 'graduationDetail'])
             ->latest();
 
-        $contractsQuery->when($searchTerm, function ($query, $term) {
+        $contractsQuery->when($searchTerm->isNotEmpty(), function ($query, $term) {
             $query->where('searchable', "LIKE", "%{$term}%");
         });
 

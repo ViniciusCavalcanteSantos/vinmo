@@ -34,7 +34,7 @@ export default function Page() {
     total: 0,
   });
 
-  const {data: events, isLoading} = useEvents(searchTermDebounce, pagination.current, pagination.pageSize);
+  const {data: events, isLoading} = useEvents(searchTermDebounce, pagination.current, pagination.pageSize, true);
   const removeEvent = useRemoveEvent()
 
   const [editingEvent, setEditingEvent] = useState<Event>();

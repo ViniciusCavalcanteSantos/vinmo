@@ -3,9 +3,9 @@ import {useT} from "@/i18n/client";
 import Client from "@/types/Client";
 import {DeleteOutlined, EyeOutlined, InfoCircleOutlined, MoreOutlined} from "@ant-design/icons";
 import React, {useEffect, useState} from "react";
-import {fetchClientCrop} from "@/lib/api/Image";
 import ImageType from "@/types/Image";
 import {ApiStatus} from "@/types/ApiResponse";
+import {fetchClientCrop} from "@/lib/api/image/fetchClientCrop";
 
 type Props = {
   open: boolean;
