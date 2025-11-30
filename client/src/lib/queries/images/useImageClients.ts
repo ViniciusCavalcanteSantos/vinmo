@@ -15,5 +15,6 @@ export function useImageClients(imageId?: string, enabled: boolean = true) {
     },
     enabled: !!imageId && enabled,
     retry: 1,
+    refetchOnWindowFocus: true,
   });
 }

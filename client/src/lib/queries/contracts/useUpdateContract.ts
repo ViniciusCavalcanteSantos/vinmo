@@ -9,11 +9,9 @@ export function useUpdateContract() {
   return useMutation({
     mutationFn: async ({id, values}: { id: number, values: any }) => {
       const res: ApiFetchResponse<UpdateContractResponse> = await updateContract(id, values);
-
       if (res.status !== ApiStatus.SUCCESS) {
         throw new Error(res.message || "API error");
       }
-
       return res;
     },
     onSuccess: () => {

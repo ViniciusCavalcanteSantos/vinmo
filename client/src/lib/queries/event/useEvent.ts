@@ -12,6 +12,7 @@ export function useEvent(eventId?: number, withContract: boolean = false) {
       return res.event;
     },
     enabled: !!eventId,
-    retry: 0
+    retry: 1,
+    staleTime: 1000 * 60 * 5,
   });
 }

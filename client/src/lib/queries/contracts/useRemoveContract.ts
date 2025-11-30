@@ -8,6 +8,6 @@ export function useRemoveContract() {
     mutationFn: (id: number) => removeContract(id),
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({queryKey: ["contracts"]});
-    },
+    }
   });
 }

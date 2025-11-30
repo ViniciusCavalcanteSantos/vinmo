@@ -5,12 +5,15 @@ import {fetchContracts} from "@/lib/api/contract/fetchContracts";
 export function useContracts(search: string = '', page: number = 1, pageSize: number = 15) {
   return useQuery({
     queryKey: ["contracts", search, page, pageSize],
-    queryFn: () => fetchContracts({
+    queryFn: () => fetchContracts(
       page,
       pageSize,
       search,
-    }),
+    ),
     select: (res) =>
       res.status === ApiStatus.SUCCESS ? res.contracts : [],
+    retry: 1,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
   });
 }

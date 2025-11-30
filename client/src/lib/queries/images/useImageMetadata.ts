@@ -11,6 +11,8 @@ export function useImageMetadata(imageId?: string, enabled = true) {
       return res.metadata;
     },
     enabled: !!imageId && enabled,
-    retry: 1,
+    retry: 2,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
   });
 }

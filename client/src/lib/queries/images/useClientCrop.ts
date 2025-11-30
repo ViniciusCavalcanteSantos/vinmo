@@ -13,6 +13,8 @@ export function useClientCrop(imageId?: string, clientId?: number, enabled: bool
       return res.faceMatch.faceCrop;
     },
     enabled: !!imageId && !!clientId && enabled,
-    staleTime: 1000 * 60 * 5,
+    retry: 1,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
   });
 }
