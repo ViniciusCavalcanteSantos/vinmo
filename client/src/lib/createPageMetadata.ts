@@ -1,4 +1,4 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type {Metadata, ResolvingMetadata} from "next";
 import {getT} from "@/i18n";
 
 type Options = {
@@ -8,14 +8,14 @@ type Options = {
 };
 
 async function createPageMetadata(
-  { path, titleKey, descriptionKey }: Options,
+  {path, titleKey, descriptionKey}: Options,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const parentMetadata = await parent;
-  const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "Vinmo";
-  const baseUrl = String(parentMetadata.alternates?.canonical?.url || "https://vinmo.org");
+  const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "App";
+  const baseUrl = String(parentMetadata.alternates?.canonical?.url || "https://photon.org");
 
-  const { t } = await getT();
+  const {t} = await getT();
   const title = t(titleKey);
   const description = t(descriptionKey);
 
