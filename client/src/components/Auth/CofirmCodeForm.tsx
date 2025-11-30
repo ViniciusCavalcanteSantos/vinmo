@@ -8,7 +8,7 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useLocalStorage} from "react-use";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {confirm_code, send_code} from "@/lib/database/User";
+import {confirm_code, send_code} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default function ConfirmCodeForm() {

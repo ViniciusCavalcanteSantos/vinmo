@@ -11,7 +11,7 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useLocalStorage} from "react-use";
-import {send_recovery_link} from "@/lib/database/User";
+import {send_recovery_link} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default function RecoverySentForm() {

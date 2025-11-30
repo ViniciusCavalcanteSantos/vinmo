@@ -33,10 +33,10 @@ import {useUser} from "@/contexts/UserContext";
 import dayjs from "dayjs";
 import {useRouter} from "next/navigation";
 import EventSelector from "@/components/EventSelector";
-import {assignClient, assignClientBulk, fetchAssignments, unassignClientBulk} from "@/lib/database/Assignment";
+import {assignClient, assignClientBulk, fetchAssignments, unassignClientBulk} from "@/lib/api/Assignment";
 import {useNotification} from "@/contexts/NotificationContext";
 import {TableRowSelection} from "antd/es/table/interface";
-import {generateRegisterLink} from "@/lib/database/Client";
+import {generateRegisterLink} from "@/lib/api/Client";
 
 export default function Page() {
   const {t} = useT();

@@ -10,7 +10,7 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useLocalStorage} from "react-use";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
-import {send_code} from "@/lib/database/User";
+import {send_code} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 import SocialMediaAuth from "@/components/Auth/SocialMediaAuth";
 

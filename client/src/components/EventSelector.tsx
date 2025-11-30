@@ -3,8 +3,8 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {TreeSelect} from 'antd';
 import {t} from "i18next";
-import {fetchContracts} from "@/lib/database/Contract";
-import {fetchEvents} from "@/lib/database/Event";
+import {fetchContracts} from "@/lib/api/Contract";
+import {fetchEvents} from "@/lib/api/Event";
 import Contract from "@/types/Contract";
 import Event from "@/types/Event";
 import {ApiStatus} from "@/types/ApiResponse";

@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Providers from "@/app/[lng]/(user)/providers";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
-import {fetchUserServerSide} from "@/lib/database/server/User";
+import {fetchUserServerSide} from "@/lib/api/server/User";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default async function Layout({children}: { children: React.ReactNode }) {
@@ -17,7 +17,6 @@ export default async function Layout({children}: { children: React.ReactNode }) 
   if (status !== ApiStatus.SUCCESS || !user) {
     redirect(`/api/auth/logout`);
   }
-
 
   return (
     <Providers user={user}>

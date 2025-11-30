@@ -2,12 +2,12 @@ import {Divider} from "antd";
 import IconGoogle from "@/components/Icons/IconGoogle";
 import IconMicrosoft from "@/components/Icons/IconMicrosoft";
 import IconLinkedin from "@/components/Icons/IconLinkedin";
-import {useEffect, useState} from "react";
-import {fetchAvailableProviders, socialRedirect} from "@/lib/database/User";
+import React, {useEffect, useState} from "react";
+import {fetchAvailableProviders, socialRedirect} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 
-export default function SocialMediaAuth() {
+function SocialMediaAuth() {
   const [availableProviders, setAvailableProviders] = useState<string[]>([])
   const notification = useNotification();
 
@@ -86,3 +86,5 @@ export default function SocialMediaAuth() {
     </>
   )
 }
+
+export default React.memo(SocialMediaAuth)

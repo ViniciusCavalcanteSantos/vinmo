@@ -10,7 +10,7 @@ import {
   removeContract as removeContractApi,
   updateContract as updateContractApi,
   UpdateContractResponse,
-} from "@/lib/database/Contract";
+} from "@/lib/api/Contract";
 import {ApiStatus} from "@/types/ApiResponse";
 import Contract from "@/types/Contract";
 import {ApiFetchResponse} from "@/lib/apiFetch";

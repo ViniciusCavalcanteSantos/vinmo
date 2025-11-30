@@ -6,7 +6,7 @@ import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import PageHeader from "@/components/PageHeader";
 import Dropzone, {FileWithUploadData} from "@/components/Dropzone";
-import {createClient, removeClient} from "@/lib/database/Client";
+import {createClient, removeClient} from "@/lib/api/Client";
 import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
 import {UserOutlined} from "@ant-design/icons";

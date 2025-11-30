@@ -10,7 +10,7 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useState} from "react";
 import {useLocalStorage} from "react-use";
 import {useRouter} from "next/navigation";
-import {send_recovery_link} from "@/lib/database/User";
+import {send_recovery_link} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default function ForgotPasswordForm() {

@@ -9,7 +9,7 @@ import {
   removeEvent as removeEventApi,
   updateEvent as updateEventApi,
   UpdateEventResponse,
-} from "@/lib/database/Event";
+} from "@/lib/api/Event";
 import {ApiStatus} from "@/types/ApiResponse";
 import Event from "@/types/Event";
 import {ApiFetchResponse} from "@/lib/apiFetch";

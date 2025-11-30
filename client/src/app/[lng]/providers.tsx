@@ -10,18 +10,22 @@ import ptBR from 'antd/locale/pt_BR';
 import {Locale} from "antd/es/locale";
 import {ThemeProvider, useTheme} from "@/contexts/AppThemeContext";
 import {PhotonSpin} from "@/components/Fallback";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
+const queryClient = new QueryClient()
 
 export default function Providers({children, lang}: PropsWithChildren<{ lang: string }>) {
 
   return (
-    <AntdRegistry>
-      <ThemeProvider>
-        <ConfigProviderWrapper lang={lang}>
-          {children}
-        </ConfigProviderWrapper>
-      </ThemeProvider>
-    </AntdRegistry>
+    <QueryClientProvider client={queryClient}>
+      <AntdRegistry>
+        <ThemeProvider>
+          <ConfigProviderWrapper lang={lang}>
+            {children}
+          </ConfigProviderWrapper>
+        </ThemeProvider>
+      </AntdRegistry>
+    </QueryClientProvider>
   );
 }
 

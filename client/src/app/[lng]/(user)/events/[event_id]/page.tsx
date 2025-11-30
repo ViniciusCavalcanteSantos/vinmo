@@ -2,7 +2,7 @@
 
 import {useParams, useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
-import {fetchEvent, fetchEventImages} from "@/lib/database/Event";
+import {fetchEvent, fetchEventImages} from "@/lib/api/Event";
 import Event from "@/types/Event";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useT} from "@/i18n/client";
@@ -21,7 +21,7 @@ import {
   MoreOutlined,
   TeamOutlined
 } from "@ant-design/icons";
-import {downloadImage, fetchImageClients, fetchImageMetadata, removeImage} from "@/lib/database/Image";
+import {downloadImage, fetchImageClients, fetchImageMetadata, removeImage} from "@/lib/api/Image";
 import {formatImageMeta, FormattedMetaItem} from "@/lib/formatImageMeta";
 import {MetadataModal} from "@/components/MetadataModal";
 import Link from "next/link";

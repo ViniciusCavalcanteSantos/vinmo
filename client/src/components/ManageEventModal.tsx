@@ -4,14 +4,15 @@ import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import Event from "@/types/Event";
-import {useEvents} from "@/contexts/EventsContext";
 import Contract from "@/types/Contract";
-import {fetchContracts} from "@/lib/database/Contract";
-import {fetchEventTypes} from "@/lib/database/Event";
+import {fetchContracts} from "@/lib/api/Contract";
+import {fetchEventTypes} from "@/lib/api/Event";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {InfoCircleOutlined} from "@ant-design/icons";
+import {useCreateEvent} from "@/lib/queries/event/useCreateEvent";
+import {useUpdateEvent} from "@/lib/queries/event/useUpdateEvent";
 
 interface ManageEventModalProps {
   open: boolean;
@@ -24,7 +25,9 @@ interface ManageEventModalProps {
 const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreate, onEdit, onCancel}) => {
   const {t} = useT();
   const notification = useNotification();
-  const {createEvent, updateEvent} = useEvents();
+  // const {createEvent, updateEvent} = useEvents();
+  const createEvent = useCreateEvent()
+  const updateEvent = useUpdateEvent()
   const {defaultDateFormat} = useUser();
 
   const isEditMode = !!event;
@@ -101,32 +104,31 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
         if (values.event_start_time) {
           values.event_start_time = values.event_start_time.format('HH:mm');
         }
-        let res;
-        if (isEditMode) {
-          res = await updateEvent(event.id, values);
-        } else {
-          res = await createEvent(values);
-        }
 
-        if (res.status !== ApiStatus.SUCCESS) {
-          notification.warning({
-            message: res.message
+        if (isEditMode) {
+          updateEvent.mutate({id: event.id, values: values}, {
+            onSuccess: (res) => {
+              notification.success({
+                message: res.message
+              })
+              onEdit(res.event)
+            }
           })
-          return;
         } else {
-          notification.success({
-            message: res.message
-          })
+          createEvent.mutate(values, {
+            onSuccess: (res) => {
+              notification.success({
+                message: res.message
+              })
+              onCreate(res.event)
+            }
+          });
         }
 
         handleClean();
-        if (isEditMode) {
-          onEdit(res.event)
-        } else {
-          onCreate(res.event);
-        }
       })
-      .catch(() => {
+      .catch((err: any) => {
+        notification.warning({message: err.message});
       });
   }
 

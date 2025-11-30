@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {AutoComplete, Col, DatePicker, Divider, Form, Input, Modal, Radio, Row, Select, Tooltip,} from 'antd';
-import {getCategories, getCities, getCountries, getStates} from "@/lib/database/Location";
+import {getCategories, getCities, getCountries, getStates} from "@/lib/api/Location";
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";

@@ -11,7 +11,7 @@ import {
   removeClient as removeClientApi,
   updateClient as updateClientApi,
   UpdateClientResponse,
-} from "@/lib/database/Client";
+} from "@/lib/api/Client";
 import {ApiStatus} from "@/types/ApiResponse";
 import Client from "@/types/Client";
 import {ApiFetchResponse} from "@/lib/apiFetch";

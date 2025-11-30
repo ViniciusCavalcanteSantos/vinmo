@@ -8,7 +8,7 @@ import Link from "next/link";
 import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useRouter} from "next/navigation";
-import {login} from "@/lib/database/User";
+import {login} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 import SocialMediaAuth from "@/components/Auth/SocialMediaAuth";
 

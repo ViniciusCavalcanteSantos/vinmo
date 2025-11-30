@@ -19,7 +19,7 @@ import {
   UploadProps
 } from 'antd';
 import {useParams, useRouter} from 'next/navigation';
-import {getCities, getCountries, getStates} from "@/lib/database/Location";
+import {getCities, getCountries, getStates} from "@/lib/api/Location";
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
@@ -27,7 +27,7 @@ import {guardianTypes} from "@/types/Client";
 import dayjs from "dayjs";
 import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
-import {createClientPublic, fetchLinkInfo} from "@/lib/database/Client";
+import {createClientPublic, fetchLinkInfo} from "@/lib/api/Client";
 import InputPhone from "@/components/InputPhone";
 import {RegisterLinkType} from "@/types/RegisterLinkType";
 import getDateFormatByCountry from "@/lib/getDateFormatByCountry";

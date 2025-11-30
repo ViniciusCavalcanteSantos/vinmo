@@ -9,7 +9,7 @@ import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useEffect, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
-import {change_password, validate_recovery_token} from "@/lib/database/User";
+import {change_password, validate_recovery_token} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export default function ResetPasswordForm() {

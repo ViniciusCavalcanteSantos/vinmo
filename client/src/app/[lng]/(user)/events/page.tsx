@@ -1,26 +1,25 @@
 "use client"
 
 import {Button, Card, Empty, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {SorterResult} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import {useT} from "@/i18n/client";
 import Event from "@/types/Event";
 import {DeleteOutlined, EditOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
-import {useEvents} from "@/contexts/EventsContext";
-import {ApiStatus} from "@/types/ApiResponse";
 import ManageEventModal from "@/components/ManageEventModal";
 import PageHeader from "@/components/PageHeader";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import Link from "next/link";
 import {filesize} from "filesize";
+import {useEvents} from "@/lib/queries/event/useEvents";
+import {useRemoveEvent} from "@/lib/queries/event/useRemoveEvent";
 
 export default function Page() {
   const {t} = useT();
   const [open, setOpen] = useState(false);
-  const {events, fetchEvents, loadingEvents, removeEvent} = useEvents();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
   useDebounce(() => {
@@ -34,6 +33,9 @@ export default function Page() {
     pageSize: 15,
     total: 0,
   });
+
+  const {data: events, isLoading} = useEvents(searchTermDebounce, pagination.current, pagination.pageSize);
+  const removeEvent = useRemoveEvent()
 
   const [editingEvent, setEditingEvent] = useState<Event>();
   const editEvent = (event: Event) => {
@@ -77,7 +79,7 @@ export default function Page() {
           shape="circle"
           danger
           icon={<DeleteOutlined/>}
-          onClick={() => removeEvent(record.id)}
+          onClick={() => removeEvent.mutate(record.id)}
         />
       </Tooltip>
     </Space>
@@ -136,22 +138,6 @@ export default function Page() {
     }
   ];
 
-  useEffect(() => {
-    setPagination(prev => ({
-      ...prev,
-      current: 1
-    }));
-    fetchEvents(1, pagination.pageSize!, searchTermDebounce, true)
-      .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          setPagination(prev => ({
-            ...prev,
-            total: res.meta.total,
-          }));
-        }
-      })
-  }, [searchTermDebounce]);
-
   const handleTableChange = (
     newPagination: TablePaginationConfig,
     filters: Record<string, any>,
@@ -162,10 +148,6 @@ export default function Page() {
       newPagination.pageSize !== pagination.pageSize
     ) {
       setPagination(newPagination);
-      fetchEvents(newPagination.current!, newPagination.pageSize!, searchTermDebounce, true)
-        .then(data => {
-          setPagination(prev => ({...prev, total: data.meta.total}));
-        });
     }
   };
 
@@ -180,7 +162,7 @@ export default function Page() {
 
       <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
         <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mb-4">
-          <Search placeholder={t('search_event')} className="w-full sm:max-w-60" loading={loadingEvents}
+          <Search placeholder={t('search_event')} className="w-full sm:max-w-60" loading={isLoading}
                   onChange={e => setSearchTerm(e.target.value)}/>
           <Button type="primary" onClick={() => setOpen(true)} className="w-full sm:w-auto">
             {t('add_new_event')}
@@ -192,7 +174,7 @@ export default function Page() {
           columns={columns}
           dataSource={events}
           bordered={true}
-          loading={loadingEvents}
+          loading={isLoading}
           scroll={{y: 560, x: 'max-content'}}
           pagination={{
             ...pagination,

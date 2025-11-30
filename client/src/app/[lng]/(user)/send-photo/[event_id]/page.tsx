@@ -9,9 +9,9 @@ import Dropzone, {FileWithUploadData} from "@/components/Dropzone";
 import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
 import Event from "@/types/Event";
-import {eventPhotoUpload, fetchEvent} from "@/lib/database/Event";
+import {eventPhotoUpload, fetchEvent} from "@/lib/api/Event";
 import {useParams, useRouter} from "next/navigation";
-import {removeImage} from "@/lib/database/Image";
+import {removeImage} from "@/lib/api/Image";
 
 const Page: React.FC = () => {
   const {t} = useT();
