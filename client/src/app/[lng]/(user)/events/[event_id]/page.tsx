@@ -24,7 +24,7 @@ import {MetadataModal} from "@/components/MetadataModal";
 import Link from "next/link";
 import Client from "@/types/Client";
 import {ClientsOnImageModal} from "@/components/ClientsOnImageModal";
-import {useFetchEvent} from "@/lib/queries/event/useEvent";
+import {useEvent} from "@/lib/queries/event/useEvent";
 import {useFetchEventImages} from "@/lib/queries/event/useEventImages";
 import {fetchImageMetadata} from "@/lib/api/image/fetchImageMetadata";
 import {downloadImage} from "@/lib/api/image/downloadImage";
@@ -51,7 +51,7 @@ export default function Page() {
     isLoading: loadingEvent,
     isError: eventError,
     error: eventErr,
-  } = useFetchEvent(eventId, true);
+  } = useEvent(eventId, true);
 
   const {
     data: images,
@@ -76,7 +76,7 @@ export default function Page() {
     return images?.reduce((acc, image) => acc + (image.original?.size ?? 0), 0) ?? 0
   }, [images])
 
-  if (loading) return <Fallback/>
+  if (loading || isError) return <Fallback/>
 
   const handleDownloadImage = (image: ImageType) => {
     downloadImage(image.id)

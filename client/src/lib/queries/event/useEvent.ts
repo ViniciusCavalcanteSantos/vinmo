@@ -2,15 +2,16 @@ import {useQuery} from "@tanstack/react-query";
 import {fetchEvent} from "@/lib/api/event/fetchEvent";
 import {ApiStatus} from "@/types/ApiResponse";
 
-export function useFetchEvent(eventId?: number, withContract: boolean = false) {
+export function useEvent(eventId?: number, withContract: boolean = false) {
   return useQuery({
     queryKey: ["event", eventId],
-    queryFn: () => {
+    queryFn: async () => {
       if (!eventId) throw new Error("Missing eventId");
-      return fetchEvent(eventId, withContract);
+      const res = await fetchEvent(eventId, withContract)
+      if (res.status !== ApiStatus.SUCCESS) throw new Error(res.message);
+      return res.event;
     },
-    select: (res) =>
-      res.status === ApiStatus.SUCCESS ? res.event : null,
     enabled: !!eventId,
+    retry: 0
   });
 }

@@ -8,22 +8,23 @@ import PageHeader from "@/components/PageHeader";
 import Dropzone, {FileWithUploadData} from "@/components/Dropzone";
 import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
-import Event from "@/types/Event";
-import {eventPhotoUpload, fetchEvent} from "@/lib/api/Event";
+import {eventPhotoUpload} from "@/lib/api/Event";
 import {useParams, useRouter} from "next/navigation";
-import {removeImage} from "@/lib/api/Image";
+import {useRemoveImage} from "@/lib/queries/images/useRemoveImage";
+import {useEvent} from "@/lib/queries/event/useEvent";
 
 const Page: React.FC = () => {
   const {t} = useT();
   const notification = useNotification();
   const params = useParams();
-  const eventId = params.event_id as string
+  const eventId = Number(params.event_id)
   const router = useRouter();
 
   const [form] = Form.useForm();
   const [loadingForm] = useState(false);
 
-  const [event, setEvent] = useState<Event | null>(null);
+  const {data: event} = useEvent(eventId, true)
+  const removeImage = useRemoveImage(eventId);
 
   const [files, setFiles] = useState<FileWithUploadData[]>([]);
   const [stats, setStats] = useState({
@@ -42,20 +43,6 @@ const Page: React.FC = () => {
       })
     );
   };
-
-  useEffect(() => {
-    if (!eventId) return;
-    fetchEvent(Number(eventId), true)
-      .then((res) => {
-        if (res.status === ApiStatus.SUCCESS) {
-          setEvent(res.event)
-        }
-      })
-      .catch(() => {
-        notification.error({message: t('unable_to_load_event')})
-        router.push('/events')
-      })
-  }, [eventId]);
 
   useEffect(() => {
     const next = files.reduce(
@@ -106,15 +93,15 @@ const Page: React.FC = () => {
     if (!file.imageId) return
 
     try {
-      const res = await removeImage(file.imageId);
-      if (res.status !== ApiStatus.SUCCESS) {
-        notification.warning({message: res.message})
-        return
-      }
+      removeImage.mutate(file.imageId, {
+        onSuccess: (res => {
+          notification.success({message: res.message})
+          setFiles(prev => prev.filter(f => f.id !== file.id));
+        })
+      });
 
-      notification.success({message: res.message})
-      setFiles(prev => prev.filter(f => f.id !== file.id));
-    } catch (err) {
+    } catch (err: any) {
+      notification.warning({message: err.message})
     }
   }
 
