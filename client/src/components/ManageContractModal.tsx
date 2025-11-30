@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {AutoComplete, Col, DatePicker, Divider, Form, Input, Modal, Radio, Row, Select, Tooltip,} from 'antd';
 import {getCategories, getCities, getCountries, getStates} from "@/lib/api/Location";
 import {useT} from "@/i18n/client";
-import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import Contract from "@/types/Contract";
-import {useContracts} from "@/contexts/ContractsContext";
 import dayjs from "dayjs";
 import {InfoCircleOutlined} from "@ant-design/icons";
+import {useCreateContract} from "@/lib/queries/contracts/useCreateContract";
+import {useUpdateContract} from "@/lib/queries/contracts/useUpdateContract";
 
 interface OptionType {
   value: string;
@@ -26,7 +26,9 @@ interface ManageContractModalProps {
 const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract, onCreate, onEdit, onCancel}) => {
   const {t} = useT();
   const notification = useNotification();
-  const {createContract, updateContract} = useContracts();
+  // const {createContract, updateContract} = useContracts();
+  const createContract = useCreateContract()
+  const updateContract = useUpdateContract()
 
   const isEditMode = !!contract;
 
@@ -173,32 +175,33 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
         if (values.conclusion_year) {
           values.conclusion_year = values.conclusion_year.year();
         }
-        let res;
-        if (isEditMode) {
-          res = await updateContract(contract.id, values);
-        } else {
-          res = await createContract(values);
-        }
 
-        if (res.status !== ApiStatus.SUCCESS) {
-          notification.warning({
-            message: res.message
+        if (isEditMode) {
+          updateContract.mutate({id: contract.id, values: values}, {
+            onSuccess: (res) => {
+              notification.success({
+                message: res.message
+              })
+              onEdit(res.contract)
+            }
           })
-          return;
         } else {
-          notification.success({
-            message: res.message
-          })
+          createContract.mutate(values, {
+            onSuccess: (res) => {
+              notification.success({
+                message: res.message
+              })
+              onCreate(res.contract)
+            }
+          });
         }
 
         handleClean();
-        if (isEditMode) {
-          onEdit(res.contract)
-        } else {
-          onCreate(res.contract);
-        }
       })
-      .catch(() => {
+      .catch((err: any) => {
+        notification.warning({
+          message: err.message
+        })
       });
   }
   return (

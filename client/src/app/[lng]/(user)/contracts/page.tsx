@@ -1,7 +1,7 @@
 "use client"
 
 import {App, Button, Card, Empty, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import ManageContractModal from "@/components/ManageContractModal";
@@ -9,17 +9,17 @@ import {useT} from "@/i18n/client";
 import Contract from "@/types/Contract";
 import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from "@ant-design/icons";
 import {useDebounce} from "react-use";
-import {useContracts} from "@/contexts/ContractsContext";
-import {ApiStatus} from "@/types/ApiResponse";
 import {Trans} from "react-i18next";
 import PageHeader from "@/components/PageHeader";
+import {useContracts} from "@/lib/queries/contracts/useContracts";
+import {useRemoveContract} from "@/lib/queries/contracts/useRemoveContract";
 
 export default function Page() {
   const {t} = useT();
   const {modal} = App.useApp();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [open, setOpen] = useState(false);
-  const {contracts, fetchContracts, loadingContracts, removeContract} = useContracts();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
   useDebounce(() => {
@@ -31,6 +31,9 @@ export default function Page() {
     pageSize: 15,
     total: 0,
   });
+
+  const {data: contracts, isLoading} = useContracts(searchTermDebounce, pagination.current, pagination.pageSize)
+  const removeContract = useRemoveContract()
 
   const [editingContract, setEditingContract] = useState<Contract>();
   const editContract = (contract: Contract) => {
@@ -64,7 +67,7 @@ export default function Page() {
       okType: 'danger',
       cancelText: t('cancel'),
       async onOk() {
-        await removeContract(record.id);
+        removeContract.mutate(record.id);
       },
     });
   };
@@ -122,22 +125,6 @@ export default function Page() {
     }
   ];
 
-  useEffect(() => {
-    setPagination(prev => ({
-      ...prev,
-      current: 1,
-    }));
-    fetchContracts(1, pagination.pageSize!, searchTermDebounce)
-      .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          setPagination(prev => ({
-            ...prev,
-            total: res.meta.total,
-          }));
-        }
-      })
-  }, [searchTermDebounce]);
-
   const handleTableChange = (
     newPagination: TablePaginationConfig,
     filters: Record<string, any>,
@@ -148,10 +135,6 @@ export default function Page() {
       newPagination.pageSize !== pagination.pageSize
     ) {
       setPagination(newPagination);
-      fetchContracts(newPagination.current!, newPagination.pageSize!, searchTerm)
-        .then(data => {
-          setPagination(prev => ({...prev, total: data.meta.total}));
-        });
     }
   };
 
@@ -191,7 +174,7 @@ export default function Page() {
 
       <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
         <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mb-4">
-          <Search placeholder={t('search_contract')} className="w-full sm:max-w-60" loading={loadingContracts}
+          <Search placeholder={t('search_contract')} className="w-full sm:max-w-60" loading={isLoading}
                   onChange={e => setSearchTerm(e.target.value)}/>
           <Button type="primary" onClick={() => setOpen(true)} className="w-full sm:w-auto">
             {t('add_new_contract')}
@@ -206,7 +189,7 @@ export default function Page() {
           columns={columns}
           dataSource={contracts}
           bordered={true}
-          loading={loadingContracts}
+          loading={isLoading}
           scroll={{y: 560, x: 'max-content'}}
           pagination={{
             ...pagination,
