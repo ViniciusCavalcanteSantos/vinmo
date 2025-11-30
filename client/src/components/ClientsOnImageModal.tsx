@@ -2,10 +2,10 @@ import {Button, Dropdown, Image, Modal} from "antd";
 import {useT} from "@/i18n/client";
 import Client from "@/types/Client";
 import {DeleteOutlined, EyeOutlined, InfoCircleOutlined, MoreOutlined} from "@ant-design/icons";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import ImageType from "@/types/Image";
-import {ApiStatus} from "@/types/ApiResponse";
-import {fetchClientCrop} from "@/lib/api/image/fetchClientCrop";
+import {useClientCrop} from "@/lib/queries/images/useClientCrop";
+import Fallback from "@/components/Fallback";
 
 type Props = {
   open: boolean;
@@ -14,49 +14,28 @@ type Props = {
   image: ImageType | null
 };
 
-type CropBox = {
-  client: Client,
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
 export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
   const {t} = useT()
 
-  const [activeCrop, setActiveCrop] = useState<CropBox | null>(null);
-  const [activeCropOpen, setActiveCropOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
 
+  const cropQuery = useClientCrop(image?.id, selectedClient?.id, cropModalOpen);
 
-  useEffect(() => {
-    if (!open) setActiveCrop(null);
-  }, [open, image]);
+  const handleOpenCrop = (client: Client) => {
+    setSelectedClient(client);
+    setCropModalOpen(true);
+  };
 
-  const seeClientCrop = (client: Client) => {
-    if (!image) return;
-
-    fetchClientCrop(image.id, client.id)
-      .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          const faceCrop = res.faceMatch.faceCrop;
-          setActiveCrop({
-            client: client,
-            x: faceCrop?.boxX ?? 0,
-            y: faceCrop?.boxY ?? 0,
-            w: faceCrop?.boxW ?? 0,
-            h: faceCrop?.boxH ?? 0
-          });
-          setActiveCropOpen(true)
-        }
-      })
-  }
+  const handleCloseCrop = () => {
+    setCropModalOpen(false);
+  };
 
   const menuFor = (client: Client) => ({
     onClick: async (info: { key: string }) => {
       switch (info.key) {
         case 'seeClient':
-          seeClientCrop(client)
+          handleOpenCrop(client);
           break
       }
     },
@@ -71,42 +50,50 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
   const viewBoxWidth = image?.original?.width ?? 1000;
   const viewBoxHeight = image?.original?.height ?? 1000;
 
+  const cropData = cropQuery.data;
+
   return (
     <Modal
       open={open}
       onCancel={onClose}
       onOk={onClose}
-      title={"Clientes na imagem"}
+      title={t('clients_on_image')}
       closable
       footer={null}
       className="!max-w-[95vw] md:!max-w-[50rem]"
     >
       <Modal
-        title={activeCrop?.client?.name}
-        open={activeCropOpen}
-        onCancel={() => setActiveCropOpen(false)}
-        onOk={() => setActiveCropOpen(false)}
+        title={selectedClient?.name}
+        open={cropModalOpen}
+        onCancel={handleCloseCrop}
+        onOk={handleCloseCrop}
         footer={null}
+        width={800}
       >
-        <div className="flex justify-center items-center min-h-[200px] bg-white rounded-md overflow-hidden">
+        <div
+          className="flex justify-center items-center min-h-[200px] bg-ant-bg-layout rounded-md overflow-hidden relative">
+          {cropQuery.isLoading && (
+            <Fallback/>
+          )}
+
           {image?.urls?.web ? (
             <div className="relative inline-block">
               <img
                 src={image.urls.web}
                 alt="Imagem Principal"
-                className="block max-w-full max-h-[60vh] w-auto h-auto object-contain"
+                className="block max-w-full max-h-[60vh] w-auto h-auto object-contain select-none"
               />
 
               <svg
                 className="absolute top-0 left-0 w-full h-full pointer-events-none"
                 viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
               >
-                {activeCrop && (
+                {cropQuery.isSuccess && cropData && (
                   <rect
-                    x={activeCrop.x}
-                    y={activeCrop.y}
-                    width={activeCrop.w}
-                    height={activeCrop.h}
+                    x={cropData.boxX}
+                    y={cropData.boxY}
+                    width={cropData.boxW}
+                    height={cropData.boxH}
                     fill="none"
                     stroke="#00ff00"
                     strokeWidth={Math.max(viewBoxWidth * 0.004, 2)}
@@ -116,19 +103,20 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
               </svg>
             </div>
           ) : (
-            <div className="text-gray-400">Imagem não disponível</div>
+            <div className="text-gray-400 p-10">{t('unable_to_get_image')}</div>
           )}
         </div>
       </Modal>
 
+      {/* Lista de Clientes */}
       <div className="mt-4 space-y-4">
         <ul className="flex flex-col gap-2">
           {clients.map((client) => (
             <li
-              className="bg-ant-fill-ter flex items-center gap-2 px-4 py-3 rounded-lg"
+              className="bg-ant-fill-ter flex items-center gap-2 px-4 py-3 rounded-lg hover:bg-ant-fill-secondary transition-colors"
               key={client.id}>
               <Image
-                className="rounded-avatar"
+                className="rounded-avatar object-cover"
                 src={client.profile.thumb}
                 width={32}
                 height={32}
@@ -143,7 +131,7 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
                   type="text"
                   shape="circle"
                   aria-label={t('options')}
-                  className="!text-2xl !text-ant-text-sec"
+                  className="!text-2xl !text-ant-text-sec hover:!text-ant-primary"
                 >
                   <MoreOutlined/>
                 </Button>

@@ -348,5 +348,7 @@
   "auto_assign_clients_to_event_explanation": "Se ativado, ao carregar uma foto para o evento, o cliente será automaticamente atribuído se seu rosto for detectado.",
   "university": "Universidade",
   "school": "Escola",
-  "untitled": "Sem nome"
+  "untitled": "Sem nome",
+  "unable_to_get_image": "Não foi possível obter a imagem",
+  "clients_on_image": "Clientes na imagem"
 }

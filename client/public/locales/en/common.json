@@ -348,5 +348,7 @@
   "auto_assign_clients_to_event_explanation": "If enabled, when uploading a photo to the event the client will be automatically assigned if their face is detected.",
   "university": "University",
   "school": "School",
-  "untitled": "Untitled"
+  "untitled": "Untitled",
+  "unable_to_get_image": "Unable to get image",
+  "clients_on_image": "Clients on image"
 }
