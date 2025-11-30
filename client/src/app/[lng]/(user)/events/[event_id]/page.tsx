@@ -6,7 +6,6 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useT} from "@/i18n/client";
 import Fallback from "@/components/Fallback";
 import ImageType from "@/types/Image";
-import {ApiStatus} from "@/types/ApiResponse";
 import {filesize} from "filesize";
 import {Badge, Button, Dropdown, Empty, Image, Tooltip, Typography} from "antd";
 import dayjs from "dayjs";
@@ -22,14 +21,13 @@ import {
 import {formatImageMeta, FormattedMetaItem} from "@/lib/formatImageMeta";
 import {MetadataModal} from "@/components/MetadataModal";
 import Link from "next/link";
-import Client from "@/types/Client";
 import {ClientsOnImageModal} from "@/components/ClientsOnImageModal";
 import {useEvent} from "@/lib/queries/event/useEvent";
 import {useFetchEventImages} from "@/lib/queries/event/useEventImages";
-import {fetchImageMetadata} from "@/lib/api/image/fetchImageMetadata";
 import {downloadImage} from "@/lib/api/image/downloadImage";
-import {fetchImageClients} from "@/lib/api/image/fetchImageClients";
 import {useRemoveImage} from "@/lib/queries/images/useRemoveImage";
+import {useImageMetadata} from "@/lib/queries/images/useImageMetadata";
+import {useImageClients} from "@/lib/queries/images/useImageClients";
 
 export default function Page() {
   const {t} = useT()
@@ -39,25 +37,26 @@ export default function Page() {
   const eventId = Number(params.event_id);
   const {defaultDateFormat} = useUser();
 
+  const [imageSelected, seImageSelected] = useState<ImageType | null>(null)
+
   const [metadata, setMetadata] = useState<FormattedMetaItem[]>([]);
   const [metadataOpen, setMetadataOpen] = useState(false);
+  const metadataQuery = useImageMetadata(imageSelected?.id, metadataOpen);
 
-  const [imageSelected, seImageSelected] = useState<ImageType | null>(null)
-  const [clients, setClients] = useState<Client[]>([])
   const [clientsOpen, setClientsOpen] = useState(false);
+  const {data: clients} = useImageClients(imageSelected?.id, clientsOpen);
+
 
   const {
     data: event,
     isLoading: loadingEvent,
     isError: eventError,
-    error: eventErr,
   } = useEvent(eventId, true);
 
   const {
     data: images,
     isLoading: loadingImages,
     isError: imagesError,
-    error: imagesErr,
   } = useFetchEventImages(eventId);
 
   const removeImage = useRemoveImage(eventId);
@@ -71,6 +70,45 @@ export default function Page() {
       router.push("/events");
     }
   }, [isError, notification, t, router]);
+
+  useEffect(() => {
+    if (metadataQuery.data && imageSelected && metadataOpen) {
+      try {
+        const metadataArray = formatImageMeta(metadataQuery.data, t);
+        if (imageSelected.original?.height) {
+          metadataArray.unshift({
+            label: t('height'),
+            value: `${imageSelected.original?.height} pixels`
+          });
+        }
+        if (imageSelected.original?.width) {
+          metadataArray.unshift({
+            label: t('width'),
+            value: `${imageSelected.original?.width} pixels`
+          });
+        }
+
+        const mime = imageSelected.original?.mimeType ?? "";
+        const subtype = mime.includes("/") ? mime.split("/")[1] : mime;
+        if (imageSelected.original?.mimeType) {
+          metadataArray.unshift({
+            label: t('image_type'),
+            value: subtype.toUpperCase() || t("unknown").toUpperCase()
+          });
+        }
+
+        setMetadata(metadataArray);
+      } catch (err: any) {
+        notification.warning({message: t('unable_to_load_metadata')});
+      }
+    }
+  }, [metadataQuery.data, imageSelected, metadataOpen, t, notification]);
+
+  useEffect(() => {
+    if (metadataQuery.isError && metadataOpen) {
+      notification.warning({message: (metadataQuery.error as any)?.message ?? t('unable_to_load_metadata')});
+    }
+  }, [metadataQuery.isError, metadataQuery.error, metadataOpen, notification, t]);
 
   const imagesSize = useMemo(() => {
     return images?.reduce((acc, image) => acc + (image.original?.size ?? 0), 0) ?? 0
@@ -95,42 +133,13 @@ export default function Page() {
   }
 
   const handleOpenMetadata = (image: ImageType) => {
-    fetchImageMetadata(image.id)
-      .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          const metadataArray = formatImageMeta(res.metadata, t)
-          if (image.original?.height) metadataArray.unshift({
-            label: t('height'),
-            value: `${image.original?.height} pixels`
-          })
-          if (image.original?.width) metadataArray.unshift({
-            label: t('width'),
-            value: `${image.original?.width} pixels`
-          })
-
-          const mime = image.original?.mimeType ?? "";
-          const subtype = mime.includes("/") ? mime.split("/")[1] : mime;
-          if (image.original?.mimeType) metadataArray.unshift({
-            label: t('image_type'),
-            value: subtype.toUpperCase() || t("unknown").toUpperCase()
-          })
-
-
-          setMetadata(metadataArray)
-          setMetadataOpen(true)
-        }
-      })
+    seImageSelected(image);
+    setMetadataOpen(true);
   }
 
   const handleOpenClients = (image: ImageType) => {
-    fetchImageClients(image.id)
-      .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          seImageSelected(image)
-          setClients(res.clients)
-          setClientsOpen(true)
-        }
-      })
+    seImageSelected(image);
+    setClientsOpen(true);
   }
 
   const menuFor = (img: ImageType) => ({
@@ -171,7 +180,7 @@ export default function Page() {
       {/* grid de imagens */}
       {images?.length ? (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
-          {images.map(image => ( // O card é um flex container para que o conteúdo se estique
+          {images.map(image => (
             <div key={image.id}>
               <div
                 className="
@@ -261,9 +270,14 @@ export default function Page() {
         </div>
       )}
 
-      <MetadataModal open={metadataOpen} onClose={() => setMetadataOpen(false)} metadata={metadata}/>
+      <MetadataModal
+        open={metadataOpen}
+        onClose={() => setMetadataOpen(false)}
+        metadata={metadata}
+        loading={metadataQuery.isFetching}
+      />
 
-      <ClientsOnImageModal open={clientsOpen} onClose={() => setClientsOpen(false)} clients={clients}
+      <ClientsOnImageModal open={clientsOpen} onClose={() => setClientsOpen(false)} clients={clients ?? []}
                            image={imageSelected}/>
     </div>
   )

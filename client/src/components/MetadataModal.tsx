@@ -7,9 +7,10 @@ type Props = {
   open: boolean;
   onClose: () => void;
   metadata: MetaItem[];
+  loading: boolean
 };
 
-export function MetadataModal({open, onClose, metadata}: Props) {
+export function MetadataModal({open, onClose, metadata, loading}: Props) {
   const {t} = useT()
   const {token} = theme.useToken();
 
@@ -27,6 +28,7 @@ export function MetadataModal({open, onClose, metadata}: Props) {
       className="
         !max-w-[40rem]
       "
+      loading={loading}
     >
       <h2 className="text-[16px] font-semibold text-center mb-4">
         {t('metadata')}
