@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {AutoComplete, Col, DatePicker, Divider, Form, Input, Modal, Radio, Row, Select, Tooltip,} from 'antd';
-import {getCategories, getCities, getCountries, getStates} from "@/lib/api/Location";
 import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import Contract from "@/types/Contract";
@@ -8,11 +7,10 @@ import dayjs from "dayjs";
 import {InfoCircleOutlined} from "@ant-design/icons";
 import {useCreateContract} from "@/lib/queries/contracts/useCreateContract";
 import {useUpdateContract} from "@/lib/queries/contracts/useUpdateContract";
-
-interface OptionType {
-  value: string;
-  label: string;
-}
+import {useCountries} from "@/lib/queries/location/useCountries";
+import {useStates} from "@/lib/queries/location/useStates";
+import {useCities} from "@/lib/queries/location/useCities";
+import {fetchContractCategories} from "@/lib/api/contract/fetchContractCategories";
 
 // Props do componente
 interface ManageContractModalProps {
@@ -26,7 +24,6 @@ interface ManageContractModalProps {
 const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract, onCreate, onEdit, onCancel}) => {
   const {t} = useT();
   const notification = useNotification();
-  // const {createContract, updateContract} = useContracts();
   const createContract = useCreateContract()
   const updateContract = useUpdateContract()
 
@@ -42,24 +39,14 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
 
   // Estados para os dados de localização
   const [categories, setCategories] = useState<{ name: string, slug: string }[]>([]);
-  const [countries, setCountries] = useState<OptionType[]>([]);
-  const [states, setStates] = useState<OptionType[]>([]);
-  const [cities, setCities] = useState<OptionType[]>([]);
 
-  // Estados para controle de carregamento
-  const [loadingCountries, setLoadingCountries] = useState(false);
-  const [loadingStates, setLoadingStates] = useState(false);
-  const [_, setLoadingCities] = useState(false);
+  const {data: countries, isLoading: isLoadingCountries} = useCountries(open)
+  const {data: states, isLoading: isLoadingStates} = useStates(country, open)
+  const {data: cities} = useCities(country, state)
 
   useEffect(() => {
     if (open) {
-      setLoadingCountries(true);
-      getCountries()
-        .then(data => {
-          setCountries(data.countries);
-        })
-        .finally(() => setLoadingCountries(false));
-      getCategories()
+      fetchContractCategories()
         .then(data => {
           setCategories(data.categories);
         })
@@ -90,23 +77,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
           setGraduationType(contract.graduationDetails?.type ?? '');
         }
 
-        // Carrega estados e cidades com base nos dados do contrato
-        if (contract.address.country) {
-          setLoadingStates(true);
-          getStates(contract.address.country)
-            .then(data => {
-              setStates(data.states);
-              if (contract.address.state) {
-                setLoadingCities(true);
-                getCities(contract.address.country, contract.address.state)
-                  .then(cityData => setCities(cityData.cities))
-                  .finally(() => setLoadingCities(false));
-              }
-            })
-            .finally(() => setLoadingStates(false));
-        }
       } else {
-        // Garante que o formulário está limpo se não for modo de edição
         handleClean();
       }
     };
@@ -117,29 +88,8 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
   }, [open, contract, form, isEditMode]);
 
 
-  const handleCountryChange = (countryCode: string) => {
-    form.setFieldsValue({state: null, city: null});
-    setStates([]);
-    setCities([]);
-    if (countryCode) {
-      setLoadingStates(true);
-      getStates(countryCode)
-        .then(data => setStates(data.states))
-        .finally(() => setLoadingStates(false));
-    }
-  };
-
-  const handleStateChange = (stateCode: string) => {
-    form.setFieldsValue({city: null});
-    setCities([]);
-    const countryCode = form.getFieldValue('country');
-    if (stateCode && countryCode) {
-      setLoadingCities(true);
-      getCities(countryCode, stateCode)
-        .then(data => setCities(data.cities))
-        .finally(() => setLoadingCities(false));
-    }
-  };
+  const handleCountryChange = () => form.setFieldsValue({state: null, city: null});
+  const handleStateChange = () => form.setFieldsValue({city: null});
 
   const handleCategoryChange = (value: string) => {
     if (value !== 'graduation') {
@@ -160,8 +110,6 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
   const handleClean = () => {
     form.resetFields();
     setGraduationType('');
-    setStates([]);
-    setCities([]);
   }
 
   const handleCancel = () => {
@@ -257,7 +205,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
           <Col xs={24} md={8}>
             <Form.Item name="country" label={t('country')} rules={[{required: true, message: t('select_country')}]}>
               <Select showSearch placeholder={t('select_country')}
-                      loading={loadingCountries}
+                      loading={isLoadingCountries}
                       onChange={handleCountryChange}
                       options={countries}
                       filterOption={(input, option) =>
@@ -267,8 +215,8 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
           <Col xs={24} md={8}>
             <Form.Item name="state" label={t('state_province')} rules={[{required: true, message: t('select_state')}]}>
               <Select showSearch placeholder={t('select_state')}
-                      loading={loadingStates}
-                      disabled={!country || loadingStates}
+                      loading={isLoadingStates}
+                      disabled={!country || isLoadingStates}
                       onChange={handleStateChange}
                       options={states}
                       filterOption={(input, option) =>

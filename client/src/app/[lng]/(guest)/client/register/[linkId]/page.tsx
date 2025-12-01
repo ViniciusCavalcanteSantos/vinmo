@@ -19,7 +19,6 @@ import {
   UploadProps
 } from 'antd';
 import {useParams, useRouter} from 'next/navigation';
-import {getCities, getCountries, getStates} from "@/lib/api/Location";
 import {useT} from "@/i18n/client";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
@@ -32,11 +31,9 @@ import InputPhone from "@/components/InputPhone";
 import {RegisterLinkType} from "@/types/RegisterLinkType";
 import getDateFormatByCountry from "@/lib/getDateFormatByCountry";
 import {CountryCode} from "libphonenumber-js";
-
-interface OptionType {
-  value: string;
-  label: string;
-}
+import {useCountries} from "@/lib/queries/location/useCountries";
+import {useStates} from "@/lib/queries/location/useStates";
+import {useCities} from "@/lib/queries/location/useCities";
 
 const ManageClientPage: React.FC = () => {
   const {t} = useT();
@@ -48,7 +45,6 @@ const ManageClientPage: React.FC = () => {
   const [linkInfo, setLinkInfo] = useState<RegisterLinkType | null>(null);
   const [requireGuardian, setRequireGuardian] = useState(false);
 
-
   const isEditMode = false;
 
   const [form] = Form.useForm();
@@ -56,30 +52,17 @@ const ManageClientPage: React.FC = () => {
   const country = Form.useWatch('country', form);
   const state = Form.useWatch('state', form);
 
-  const [countries, setCountries] = useState<OptionType[]>([]);
-  const [states, setStates] = useState<OptionType[]>([]);
-  const [cities, setCities] = useState<OptionType[]>([]);
+  const {data: countries, isLoading: isLoadingCountries} = useCountries()
+  const {data: states, isLoading: isLoadingStates} = useStates(country)
+  const {data: cities} = useCities(country, state)
 
   const [uploadRequired, setUploadRequired] = useState<boolean>(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const [loadingCountries, setLoadingCountries] = useState(false);
-  const [loadingStates, setLoadingStates] = useState(false);
-  const [_, setLoadingCities] = useState(false);
-
   const [loadingForm, setLoadingForm] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-
-  useEffect(() => {
-    setLoadingCountries(true);
-    getCountries()
-      .then(data => {
-        setCountries(data.countries);
-      })
-      .finally(() => setLoadingCountries(false));
-  }, []);
 
   useEffect(() => {
     const loadClientData = async () => {
@@ -112,29 +95,8 @@ const ManageClientPage: React.FC = () => {
     setRequireGuardian(false);
   }, [linkInfo, birthdate]);
 
-  const handleCountryChange = (countryCode: string) => {
-    form.setFieldsValue({state: null, city: null});
-    setStates([]);
-    setCities([]);
-    if (countryCode) {
-      setLoadingStates(true);
-      getStates(countryCode)
-        .then(res => setStates(res.states))
-        .finally(() => setLoadingStates(false));
-    }
-  };
-
-  const handleStateChange = async (stateCode: string) => {
-    form.setFieldsValue({city: null});
-    setCities([]);
-    const countryCode = form.getFieldValue('country');
-    if (stateCode && countryCode) {
-      setLoadingCities(true);
-      getCities(countryCode, stateCode)
-        .then(data => setCities(data.cities))
-        .finally(() => setLoadingCities(false));
-    }
-  };
+  const handleCountryChange = () => form.setFieldsValue({state: null, city: null});
+  const handleStateChange = async () => form.setFieldsValue({city: null});
 
   const handleSubmit = async (values: any) => {
     if (!linkInfo) return;
@@ -362,8 +324,8 @@ const ManageClientPage: React.FC = () => {
                       <Form.Item name="country" label={t('country')}
                                  rules={[{required: true, message: t('select_country')}]}>
                         <Select showSearch placeholder={t('select_country')}
-                                loading={loadingCountries}
-                                onChange={(value) => handleCountryChange(value)}
+                                loading={isLoadingCountries}
+                                onChange={handleCountryChange}
                                 options={countries}
                                 filterOption={(input, option) =>
                                   (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
@@ -373,8 +335,8 @@ const ManageClientPage: React.FC = () => {
                       <Form.Item name="state" label={t('state_province')}
                                  rules={[{required: true, message: t('select_state')}]}>
                         <Select showSearch placeholder={t('select_state')}
-                                loading={loadingStates}
-                                disabled={!country || loadingStates}
+                                loading={isLoadingStates}
+                                disabled={!country || isLoadingStates}
                                 onChange={handleStateChange}
                                 options={states}
                                 filterOption={(input, option) =>
