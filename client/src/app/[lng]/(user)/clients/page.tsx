@@ -512,8 +512,9 @@ interface AssignModalsProps {
 function AssignModals({openModalAssign, handleClose, clientIds, type, initialAssignments = []}: AssignModalsProps) {
   const {t} = useT();
   const notification = useNotification();
+  console.log(initialAssignments)
 
-  const [assignments, setAssignments] = useState<number[]>(initialAssignments);
+  const [assignments, setAssignments] = useState<number[]>([]);
 
   useEffect(() => {
     setAssignments(initialAssignments)

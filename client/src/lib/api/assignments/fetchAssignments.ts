@@ -5,7 +5,7 @@ export interface FetchAssignmentsResponse {
 }
 
 export async function fetchAssignments(clientId: number | string) {
-  return await apiFetch<FetchAssignmentsResponse>(`/client/${clientId}/assignment`, {
+  return await apiFetch<FetchAssignmentsResponse>(`/clients/${clientId}/assignments`, {
     method: "GET",
   });
 }
