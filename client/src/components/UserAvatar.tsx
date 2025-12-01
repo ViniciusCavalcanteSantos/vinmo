@@ -2,7 +2,7 @@
 
 import User from "@/types/User";
 import {Avatar, AvatarProps} from "antd";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 const AVATAR_COLORS = [
   '#f56a00', // Orange
@@ -19,7 +19,7 @@ interface UserAvatarInterface extends AvatarProps {
   user?: User
 }
 
-export default function UserAvatar(props: UserAvatarInterface) {
+function UserAvatar(props: UserAvatarInterface) {
   const {user, ...avatarProps} = props;
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -53,3 +53,5 @@ function getStandardColor(str: string) {
   const index = Math.abs(hash) % AVATAR_COLORS.length;
   return AVATAR_COLORS[index];
 }
+
+export default React.memo(UserAvatar)

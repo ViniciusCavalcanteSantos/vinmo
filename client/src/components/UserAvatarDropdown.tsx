@@ -1,7 +1,7 @@
 'use client'
 
 import User from "@/types/User";
-import {useEffect, useMemo, useState} from "react"; // Adicionado useMemo
+import React, {useEffect, useMemo, useState} from "react";
 import {Button, Divider, Dropdown} from "antd";
 import {LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined} from "@ant-design/icons";
 import UserAvatar from "@/components/UserAvatar";
@@ -10,7 +10,7 @@ import {useT} from "@/i18n/client";
 import {useUser} from "@/contexts/UserContext";
 import {useTheme} from "@/contexts/AppThemeContext";
 
-export default function UserAvatarDropdown({user}: { user: User | null }) {
+function UserAvatarDropdown({user}: { user: User | null }) {
   const {logout} = useUser();
   const [mounted, setMounted] = useState(false);
   const {t} = useT();
@@ -82,3 +82,5 @@ export default function UserAvatarDropdown({user}: { user: User | null }) {
     </Dropdown>
   );
 }
+
+export default React.memo(UserAvatarDropdown)
