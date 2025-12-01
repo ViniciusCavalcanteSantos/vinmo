@@ -1,16 +1,19 @@
 'use client'
 
-import {createContext, useCallback, useContext, useMemo, useState} from 'react';
+import {createContext, useCallback, useContext, useMemo} from 'react';
 import User from "@/types/User";
 import getDateFormatByCountry from "@/lib/getDateFormatByCountry";
 import apiFetch from "@/lib/apiFetch";
 import {useRouter} from "next/navigation";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {fetchUser} from "@/lib/api/users/fetchUser";
 
 interface UserContextType {
   user: User | null;
   setUser: (user: User) => void;
   logout: () => void;
   defaultDateFormat: string;
+  isLoggingOut: boolean;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -21,37 +24,47 @@ export const UserProvider = (
     initialUser
   }: {
     children: React.ReactNode,
-    initialUser: User
+    initialUser: User | null
   }) => {
-  const [user, setUserState] = useState<User>(initialUser);
   const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const {data: user} = useQuery({
+    queryKey: ['user'],
+    queryFn: () => fetchUser(),
+    initialData: initialUser,
+    staleTime: Infinity,
+    refetchOnWindowFocus: true,
+  });
+
+  const {mutate: logout, isPending: isLoggingOut} = useMutation({
+    mutationFn: async () => {
+      await apiFetch('/logout', {method: 'POST'});
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(['user'], null);
+      queryClient.clear();
+      router.refresh();
+      router.replace('/signin');
+    }
+  });
+
+  const setUser = useCallback((newUser: User) => {
+    queryClient.setQueryData(['user'], newUser);
+  }, [queryClient]);
 
   const defaultDateFormat = useMemo(() => {
     return getDateFormatByCountry(user?.address?.country)
   }, [user?.address?.country]);
 
-  const setUser = useCallback((userToSet: User) => {
-    setUserState(userToSet);
-  }, [setUserState]);
-
-  const logout = useCallback(async () => {
-    try {
-      await apiFetch('/logout', {
-        method: 'POST',
-      });
-    } catch (e) {
-    }
-
-    router.refresh()
-    router.replace('/signin')
-  }, [router]);
 
   const value = useMemo(() => ({
     user,
     setUser,
     logout,
-    defaultDateFormat
-  }), [user, setUser, logout, defaultDateFormat]);
+    defaultDateFormat,
+    isLoggingOut
+  }), [user, setUser, logout, defaultDateFormat, isLoggingOut]);
 
   return (
     <UserContext.Provider value={value}>

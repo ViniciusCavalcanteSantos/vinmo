@@ -5,6 +5,9 @@ import "./globals.css";
 import Providers from "./providers";
 import {themeBody} from "@/theme";
 import {languages} from "@/i18n/settings";
+import {fetchUserServer} from "@/lib/api/users/fetchUserServer";
+import {Theme} from "@/contexts/AppThemeContext";
+import {cookies} from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,13 +53,22 @@ async function LocaleLayout(
     params: Promise<any>;
   }>) {
   const {lng} = await params;
+  const {user} = await fetchUserServer()
+
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get('theme')?.value;
+  const validThemes: Theme[] = ['light', 'dark', 'system'];
+  const initialTheme = validThemes.includes(themeCookie as Theme)
+    ? (themeCookie as Theme)
+    : 'system';
+
   return (
     <html lang={lng} className="h-full" suppressHydrationWarning>
     <body
       className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-app-bg`}
       style={themeBody}
     >
-    <Providers lang={lng}>
+    <Providers lang={lng} user={user} theme={initialTheme}>
       {children}
     </Providers>
     </body>

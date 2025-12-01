@@ -1,19 +1,10 @@
-import {cookies} from "next/headers";
-import ApiResponse, {ApiStatus} from "@/types/ApiResponse";
+import apiFetch from "@/lib/apiFetch";
 import User from "@/types/User";
 
-export async function fetchUser() {
-  const cookieStore = await cookies();
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/me`, {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-    cache: 'no-store'
+export async function fetchUser(): Promise<User | null> {
+  const data = await apiFetch<{ user: User | null }>('/me', {
+    method: 'GET',
   });
 
-  if (!res.ok) return {status: ApiStatus.ERROR, user: null};
-
-  const data = await res.json();
-  return data as ApiResponse & { user: User };
+  return data.user ?? null;
 }

@@ -1,13 +1,12 @@
 import {PropsWithChildren} from "react";
-import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import Providers from "@/app/[lng]/(auth)/providers";
+import {fetchUserServer} from "@/lib/api/users/fetchUserServer";
 
 export default async function Layout({children}: PropsWithChildren) {
-  const cookieStore = await cookies();
-  const loggedIn = !!cookieStore.get('logged_in')?.value;
+  const {user} = await fetchUserServer()
 
-  if (loggedIn) {
+  if (user) {
     redirect(`/home`);
   }
 

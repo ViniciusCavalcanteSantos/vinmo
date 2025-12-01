@@ -8,23 +8,31 @@ import {NotificationProvider} from "@/contexts/NotificationContext";
 import en from 'antd/locale/en_US';
 import ptBR from 'antd/locale/pt_BR';
 import {Locale} from "antd/es/locale";
-import {ThemeProvider, useTheme} from "@/contexts/AppThemeContext";
+import {Theme, ThemeProvider, useTheme} from "@/contexts/AppThemeContext";
 import {PhotonSpin} from "@/components/Fallback";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {UserProvider} from "@/contexts/UserContext";
+import User from "@/types/User";
 
 const queryClient = new QueryClient()
 
-export default function Providers({children, lang}: PropsWithChildren<{ lang: string }>) {
+export default function Providers({children, lang, user, theme}: PropsWithChildren<{
+  lang: string,
+  user: User | null,
+  theme: Theme
+}>) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AntdRegistry>
-        <ThemeProvider>
-          <ConfigProviderWrapper lang={lang}>
-            {children}
-          </ConfigProviderWrapper>
-        </ThemeProvider>
-      </AntdRegistry>
+      <UserProvider initialUser={user}>
+        <AntdRegistry>
+          <ThemeProvider initialTheme={theme}>
+            <ConfigProviderWrapper lang={lang}>
+              {children}
+            </ConfigProviderWrapper>
+          </ThemeProvider>
+        </AntdRegistry>
+      </UserProvider>
     </QueryClientProvider>
   );
 }
