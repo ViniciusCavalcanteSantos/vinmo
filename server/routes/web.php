@@ -14,50 +14,58 @@ Route::get('/', function () {
 });
 
 Route::prefix('/api')->group(function () {
-    Route::post('/send-code', [AuthController::class, 'send_code']);
-    Route::post('/send-recovery-link', [AuthController::class, 'send_recovery_link']);
-    Route::post('/validate-recovery-token', [AuthController::class, 'validate_recovery_token']);
-    Route::post('/change-password', [AuthController::class, 'change_password']);
-    Route::post('/confirm-code', [AuthController::class, 'confirm_code']);
-
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
-
+    // --- AUTHENTICATION ---
     Route::prefix('/auth')->group(function () {
+        Route::post('/send-code', [AuthController::class, 'sendCode']);
+        Route::post('/send-recovery-link', [AuthController::class, 'sendRecoveryLink']);
+        Route::post('/validate-recovery-token', [AuthController::class, 'validateRecoveryToken']);
+        Route::post('/change-password', [AuthController::class, 'changePassword']);
+        Route::post('/confirm-code', [AuthController::class, 'confirmCode']);
+
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/login', [AuthController::class, 'login']);
+
         Route::get('/available-providers', [AuthController::class, 'availableProviders']);
         Route::get('/{provider}/redirect', [AuthController::class, 'redirectToProvider']);
         Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
     });
 
-    Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
-    Route::get('/images/{image}/download', [ImageController::class, 'download'])->name('images.download');
-    Route::get('/images/{image}/metadata', [ImageController::class, 'metadata'])->name('images.metadata');
-    Route::get('/images/{image}/clients', [ImageController::class, 'clientOnImage'])->name('images.clients');
-    Route::get('/images/{image}/clients/crop/{client}',
-        [ImageController::class, 'getClientCrop'])->name('images.clients.crop');
+    // --- IMAGES ---
+    Route::prefix('/images/{image}')->group(function () {
+        Route::get('/', [ImageController::class, 'show'])->name('images.show');
+        Route::delete('/', [ImageController::class, 'destroy'])->name('images.delete');
 
-    Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.delete');
+        Route::get('/download', [ImageController::class, 'download'])->name('images.download');
+        Route::get('/metadata', [ImageController::class, 'metadata'])->name('images.metadata');
+        Route::get('/clients', [ImageController::class, 'clientOnImage'])->name('images.clients');
+        Route::get('/clients/{client}/crop', [ImageController::class, 'getClientCrop'])->name('images.clients.crop');
+    });
 
+    // --- PROTECTED ROUTES ---
     Route::middleware('auth:sanctum')->group(function () {
+        /* USUÁRIO */
         Route::get('/me', [AuthController::class, 'me']);
         Route::post('/logout', [AuthController::class, 'logout']); // 👈 aqui
 
-        Route::get('/contract/categories', [ContractController::class, 'getCategories']);
-        Route::apiResource('/contract', ContractController::class);
+        /* CONTRATOS */
+        Route::get('/contracts/categories', [ContractController::class, 'getCategories']);
+        Route::apiResource('/contracts', ContractController::class);
 
-        Route::get('event/types/{contract}', [EventController::class, 'getEventTypes']);
-        Route::apiResource('/event', EventController::class);
-        Route::get('event/{event}/images', [EventController::class, 'getImages']);
+        /* EVENTOS */
+        Route::get('events/types/{contract}', [EventController::class, 'getEventTypes']);
+        Route::apiResource('/events', EventController::class);
+        Route::get('events/{event}/images', [EventController::class, 'getImages']);
+        Route::apiResource('/events/photo', EventPhotoController::class);
 
-        Route::apiResource('/event/photo', EventPhotoController::class);
+        /* CLIENTES */
+        Route::apiResource('/clients', ClientController::class);
+        Route::get('/clients/links/{linkId}', [ClientController::class, 'getLinkInfo']);
+        Route::post('/clients/links', [ClientController::class, 'generateLink']);
 
-        Route::apiResource('/client', ClientController::class);
-        Route::get('/client/link/{linkId}', [ClientController::class, 'getLinkInfo']);
-        Route::post('/client/link', [ClientController::class, 'generateLink']);
-
-        Route::apiResource('/assignment/client', AssignmentController::class);
-        Route::post('/assignment/client/{client}', [AssignmentController::class, 'store']);
-        Route::post('/assignment/bulk', [AssignmentController::class, 'storeBulk']);
-        Route::delete('/assignment/bulk', [AssignmentController::class, 'destroyBulk']);
+        /* ATRIBUIÇÃO DOS CLIENTES */
+        Route::get('clients/{client}/assignments', [AssignmentController::class, 'show']);
+        Route::post('clients/{client}/assignments', [AssignmentController::class, 'store']);
+        Route::post('clients/assignments/bulk', [AssignmentController::class, 'storeBulk']);
+        Route::delete('clients/assignments/bulk', [AssignmentController::class, 'destroyBulk']);
     });
 });

@@ -6,7 +6,7 @@ export interface CreateContractResponse {
 }
 
 export async function createContract(data: any) {
-  return apiFetch<CreateContractResponse>("/contract", {
+  return apiFetch<CreateContractResponse>("/contracts", {
     method: "POST",
     body: JSON.stringify(data),
   });

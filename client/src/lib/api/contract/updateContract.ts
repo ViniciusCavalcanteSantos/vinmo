@@ -6,7 +6,7 @@ export interface UpdateContractResponse {
 }
 
 export async function updateContract(id: number, data: any) {
-  return apiFetch<UpdateContractResponse>(`/contract/${id}`, {
+  return apiFetch<UpdateContractResponse>(`/contracts/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
   });

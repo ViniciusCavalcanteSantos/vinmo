@@ -14,7 +14,7 @@ export async function updateClient(id: number, values: any, profile: UploadFile)
   }
 
   formData.append("_method", "PUT");
-  return await apiFetch<UpdateClientResponse>(`/client/${id}`, {
+  return await apiFetch<UpdateClientResponse>(`/clients/${id}`, {
     method: "POST",
     body: formData
   });

@@ -6,7 +6,7 @@ export interface UpdateEventResponse {
 }
 
 export async function updateEvent(id: number, data: any) {
-  return apiFetch<UpdateEventResponse>(`/event/${id}`, {
+  return apiFetch<UpdateEventResponse>(`/events/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
   });

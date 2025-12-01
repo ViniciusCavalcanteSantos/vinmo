@@ -10,7 +10,7 @@ export async function uploadEventPhoto(
 ) {
   const formData = objectToFormData({event_id: eventId}, {'photo': photo})
 
-  return apiFetch<{ image: Image }>("/event/photo", {
+  return apiFetch<{ image: Image }>("/events/photos", {
     method: "POST",
     body: formData,
     driver: 'axios',

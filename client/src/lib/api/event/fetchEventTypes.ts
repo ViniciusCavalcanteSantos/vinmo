@@ -8,7 +8,7 @@ export interface FetchEventTypesResponse {
 }
 
 export async function fetchEventTypes(contractId: number) {
-  return await apiFetch<FetchEventTypesResponse>(`/event/types/${contractId}`, {
+  return await apiFetch<FetchEventTypesResponse>(`/events/types/${contractId}`, {
     method: "GET",
   });
 }

@@ -35,7 +35,7 @@ it('returns paginated events for the organization', function () {
     $otherContract = Contract::factory()->create();
     Event::factory()->count(3)->create(['contract_id' => $otherContract->id]);
 
-    $response = getJson('/api/event');
+    $response = getJson('/api/events');
 
     $response->assertOk()
         ->assertJsonStructure([
@@ -58,7 +58,7 @@ it('can search events', function () {
         'title' => 'Another item'
     ]);
 
-    $response = getJson('/api/event?search=Specific');
+    $response = getJson('/api/events?search=Specific');
 
     $response->assertOk()
         ->assertJsonCount(1, 'events')
@@ -75,7 +75,7 @@ it('creates a new event', function () {
         'start_time' => '22:00',
     ];
 
-    $response = postJson('/api/event', $eventData);
+    $response = postJson('/api/events', $eventData);
 
     $response
         ->assertOk()
@@ -92,7 +92,7 @@ it('creates a new event', function () {
 });
 
 it('fails to store with invalid data', function () {
-    $response = postJson('/api/event', ['date' => 'invalid-date']);
+    $response = postJson('/api/events', ['date' => 'invalid-date']);
 
     $response->assertStatus(422);
 });
@@ -100,7 +100,7 @@ it('fails to store with invalid data', function () {
 it('returns a specific event', function () {
     $event = Event::factory()->create(['contract_id' => $this->contract->id]);
 
-    $response = getJson("/api/event/{$event->id}");
+    $response = getJson("/api/events/{$event->id}");
 
     $response->assertOk()
         ->assertJson([
@@ -115,7 +115,7 @@ it('fails to show an event from another organization', function () {
     $otherContract = Contract::factory()->create();
     $event = Event::factory()->create(['contract_id' => $otherContract->id]);
 
-    $response = getJson("/api/event/{$event->id}");
+    $response = getJson("/api/events/{$event->id}");
 
     $response->assertForbidden();
 });
@@ -132,7 +132,7 @@ it('updates an existing event', function () {
         'start_time' => '19:00',
     ];
 
-    $response = putJson("/api/event/{$event->id}", $updateData);
+    $response = putJson("/api/events/{$event->id}", $updateData);
 
     $response->assertOk()->assertJson(['status' => 'success', 'message' => 'Event updated']);
 
@@ -147,7 +147,7 @@ it('fails to update an event from another organization', function () {
     $event = Event::factory()->create(['contract_id' => $otherContract->id]);
     $updateData = ['title' => 'new title'];
 
-    $response = putJson("/api/event/{$event->id}", $updateData);
+    $response = putJson("/api/events/{$event->id}", $updateData);
 
     $response->assertForbidden();
 });
@@ -155,7 +155,7 @@ it('fails to update an event from another organization', function () {
 it('deletes an event', function () {
     $event = Event::factory()->create(['contract_id' => $this->contract->id]);
 
-    $response = deleteJson("/api/event/{$event->id}");
+    $response = deleteJson("/api/events/{$event->id}");
 
     $response->assertOk()
         ->assertJson(['status' => 'success', 'message' => 'Event deleted']);
@@ -167,7 +167,7 @@ it('fails to delete an event from another organization', function () {
     $otherContract = Contract::factory()->create();
     $event = Event::factory()->create(['contract_id' => $otherContract->id]);
 
-    $response = deleteJson("/api/event/{$event->id}");
+    $response = deleteJson("/api/events/{$event->id}");
 
     $response->assertForbidden();
 });
@@ -175,7 +175,7 @@ it('fails to delete an event from another organization', function () {
 it('returns event types for a contract', function () {
     $count = EventType::where('category_id', $this->contract->category_id)->count();
 
-    $response = getJson("/api/event/types/{$this->contract->id}");
+    $response = getJson("/api/events/types/{$this->contract->id}");
 
     $response->assertOk()
         ->assertJsonStructure(['status', 'message', 'eventTypes'])
@@ -185,7 +185,7 @@ it('returns event types for a contract', function () {
 it('fails to get event types for a contract from another organization', function () {
     $otherContract = Contract::factory()->create();
 
-    $response = getJson("/api/event/types/{$otherContract->id}");
+    $response = getJson("/api/events/types/{$otherContract->id}");
 
     $response->assertForbidden();
 });
@@ -193,7 +193,7 @@ it('fails to get event types for a contract from another organization', function
 it('returns images for an event', function () {
     $event = Event::factory()->create(['contract_id' => $this->contract->id]);
 
-    $response = getJson("/api/event/{$event->id}/images");
+    $response = getJson("/api/events/{$event->id}/images");
 
     $response->assertOk()
         ->assertJsonStructure(['status', 'message', 'images']);
@@ -203,7 +203,7 @@ it('fails to get images for an event from another organization', function () {
     $otherContract = Contract::factory()->create();
     $event = Event::factory()->create(['contract_id' => $otherContract->id]);
 
-    $response = getJson("/api/event/{$event->id}/images");
+    $response = getJson("/api/events/{$event->id}/images");
 
     $response->assertForbidden();
 });

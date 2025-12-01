@@ -7,7 +7,7 @@ export interface FetchEventResponse {
 }
 
 export async function fetchEvent(eventId: number, withContract: boolean = false) {
-  const url = buildUrl(`/event/${eventId}`, {
+  const url = buildUrl(`/events/${eventId}`, {
     with_contract: withContract
   });
 

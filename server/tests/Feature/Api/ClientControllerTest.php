@@ -29,7 +29,7 @@ it('returns paginated clients for the organization', function () {
     // Client from another organization
     Client::factory()->count(3)->create();
 
-    $response = getJson('/api/client');
+    $response = getJson('/api/clients');
 
     $response->assertOk()
         ->assertJsonStructure([
@@ -52,7 +52,7 @@ it('can search clients', function () {
         'name' => 'Another item'
     ]);
 
-    $response = getJson('/api/client?search=Specific');
+    $response = getJson('/api/clients?search=Specific');
 
     $response->assertOk()
         ->assertJsonCount(1, 'clients')
@@ -72,7 +72,7 @@ it('creates a new client', function () {
         'profile' => $file
     ];
 
-    $response = postJson('/api/client', $clientData);
+    $response = postJson('/api/clients', $clientData);
 
     $response
         ->assertOk()
@@ -89,7 +89,7 @@ it('creates a new client', function () {
 });
 
 it('fails to store with invalid data', function () {
-    $response = postJson('/api/client', ['code' => 29]);
+    $response = postJson('/api/clients', ['code' => 29]);
 
     $response->assertStatus(422);
 });
@@ -97,7 +97,7 @@ it('fails to store with invalid data', function () {
 it('returns a specific client', function () {
     $client = Client::factory()->create(['organization_id' => $this->organization->id]);
 
-    $response = getJson("/api/client/{$client->id}");
+    $response = getJson("/api/clients/{$client->id}");
 
     $response->assertOk()
         ->assertJson([
@@ -111,7 +111,7 @@ it('returns a specific client', function () {
 it('fails to show a client from another organization', function () {
     $client = Client::factory()->create();
 
-    $response = getJson("/api/client/{$client->id}");
+    $response = getJson("/api/clients/{$client->id}");
 
     $response->assertForbidden();
 });
@@ -123,7 +123,7 @@ it('updates an existing client', function () {
         'name' => 'Jane Doe Updated',
     ];
 
-    $response = putJson("/api/client/{$client->id}", $updateData);
+    $response = putJson("/api/clients/{$client->id}", $updateData);
 
     $response->assertOk()->assertJson(['status' => 'success', 'message' => 'Client updated']);
 
@@ -137,7 +137,7 @@ it('fails to update a client from another organization', function () {
     $client = Client::factory()->create();
     $updateData = ['name' => 'new name'];
 
-    $response = putJson("/api/client/{$client->id}", $updateData);
+    $response = putJson("/api/clients/{$client->id}", $updateData);
 
     $response->assertForbidden();
 });
@@ -145,7 +145,7 @@ it('fails to update a client from another organization', function () {
 it('deletes a client', function () {
     $client = Client::factory()->create(['organization_id' => $this->organization->id]);
 
-    $response = deleteJson("/api/client/{$client->id}");
+    $response = deleteJson("/api/clients/{$client->id}");
 
     $response->assertOk()
         ->assertJson(['status' => 'success', 'message' => 'Client deleted']);
@@ -156,7 +156,7 @@ it('deletes a client', function () {
 it('fails to delete a client from another organization', function () {
     $client = Client::factory()->create();
 
-    $response = deleteJson("/api/client/{$client->id}");
+    $response = deleteJson("/api/clients/{$client->id}");
 
     $response->assertForbidden();
 });
@@ -169,7 +169,7 @@ it('generates a client registration link', function () {
         'max_registers' => 10,
     ];
 
-    $response = postJson('/api/client/generate-register-link', $linkData);
+    $response = postJson('/api/clients/links', $linkData);
 
     $response->assertStatus(201)
         ->assertJsonStructure(['status', 'message', 'link_id']);
@@ -193,7 +193,7 @@ it('gets client registration link info', function () {
 
     $linkIdEncoded = base64_encode($link->id);
 
-    $response = getJson("/api/client/get-link-info/{$linkIdEncoded}");
+    $response = getJson("/api/clients/links/{$linkIdEncoded}");
 
     $response->assertOk()
         ->assertJsonPath('linkInfo.title', $link->title);
@@ -223,7 +223,7 @@ it('creates a client from a public registration link', function () {
         'profile' => $file
     ];
 
-    $response = postJson("/api/public/client/register/{$linkIdEncoded}", $clientData);
+    $response = postJson("/api/public/clients/register/{$linkIdEncoded}", $clientData);
 
     $response->assertOk()
         ->assertJsonPath('client.name', 'Public User');

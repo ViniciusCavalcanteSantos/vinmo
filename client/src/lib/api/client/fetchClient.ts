@@ -6,7 +6,7 @@ export interface FetchClientResponse {
 }
 
 export async function fetchClient(id: number) {
-  return await apiFetch<FetchClientResponse>(`/client/${id}`, {
+  return await apiFetch<FetchClientResponse>(`/clients/${id}`, {
     method: "GET",
   });
 }

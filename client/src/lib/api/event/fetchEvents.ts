@@ -13,7 +13,7 @@ export interface FetchEventsResponse {
 }
 
 export async function fetchEvents(page: number = 1, pageSize: number = 15, searchTerm?: string, withContract: boolean = false) {
-  const url = buildUrl('/event', {
+  const url = buildUrl('/events', {
     page: String(page),
     per_page: String(pageSize),
     search: searchTerm,

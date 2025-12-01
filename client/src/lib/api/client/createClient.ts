@@ -14,7 +14,7 @@ export async function createClient(
 ) {
   const formData = objectToFormData(values, {'profile': profile})
 
-  return apiFetch<CreateClientResponse>("/client", {
+  return apiFetch<CreateClientResponse>("/clients", {
     method: "POST",
     body: formData,
     driver: 'axios',
@@ -30,7 +30,7 @@ export async function createClientPublic(
 ) {
   const formData = objectToFormData(values, {'profile': profile})
 
-  return apiFetch<CreateClientResponse>(`/public/client/register/${linkId}`, {
+  return apiFetch<CreateClientResponse>(`/public/clients/register/${linkId}`, {
     method: "POST",
     body: formData,
     driver: 'axios',

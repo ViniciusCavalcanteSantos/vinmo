@@ -132,7 +132,7 @@ class AuthController extends Controller
             );
     }
 
-    public function send_code(Request $request)
+    public function sendCode(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255|unique:users',
@@ -164,7 +164,7 @@ class AuthController extends Controller
         }
     }
 
-    public function send_recovery_link(Request $request)
+    public function sendRecoveryLink(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255',
@@ -204,7 +204,7 @@ class AuthController extends Controller
         }
     }
 
-    public function validate_recovery_token(Request $request)
+    public function validateRecoveryToken(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'token' => 'required|size:64',
@@ -246,7 +246,7 @@ class AuthController extends Controller
         }
     }
 
-    public function change_password(Request $request)
+    public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'token' => 'required|size:64',
@@ -291,7 +291,7 @@ class AuthController extends Controller
         }
     }
 
-    public function confirm_code(Request $request)
+    public function confirmCode(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255|unique:users',

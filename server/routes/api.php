@@ -12,7 +12,7 @@ Route::get('/locations/countries/{country_cca2}/states', [LocationController::cl
 Route::get('/locations/countries/{country_cca2}/states/{state_code}/cities',
     [LocationController::class, 'getCities']);
 
-Route::post('/public/client/register/{linkId}', [ClientController::class, 'storePublic']);
+Route::post('/public/clients/register/{linkId}', [ClientController::class, 'storePublic']);
 
 Route::post('/deploy/webhook', function (Request $request) {
     $githubSecret = config('app.github_webhook_secret');

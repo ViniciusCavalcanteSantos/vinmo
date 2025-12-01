@@ -6,7 +6,7 @@ export interface CreateEventResponse {
 }
 
 export async function createEvent(data: any) {
-  return apiFetch<CreateEventResponse>("/event", {
+  return apiFetch<CreateEventResponse>("/events", {
     method: "POST",
     body: JSON.stringify(data),
   });

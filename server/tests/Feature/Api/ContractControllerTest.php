@@ -26,7 +26,7 @@ it('returns paginated contracts for the organization', function () {
     Contract::factory()->count(5)->create(['organization_id' => $this->organization->id]);
     Contract::factory()->count(3)->create(); // Other organization
 
-    $response = getJson('/api/contract');
+    $response = getJson('/api/contracts');
 
     $response->assertOk()
         ->assertJsonStructure([
@@ -49,7 +49,7 @@ it('can search contracts', function () {
         'title' => 'Another item'
     ]);
 
-    $response = getJson('/api/contract?search=Specific');
+    $response = getJson('/api/contracts?search=Specific');
 
     $response->assertOk()
         ->assertJsonCount(1, 'contracts')
@@ -76,7 +76,7 @@ it('creates a new contract', function () {
         'university_course' => 'Ciência da Computação',
     ];
 
-    $response = postJson('/api/contract', $contractData);
+    $response = postJson('/api/contracts', $contractData);
 
     $response
         ->assertOk()
@@ -94,7 +94,7 @@ it('creates a new contract', function () {
 });
 
 it('fails to store with invalid data', function () {
-    $response = postJson('/api/contract', ['start_date' => 'invalid-date']);
+    $response = postJson('/api/contracts', ['start_date' => 'invalid-date']);
 
     $response->assertStatus(422);
 });
@@ -102,7 +102,7 @@ it('fails to store with invalid data', function () {
 it('returns a specific contract', function () {
     $contract = Contract::factory()->create(['organization_id' => $this->organization->id]);
 
-    $response = getJson("/api/contract/{$contract->id}");
+    $response = getJson("/api/contracts/{$contract->id}");
 
     $response->assertOk()
         ->assertJson([
@@ -116,7 +116,7 @@ it('returns a specific contract', function () {
 it('fails to show a contract from another organization', function () {
     $contract = Contract::factory()->create();
 
-    $response = getJson("/api/contract/{$contract->id}");
+    $response = getJson("/api/contracts/{$contract->id}");
 
     $response->assertForbidden();
 });
@@ -138,7 +138,7 @@ it('updates an existing contract', function () {
         'school_grade_level' => 'high_school',
     ];
 
-    $response = putJson("/api/contract/{$contract->id}", $updateData);
+    $response = putJson("/api/contracts/{$contract->id}", $updateData);
 
     $response->assertOk()->assertJson(['status' => 'success', 'message' => 'Contract updated']);
 
@@ -152,7 +152,7 @@ it('fails to update a contract from another organization', function () {
     $contract = Contract::factory()->create();
     $updateData = ['title' => 'new title'];
 
-    $response = putJson("/api/contract/{$contract->id}", $updateData);
+    $response = putJson("/api/contracts/{$contract->id}", $updateData);
 
     $response->assertForbidden();
 });
@@ -160,7 +160,7 @@ it('fails to update a contract from another organization', function () {
 it('deletes a contract', function () {
     $contract = Contract::factory()->create(['organization_id' => $this->organization->id]);
 
-    $response = deleteJson("/api/contract/{$contract->id}");
+    $response = deleteJson("/api/contracts/{$contract->id}");
 
     $response->assertOk()
         ->assertJson(['status' => 'success', 'message' => 'Contract deleted']);
@@ -171,7 +171,7 @@ it('deletes a contract', function () {
 it('fails to delete a contract from another organization', function () {
     $contract = Contract::factory()->create();
 
-    $response = deleteJson("/api/contract/{$contract->id}");
+    $response = deleteJson("/api/contracts/{$contract->id}");
 
     $response->assertForbidden();
 });
@@ -179,7 +179,7 @@ it('fails to delete a contract from another organization', function () {
 it('returns all contract categories', function () {
     $count = ContractCategory::count();
 
-    $response = getJson('/api/contract/categories');
+    $response = getJson('/api/contracts/categories');
 
     $response->assertOk()
         ->assertJsonStructure(['status', 'message', 'categories'])

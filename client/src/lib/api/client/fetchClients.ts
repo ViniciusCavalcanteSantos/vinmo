@@ -21,7 +21,7 @@ export async function fetchClients(page: number = 1, pageSize: number = 15, sear
     query.append('search', searchTerm);
   }
 
-  return await apiFetch<FetchClientsResponse>(`/client?${query.toString()}`, {
+  return await apiFetch<FetchClientsResponse>(`/clients?${query.toString()}`, {
     method: "GET",
   });
 }

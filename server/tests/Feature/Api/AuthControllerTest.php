@@ -17,7 +17,7 @@ beforeEach(function () {
 it('sends a confirmation code', function () {
     $email = 'test@example.com';
 
-    $response = $this->postJson('/api/send-code', ['email' => $email]);
+    $response = $this->postJson('/api/auth/send-code', ['email' => $email]);
 
     $response->assertStatus(200)
         ->assertJson([
@@ -34,7 +34,7 @@ it('sends a confirmation code', function () {
 });
 
 it('send code fails with invalid email', function () {
-    $response = $this->postJson('/api/send-code', ['email' => 'not-an-email']);
+    $response = $this->postJson('/api/auth/send-code', ['email' => 'not-an-email']);
 
     $response->assertStatus(422);
     Mail::assertNothingSent();
@@ -42,12 +42,12 @@ it('send code fails with invalid email', function () {
 
 it('confirms a valid code', function () {
     $email = 'test@example.com';
-    $code = '12345678';
+    $code = '123456';
 
     $this->withSession([
         'confirmation_email' => $email,
         'confirmation_code' => $code,
-    ])->postJson('/api/confirm-code', [
+    ])->postJson('/api/auth/confirm-code', [
         'email' => $email,
         'code' => $code,
     ])->assertOk()
@@ -66,9 +66,9 @@ it('fails to confirm an invalid code', function () {
     $this->withSession([
         'confirmation_email' => $email,
         'confirmation_code' => $code,
-    ])->postJson('/api/confirm-code', [
+    ])->postJson('/api/auth/confirm-code', [
         'email' => $email,
-        'code' => '87654321',
+        'code' => '876543',
     ])->assertStatus(422)
         ->assertJson([
             'status' => 'error',
@@ -79,9 +79,9 @@ it('fails to confirm an invalid code', function () {
 });
 
 it('fails to confirm if session expired', function () {
-    $this->postJson('/api/confirm-code', [
+    $this->postJson('/api/auth/confirm-code', [
         'email' => 'test@example.com',
-        'code' => '12345678',
+        'code' => '123456',
     ])->assertStatus(422)
         ->assertJson([
             'status' => 'error',
@@ -101,19 +101,10 @@ it('registers a new user successfully', function () {
     $userData = [
         'name' => 'Test User',
         'password' => $password,
-        'password_confirmation' => $password,
-        'address' => [
-            'postal_code' => '12345-678',
-            'street' => 'Test Street',
-            'number' => '123',
-            'neighborhood' => 'Test Neighborhood',
-            'city' => 'Test City',
-            'state' => 'TS',
-            'country' => 'BR',
-        ],
+        'password_confirmation' => $password
     ];
 
-    $response = $this->postJson('/api/register', $userData);
+    $response = $this->postJson('/api/auth/register', $userData);
 
     $response->assertStatus(200)
         ->assertJson([
@@ -128,15 +119,11 @@ it('registers a new user successfully', function () {
         'name' => 'Test User',
     ]);
 
-    $this->assertDatabaseHas('addresses', [
-        'street' => 'Test Street',
-    ]);
-
     $this->assertAuthenticated();
 });
 
 it('register fails if email is not verified', function () {
-    $response = $this->postJson('/api/register', [
+    $response = $this->postJson('/api/auth/register', [
         'name' => 'Test User',
         'password' => 'password',
         'password_confirmation' => 'password',
@@ -160,7 +147,7 @@ it('logs in a user successfully', function () {
         'password' => Hash::make('password'),
     ]);
 
-    $response = $this->postJson('/api/login', [
+    $response = $this->postJson('/api/auth/login', [
         'email' => $user->email,
         'password' => 'password',
     ]);
@@ -181,7 +168,7 @@ it('fails login with incorrect password', function () {
         'password' => Hash::make('password'),
     ]);
 
-    $response = $this->postJson('/api/login', [
+    $response = $this->postJson('/api/auth/login', [
         'email' => $user->email,
         'password' => 'wrong-password',
     ]);
@@ -233,7 +220,7 @@ it('sends a password recovery link', function () {
         ->with(\Mockery::on(fn($u) => $u->is($user)))
         ->andReturn('test-token');
 
-    $response = $this->postJson('/api/send-recovery-link', ['email' => $user->email]);
+    $response = $this->postJson('/api/auth/send-recovery-link', ['email' => $user->email]);
 
     $response->assertOk()
         ->assertJson(['status' => 'success']);
@@ -244,7 +231,7 @@ it('sends a password recovery link', function () {
 });
 
 it('send recovery link fails for non existent user', function () {
-    $response = $this->postJson('/api/send-recovery-link', ['email' => 'no-user@example.com']);
+    $response = $this->postJson('/api/auth/send-recovery-link', ['email' => 'no-user@example.com']);
 
     $response->assertOk()
         ->assertJson([
@@ -264,7 +251,7 @@ it('validates a recovery token', function () {
         ->withArgs(fn($u, $t) => $u->is($user) && $t === $token)
         ->andReturn(true);
 
-    $response = $this->postJson('/api/validate-recovery-token', [
+    $response = $this->postJson('/api/auth/validate-recovery-token', [
         'email' => $user->email,
         'token' => $token,
     ]);
@@ -285,7 +272,7 @@ it('fails to validate an invalid recovery token', function () {
         ->withArgs(fn($u, $t) => $u->is($user) && $t === $token)
         ->andReturn(false);
 
-    $response = $this->postJson('/api/validate-recovery-token', [
+    $response = $this->postJson('/api/auth/validate-recovery-token', [
         'email' => $user->email,
         'token' => $token,
     ]);
@@ -317,7 +304,7 @@ it('changes the password with a valid token', function () {
         )
         ->andReturn(Password::PASSWORD_RESET);
 
-    $response = $this->postJson('/api/change-password', $payload);
+    $response = $this->postJson('/api/auth/change-password', $payload);
 
     $response->assertOk()
         ->assertJson([
@@ -342,7 +329,7 @@ it('fails to change password with an invalid token', function () {
         ->once()
         ->andReturn(Password::INVALID_TOKEN);
 
-    $response = $this->postJson('/api/change-password', $payload);
+    $response = $this->postJson('/api/auth/change-password', $payload);
 
     $response->assertOk()
         ->assertJson([
