@@ -32,12 +32,16 @@ import {useUser} from "@/contexts/UserContext";
 import dayjs from "dayjs";
 import {useRouter} from "next/navigation";
 import EventSelector from "@/components/EventSelector";
-import {assignClient, assignClientBulk, fetchAssignments, unassignClientBulk} from "@/lib/api/Assignment";
+// import {assignClient, assignClientBulk, fetchAssignments, unassignClientBulk} from "@/lib/api/Assignment";
 import {useNotification} from "@/contexts/NotificationContext";
 import {TableRowSelection} from "antd/es/table/interface";
 import {useClients} from "@/lib/queries/clients/useClients";
 import {useRemoveClient} from "@/lib/queries/clients/useRemoveClient";
 import {createLink} from "@/lib/api/link/createLink";
+import {fetchAssignments} from "@/lib/api/assignment/fetchAssignments";
+import {assignClient} from "@/lib/api/assignment/assignClient";
+import {assignClientBulk} from "@/lib/api/assignment/assignClientBulk";
+import {unassignClientBulk} from "@/lib/api/assignment/unassignClientBulk";
 
 export default function Page() {
   const {t} = useT();

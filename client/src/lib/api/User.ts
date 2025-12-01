@@ -75,7 +75,3 @@ export async function change_password(email: string, token: string, password: st
     body: JSON.stringify({email, token, password, password_confirmation}),
   });
 }
-
-export async function fetchUser() {
-  return apiFetch<{ user: User }>("/me");
-}
