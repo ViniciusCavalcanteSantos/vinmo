@@ -35,9 +35,9 @@ import EventSelector from "@/components/EventSelector";
 import {assignClient, assignClientBulk, fetchAssignments, unassignClientBulk} from "@/lib/api/Assignment";
 import {useNotification} from "@/contexts/NotificationContext";
 import {TableRowSelection} from "antd/es/table/interface";
-import {generateRegisterLink} from "@/lib/api/Client";
 import {useClients} from "@/lib/queries/clients/useClients";
 import {useRemoveClient} from "@/lib/queries/clients/useRemoveClient";
+import {createLink} from "@/lib/api/link/createLink";
 
 export default function Page() {
   const {t} = useT();
@@ -363,7 +363,7 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
 
         values.assignments = assignments
 
-        const res = await generateRegisterLink(values)
+        const res = await createLink(values)
         if (res.link_id) {
           const link = process.env.NEXT_PUBLIC_APP_URL + `/client/register/${res.link_id}`
           handleClose()

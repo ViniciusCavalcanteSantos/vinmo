@@ -21,3 +21,19 @@ export async function createClient(
     onProgress
   });
 }
+
+export async function createClientPublic(
+  linkId: string,
+  values: any,
+  profile: UploadFile | File | Blob,
+  onProgress?: (progress: number) => void
+) {
+  const formData = objectToFormData(values, {'profile': profile})
+
+  return apiFetch<CreateClientResponse>(`/public/client/register/${linkId}`, {
+    method: "POST",
+    body: formData,
+    driver: 'axios',
+    onProgress
+  });
+}

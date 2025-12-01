@@ -26,7 +26,6 @@ import {guardianTypes} from "@/types/Client";
 import dayjs from "dayjs";
 import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
-import {createClientPublic, fetchLinkInfo} from "@/lib/api/Client";
 import InputPhone from "@/components/InputPhone";
 import {RegisterLinkType} from "@/types/RegisterLinkType";
 import getDateFormatByCountry from "@/lib/getDateFormatByCountry";
@@ -34,6 +33,8 @@ import {CountryCode} from "libphonenumber-js";
 import {useCountries} from "@/lib/queries/location/useCountries";
 import {useStates} from "@/lib/queries/location/useStates";
 import {useCities} from "@/lib/queries/location/useCities";
+import {createClientPublic} from "@/lib/api/client/createClient";
+import {fetchLink} from "@/lib/api/link/fetchLink";
 
 const ManageClientPage: React.FC = () => {
   const {t} = useT();
@@ -67,7 +68,7 @@ const ManageClientPage: React.FC = () => {
   useEffect(() => {
     const loadClientData = async () => {
       setLoadingForm(true);
-      const res = await fetchLinkInfo(linkId);
+      const res = await fetchLink(linkId);
       if (res.status === ApiStatus.SUCCESS) {
         setLinkInfo(res.linkInfo);
       } else {

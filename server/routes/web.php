@@ -52,9 +52,8 @@ Route::prefix('/api')->group(function () {
         Route::apiResource('/event/photo', EventPhotoController::class);
 
         Route::apiResource('/client', ClientController::class);
-        Route::get('/client/get-link-info/{linkId}', [ClientController::class, 'getLinkInfo']);
-        Route::post('/client/generate-register-link', [ClientController::class, 'generateLink']);
-
+        Route::get('/client/link/{linkId}', [ClientController::class, 'getLinkInfo']);
+        Route::post('/client/link', [ClientController::class, 'generateLink']);
 
         Route::apiResource('/assignment/client', AssignmentController::class);
         Route::post('/assignment/client/{client}', [AssignmentController::class, 'store']);
