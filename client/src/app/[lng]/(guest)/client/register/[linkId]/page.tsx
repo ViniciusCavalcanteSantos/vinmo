@@ -30,11 +30,11 @@ import InputPhone from "@/components/InputPhone";
 import {RegisterLinkType} from "@/types/RegisterLinkType";
 import getDateFormatByCountry from "@/lib/getDateFormatByCountry";
 import {CountryCode} from "libphonenumber-js";
-import {useCountries} from "@/lib/queries/location/useCountries";
-import {useStates} from "@/lib/queries/location/useStates";
-import {useCities} from "@/lib/queries/location/useCities";
-import {createClientPublic} from "@/lib/api/client/createClient";
-import {fetchLink} from "@/lib/api/link/fetchLink";
+import {useCountries} from "@/lib/queries/locations/useCountries";
+import {useStates} from "@/lib/queries/locations/useStates";
+import {useCities} from "@/lib/queries/locations/useCities";
+import {createClientPublic} from "@/lib/api/clients/createClient";
+import {fetchLink} from "@/lib/api/links/fetchLink";
 
 const ManageClientPage: React.FC = () => {
   const {t} = useT();

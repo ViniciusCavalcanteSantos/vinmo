@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchClients} from "@/lib/api/client/fetchClients";
+import {fetchClients} from "@/lib/api/clients/fetchClients";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useClients(search: string = '', page: number = 1, page_size: number = 15) {

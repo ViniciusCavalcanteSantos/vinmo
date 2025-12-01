@@ -7,10 +7,10 @@ import dayjs from "dayjs";
 import {InfoCircleOutlined} from "@ant-design/icons";
 import {useCreateContract} from "@/lib/queries/contracts/useCreateContract";
 import {useUpdateContract} from "@/lib/queries/contracts/useUpdateContract";
-import {useCountries} from "@/lib/queries/location/useCountries";
-import {useStates} from "@/lib/queries/location/useStates";
-import {useCities} from "@/lib/queries/location/useCities";
-import {fetchContractCategories} from "@/lib/api/contract/fetchContractCategories";
+import {useCountries} from "@/lib/queries/locations/useCountries";
+import {useStates} from "@/lib/queries/locations/useStates";
+import {useCities} from "@/lib/queries/locations/useCities";
+import {fetchContractCategories} from "@/lib/api/contracts/fetchContractCategories";
 
 // Props do componente
 interface ManageContractModalProps {

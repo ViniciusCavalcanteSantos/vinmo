@@ -1,6 +1,6 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {ApiFetchResponse} from "@/lib/apiFetch";
-import {createEvent, CreateEventResponse} from "@/lib/api/event/createEvent";
+import {createEvent, CreateEventResponse} from "@/lib/api/events/createEvent";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useCreateEvent() {

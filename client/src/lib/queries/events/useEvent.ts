@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchEvent} from "@/lib/api/event/fetchEvent";
+import {fetchEvent} from "@/lib/api/events/fetchEvent";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useEvent(eventId?: number, withContract: boolean = false) {

@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {removeEvent} from "@/lib/api/event/removeEvent";
+import {removeEvent} from "@/lib/api/events/removeEvent";
 
 export function useRemoveEvent() {
   const queryClient = useQueryClient();

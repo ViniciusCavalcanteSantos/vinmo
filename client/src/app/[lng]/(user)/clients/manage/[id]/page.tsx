@@ -30,9 +30,9 @@ import {useUser} from "@/contexts/UserContext";
 import EventSelector from "@/components/EventSelector";
 import InputPhone from "@/components/InputPhone";
 import {useClient} from "@/lib/queries/clients/useClient";
-import {useCountries} from "@/lib/queries/location/useCountries";
-import {useStates} from "@/lib/queries/location/useStates";
-import {useCities} from "@/lib/queries/location/useCities";
+import {useCountries} from "@/lib/queries/locations/useCountries";
+import {useStates} from "@/lib/queries/locations/useStates";
+import {useCities} from "@/lib/queries/locations/useCities";
 import {useCreateClient} from "@/lib/queries/clients/useCreateClient";
 import {useUpdateClient} from "@/lib/queries/clients/useUpdateClient";
 

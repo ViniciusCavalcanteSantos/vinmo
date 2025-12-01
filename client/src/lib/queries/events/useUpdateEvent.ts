@@ -1,7 +1,7 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {ApiFetchResponse} from "@/lib/apiFetch";
 import {ApiStatus} from "@/types/ApiResponse";
-import {updateEvent, UpdateEventResponse} from "@/lib/api/event/updateEvent";
+import {updateEvent, UpdateEventResponse} from "@/lib/api/events/updateEvent";
 
 export function useUpdateEvent() {
   const queryClient = useQueryClient();

@@ -37,11 +37,11 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {TableRowSelection} from "antd/es/table/interface";
 import {useClients} from "@/lib/queries/clients/useClients";
 import {useRemoveClient} from "@/lib/queries/clients/useRemoveClient";
-import {createLink} from "@/lib/api/link/createLink";
-import {fetchAssignments} from "@/lib/api/assignment/fetchAssignments";
-import {assignClient} from "@/lib/api/assignment/assignClient";
-import {assignClientBulk} from "@/lib/api/assignment/assignClientBulk";
-import {unassignClientBulk} from "@/lib/api/assignment/unassignClientBulk";
+import {createLink} from "@/lib/api/links/createLink";
+import {fetchAssignments} from "@/lib/api/assignments/fetchAssignments";
+import {assignClient} from "@/lib/api/assignments/assignClient";
+import {assignClientBulk} from "@/lib/api/assignments/assignClientBulk";
+import {unassignClientBulk} from "@/lib/api/assignments/unassignClientBulk";
 
 export default function Page() {
   const {t} = useT();

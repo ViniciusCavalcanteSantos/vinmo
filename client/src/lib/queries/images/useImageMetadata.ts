@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchImageMetadata} from "@/lib/api/image/fetchImageMetadata";
+import {fetchImageMetadata} from "@/lib/api/images/fetchImageMetadata";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useImageMetadata(imageId?: string, enabled = true) {

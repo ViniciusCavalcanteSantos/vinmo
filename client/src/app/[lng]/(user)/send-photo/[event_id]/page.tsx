@@ -10,8 +10,8 @@ import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
 import {useParams, useRouter} from "next/navigation";
 import {useRemoveImage} from "@/lib/queries/images/useRemoveImage";
-import {useEvent} from "@/lib/queries/event/useEvent";
-import {uploadEventPhoto} from "@/lib/api/event/uploadEventPhoto";
+import {useEvent} from "@/lib/queries/events/useEvent";
+import {uploadEventPhoto} from "@/lib/api/events/uploadEventPhoto";
 
 const Page: React.FC = () => {
   const {t} = useT();

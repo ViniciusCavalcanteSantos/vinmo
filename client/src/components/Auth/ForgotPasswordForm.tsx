@@ -11,7 +11,7 @@ import {useState} from "react";
 import {useLocalStorage} from "react-use";
 import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
-import {sendRecoveryLink} from "@/lib/api/user/sendRecoveryLink";
+import {sendRecoveryLink} from "@/lib/api/users/sendRecoveryLink";
 
 export default function ForgotPasswordForm() {
   const {t} = useT()

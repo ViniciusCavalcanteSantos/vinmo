@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchEvents} from "@/lib/api/event/fetchEvents";
+import {fetchEvents} from "@/lib/api/events/fetchEvents";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useEvents(search: string = '', page: number = 1, page_size: number = 15, with_contract: boolean = false) {

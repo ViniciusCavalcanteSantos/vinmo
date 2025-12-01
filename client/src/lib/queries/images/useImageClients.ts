@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchImageClients} from "@/lib/api/image/fetchImageClients";
+import {fetchImageClients} from "@/lib/api/images/fetchImageClients";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useImageClients(imageId?: string, enabled: boolean = true) {

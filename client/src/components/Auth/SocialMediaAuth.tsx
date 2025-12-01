@@ -5,8 +5,8 @@ import IconLinkedin from "@/components/Icons/IconLinkedin";
 import React, {useEffect, useState} from "react";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
-import {fetchAvailableProviders} from "@/lib/api/user/fetchAvailableProviders";
-import {socialRedirect} from "@/lib/api/user/socialRedirect";
+import {fetchAvailableProviders} from "@/lib/api/users/fetchAvailableProviders";
+import {socialRedirect} from "@/lib/api/users/socialRedirect";
 
 function SocialMediaAuth() {
   const [availableProviders, setAvailableProviders] = useState<string[]>([])

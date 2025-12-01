@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchClient} from "@/lib/api/client/fetchClient";
+import {fetchClient} from "@/lib/api/clients/fetchClient";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useClient(clientId?: number, enabled: boolean = true) {

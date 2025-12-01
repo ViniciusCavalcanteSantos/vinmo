@@ -12,7 +12,7 @@ import {useState} from "react";
 import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
 import SocialMediaAuth from "@/components/Auth/SocialMediaAuth";
-import {sendCode} from "@/lib/api/user/sendCode";
+import {sendCode} from "@/lib/api/users/sendCode";
 
 export default function SignupForm() {
   const {t} = useT()

@@ -14,8 +14,8 @@ import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import Link from "next/link";
 import {filesize} from "filesize";
-import {useEvents} from "@/lib/queries/event/useEvents";
-import {useRemoveEvent} from "@/lib/queries/event/useRemoveEvent";
+import {useEvents} from "@/lib/queries/events/useEvents";
+import {useRemoveEvent} from "@/lib/queries/events/useRemoveEvent";
 
 export default function Page() {
   const {t} = useT();

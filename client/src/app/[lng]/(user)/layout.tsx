@@ -3,7 +3,7 @@ import Providers from "@/app/[lng]/(user)/providers";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
-import {fetchUser} from "@/lib/api/user/fetchUser";
+import {fetchUser} from "@/lib/api/users/fetchUser";
 
 export default async function Layout({children}: { children: React.ReactNode }) {
   const cookieStore = await cookies();

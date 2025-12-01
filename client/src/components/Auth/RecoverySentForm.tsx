@@ -12,7 +12,7 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useLocalStorage} from "react-use";
 import {ApiStatus} from "@/types/ApiResponse";
-import {sendRecoveryLink} from "@/lib/api/user/sendRecoveryLink";
+import {sendRecoveryLink} from "@/lib/api/users/sendRecoveryLink";
 
 export default function RecoverySentForm() {
   const {t} = useT()

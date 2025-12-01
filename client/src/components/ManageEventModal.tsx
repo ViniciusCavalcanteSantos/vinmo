@@ -9,10 +9,10 @@ import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {InfoCircleOutlined} from "@ant-design/icons";
-import {useCreateEvent} from "@/lib/queries/event/useCreateEvent";
-import {useUpdateEvent} from "@/lib/queries/event/useUpdateEvent";
-import {fetchContracts} from "@/lib/api/contract/fetchContracts";
-import {fetchEventTypes} from "@/lib/api/event/fetchEventTypes";
+import {useCreateEvent} from "@/lib/queries/events/useCreateEvent";
+import {useUpdateEvent} from "@/lib/queries/events/useUpdateEvent";
+import {fetchContracts} from "@/lib/api/contracts/fetchContracts";
+import {fetchEventTypes} from "@/lib/api/events/fetchEventTypes";
 
 interface ManageEventModalProps {
   open: boolean;

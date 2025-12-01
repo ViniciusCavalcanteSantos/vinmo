@@ -9,8 +9,8 @@ import {useLocalStorage} from "react-use";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
-import {confirmCode} from "@/lib/api/user/confirmCode";
-import {sendCode} from "@/lib/api/user/sendCode";
+import {confirmCode} from "@/lib/api/users/confirmCode";
+import {sendCode} from "@/lib/api/users/sendCode";
 
 export default function ConfirmCodeForm() {
   const {t} = useT()

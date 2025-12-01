@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {removeImage} from "@/lib/api/image/removeImage";
+import {removeImage} from "@/lib/api/images/removeImage";
 
 export function useRemoveImage(eventId?: number) {
   const queryClient = useQueryClient();

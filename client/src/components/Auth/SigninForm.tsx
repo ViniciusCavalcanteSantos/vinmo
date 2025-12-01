@@ -10,7 +10,7 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
 import SocialMediaAuth from "@/components/Auth/SocialMediaAuth";
-import {login} from "@/lib/api/user/login";
+import {login} from "@/lib/api/users/login";
 
 export default function SigninForm() {
   const {t} = useT();

@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchClientCrop} from "@/lib/api/image/fetchClientCrop";
+import {fetchClientCrop} from "@/lib/api/images/fetchClientCrop";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useClientCrop(imageId?: string, clientId?: number, enabled: boolean = false) {

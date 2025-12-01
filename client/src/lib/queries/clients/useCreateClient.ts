@@ -1,6 +1,6 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {ApiFetchResponse} from "@/lib/apiFetch";
-import {createClient, CreateClientResponse} from "@/lib/api/client/createClient";
+import {createClient, CreateClientResponse} from "@/lib/api/clients/createClient";
 import {ApiStatus} from "@/types/ApiResponse";
 import {UploadFile} from "antd";
 

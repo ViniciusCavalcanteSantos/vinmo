@@ -6,8 +6,8 @@ import {t} from "i18next";
 import Contract from "@/types/Contract";
 import Event from "@/types/Event";
 import {ApiStatus} from "@/types/ApiResponse";
-import {fetchContracts} from "@/lib/api/contract/fetchContracts";
-import {fetchEvents} from "@/lib/api/event/fetchEvents";
+import {fetchContracts} from "@/lib/api/contracts/fetchContracts";
+import {fetchEvents} from "@/lib/api/events/fetchEvents";
 
 interface EventSelectorProps {
   value?: number[];

@@ -10,8 +10,8 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useEffect, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
-import {validateRecoveryToken} from "@/lib/api/user/validateRecoveryToken";
-import {changePassword} from "@/lib/api/user/changePassword";
+import {validateRecoveryToken} from "@/lib/api/users/validateRecoveryToken";
+import {changePassword} from "@/lib/api/users/changePassword";
 
 export default function ResetPasswordForm() {
   const {t} = useT()

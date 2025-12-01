@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {fetchEventImages} from "@/lib/api/event/fetchEventImages";
+import {fetchEventImages} from "@/lib/api/events/fetchEventImages";
 import {ApiStatus} from "@/types/ApiResponse";
 
 export function useFetchEventImages(eventId?: number) {

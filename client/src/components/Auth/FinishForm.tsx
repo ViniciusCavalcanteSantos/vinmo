@@ -13,7 +13,7 @@ import {useLocalStorage} from "react-use";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
-import {register} from "@/lib/api/user/register";
+import {register} from "@/lib/api/users/register";
 
 export default function FinishForm() {
   const {t} = useT();
