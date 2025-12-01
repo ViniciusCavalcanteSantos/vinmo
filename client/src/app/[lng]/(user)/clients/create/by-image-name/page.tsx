@@ -6,11 +6,11 @@ import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import PageHeader from "@/components/PageHeader";
 import Dropzone, {FileWithUploadData} from "@/components/Dropzone";
-import {createClient, removeClient} from "@/lib/api/Client";
-import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
 import {UserOutlined} from "@ant-design/icons";
 import EventSelector from "@/components/EventSelector";
+import {useCreateClient} from "@/lib/queries/clients/useCreateClient";
+import {useRemoveClient} from "@/lib/queries/clients/useRemoveClient";
 
 const Page: React.FC = () => {
   const {t} = useT();
@@ -29,6 +29,9 @@ const Page: React.FC = () => {
   });
 
   const [assignments, setAssignments] = useState<number[]>([]);
+
+  const createClient = useCreateClient()
+  const removeClient = useRemoveClient()
 
   const updateFile = (fileId: string, patch: Partial<FileWithUploadData>) => {
     setFiles(prev =>
@@ -64,19 +67,22 @@ const Page: React.FC = () => {
       .trim();
     if (!fileName) fileName = t('untitled');
 
-    const res = await createClient({name: fileName, assignments: assignments}, file, (progress) => {
-      updateFile(file.id, {progress: Math.min(progress, 90)});
-    })
-
-    if (res.status !== ApiStatus.SUCCESS) {
-      notification.warning({message: res.message})
-      updateFile(file.id, {status: 'error'});
-    } else {
+    try {
+      const res = await createClient.mutateAsync({
+        values: {name: fileName, assignments: assignments},
+        profile: file,
+        onProgress: (progress) => {
+          updateFile(file.id, {progress: Math.min(progress, 90)});
+        }
+      })
       updateFile(file.id, {
         clientId: res.client.id,
         status: 'success',
         progress: 100,
       });
+    } catch (err: any) {
+      notification.warning({message: err.message})
+      updateFile(file.id, {status: 'error'});
     }
   }
 
@@ -88,15 +94,12 @@ const Page: React.FC = () => {
     if (!file.clientId) return
 
     try {
-      const res = await removeClient(file.clientId);
-      if (res.status !== ApiStatus.SUCCESS) {
-        notification.warning({message: res.message})
-        return
-      }
+      const res = await removeClient.mutateAsync(file.clientId);
 
       notification.success({message: res.message})
       setFiles(prev => prev.filter(f => f.id !== file.id));
-    } catch (err) {
+    } catch (err: any) {
+      notification.warning({message: err.message})
     }
   }
 

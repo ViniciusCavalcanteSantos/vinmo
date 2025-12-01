@@ -20,23 +20,21 @@ import {
   UploadProps
 } from 'antd';
 import {useParams, useRouter} from 'next/navigation';
-import {getCities, getCountries, getStates} from "@/lib/api/Location";
 import {useT} from "@/i18n/client";
-import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import {guardianTypes} from "@/types/Client";
 import dayjs from "dayjs";
 import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
-import {createClient, fetchClient, updateClient} from "@/lib/api/Client";
 import {useUser} from "@/contexts/UserContext";
 import EventSelector from "@/components/EventSelector";
 import InputPhone from "@/components/InputPhone";
-
-interface OptionType {
-  value: string;
-  label: string;
-}
+import {useClient} from "@/lib/queries/clients/useClient";
+import {useCountries} from "@/lib/queries/location/useCountries";
+import {useStates} from "@/lib/queries/location/useStates";
+import {useCities} from "@/lib/queries/location/useCities";
+import {useCreateClient} from "@/lib/queries/clients/useCreateClient";
+import {useUpdateClient} from "@/lib/queries/clients/useUpdateClient";
 
 const ManageClientPage: React.FC = () => {
   const {t} = useT();
@@ -44,9 +42,9 @@ const ManageClientPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const clientId = params.id as string;
-  const {defaultDateFormat} = useUser();
-
   const isEditMode = clientId !== 'new';
+
+  const {defaultDateFormat} = useUser();
 
   const [form] = Form.useForm();
   const informAddress = Form.useWatch('inform_address', form);
@@ -56,102 +54,67 @@ const ManageClientPage: React.FC = () => {
   const country = Form.useWatch('country', form);
   const state = Form.useWatch('state', form);
 
-  const [countries, setCountries] = useState<OptionType[]>([]);
-  const [states, setStates] = useState<OptionType[]>([]);
-  const [cities, setCities] = useState<OptionType[]>([]);
 
   const [uploadRequired, setUploadRequired] = useState<boolean>(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const [loadingCountries, setLoadingCountries] = useState(false);
-  const [loadingStates, setLoadingStates] = useState(false);
-  const [_, setLoadingCities] = useState(false);
-
-  const [loadingForm, setLoadingForm] = useState(isEditMode);
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
-
   const [assignments, setAssignments] = useState<number[]>([]);
 
-  useEffect(() => {
-    setLoadingCountries(true);
-    getCountries()
-      .then(data => {
-        setCountries(data.countries);
-      })
-      .finally(() => setLoadingCountries(false));
-  }, []);
+  const createClient = useCreateClient()
+  const updateClient = useUpdateClient()
+
+  const {
+    data: clientData,
+    isLoading: isLoadingClient,
+    isError: isClientError
+  } = useClient(Number(clientId), isEditMode);
+
+  const {data: countries, isLoading: isLoadingCountries} = useCountries()
+  const {data: states, isLoading: isLoadingStates} = useStates(country)
+  const {data: cities} = useCities(country, state)
 
   useEffect(() => {
-    const loadClientData = async () => {
-      if (isEditMode && clientId) {
-        setLoadingForm(true);
-        const res = await fetchClient(Number(clientId));
-        if (res.status === ApiStatus.SUCCESS && res.client) {
-          const clientData = res.client;
-          form.setFieldsValue({
-            ...clientData,
-            guardian_name: clientData.guardian?.name,
-            guardian_type: clientData.guardian?.type,
-            guardian_phone: clientData.guardian?.phone,
-            guardian_email: clientData.guardian?.email,
-            postal_code: clientData.address?.postalCode,
-            street: clientData.address?.street,
-            number: clientData.address?.number,
-            neighborhood: clientData.address?.neighborhood,
-            complement: clientData.address?.complement,
-            country: clientData.address?.country,
-            state: clientData.address?.state,
-            city: clientData.address?.city,
-            inform_address: !!clientData.address,
-            inform_guardian: !!clientData.guardian?.name,
-            birthdate: clientData.birthdate ? dayjs(clientData.birthdate) : null,
-          });
-          if (clientData.address) {
-            try {
-              const {country, state} = clientData.address;
-              setLoadingStates(true);
-              setLoadingCities(true);
-              const [statesRes, citiesRes] = await Promise.all([
-                getStates(country),
-                getCities(country, state)
-              ]);
+    if (isEditMode && clientData && !isLoadingClient) {
+      form.setFieldsValue({
+        ...clientData,
+        guardian_name: clientData.guardian?.name,
+        guardian_type: clientData.guardian?.type,
+        guardian_phone: clientData.guardian?.phone,
+        guardian_email: clientData.guardian?.email,
+        postal_code: clientData.address?.postalCode,
+        street: clientData.address?.street,
+        number: clientData.address?.number,
+        neighborhood: clientData.address?.neighborhood,
+        complement: clientData.address?.complement,
+        country: clientData.address?.country,
+        state: clientData.address?.state,
+        city: clientData.address?.city,
+        inform_address: !!clientData.address,
+        inform_guardian: !!clientData.guardian?.name,
+        birthdate: clientData.birthdate ? dayjs(clientData.birthdate) : null,
+      });
 
-              if (statesRes.status !== ApiStatus.SUCCESS || citiesRes.status !== ApiStatus.SUCCESS) {
-                return notification.warning({message: t('failed_to_load_address')});
-              }
-
-              setStates(statesRes.states)
-              setCities(citiesRes.cities)
-            } catch (err) {
-            } finally {
-              setLoadingCountries(false);
-              setLoadingCities(false);
-            }
-          }
-
-          setFileList([
-            {
-              uid: '-1',
-              name: 'profile.jpg',
-              status: 'done',
-              url: clientData.profile.web,
-            },
-          ]);
-        } else {
-          notification.error({message: t('client_not_found')});
-          router.back();
-        }
-        setLoadingForm(false);
-      } else {
-        form.resetFields();
+      if (clientData.profile?.web) {
+        setFileList([{
+          uid: '-1',
+          name: 'profile.jpg',
+          status: 'done',
+          url: clientData.profile.web,
+        }]);
       }
-    };
+    } else if (!isEditMode) {
+      form.resetFields();
+    }
+  }, [clientData, isEditMode, isLoadingClient, form]);
 
-    loadClientData();
-  }, [clientId, isEditMode, form, router]);
-
+  useEffect(() => {
+    if (isClientError) {
+      notification.error({message: t('client_not_found')});
+      router.back();
+    }
+  }, [isClientError, router, t]);
 
   useEffect(() => {
     if (!informAddress) {
@@ -169,68 +132,58 @@ const ManageClientPage: React.FC = () => {
     }
   }, [informAddress, informGuardian])
 
-  const handleCountryChange = (countryCode: string) => {
-    form.setFieldsValue({state: null, city: null});
-    setStates([]);
-    setCities([]);
-    if (countryCode) {
-      setLoadingStates(true);
-      getStates(countryCode)
-        .then(res => setStates(res.states))
-        .finally(() => setLoadingStates(false));
-    }
-  };
+  const handleCountryChange = () => form.setFieldsValue({state: null, city: null})
+  const handleStateChange = async () => form.setFieldsValue({city: null});
 
-  const handleStateChange = async (stateCode: string) => {
-    form.setFieldsValue({city: null});
-    setCities([]);
-    const countryCode = form.getFieldValue('country');
-    if (stateCode && countryCode) {
-      setLoadingCities(true);
-      getCities(countryCode, stateCode)
-        .then(data => setCities(data.cities))
-        .finally(() => setLoadingCities(false));
-    }
-  };
+  const isSubmitting = createClient.isPending || updateClient.isPending;
+  const isPageLoading = (isEditMode && isLoadingClient);
 
   const handleSubmit = async (values: any) => {
-    if (!fileList[0]) {
-      setUploadRequired(true);
-      return;
-    }
-
-    setLoadingSubmit(true);
-    if (values.birthdate) {
-      values.birthdate = dayjs(values.birthdate).format('YYYY-MM-DD');
-    }
-
-    values.assignments = assignments
-
-    let res;
-    if (isEditMode) {
-      res = await updateClient(Number(clientId), values, fileList[0]);
-    } else {
-      res = await createClient(values, fileList[0]);
-    }
-
-    setLoadingSubmit(false);
-
-    if (res.status !== ApiStatus.SUCCESS) {
-      return notification.warning({message: res.message});
-    }
-
-    notification.success({message: res.message});
-    if (!isEditMode) {
-      if (keepAdding) {
-        setFileList([])
-        form.resetFields();
-        form.setFieldsValue({inform_address: informAddress});
-        form.setFieldsValue({inform_guardian: informGuardian});
-        form.setFieldsValue({keep_adding: keepAdding});
-        form.setFieldsValue({auto_assign: autoAssign});
-      } else {
-        router.push('/clients');
+    try {
+      if (!fileList[0]) {
+        setUploadRequired(true);
+        return;
       }
+
+      if (values.birthdate) {
+        values.birthdate = dayjs(values.birthdate).format('YYYY-MM-DD');
+      }
+
+      values.assignments = assignments
+      const file = fileList[0];
+
+      if (isEditMode) {
+        const res = await updateClient.mutateAsync({
+          id: Number(clientId),
+          values,
+          profile: file
+        });
+
+        notification.success({message: res.message});
+      } else {
+        const res = await createClient.mutateAsync({
+          values,
+          profile: file
+        });
+
+        notification.success({message: res.message});
+
+        if (keepAdding) {
+          setFileList([])
+          form.resetFields();
+          form.setFieldsValue({
+            inform_address: informAddress,
+            inform_guardian: informGuardian,
+            keep_adding: true,
+            auto_assign: autoAssign
+          });
+          setAssignments([]);
+        } else {
+          router.push('/clients');
+        }
+      }
+    } catch (err: any) {
+      notification.warning({message: err.message});
     }
   }
 
@@ -317,7 +270,7 @@ const ManageClientPage: React.FC = () => {
           )}
         </div>
 
-        <Card loading={loadingForm} variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)] w-full">
+        <Card loading={isPageLoading} variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)] w-full">
           <Form form={form} layout="vertical" name="manage_client_form" onFinish={handleSubmit}>
             <Row gutter={16}>
               <Col xs={24} md={12}>
@@ -478,8 +431,8 @@ const ManageClientPage: React.FC = () => {
                     <Form.Item name="country" label={t('country')}
                                rules={[{required: true, message: t('select_country')}]}>
                       <Select showSearch placeholder={t('select_country')}
-                              loading={loadingCountries}
-                              onChange={(value) => handleCountryChange(value)}
+                              loading={isLoadingCountries}
+                              onChange={handleCountryChange}
                               options={countries}
                               filterOption={(input, option) =>
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
@@ -489,8 +442,8 @@ const ManageClientPage: React.FC = () => {
                     <Form.Item name="state" label={t('state_province')}
                                rules={[{required: true, message: t('select_state')}]}>
                       <Select showSearch placeholder={t('select_state')}
-                              loading={loadingStates}
-                              disabled={!country || loadingStates}
+                              loading={isLoadingStates}
+                              disabled={!country || isLoadingStates}
                               onChange={handleStateChange}
                               options={states}
                               filterOption={(input, option) =>
@@ -520,7 +473,7 @@ const ManageClientPage: React.FC = () => {
             <Form.Item className="!mt-4 flex justify-end">
               <Space className="flex justify-end">
                 <Button onClick={() => router.back()}>{t('cancel')}</Button>
-                <Button type="primary" htmlType="submit" loading={loadingSubmit}>
+                <Button type="primary" htmlType="submit" loading={isSubmitting}>
                   {t('save_client')}
                 </Button>
               </Space>

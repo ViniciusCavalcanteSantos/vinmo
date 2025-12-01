@@ -25,7 +25,6 @@ import {useT} from "@/i18n/client";
 import Client from "@/types/Client";
 import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, LinkOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
-import {useClients} from "@/contexts/ClientsContext";
 import {ApiStatus} from "@/types/ApiResponse";
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
@@ -37,10 +36,11 @@ import {assignClient, assignClientBulk, fetchAssignments, unassignClientBulk} fr
 import {useNotification} from "@/contexts/NotificationContext";
 import {TableRowSelection} from "antd/es/table/interface";
 import {generateRegisterLink} from "@/lib/api/Client";
+import {useClients} from "@/lib/queries/clients/useClients";
+import {useRemoveClient} from "@/lib/queries/clients/useRemoveClient";
 
 export default function Page() {
   const {t} = useT();
-  const {clients, fetchClients, loadingClients, removeClient} = useClients();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermDebounce, setSearchTermDebounce] = useState("");
   const [openModalRegister, setOpenModalRegister] = useState(false);
@@ -59,6 +59,9 @@ export default function Page() {
     pageSize: 15,
     total: 0,
   });
+
+  const {data: clients, isLoading} = useClients(searchTermDebounce, pagination.current, pagination.pageSize)
+  const removeClient = useRemoveClient()
 
   const [openModalGenerateLink, setOpenModalGenerateLink] = useState(false);
 
@@ -124,7 +127,7 @@ export default function Page() {
           shape="circle"
           danger
           icon={<DeleteOutlined/>}
-          onClick={() => removeClient(record.id)}
+          onClick={() => removeClient.mutate(record.id)}
         />
       </Tooltip>
     </Space>
@@ -198,22 +201,6 @@ export default function Page() {
     </div>
   );
 
-  useEffect(() => {
-    setPagination(prev => ({
-      ...prev,
-      current: 1
-    }));
-    fetchClients(1, pagination.pageSize!, searchTermDebounce)
-      .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          setPagination(prev => ({
-            ...prev,
-            total: res.meta.total,
-          }));
-        }
-      })
-  }, [searchTermDebounce]);
-
   const handleTableChange = (
     newPagination: TablePaginationConfig,
   ) => {
@@ -222,9 +209,6 @@ export default function Page() {
       newPagination.pageSize !== pagination.pageSize
     ) {
       setPagination(newPagination);
-      fetchClients(newPagination.current!, newPagination.pageSize!, searchTermDebounce).then(data => {
-        setPagination(prev => ({...prev, total: data.meta.total}));
-      });
     }
   };
 
@@ -280,7 +264,7 @@ export default function Page() {
 
       <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
         <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mb-4">
-          <Search placeholder={t('search_client')} className="w-full sm:max-w-60" loading={loadingClients}
+          <Search placeholder={t('search_client')} className="w-full sm:max-w-60" loading={isLoading}
                   onChange={e => setSearchTerm(e.target.value)}/>
           <Button type="primary" onClick={() => setOpenModalRegister(true)} className="w-full sm:w-auto">
             {t('add_new_client')}
@@ -298,7 +282,7 @@ export default function Page() {
           }}
           dataSource={clients}
           bordered={true}
-          loading={loadingClients}
+          loading={isLoading}
           scroll={{y: 560, x: 'max-content'}}
           pagination={{
             ...pagination,

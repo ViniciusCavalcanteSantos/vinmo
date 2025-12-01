@@ -1,13 +1,10 @@
-import {ClientsProvider} from "@/contexts/ClientsContext";
 import {UserProvider} from "@/contexts/UserContext";
 import User from "@/types/User";
 
 export default function Providers({children, user}: { children: React.ReactNode, user: User }) {
   return (
     <UserProvider initialUser={user}>
-      <ClientsProvider>
-        {children}
-      </ClientsProvider>
+      {children}
     </UserProvider>
   );
 }
