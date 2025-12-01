@@ -12,8 +12,8 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useLocalStorage} from "react-use";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {register} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
+import {register} from "@/lib/api/user/register";
 
 export default function FinishForm() {
   const {t} = useT();

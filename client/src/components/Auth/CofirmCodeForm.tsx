@@ -8,8 +8,9 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useLocalStorage} from "react-use";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {confirm_code, send_code} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
+import {confirmCode} from "@/lib/api/user/confirmCode";
+import {sendCode} from "@/lib/api/user/sendCode";
 
 export default function ConfirmCodeForm() {
   const {t} = useT()
@@ -22,8 +23,8 @@ export default function ConfirmCodeForm() {
     if (!emailConfirmation) router.push("/signup")
   }, [emailConfirmation])
 
-  const sendCode = async () => {
-    const res = await send_code(emailConfirmation ?? "")
+  const handleSendCode = async () => {
+    const res = await sendCode(emailConfirmation ?? "")
     if (res.status !== ApiStatus.SUCCESS) {
       notification.info({
         message: res.message,
@@ -39,7 +40,7 @@ export default function ConfirmCodeForm() {
 
   const handleFinish = async (values: any) => {
     setSending(true)
-    const res = await confirm_code(emailConfirmation ?? "", values.code)
+    const res = await confirmCode(emailConfirmation ?? "", values.code)
     if (res.status === ApiStatus.MAX_ATTEMPTS) {
       notification.warning({
         message: res.message,
@@ -106,7 +107,8 @@ export default function ConfirmCodeForm() {
       </Form.Item>
 
       <div className="flex justify-center">
-        <button className='font-medium text-ant-primary hover:text-ant-primary-hover cursor-pointer' onClick={sendCode}
+        <button className='font-medium text-ant-primary hover:text-ant-primary-hover cursor-pointer'
+                onClick={handleSendCode}
                 type="button">
           <span className="underline underline-offset-2">{t('login.didnt_receive_an_email')}</span>
         </button>

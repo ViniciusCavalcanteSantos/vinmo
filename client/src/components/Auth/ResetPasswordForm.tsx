@@ -9,8 +9,9 @@ import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useEffect, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
-import {change_password, validate_recovery_token} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
+import {validateRecoveryToken} from "@/lib/api/user/validateRecoveryToken";
+import {changePassword} from "@/lib/api/user/changePassword";
 
 export default function ResetPasswordForm() {
   const {t} = useT()
@@ -23,7 +24,7 @@ export default function ResetPasswordForm() {
 
   useEffect(() => {
     (async () => {
-      const res = await validate_recovery_token(email, token)
+      const res = await validateRecoveryToken(email, token)
       if (res.status !== ApiStatus.SUCCESS) {
         notification.warning({
           message: res.message,
@@ -35,7 +36,7 @@ export default function ResetPasswordForm() {
 
   const handleFinish = async (values: any) => {
     setSending(true)
-    const res = await change_password(email, token, values.password, values.password_confirmation)
+    const res = await changePassword(email, token, values.password, values.password_confirmation)
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({

@@ -3,9 +3,10 @@ import IconGoogle from "@/components/Icons/IconGoogle";
 import IconMicrosoft from "@/components/Icons/IconMicrosoft";
 import IconLinkedin from "@/components/Icons/IconLinkedin";
 import React, {useEffect, useState} from "react";
-import {fetchAvailableProviders, socialRedirect} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
+import {fetchAvailableProviders} from "@/lib/api/user/fetchAvailableProviders";
+import {socialRedirect} from "@/lib/api/user/socialRedirect";
 
 function SocialMediaAuth() {
   const [availableProviders, setAvailableProviders] = useState<string[]>([])

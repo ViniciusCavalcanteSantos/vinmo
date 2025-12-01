@@ -10,9 +10,9 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useLocalStorage} from "react-use";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
-import {send_code} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
 import SocialMediaAuth from "@/components/Auth/SocialMediaAuth";
+import {sendCode} from "@/lib/api/user/sendCode";
 
 export default function SignupForm() {
   const {t} = useT()
@@ -23,7 +23,7 @@ export default function SignupForm() {
 
   const handleFinish = async (values: any) => {
     setSending(true)
-    const res = await send_code(values.email)
+    const res = await sendCode(values.email)
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({

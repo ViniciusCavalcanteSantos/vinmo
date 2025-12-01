@@ -10,8 +10,8 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useState} from "react";
 import {useLocalStorage} from "react-use";
 import {useRouter} from "next/navigation";
-import {send_recovery_link} from "@/lib/api/User";
 import {ApiStatus} from "@/types/ApiResponse";
+import {sendRecoveryLink} from "@/lib/api/user/sendRecoveryLink";
 
 export default function ForgotPasswordForm() {
   const {t} = useT()
@@ -22,7 +22,7 @@ export default function ForgotPasswordForm() {
 
   const handleFinish = async (values: any) => {
     setSending(true)
-    const res = await send_recovery_link(values.email)
+    const res = await sendRecoveryLink(values.email)
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
