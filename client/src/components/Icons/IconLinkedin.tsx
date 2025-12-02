@@ -1,8 +1,8 @@
 import React from "react";
 
-const IconLinkedin = (props: React.SVGProps<SVGSVGElement>) => (
+const IconLinkedin = ({className, ...props}: React.SVGProps<SVGSVGElement>) => (
   <svg
-    className="w-6 h-6"
+    className={`w-6 h-6 ${className}`}
     viewBox="0 0 382 382"
     {...props}
   >
