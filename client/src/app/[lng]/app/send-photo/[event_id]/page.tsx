@@ -11,7 +11,7 @@ import Link from "next/link";
 import {useParams} from "next/navigation";
 import {useRemoveImage} from "@/lib/queries/images/useRemoveImage";
 import {useEvent} from "@/lib/queries/events/useEvent";
-import {uploadEventPhoto} from "@/lib/api/events/uploadEventPhoto";
+import {useUploadEventPhoto} from "@/lib/queries/events/useUploadEventPhoto";
 
 const Page: React.FC = () => {
   const {t} = useT();
@@ -23,6 +23,7 @@ const Page: React.FC = () => {
   const [loadingForm] = useState(false);
 
   const {data: event} = useEvent(eventId, true)
+  const {mutateAsync: uploadEventPhoto} = useUploadEventPhoto()
   const removeImage = useRemoveImage(eventId);
 
   const [files, setFiles] = useState<FileWithUploadData[]>([]);
@@ -59,8 +60,11 @@ const Page: React.FC = () => {
   }, [files]);
 
   const handleUpload = async (file: FileWithUploadData) => {
-    const res = await uploadEventPhoto(eventId, file, (progress) => {
-      updateFile(file.id, {progress: Math.min(progress, 90)});
+    const res = await uploadEventPhoto({
+      eventId: eventId, photo: file,
+      onProgress: (progress) => {
+        updateFile(file.id, {progress: Math.min(progress, 90)});
+      }
     })
 
     if (res.status !== ApiStatus.SUCCESS) {

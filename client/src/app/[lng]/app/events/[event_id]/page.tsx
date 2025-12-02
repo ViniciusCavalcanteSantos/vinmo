@@ -23,7 +23,7 @@ import {MetadataModal} from "@/components/MetadataModal";
 import Link from "next/link";
 import {ClientsOnImageModal} from "@/components/ClientsOnImageModal";
 import {useEvent} from "@/lib/queries/events/useEvent";
-import {useFetchEventImages} from "@/lib/queries/events/useEventImages";
+import {useEventImages} from "@/lib/queries/events/useEventImages";
 import {downloadImage} from "@/lib/api/images/downloadImage";
 import {useRemoveImage} from "@/lib/queries/images/useRemoveImage";
 import {useImageMetadata} from "@/lib/queries/images/useImageMetadata";
@@ -57,7 +57,7 @@ export default function Page() {
     data: images,
     isLoading: loadingImages,
     isError: imagesError,
-  } = useFetchEventImages(eventId);
+  } = useEventImages(eventId);
 
   const removeImage = useRemoveImage(eventId);
 
