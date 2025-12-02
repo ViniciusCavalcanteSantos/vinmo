@@ -21,7 +21,14 @@ class StoragePathService
         self::$useEncodedIds = false;
     }
 
-    public static function getEventPhotoFolder(int|string $eventId, string $filename = '')
+    protected static function id(int|string $id): string
+    {
+        return self::$useEncodedIds
+            ? base64_encode($id)
+            : (string) $id;
+    }
+
+    public static function getEventPhotoFolder(int|string $eventId, string $filename = ''): string
     {
         return self::getEventFolder($eventId)."/photos/".$filename;
     }
@@ -31,15 +38,19 @@ class StoragePathService
         return 'events/'.self::id($eventId);
     }
 
-    protected static function id(int|string $id): string
-    {
-        return self::$useEncodedIds
-            ? base64_encode($id)
-            : (string) $id;
-    }
-
     public static function getClientProfilePath(int|string $clientId, string $filename = ''): string
     {
         return 'clients/'.self::id($clientId).'/'.$filename;
+    }
+
+    public static function getUserProfilePath(int|string $userId, string $filename = '')
+    {
+        return self::getUserFolder($userId).'/profiles/'.$filename;
+    }
+
+    public static function getUserFolder(int|string $userId)
+    {
+        return 'users/'.self::id($userId);
+
     }
 }

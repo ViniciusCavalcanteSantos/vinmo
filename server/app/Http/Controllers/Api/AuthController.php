@@ -9,14 +9,20 @@ use App\Mail\EmailPasswordReset;
 use App\Models\Organization;
 use App\Models\User;
 use App\Models\UserSocialIdentity;
+use App\Services\ImageAnalysis\ImagePreparationService;
+use App\Services\StoragePathService;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -118,11 +124,39 @@ class AuthController extends Controller
         }
 
         if ($avatarUrl && !$user->profile) {
-            $user->profile()->updateOrCreate([
-                'organization_id' => $user->organization_id,
-                'path' => $avatarUrl,
-                'disk' => 'external'
-            ]);
+            try {
+                $response = Http::get($avatarUrl);
+                if ($response->failed()) {
+                    throw new \Exception("It was not possible to obtain the social media avatar.");
+                }
+                $file = $response->body();
+                $processed = ImagePreparationService::from($file)->fitBytes();
+
+                $width = $processed->width();
+                $height = $processed->height();
+                $bytes = $processed->getAsBytes();
+                $ext = $processed->getExtension();
+                $mime = $processed->getMimetype();
+
+                $filepath = StoragePathService::getUserProfilePath($user->id, "profile.{$ext}");
+                Storage::put($filepath, $bytes);
+
+                $user->profile()->updateOrCreate([
+                    'organization_id' => $user->organization_id,
+                    'path' => $filepath,
+                    'disk' => 's3',
+                    'size' => strlen($bytes),
+                    'width' => $width,
+                    'height' => $height,
+                    'mime_type' => $mime,
+                ]);
+            } catch (ConnectionException|\Exception $e) {
+                Log::error("Falha ao processar avatar social: {$e->getMessage()}", [
+                    'user_id' => $user->id,
+                    'url' => $avatarUrl,
+                    'trace' => $e->getTraceAsString(),
+                ]);
+            }
         }
 
         Auth::login($user, true);
