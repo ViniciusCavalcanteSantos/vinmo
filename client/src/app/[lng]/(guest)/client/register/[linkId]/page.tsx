@@ -324,24 +324,32 @@ const ManageClientPage: React.FC = () => {
                     <Col span={8}>
                       <Form.Item name="country" label={t('country')}
                                  rules={[{required: true, message: t('select_country')}]}>
-                        <Select showSearch placeholder={t('select_country')}
+                        <Select placeholder={t('select_country')}
                                 loading={isLoadingCountries}
                                 onChange={handleCountryChange}
                                 options={countries}
-                                filterOption={(input, option) =>
-                                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
+                                showSearch={{
+                                  filterOption: (input, option) => (
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                  )
+                                }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item name="state" label={t('state_province')}
                                  rules={[{required: true, message: t('select_state')}]}>
-                        <Select showSearch placeholder={t('select_state')}
+                        <Select placeholder={t('select_state')}
                                 loading={isLoadingStates}
                                 disabled={!country || isLoadingStates}
                                 onChange={handleStateChange}
                                 options={states}
-                                filterOption={(input, option) =>
-                                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
+                                showSearch={{
+                                  filterOption: (input, option) => (
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                  )
+                                }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -349,8 +357,12 @@ const ManageClientPage: React.FC = () => {
                         <AutoComplete placeholder={t('enter_or_select')}
                                       disabled={!state}
                                       options={cities}
-                                      filterOption={(inputValue, option) =>
-                                        (option?.label ?? '').toUpperCase().includes(inputValue.toUpperCase())}>
+                                      showSearch={{
+                                        filterOption: (input, option) => (
+                                          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                        )
+                                      }}
+                        >
                           <Input/>
                         </AutoComplete>
                       </Form.Item>

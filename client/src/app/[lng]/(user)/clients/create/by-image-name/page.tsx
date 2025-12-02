@@ -154,10 +154,7 @@ const Page: React.FC = () => {
                   <Statistic
                     title={t('photos_uploaded_successfully')}
                     value={stats.totalSuccess}
-                    valueStyle={{color: "#3f8600"}}
-                    valueRender={(node) => {
-                      return <span className='text-ant-success'>{node}</span>;
-                    }}
+                    classNames={{content: '!text-ant-success'}}
                   />
                 </Card>
               </Col>
@@ -166,10 +163,7 @@ const Page: React.FC = () => {
                   <Statistic
                     title={t('photos_pending_for_submission')}
                     value={stats.totalPending}
-                    valueStyle={{color: "#faad14"}}
-                    valueRender={(node) => {
-                      return <span className='text-ant-warning'>{node}</span>;
-                    }}
+                    classNames={{content: '!text-ant-warning'}}
                   />
                 </Card>
               </Col>
@@ -178,10 +172,7 @@ const Page: React.FC = () => {
                   <Statistic
                     title={t('photos_with_error')}
                     value={stats.totalError}
-                    valueStyle={{color: "#cf1322"}}
-                    valueRender={(node) => {
-                      return <span className='text-ant-error'>{node}</span>;
-                    }}
+                    classNames={{content: '!text-ant-error'}}
                   />
                 </Card>
               </Col>

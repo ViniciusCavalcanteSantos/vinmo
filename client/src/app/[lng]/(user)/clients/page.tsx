@@ -281,7 +281,8 @@ export default function Page() {
           rowSelection={rowSelection}
           columns={columns}
           expandable={{
-            expandedRowRender, rowExpandable: (record) =>
+            expandedRowRender,
+            rowExpandable: (record) =>
               !!(record.address || record.guardian)
           }}
           dataSource={clients}

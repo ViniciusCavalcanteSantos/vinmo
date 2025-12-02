@@ -1,10 +1,6 @@
-// components/AssignEventsToggle.tsx
 import React from 'react';
 import {Switch} from 'antd';
 import {CalendarOutlined} from '@ant-design/icons';
-
-// Não precisamos mais do 'styled-components'
-// import styled from 'styled-components';
 
 interface AssignEventsToggleProps {
   checked: boolean;
@@ -17,7 +13,7 @@ const AssignEventsToggle: React.FC<AssignEventsToggleProps> = ({checked, onChang
     onChange(!checked);
   };
 
-  // Definimos as classes base que são sempre aplicadas
+  // Definimos as classes-base que são sempre aplicadas
   const baseWrapperClasses = `
     flex items-center justify-between 
     px-4 py-3 
@@ -26,17 +22,15 @@ const AssignEventsToggle: React.FC<AssignEventsToggleProps> = ({checked, onChang
     transition-colors duration-200 ease-in-out
   `;
 
-  // Definimos as classes que mudam com base no estado 'checked'
   const conditionalWrapperClasses = checked
-    ? 'bg-blue-50 border-blue-400 hover:border-blue-500' // Estilos quando selecionado
-    : 'bg-white border-gray-300 hover:border-blue-500';  // Estilos padrão
+    ? 'bg-blue-50 border-blue-400 hover:border-blue-500'
+    : 'bg-white border-gray-300 hover:border-blue-500';
 
   const conditionalContentClasses = checked
-    ? 'text-blue-700 font-semibold' // Estilos do texto quando selecionado
-    : 'text-gray-800';             // Estilo do texto padrão
+    ? 'text-blue-700 font-semibold'
+    : 'text-gray-800';
 
   return (
-    // Juntamos as classes base e as condicionais
     <div className={`${baseWrapperClasses} ${conditionalWrapperClasses}`} onClick={handleClick}>
       <div className={`flex items-center gap-3 text-base ${conditionalContentClasses}`}>
         <CalendarOutlined/>

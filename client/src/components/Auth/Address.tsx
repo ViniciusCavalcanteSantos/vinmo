@@ -5,16 +5,12 @@ import Title from "@/components/Title";
 import {PrimaryButton} from "@/components/PrimaryButton";
 import {useT} from "@/i18n/client";
 import {useLocalStorage} from "react-use";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useRouter} from "next/navigation";
-import {getCities, getCountries, getStates} from "@/lib/api/Location";
 import {FullAddressType} from "@/types/Address";
-
-
-interface OptionType {
-  value: string;
-  label: string;
-}
+import {useCountries} from "@/lib/queries/locations/useCountries";
+import {useStates} from "@/lib/queries/locations/useStates";
+import {useCities} from "@/lib/queries/locations/useCities";
 
 export default function Address() {
   const {t} = useT();
@@ -26,49 +22,20 @@ export default function Address() {
   const country = Form.useWatch('country', form);
   const state = Form.useWatch('state', form);
 
-  const [countries, setCountries] = useState<OptionType[]>([]);
-  const [states, setStates] = useState<OptionType[]>([]);
-  const [cities, setCities] = useState<OptionType[]>([]);
-
-  const [loadingCountries, setLoadingCountries] = useState(false);
-  const [loadingStates, setLoadingStates] = useState(false);
-  const [_, setLoadingCities] = useState(false);
-
-  useEffect(() => {
-    setLoadingCountries(true);
-    getCountries()
-      .then(data => {
-        setCountries(data.countries);
-      })
-      .finally(() => setLoadingCountries(false));
-  }, []);
+  const {data: countries, isLoading: isLoadingCountries} = useCountries()
+  const {data: states, isLoading: isLoadingStates} = useStates(country)
+  const {data: cities} = useCities(country, state)
 
   useEffect(() => {
     if (!emailConfirmation) router.push('/signup');
   }, [emailConfirmation]);
 
-  const handleCountryChange = (countryCode: string) => {
+  const handleCountryChange = () => {
     form.setFieldsValue({state: null, city: null});
-    setStates([]);
-    setCities([]);
-    if (countryCode) {
-      setLoadingStates(true);
-      getStates(countryCode)
-        .then(res => setStates(res.states))
-        .finally(() => setLoadingStates(false));
-    }
   };
 
-  const handleStateChange = async (stateCode: string) => {
+  const handleStateChange = async () => {
     form.setFieldsValue({city: null});
-    setCities([]);
-    const countryCode = form.getFieldValue('country');
-    if (stateCode && countryCode) {
-      setLoadingCities(true);
-      getCities(countryCode, stateCode)
-        .then(data => setCities(data.cities))
-        .finally(() => setLoadingCities(false));
-    }
   };
 
   const handleFinish = async (values: any) => {
@@ -159,12 +126,15 @@ export default function Address() {
       >
         <Select
           className="!h-11"
-          showSearch placeholder={t('select_country')}
-          loading={loadingCountries}
-          onChange={(value) => handleCountryChange(value)}
+          placeholder={t('select_country')}
+          loading={isLoadingCountries}
+          onChange={handleCountryChange}
           options={countries}
-          filterOption={(input, option) =>
-            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+          showSearch={{
+            filterOption: (input, option) => (
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            )
+          }}
         />
       </Form.Item>
 
@@ -176,13 +146,17 @@ export default function Address() {
             <Select
 
               className="!h-11"
-              showSearch placeholder={t('select_state')}
-              loading={loadingStates}
-              disabled={!country || loadingStates}
+              placeholder={t('select_state')}
+              loading={isLoadingStates}
+              disabled={!country || isLoadingStates}
               onChange={handleStateChange}
               options={states}
-              filterOption={(input, option) =>
-                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
+              showSearch={{
+                filterOption: (input, option) => (
+                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                )
+              }}
+            />
           </Form.Item>
         </Col>
 
@@ -195,8 +169,12 @@ export default function Address() {
               placeholder={t('enter_or_select')}
               disabled={!state}
               options={cities}
-              filterOption={(inputValue, option) =>
-                (option?.label ?? '').toUpperCase().includes(inputValue.toUpperCase())}>
+              showSearch={{
+                filterOption: (input, option) => (
+                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                )
+              }}
+            >
               <Input/>
             </AutoComplete>
           </Form.Item>

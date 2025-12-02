@@ -7,6 +7,7 @@ import {languages} from "@/i18n/settings";
 import {fetchUserServer} from "@/lib/api/users/fetchUserServer";
 import {Theme} from "@/contexts/AppThemeContext";
 import {cookies} from "next/headers";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
