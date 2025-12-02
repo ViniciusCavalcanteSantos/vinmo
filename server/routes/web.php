@@ -55,7 +55,7 @@ Route::prefix('/api')->group(function () {
         Route::get('events/types/{contract}', [EventController::class, 'getEventTypes']);
         Route::apiResource('/events', EventController::class);
         Route::get('events/{event}/images', [EventController::class, 'getImages']);
-        Route::apiResource('/events/photo', EventPhotoController::class);
+        Route::apiResource('/events/photos', EventPhotoController::class);
 
         /* CLIENTES */
         Route::apiResource('/clients', ClientController::class);
