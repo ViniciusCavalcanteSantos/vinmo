@@ -12,7 +12,7 @@ export const config = {
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  if (pathname.indexOf('icon') > -1 || pathname.indexOf('chrome') > -1) return NextResponse.next()
+  if (pathname.includes('.') || pathname.startsWith('/_next')) return NextResponse.next()
 
   let lng
   const cookie = req.cookies.get(cookieName);
@@ -21,25 +21,34 @@ export function middleware(req: NextRequest) {
   if (!lng) lng = fallbackLng
 
   const lngInPath = languages.find(loc => pathname.startsWith(`/${loc}`))
-  const headers = new Headers(req.headers)
-  headers.set(headerName, lngInPath || lng)
-  headers.set("x-pathname", req.nextUrl.pathname)
 
-  if (
-    !lngInPath &&
-    !pathname.startsWith('/_next')
-  ) {
-    return NextResponse.redirect(new URL(`/${lng}${pathname}${req.nextUrl.search}`, req.url))
-  }
+  const requestHeaders = new Headers(req.headers)
+  requestHeaders.set("x-pathname", req.nextUrl.pathname)
 
-  const referer = req.headers.get('referer')
-  if (referer) {
-    const refererUrl = new URL(referer)
-    const lngInReferer = languages.find((l) => refererUrl.pathname.startsWith(`/${l}`))
-    const response = NextResponse.next({headers})
-    if (lngInReferer) response.cookies.set(cookieName, lngInReferer)
+  if (pathname.startsWith('/app') || (lngInPath && pathname.startsWith(`/${lngInPath}/app`))) {
+    if (lngInPath) {
+      const cleanPath = pathname.replace(new RegExp(`^/${lngInPath}`), '');
+      const response = NextResponse.redirect(new URL(cleanPath, req.url))
+      response.cookies.set(cookieName, lngInPath);
+      return response;
+    }
+
+    const url = req.nextUrl.clone()
+    url.pathname = `/${lng}${pathname}`
+    requestHeaders.set(headerName, lng)
+
+
+    const response = NextResponse.rewrite(url, {headers: requestHeaders})
+    if (!cookie?.value || cookie.value !== lng) {
+      response.cookies.set(cookieName, lng)
+    }
     return response
   }
 
-  return NextResponse.next({headers})
+  if (!lngInPath) {
+    return NextResponse.redirect(new URL(`/${lng}${pathname}${req.nextUrl.search}`, req.url))
+  }
+
+  requestHeaders.set(headerName, lngInPath)
+  return NextResponse.next({headers: requestHeaders})
 }

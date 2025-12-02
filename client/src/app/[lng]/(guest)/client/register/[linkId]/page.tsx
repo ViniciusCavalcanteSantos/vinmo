@@ -121,7 +121,7 @@ const ManageClientPage: React.FC = () => {
     }
 
     notification.success({title: res.message});
-    router.push('/client/register/success');
+    router.push('app/client/register/success');
   }
 
   const handleBeforeUpload = (file: File) => {

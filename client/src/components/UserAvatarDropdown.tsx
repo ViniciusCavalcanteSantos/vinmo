@@ -44,7 +44,7 @@ function UserAvatarDropdown({user}: { user: User | null }) {
             <Divider className="!m-0 !border-ant-border-sec"/>
           </div>
 
-          <Link href="/profile">
+          <Link href="/app/profile">
             <Button className="!p-2 w-full !justify-start" type="text" icon={<UserOutlined/>}>
               {t('profile')}
             </Button>

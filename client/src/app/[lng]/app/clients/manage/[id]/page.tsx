@@ -179,7 +179,7 @@ const ManageClientPage: React.FC = () => {
           });
           setAssignments([]);
         } else {
-          router.push('/clients');
+          router.push('/app/clients');
         }
       }
     } catch (err: any) {

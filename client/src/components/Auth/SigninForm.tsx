@@ -28,7 +28,7 @@ export default function SigninForm() {
 
     setUser(res.user)
     router.refresh();
-    router.push("/home");
+    router.push("/app");
   };
 
   return (

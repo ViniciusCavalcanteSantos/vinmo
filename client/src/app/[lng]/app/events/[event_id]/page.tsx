@@ -67,7 +67,7 @@ export default function Page() {
   useEffect(() => {
     if (isError) {
       notification.warning({title: t("unable_to_load_event")});
-      router.push("/events");
+      router.push("/app/events");
     }
   }, [isError, notification, t, router]);
 
@@ -263,7 +263,7 @@ export default function Page() {
             image={<InboxOutlined className="!text-8xl !text-ant-primary"/>}
             description={<Typography.Text>{t('no_photos_in_event_yet')}</Typography.Text>}
           >
-            <Link href={`/send-photo/${event?.id}`}>
+            <Link href={`/app/send-photo/${event?.id}`}>
               <Button type='primary'>{t('add_photos')}</Button>
             </Link>
           </Empty>

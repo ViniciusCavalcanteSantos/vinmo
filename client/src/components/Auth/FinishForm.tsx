@@ -52,7 +52,7 @@ export default function FinishForm() {
 
     setUser(res.user)
     router.refresh();
-    router.push("/home")
+    router.push("/app")
   }
 
   return (

@@ -181,7 +181,7 @@ const Page: React.FC = () => {
             <Form.Item className="!mt-4 flex justify-end">
               <Space className="flex justify-end">
                 <Button type="primary">
-                  <Link href='/clients'>
+                  <Link href='/app/clients'>
                     {t('finish_and_exit')}
                   </Link>
                 </Button>

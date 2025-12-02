@@ -109,7 +109,7 @@ export default function Page() {
   const ActionButtons = ({record}: { record: Client }) => (
     <Space size="middle">
       <Tooltip title={t('edit')} destroyOnHidden>
-        <Link href={`/clients/manage/${record.id}`}>
+        <Link href={`/app/clients/manage/${record.id}`}>
           <Button
             type="text"
             shape="circle"
@@ -220,9 +220,9 @@ export default function Page() {
     form.validateFields()
       .then(async ({register_type}: any) => {
         if (register_type === 'manual') {
-          router.push('/clients/manage/new');
+          router.push('/app/clients/manage/new');
         } else if (register_type === 'image_name') {
-          router.push('/clients/create/by-image-name');
+          router.push('/app/clients/create/by-image-name');
         } else {
           setOpenModalRegister(false)
           setOpenModalGenerateLink(true)

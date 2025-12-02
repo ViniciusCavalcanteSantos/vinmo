@@ -28,15 +28,19 @@ export default function Header() {
   const iconStyle = {fontSize: 20} as CSSProperties;
 
   const menu = [
-    {title: t('contracts'), link: "/contracts", icon: <FileTextOutlined className={iconClass} style={iconStyle}/>},
-    {title: t('events'), link: "/events", icon: <CalendarOutlined className={iconClass} style={iconStyle}/>},
-    {title: t('clients'), link: "/clients", icon: <TeamOutlined className={iconClass} style={iconStyle}/>},
+    {title: t('contracts'), link: "/app/contracts", icon: <FileTextOutlined className={iconClass} style={iconStyle}/>},
+    {title: t('events'), link: "/app/events", icon: <CalendarOutlined className={iconClass} style={iconStyle}/>},
+    {title: t('clients'), link: "/app/clients", icon: <TeamOutlined className={iconClass} style={iconStyle}/>},
     {
       title: t('team_members'),
-      link: "/team-members",
+      link: "/app/team-members",
       icon: <AliwangwangOutlined className={iconClass} style={iconStyle}/>
     },
-    {title: t('photo_sorter'), link: "/photo-sorter", icon: <CameraOutlined className={iconClass} style={iconStyle}/>},
+    {
+      title: t('photo_sorter'),
+      link: "/app/photo-sorter",
+      icon: <CameraOutlined className={iconClass} style={iconStyle}/>
+    },
   ];
 
   return (
@@ -53,7 +57,7 @@ export default function Header() {
             </button>
           </div>
 
-          <Link href="/home" className="-m-1.5 p-1.5">
+          <Link href="/app" className="-m-1.5 p-1.5">
             <div className="flex items-center justify-center text-2xl text-ant-text">
               <Title/>
             </div>

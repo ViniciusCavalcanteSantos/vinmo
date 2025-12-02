@@ -160,7 +160,7 @@ class AuthController extends Controller
         }
 
         Auth::login($user, true);
-        return redirect(config('app.url_client').'/home')
+        return redirect(config('app.url_client').'/app')
             ->withCookie(
                 'logged_in', '1', 60 * 24 * 7, '/', null, true, false, false, 'Lax'
             );

@@ -46,7 +46,7 @@ export default function Page() {
   const ActionButtons = ({record}: { record: Event }) => (
     <Space size="middle">
       <Tooltip title={t('view')} destroyOnHidden>
-        <Link href={`/events/${record.id}`}>
+        <Link href={`/app/events/${record.id}`}>
           <Button
             type="text"
             shape="circle"
@@ -65,7 +65,7 @@ export default function Page() {
         />
       </Tooltip>
       <Tooltip title={t('send_photo')} destroyOnHidden>
-        <Link href={`/send-photo/${record.id}`}>
+        <Link href={`/app/send-photo/${record.id}`}>
           <Button
             type="text"
             shape="circle"

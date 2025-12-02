@@ -7,7 +7,7 @@ export default async function Layout({children}: PropsWithChildren) {
   const {user} = await fetchUserServer()
 
   if (user) {
-    redirect(`/home`);
+    redirect(`/app`);
   }
 
   return (
