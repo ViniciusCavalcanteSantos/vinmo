@@ -121,7 +121,7 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
                 width={32}
                 height={32}
                 style={{cursor: 'pointer'}}
-                preview={{src: client.profile.web, mask: <EyeOutlined/>}}
+                preview={{src: client.profile.web, cover: <EyeOutlined/>}}
               />
 
               <h2 className="text-ant-text font-medium">{client.name}</h2>

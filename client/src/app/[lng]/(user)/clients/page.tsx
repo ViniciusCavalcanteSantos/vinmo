@@ -150,7 +150,7 @@ export default function Page() {
             width={32}
             height={32}
             style={{cursor: 'pointer'}}
-            preview={{src: record.profile.web, mask: <EyeOutlined/>}}
+            preview={{src: record.profile.web, cover: <EyeOutlined/>}}
           />
           <span>{record.name}</span>
         </div>
