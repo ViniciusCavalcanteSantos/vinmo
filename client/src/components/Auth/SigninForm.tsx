@@ -11,11 +11,13 @@ import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
 import SocialMediaAuth from "@/components/Auth/SocialMediaAuth";
 import {login} from "@/lib/api/users/login";
+import {useUser} from "@/contexts/UserContext";
 
 export default function SigninForm() {
   const {t} = useT();
   const notification = useNotification();
   const router = useRouter();
+  const {setUser} = useUser()
 
   const handleFinish = async (values: any) => {
     const res = await login(values.email, values.password, values.remember_me);
@@ -23,9 +25,11 @@ export default function SigninForm() {
       notification.info({title: res.message});
       return;
     }
+
+    setUser(res.user)
+    router.refresh();
     router.push("/home");
   };
-
 
   return (
     <Form

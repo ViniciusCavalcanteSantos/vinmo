@@ -14,6 +14,7 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
 import {register} from "@/lib/api/users/register";
+import {useUser} from "@/contexts/UserContext";
 
 export default function FinishForm() {
   const {t} = useT();
@@ -21,6 +22,7 @@ export default function FinishForm() {
   const [emailConfirmation] = useLocalStorage<string | null>('emailConfirmation', null)
   const [sending, setSending] = useState(false)
   const router = useRouter();
+  const {setUser} = useUser()
 
   useEffect(() => {
     if (!emailConfirmation) {
@@ -48,6 +50,8 @@ export default function FinishForm() {
       description: t('login.start_using_immediately')
     });
 
+    setUser(res.user)
+    router.refresh();
     router.push("/home")
   }
 
