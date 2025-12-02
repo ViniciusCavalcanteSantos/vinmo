@@ -81,7 +81,7 @@ const Page: React.FC = () => {
         progress: 100,
       });
     } catch (err: any) {
-      notification.warning({message: err.message})
+      notification.warning({title: err.message})
       updateFile(file.id, {status: 'error'});
     }
   }
@@ -96,10 +96,10 @@ const Page: React.FC = () => {
     try {
       const res = await removeClient.mutateAsync(file.clientId);
 
-      notification.success({message: res.message})
+      notification.success({title: res.message})
       setFiles(prev => prev.filter(f => f.id !== file.id));
     } catch (err: any) {
-      notification.warning({message: err.message})
+      notification.warning({title: err.message})
     }
   }
 
@@ -154,10 +154,7 @@ const Page: React.FC = () => {
                   <Statistic
                     title={t('photos_uploaded_successfully')}
                     value={stats.totalSuccess}
-                    valueStyle={{color: "#3f8600"}}
-                    valueRender={(node) => {
-                      return <span className='text-ant-success'>{node}</span>;
-                    }}
+                    classNames={{content: '!text-ant-success'}}
                   />
                 </Card>
               </Col>
@@ -166,10 +163,7 @@ const Page: React.FC = () => {
                   <Statistic
                     title={t('photos_pending_for_submission')}
                     value={stats.totalPending}
-                    valueStyle={{color: "#faad14"}}
-                    valueRender={(node) => {
-                      return <span className='text-ant-warning'>{node}</span>;
-                    }}
+                    classNames={{content: '!text-ant-warning'}}
                   />
                 </Card>
               </Col>
@@ -178,10 +172,7 @@ const Page: React.FC = () => {
                   <Statistic
                     title={t('photos_with_error')}
                     value={stats.totalError}
-                    valueStyle={{color: "#cf1322"}}
-                    valueRender={(node) => {
-                      return <span className='text-ant-error'>{node}</span>;
-                    }}
+                    classNames={{content: '!text-ant-error'}}
                   />
                 </Card>
               </Col>

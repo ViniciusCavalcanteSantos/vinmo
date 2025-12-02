@@ -1,4 +1,4 @@
-import {Modal, theme} from "antd";
+import {Modal} from "antd";
 import {useT} from "@/i18n/client";
 
 type MetaItem = { label: string; value: string };
@@ -12,7 +12,6 @@ type Props = {
 
 export function MetadataModal({open, onClose, metadata, loading}: Props) {
   const {t} = useT()
-  const {token} = theme.useToken();
 
   metadata.unshift()
 

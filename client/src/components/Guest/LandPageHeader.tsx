@@ -44,7 +44,7 @@ const LandingPageHeader = () => {
             <Space>
               <Button onClick={() => router.push('signup')}>{t('login.sign_up')}</Button>
 
-              <Divider type="vertical" style={{height: '2rem'}}/>
+              <Divider orientation="vertical" style={{height: '2rem'}}/>
 
               <Link href="/signin"
                     className='text-primary font-semibold py-2 px-3 hover:bg-[#091E420F] text-base transition-colors duration-200'>{t('login.sign_in')}</Link>

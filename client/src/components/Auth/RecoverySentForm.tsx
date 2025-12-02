@@ -31,13 +31,13 @@ export default function RecoverySentForm() {
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
-        message: res.message,
+        title: res.message,
       });
       return;
     }
 
     notification.success({
-      message: res.message,
+      title: res.message,
     });
   }
 

@@ -1,4 +1,3 @@
-import '@ant-design/v5-patch-for-react-19';
 import type {Metadata, ResolvingMetadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
@@ -8,6 +7,7 @@ import {languages} from "@/i18n/settings";
 import {fetchUserServer} from "@/lib/api/users/fetchUserServer";
 import {Theme} from "@/contexts/AppThemeContext";
 import {cookies} from "next/headers";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -109,7 +109,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
           updateEvent.mutate({id: event.id, values: values}, {
             onSuccess: (res) => {
               notification.success({
-                message: res.message
+                title: res.message
               })
               onEdit(res.event)
             }
@@ -118,7 +118,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
           createEvent.mutate(values, {
             onSuccess: (res) => {
               notification.success({
-                message: res.message
+                title: res.message
               })
               onCreate(res.event)
             }
@@ -128,7 +128,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
         handleClean();
       })
       .catch((err: any) => {
-        notification.warning({message: err.message});
+        notification.warning({title: err.message});
       });
   }
 

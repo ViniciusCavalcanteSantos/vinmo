@@ -27,14 +27,14 @@ export default function SignupForm() {
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
-        message: res.message,
+        title: res.message,
       });
       return;
     }
 
     setEmailConfirmation(values.email)
     notification.success({
-      message: t('login.email_code_sent'),
+      title: t('login.email_code_sent'),
       description: t('login.check_your_inbox')
     });
     router.push('/signup/confirm-code')

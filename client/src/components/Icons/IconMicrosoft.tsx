@@ -1,8 +1,8 @@
 import React from "react";
 
-const IconMicrosoft = (props: React.SVGProps<SVGSVGElement>) => (
+const IconMicrosoft = ({className, ...props}: React.SVGProps<SVGSVGElement>) => (
   <svg
-    className="w-6 h-6"
+    className={`w-6 h-6 ${className}`}
     viewBox="0 0 23 23"
     {...props}
   >

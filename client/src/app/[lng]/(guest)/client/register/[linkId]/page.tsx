@@ -72,7 +72,7 @@ const ManageClientPage: React.FC = () => {
       if (res.status === ApiStatus.SUCCESS) {
         setLinkInfo(res.linkInfo);
       } else {
-        notification.error({message: t('link_not_found')});
+        notification.error({title: t('link_not_found')});
         router.replace("/");
       }
       setLoadingForm(false);
@@ -117,10 +117,10 @@ const ManageClientPage: React.FC = () => {
     setLoadingSubmit(false);
 
     if (res.status !== ApiStatus.SUCCESS) {
-      return notification.warning({message: res.message});
+      return notification.warning({title: res.message});
     }
 
-    notification.success({message: res.message});
+    notification.success({title: res.message});
     router.push('/client/register/success');
   }
 
@@ -128,7 +128,7 @@ const ManageClientPage: React.FC = () => {
     const isImage = file.type.startsWith('image/');
     if (!isImage) {
       notification.warning({
-        message: t('Invalid_file'),
+        title: t('Invalid_file'),
         description: t('please_select_images_only')
       });
       return Upload.LIST_IGNORE;
@@ -194,7 +194,7 @@ const ManageClientPage: React.FC = () => {
 
             {previewImage && (
               <Image
-                wrapperStyle={{display: 'none'}}
+                styles={{root: {display: 'none'}}}
                 preview={{
                   visible: previewOpen,
                   onVisibleChange: (visible) => setPreviewOpen(visible),
@@ -324,24 +324,32 @@ const ManageClientPage: React.FC = () => {
                     <Col span={8}>
                       <Form.Item name="country" label={t('country')}
                                  rules={[{required: true, message: t('select_country')}]}>
-                        <Select showSearch placeholder={t('select_country')}
+                        <Select placeholder={t('select_country')}
                                 loading={isLoadingCountries}
                                 onChange={handleCountryChange}
                                 options={countries}
-                                filterOption={(input, option) =>
-                                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
+                                showSearch={{
+                                  filterOption: (input, option) => (
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                  )
+                                }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item name="state" label={t('state_province')}
                                  rules={[{required: true, message: t('select_state')}]}>
-                        <Select showSearch placeholder={t('select_state')}
+                        <Select placeholder={t('select_state')}
                                 loading={isLoadingStates}
                                 disabled={!country || isLoadingStates}
                                 onChange={handleStateChange}
                                 options={states}
-                                filterOption={(input, option) =>
-                                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}/>
+                                showSearch={{
+                                  filterOption: (input, option) => (
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                  )
+                                }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -349,8 +357,12 @@ const ManageClientPage: React.FC = () => {
                         <AutoComplete placeholder={t('enter_or_select')}
                                       disabled={!state}
                                       options={cities}
-                                      filterOption={(inputValue, option) =>
-                                        (option?.label ?? '').toUpperCase().includes(inputValue.toUpperCase())}>
+                                      showSearch={{
+                                        filterOption: (input, option) => (
+                                          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                        )
+                                      }}
+                        >
                           <Input/>
                         </AutoComplete>
                       </Form.Item>
