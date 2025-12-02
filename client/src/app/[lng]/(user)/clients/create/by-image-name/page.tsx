@@ -81,7 +81,7 @@ const Page: React.FC = () => {
         progress: 100,
       });
     } catch (err: any) {
-      notification.warning({message: err.message})
+      notification.warning({title: err.message})
       updateFile(file.id, {status: 'error'});
     }
   }
@@ -96,10 +96,10 @@ const Page: React.FC = () => {
     try {
       const res = await removeClient.mutateAsync(file.clientId);
 
-      notification.success({message: res.message})
+      notification.success({title: res.message})
       setFiles(prev => prev.filter(f => f.id !== file.id));
     } catch (err: any) {
-      notification.warning({message: err.message})
+      notification.warning({title: err.message})
     }
   }
 

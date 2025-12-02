@@ -72,7 +72,7 @@ const ManageClientPage: React.FC = () => {
       if (res.status === ApiStatus.SUCCESS) {
         setLinkInfo(res.linkInfo);
       } else {
-        notification.error({message: t('link_not_found')});
+        notification.error({title: t('link_not_found')});
         router.replace("/");
       }
       setLoadingForm(false);
@@ -117,10 +117,10 @@ const ManageClientPage: React.FC = () => {
     setLoadingSubmit(false);
 
     if (res.status !== ApiStatus.SUCCESS) {
-      return notification.warning({message: res.message});
+      return notification.warning({title: res.message});
     }
 
-    notification.success({message: res.message});
+    notification.success({title: res.message});
     router.push('/client/register/success');
   }
 
@@ -128,7 +128,7 @@ const ManageClientPage: React.FC = () => {
     const isImage = file.type.startsWith('image/');
     if (!isImage) {
       notification.warning({
-        message: t('Invalid_file'),
+        title: t('Invalid_file'),
         description: t('please_select_images_only')
       });
       return Upload.LIST_IGNORE;
@@ -194,7 +194,7 @@ const ManageClientPage: React.FC = () => {
 
             {previewImage && (
               <Image
-                wrapperStyle={{display: 'none'}}
+                styles={{root: {display: 'none'}}}
                 preview={{
                   visible: previewOpen,
                   onVisibleChange: (visible) => setPreviewOpen(visible),

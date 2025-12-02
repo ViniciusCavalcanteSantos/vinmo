@@ -128,7 +128,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
           updateContract.mutate({id: contract.id, values: values}, {
             onSuccess: (res) => {
               notification.success({
-                message: res.message
+                title: res.message
               })
               onEdit(res.contract)
             }
@@ -137,7 +137,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
           createContract.mutate(values, {
             onSuccess: (res) => {
               notification.success({
-                message: res.message
+                title: res.message
               })
               onCreate(res.contract)
             }
@@ -148,7 +148,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
       })
       .catch((err: any) => {
         notification.warning({
-          message: err.message
+          title: err.message
         })
       });
   }

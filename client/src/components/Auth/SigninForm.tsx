@@ -20,7 +20,7 @@ export default function SigninForm() {
   const handleFinish = async (values: any) => {
     const res = await login(values.email, values.password, values.remember_me);
     if (res.status !== ApiStatus.SUCCESS) {
-      notification.info({message: res.message});
+      notification.info({title: res.message});
       return;
     }
     router.push("/home");

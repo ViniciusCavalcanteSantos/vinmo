@@ -381,7 +381,7 @@ function CreateRegisterLinkModal({open, handleClose}: CreateRegisterLinkModalPro
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedLink)
       .then(() => {
-        notification.success({message: t('link_copied_to_clipboard')})
+        notification.success({title: t('link_copied_to_clipboard')})
       })
       .catch(() => {
       })
@@ -536,11 +536,11 @@ function AssignModals({openModalAssign, handleClose, clientIds, type, initialAss
     }
 
     if (res.status !== ApiStatus.SUCCESS) {
-      notification.warning({message: res.message})
+      notification.warning({title: res.message})
       return;
     }
 
-    notification.success({message: res.message})
+    notification.success({title: res.message})
     handleClose()
   }
 

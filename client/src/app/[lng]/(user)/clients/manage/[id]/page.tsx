@@ -111,7 +111,7 @@ const ManageClientPage: React.FC = () => {
 
   useEffect(() => {
     if (isClientError) {
-      notification.error({message: t('client_not_found')});
+      notification.error({title: t('client_not_found')});
       router.back();
     }
   }, [isClientError, router, t]);
@@ -159,14 +159,14 @@ const ManageClientPage: React.FC = () => {
           profile: file
         });
 
-        notification.success({message: res.message});
+        notification.success({title: res.message});
       } else {
         const res = await createClient.mutateAsync({
           values,
           profile: file
         });
 
-        notification.success({message: res.message});
+        notification.success({title: res.message});
 
         if (keepAdding) {
           setFileList([])
@@ -183,7 +183,7 @@ const ManageClientPage: React.FC = () => {
         }
       }
     } catch (err: any) {
-      notification.warning({message: err.message});
+      notification.warning({title: err.message});
     }
   }
 
@@ -191,7 +191,7 @@ const ManageClientPage: React.FC = () => {
     const isImage = file.type.startsWith('image/');
     if (!isImage) {
       notification.warning({
-        message: t('Invalid_file'),
+        title: t('Invalid_file'),
         description: t('please_select_images_only')
       });
       return Upload.LIST_IGNORE;
@@ -259,7 +259,7 @@ const ManageClientPage: React.FC = () => {
 
           {previewImage && (
             <Image
-              wrapperStyle={{display: 'none'}}
+              styles={{root: {display: 'none'}}}
               preview={{
                 visible: previewOpen,
                 onVisibleChange: (visible) => setPreviewOpen(visible),

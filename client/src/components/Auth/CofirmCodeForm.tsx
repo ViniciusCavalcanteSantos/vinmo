@@ -27,13 +27,13 @@ export default function ConfirmCodeForm() {
     const res = await sendCode(emailConfirmation ?? "")
     if (res.status !== ApiStatus.SUCCESS) {
       notification.info({
-        message: res.message,
+        title: res.message,
       });
       return;
     }
 
     notification.success({
-      message: t('login.new_email_code_sent'),
+      title: t('login.new_email_code_sent'),
       description: t('login.check_your_inbox')
     });
   }
@@ -43,7 +43,7 @@ export default function ConfirmCodeForm() {
     const res = await confirmCode(emailConfirmation ?? "", values.code)
     if (res.status === ApiStatus.MAX_ATTEMPTS) {
       notification.warning({
-        message: res.message,
+        title: res.message,
       });
       router.push('/signup')
       return;
@@ -52,13 +52,13 @@ export default function ConfirmCodeForm() {
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
-        message: res.message,
+        title: res.message,
       });
       return;
     }
 
     notification.success({
-      message: t('login.email_verified_successfully'),
+      title: t('login.email_verified_successfully'),
       description: t('login.you_can_proceed_with_registration')
     });
     router.push('/signup/finish')

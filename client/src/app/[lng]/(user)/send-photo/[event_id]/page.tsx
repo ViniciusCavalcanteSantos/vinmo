@@ -74,7 +74,7 @@ const Page: React.FC = () => {
     })
 
     if (res.status !== ApiStatus.SUCCESS) {
-      notification.warning({message: res.message})
+      notification.warning({title: res.message})
       updateFile(file.id, {status: 'error'});
     } else {
       updateFile(file.id, {
@@ -95,13 +95,13 @@ const Page: React.FC = () => {
     try {
       removeImage.mutate(file.imageId, {
         onSuccess: (res => {
-          notification.success({message: res.message})
+          notification.success({title: res.message})
           setFiles(prev => prev.filter(f => f.id !== file.id));
         })
       });
 
     } catch (err: any) {
-      notification.warning({message: err.message})
+      notification.warning({title: err.message})
     }
   }
 

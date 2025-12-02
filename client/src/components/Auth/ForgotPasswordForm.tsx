@@ -26,13 +26,13 @@ export default function ForgotPasswordForm() {
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
-        message: res.message,
+        title: res.message,
       });
       return;
     }
 
     notification.success({
-      message: res.message,
+      title: res.message,
     });
     setEmailRecovery(values.email)
     router.push('/recovery-sent')

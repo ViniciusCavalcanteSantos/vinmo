@@ -18,13 +18,13 @@ function SocialMediaAuth() {
       const res = await redirect(socialMedia);
 
       if (res.status !== ApiStatus.SUCCESS) {
-        notification.info({message: res.message});
+        notification.info({title: res.message});
         return;
       }
 
       window.location.href = res.url;
     } catch (err: any) {
-      notification.error({message: err.message});
+      notification.error({title: err.message});
     }
   };
 

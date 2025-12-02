@@ -38,13 +38,13 @@ export default function FinishForm() {
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
-        message: res.message,
+        title: res.message,
       });
       return;
     }
 
     notification.success({
-      message: t('login.account_created'),
+      title: t('login.account_created'),
       description: t('login.start_using_immediately')
     });
 

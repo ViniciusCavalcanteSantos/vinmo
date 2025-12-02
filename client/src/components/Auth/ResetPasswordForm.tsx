@@ -27,7 +27,7 @@ export default function ResetPasswordForm() {
       const res = await validateRecoveryToken(email, token)
       if (res.status !== ApiStatus.SUCCESS) {
         notification.warning({
-          message: res.message,
+          title: res.message,
         });
         router.push('/forgot-password')
       }
@@ -40,13 +40,13 @@ export default function ResetPasswordForm() {
     if (res.status !== ApiStatus.SUCCESS) {
       setSending(false)
       notification.info({
-        message: res.message,
+        title: res.message,
       });
       return;
     }
 
     notification.success({
-      message: res.message,
+      title: res.message,
     });
     router.push('/signin')
   }

@@ -66,7 +66,7 @@ export default function Page() {
 
   useEffect(() => {
     if (isError) {
-      notification.warning({message: t("unable_to_load_event")});
+      notification.warning({title: t("unable_to_load_event")});
       router.push("/events");
     }
   }, [isError, notification, t, router]);
@@ -99,14 +99,14 @@ export default function Page() {
 
         setMetadata(metadataArray);
       } catch (err: any) {
-        notification.warning({message: t('unable_to_load_metadata')});
+        notification.warning({title: t('unable_to_load_metadata')});
       }
     }
   }, [metadataQuery.data, imageSelected, metadataOpen, t, notification]);
 
   useEffect(() => {
     if (metadataQuery.isError && metadataOpen) {
-      notification.warning({message: (metadataQuery.error as any)?.message ?? t('unable_to_load_metadata')});
+      notification.warning({title: (metadataQuery.error as any)?.message ?? t('unable_to_load_metadata')});
     }
   }, [metadataQuery.isError, metadataQuery.error, metadataOpen, notification, t]);
 
@@ -124,11 +124,11 @@ export default function Page() {
     try {
       removeImage.mutate(image.id, {
         onSuccess: (res) => {
-          notification.success({message: res.message});
+          notification.success({title: res.message});
         }
       });
     } catch (err: any) {
-      notification.warning({message: err?.message || t('unable_to_delete')});
+      notification.warning({title: err?.message || t('unable_to_delete')});
     }
   }
 
