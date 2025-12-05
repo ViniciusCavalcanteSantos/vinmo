@@ -49,6 +49,22 @@ services:
     depends_on:
       - app
 
+  reverb:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /var/www
+    command: php artisan reverb:start --host="0.0.0.0" --port=8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    depends_on:
+      - app
+      - redis
+
   composer:
     build:
       context: .
