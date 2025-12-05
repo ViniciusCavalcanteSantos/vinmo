@@ -5,7 +5,6 @@ import {DeleteOutlined, EyeOutlined, InfoCircleOutlined, MoreOutlined} from "@an
 import React, {useState} from "react";
 import ImageType from "@/types/Image";
 import {useClientCrop} from "@/lib/queries/images/useClientCrop";
-import Fallback from "@/components/Fallback";
 
 type Props = {
   open: boolean;
@@ -20,7 +19,7 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [cropModalOpen, setCropModalOpen] = useState(false);
 
-  const cropQuery = useClientCrop(image?.id, selectedClient?.id, cropModalOpen);
+  const {data: cropData, isSuccess: cropSuccess} = useClientCrop(image?.id, selectedClient?.id, cropModalOpen);
 
   const handleOpenCrop = (client: Client) => {
     setSelectedClient(client);
@@ -50,7 +49,6 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
   const viewBoxWidth = image?.original?.width ?? 1000;
   const viewBoxHeight = image?.original?.height ?? 1000;
 
-  const cropData = cropQuery.data;
 
   return (
     <Modal
@@ -72,10 +70,6 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
       >
         <div
           className="flex justify-center items-center min-h-[200px] bg-ant-bg-layout rounded-md overflow-hidden relative">
-          {cropQuery.isLoading && (
-            <Fallback/>
-          )}
-
           {image?.urls?.web ? (
             <div className="relative inline-block">
               <img
@@ -88,7 +82,7 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
                 className="absolute top-0 left-0 w-full h-full pointer-events-none"
                 viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
               >
-                {cropQuery.isSuccess && cropData && (
+                {cropSuccess && cropData && (
                   <rect
                     x={cropData.boxX}
                     y={cropData.boxY}
@@ -126,12 +120,12 @@ export function ClientsOnImageModal({open, onClose, clients, image}: Props) {
 
               <h2 className="text-ant-text font-medium">{client.name}</h2>
 
-              <Dropdown menu={menuFor(client)} trigger={['click']} className="ml-auto">
+              <Dropdown menu={menuFor(client)} trigger={['click']}>
                 <Button
                   type="text"
                   shape="circle"
                   aria-label={t('options')}
-                  className="!text-2xl !text-ant-text-sec hover:!text-ant-primary"
+                  className="!text-2xl !text-ant-text-sec hover:!text-ant-primary ml-auto"
                 >
                   <MoreOutlined/>
                 </Button>

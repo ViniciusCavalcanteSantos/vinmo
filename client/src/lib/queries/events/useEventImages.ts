@@ -11,5 +11,6 @@ export function useEventImages(eventId?: number) {
       res.status === ApiStatus.SUCCESS ? res.images : [],
     retry: 1,
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
   });
 }
