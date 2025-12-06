@@ -1,16 +1,16 @@
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     command: php artisan serve --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
     volumes:
-      - ./:/var/www
+      - ../:/var/www
     env_file:
-      - .env
+      - ../.env
     depends_on:
       - mysql
       - redis
@@ -24,54 +24,54 @@ services:
   
   queue:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     command: php artisan queue:listen --sleep=1 --tries=3
     volumes:
-      - ./:/var/www
+      - ../:/var/www
     env_file:
-      - .env
+      - ../.env
     depends_on:
       - app
       - redis
 
   scheduler:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     command: php artisan schedule:work
     volumes:
-      - ./:/var/www
+      - ../:/var/www
     env_file:
-      - .env
+      - ../.env
     depends_on:
       - app
 
   reverb:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     command: php artisan reverb:start --host="0.0.0.0" --port=8080
     ports:
       - "8080:8080"
     volumes:
-      - ./:/var/www
+      - ../:/var/www
     env_file:
-      - .env
+      - ../.env
     depends_on:
       - app
       - redis
 
   composer:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     volumes:
-      - ./:/var/www
+      - ../:/var/www
     entrypoint: [ "composer", "--ansi", "--no-interaction", "--no-progress" ]
 
   mysql:
