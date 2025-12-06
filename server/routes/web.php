@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ContractController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\EventPhotoController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -67,5 +68,9 @@ Route::prefix('/api')->group(function () {
         Route::post('clients/{client}/assignments', [AssignmentController::class, 'store']);
         Route::post('clients/assignments/bulk', [AssignmentController::class, 'storeBulk']);
         Route::delete('clients/assignments/bulk', [AssignmentController::class, 'destroyBulk']);
+
+        Route::prefix('/notifications')->group(function () {
+            Route::get('/', [NotificationController::class, 'index']);
+        });
     });
 });

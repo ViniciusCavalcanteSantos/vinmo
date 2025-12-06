@@ -419,6 +419,40 @@ export interface components {
              */
             clientsOnImageCount?: number | null;
         };
+        NotificationData: {
+            /** @example Atualização de sistema */
+            message: string;
+            /** @example O sistema foi atualizado para a versão 2.3. */
+            description: string;
+            /** @description Dados de ação adicionais (objeto JSON). Pode conter campos como 'type', 'target', etc. */
+            action: {
+                [key: string]: string;
+            };
+        };
+        Notification: {
+            /**
+             * Format: uuid
+             * @example 311d5e06-7fcf-4a33-b79f-0f2c9e15173c
+             */
+            id: string;
+            /** @example App\\Notifications\\SystemNotification */
+            type: string;
+            /** @example App\\Models\\User */
+            notifiableType: string;
+            /** @example 123 */
+            notifiableId: number;
+            data: components["schemas"]["NotificationData"];
+            /**
+             * Format: date-time
+             * @example 2025-11-06T10:15:00Z
+             */
+            readAt?: string | null;
+            /**
+             * Format: date-time
+             * @example 2025-11-06T10:15:00Z
+             */
+            createdAt: string;
+        };
         User: {
             /** @example 1 */
             id: number;

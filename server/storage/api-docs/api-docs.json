@@ -850,6 +850,75 @@
                 },
                 "type": "object"
             },
+            "NotificationData": {
+                "required": [
+                    "message",
+                    "description",
+                    "action"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Atualização de sistema"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "O sistema foi atualizado para a versão 2.3."
+                    },
+                    "action": {
+                        "description": "Dados de ação adicionais (objeto JSON). Pode conter campos como 'type', 'target', etc.",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Notification": {
+                "required": [
+                    "id",
+                    "type",
+                    "notifiableType",
+                    "notifiableId",
+                    "data",
+                    "createdAt"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "311d5e06-7fcf-4a33-b79f-0f2c9e15173c"
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "App\\\\Notifications\\\\SystemNotification"
+                    },
+                    "notifiableType": {
+                        "type": "string",
+                        "example": "App\\\\Models\\\\User"
+                    },
+                    "notifiableId": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/NotificationData"
+                    },
+                    "readAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-06T10:15:00Z",
+                        "nullable": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-06T10:15:00Z"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "required": [
                     "id",

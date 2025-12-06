@@ -351,5 +351,7 @@
   "untitled": "Untitled",
   "unable_to_get_image": "Unable to get image",
   "clients_on_image": "Clients on image",
-  "items_selected": "Items selected"
+  "items_selected": "Items selected",
+  "notification": "Notification",
+  "notifications": "Notifications"
 }
