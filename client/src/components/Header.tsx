@@ -18,6 +18,7 @@ import {Button, Divider} from "antd";
 import {useUser} from "@/contexts/UserContext";
 import logo from "@/assets/logos/logo.svg"
 import Image from "next/image";
+import NotificationsDropdown from "@/components/NotificationsDropdown";
 
 export default function Header() {
   const {user} = useUser();
@@ -52,7 +53,7 @@ export default function Header() {
               className="rounded-md cursor-pointer border border-ant-border bg-ant-bg hover:bg-ant-fill-sec"
               onClick={() => setOpen(true)}
             >
-              <MenuOutlined className="p-2 text-ant-text"/>
+              <MenuOutlined className="p-2 text-red-500"/>
               <span className="sr-only">{t('open_main_menu')}</span>
             </button>
           </div>
@@ -64,6 +65,8 @@ export default function Header() {
           </Link>
         </div>
 
+
+        <NotificationsDropdown/>
         <UserAvatarDropdown user={user}/>
       </div>
 
