@@ -44,17 +44,15 @@ export default function NotificationsDropdown() {
             <Divider className="!m-0 !border-ant-border-sec"/>
           </div>
 
-
           <div className="flex flex-col gap-2">
             {notifications.map(notification => {
               return (
-                <div className="p-2 hover:bg-ant-fill-tertiary rounded-lg cursor-pointer" key={notification.id}>
+                <div className="p-2 hover:bg-ant-fill-ter rounded-lg cursor-pointer" key={notification.id}>
                   <div className="font-semibold text-ant-text">{notification.data.message}</div>
                   <div className="text-sm text-ant-text-secondary">{notification.data.description}</div>
                 </div>
               )
             })}
-
 
           </div>
           <Divider className="!m-0 !border-ant-border-sec"/>
@@ -68,7 +66,7 @@ export default function NotificationsDropdown() {
         </div>
       </div>
     );
-  }, [t]);
+  }, [t, notifications]);
 
   return (
     <Dropdown
