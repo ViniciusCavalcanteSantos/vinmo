@@ -353,5 +353,40 @@
   "clients_on_image": "Clientes na imagem",
   "items_selected": "Itens selecionados",
   "notification": "Notificação",
-  "notifications": "Notificações"
+  "notifications": "Notificações",
+  "you_have_unread_notifications_zero": "Você não tem notificações não lidas",
+  "you_have_unread_notifications_one": "Você tem 1 notificação não lida",
+  "you_have_unread_notifications_other": "Você tem {{count}} notificações não lidas",
+  "dismiss": "Dispensar",
+  "mark_as_read": "Marcar como lido",
+  "mark_all_read": "Marcar todos como lidos",
+  "no_notifications": "Sem notificações",
+  "time": {
+    "past": {
+      "now": "agora mesmo",
+      "minute": "há {{count}} minuto",
+      "minute_other": "há {{count}} minutos",
+      "hour": "há {{count}} hora",
+      "hour_other": "há {{count}} horas",
+      "day": "há {{count}} dia",
+      "day_other": "há {{count}} dias",
+      "month": "há {{count}} mês",
+      "month_other": "há {{count}} meses",
+      "year": "há {{count}} ano",
+      "year_other": "há {{count}} anos"
+    },
+    "future": {
+      "now": "em instantes",
+      "minute": "em {{count}} minuto",
+      "minute_other": "em {{count}} minutos",
+      "hour": "em {{count}} hora",
+      "hour_other": "em {{count}} horas",
+      "day": "em {{count}} dia",
+      "day_other": "em {{count}} dias",
+      "month": "em {{count}} mês",
+      "month_other": "em {{count}} meses",
+      "year": "em {{count}} ano",
+      "year_other": "em {{count}} anos"
+    }
+  }
 }

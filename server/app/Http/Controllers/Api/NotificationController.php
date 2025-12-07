@@ -16,4 +16,34 @@ class NotificationController extends Controller
             'notifications' => NotificationResource::collection($request->user()->notifications()->paginate(10))
         ]);
     }
+
+    public function read(Request $request, $id)
+    {
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Notifications updated successfully',
+        ]);
+    }
+
+    public function readAll(Request $request)
+    {
+        $request->user()->unreadNotifications->markAsRead();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Notifications updated successfully',
+        ]);
+    }
+
+    public function dismiss(Request $request, $id)
+    {
+        $request->user()->notifications()->findOrFail($id)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Notification dismissed successfully',
+        ]);
+    }
 }

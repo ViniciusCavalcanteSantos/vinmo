@@ -353,5 +353,40 @@
   "clients_on_image": "Clients on image",
   "items_selected": "Items selected",
   "notification": "Notification",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "you_have_unread_notifications_zero": "You have no unread notifications",
+  "you_have_unread_notifications_one": "You have 1 unread a notification",
+  "you_have_unread_notifications_other": "You have {{count}} unread notifications",
+  "dismiss": "Dismiss",
+  "mark_as_read": "Mark as read",
+  "mark_all_read": "Mark all read",
+  "no_notifications": "No notifications",
+  "time": {
+    "past": {
+      "now": "just now",
+      "minute": "{{count}} minute ago",
+      "minute_other": "{{count}} minutes ago",
+      "hour": "{{count}} hour ago",
+      "hour_other": "{{count}} hours ago",
+      "day": "{{count}} day ago",
+      "day_other": "{{count}} days ago",
+      "month": "{{count}} month ago",
+      "month_other": "{{count}} months ago",
+      "year": "{{count}} year ago",
+      "year_other": "{{count}} years ago"
+    },
+    "future": {
+      "now": "in a few seconds",
+      "minute": "in {{count}} minute",
+      "minute_other": "in {{count}} minutes",
+      "hour": "in {{count}} hour",
+      "hour_other": "in {{count}} hours",
+      "day": "in {{count}} day",
+      "day_other": "in {{count}} days",
+      "month": "in {{count}} month",
+      "month_other": "in {{count}} months",
+      "year": "in {{count}} year",
+      "year_other": "in {{count}} years"
+    }
+  }
 }
