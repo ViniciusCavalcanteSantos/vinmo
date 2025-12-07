@@ -14,14 +14,14 @@ services:
   # Aplicação PHP-FPM
   app:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile
     working_dir: /var/www
     volumes:
-      - ../storage:/var/www/storage
+      - ./storage:/var/www/storage
       - assets_volume:/var/www/public
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - mysql
       - redis
@@ -32,12 +32,12 @@ services:
   # Fila (Queue Worker)
   queue:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile
     working_dir: /var/www
     command: php artisan queue:work --tries=3 --timeout=90
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - app
       - redis
@@ -49,12 +49,12 @@ services:
   # Scheduler (Cron)
   scheduler:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile
     working_dir: /var/www
     command: php artisan schedule:work
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - app
       - mysql
@@ -65,14 +65,14 @@ services:
   # Reverb (Websockets)
   reverb:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile
     working_dir: /var/www
     command: php artisan reverb:start --host="0.0.0.0" --port=8080
     ports:
       - "8002:8080"
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - redis
     restart: always
