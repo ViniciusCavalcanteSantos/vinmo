@@ -9,12 +9,14 @@ use App\Mail\EmailPasswordReset;
 use App\Models\Organization;
 use App\Models\User;
 use App\Models\UserSocialIdentity;
+use App\Notifications\SystemNotification;
 use App\Services\ImageAnalysis\ImagePreparationService;
 use App\Services\StoragePathService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -67,6 +69,10 @@ class AuthController extends Controller
             ], 400);
         }
 
+        $currentLocale = App::getLocale();
+        session()->put('auth_social_locale', $currentLocale);
+        session()->save();
+
         return response()->json([
             'status' => 'success',
             'message' => __('Url obtained successfully'),
@@ -76,6 +82,10 @@ class AuthController extends Controller
 
     public function handleProviderCallback($provider)
     {
+        if (session()->has('auth_social_locale')) {
+            App::setLocale(session()->get('auth_social_locale'));
+        }
+        
         if (!in_array($provider, $this->getProvidersAvailable())) {
             return redirect(config('app.url_client').'/signin?error=invalid_provider');
         }
@@ -120,6 +130,11 @@ class AuthController extends Controller
 
                     return $newUser;
                 });
+
+                $user->notify(new SystemNotification(
+                    __('Welcome to :name', ['name' => config('app.name')]),
+                    __('We are thrilled to have you on board. Feel free to explore and let us know if you need any help.')
+                ));
             }
         }
 
@@ -414,6 +429,11 @@ class AuthController extends Controller
                     'email_verified_at' => $validated['email_verified_at'],
                     'password' => Hash::make($validated['password']),
                 ]);
+
+                $user->notify(new SystemNotification(
+                    __('Welcome to :name', ['name' => config('app.name')]),
+                    __('We are thrilled to have you on board. Feel free to explore and let us know if you need any help.')
+                ));
 
                 return $user;
             });

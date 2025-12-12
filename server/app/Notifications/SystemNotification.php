@@ -19,7 +19,7 @@ class SystemNotification extends Notification implements ShouldQueue, ShouldBroa
     /**
      * Create a new notification instance.
      */
-    public function __construct(string $message, string $description)
+    public function __construct(string $message, string $description, ?array $action = null)
     {
         $this->message = $message;
         $this->description = $description;

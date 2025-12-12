@@ -63,7 +63,7 @@ export default function NotificationsDropdown() {
   const dropdownContent = useMemo(() => {
     return (
       <div
-        className="min-w-[260px] flex flex-col gap-1 rounded-2xl
+        className="min-w-[260px] max-w-[520px] flex flex-col gap-1 rounded-2xl
                    bg-ant-bg-elevated border border-ant-border-sec
                    text-ant-text shadow-ant-2"
       >
