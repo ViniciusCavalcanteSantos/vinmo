@@ -1,0 +1,212 @@
+"use client"
+
+import {Button, Card, Empty, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
+import React, {useState} from "react";
+import {SorterResult} from "antd/es/table/interface";
+import Search from "antd/es/input/Search";
+import {useT} from "@/i18n/client";
+import Event from "@/types/Event";
+import {DeleteOutlined, EditOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
+import {useDebounce} from "react-use";
+import ManageEventModal from "@/components/ManageEventModal";
+import PageHeader from "@/components/PageHeader";
+import dayjs from "dayjs";
+import {useUser} from "@/contexts/UserContext";
+import Link from "next/link";
+import {filesize} from "filesize";
+import {useEvents} from "@/lib/queries/events/useEvents";
+import {useRemoveEvent} from "@/lib/queries/events/useRemoveEvent";
+
+export default function EventManager() {
+  const {t} = useT();
+  const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTermDebounce, setSearchTermDebounce] = useState("");
+  useDebounce(() => {
+    setSearchTermDebounce(searchTerm);
+  }, 300, [searchTerm])
+
+  const {defaultDateFormat} = useUser();
+
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 15,
+    total: 0,
+  });
+
+  const {data: events, isLoading} = useEvents(searchTermDebounce, pagination.current, pagination.pageSize, true);
+  const removeEvent = useRemoveEvent()
+
+  const [editingEvent, setEditingEvent] = useState<Event>();
+  const editEvent = (event: Event) => {
+    setEditingEvent(event)
+    setOpen(true)
+  }
+
+  const ActionButtons = ({record}: { record: Event }) => (
+    <Space size="middle">
+      <Tooltip title={t('view')} destroyOnHidden>
+        <Link href={`/app/events/${record.id}`}>
+          <Button
+            type="text"
+            shape="circle"
+            icon={<EyeOutlined/>}
+            onClick={() => (record)}
+          />
+        </Link>
+
+      </Tooltip>
+      <Tooltip title={t('edit')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          icon={<EditOutlined/>}
+          onClick={() => editEvent(record)}
+        />
+      </Tooltip>
+      <Tooltip title={t('send_photo')} destroyOnHidden>
+        <Link href={`/app/send-photo/${record.id}`}>
+          <Button
+            type="text"
+            shape="circle"
+            icon={<UploadOutlined/>}
+          />
+        </Link>
+      </Tooltip>
+      <Tooltip title={t('delete')} destroyOnHidden>
+        <Button
+          type="text"
+          shape="circle"
+          danger
+          icon={<DeleteOutlined/>}
+          onClick={() => removeEvent.mutate(record.id)}
+        />
+      </Tooltip>
+    </Space>
+  )
+
+
+  const columns: TableColumnsType<Event> = [
+    {
+      title: t('category'),
+      dataIndex: ['type', 'category', "name"],
+      sorter: (a, b) => a.type.category.name.localeCompare(b.type.category.name)
+    },
+    {
+      title: t('contract'),
+      sorter: (a, b) => a.contract?.code.localeCompare(b.contract?.code ?? '') ?? 0,
+      render: (_, record) => `${record.contract?.code}`
+    },
+    {
+      title: t('event'),
+      dataIndex: ['type', "name"],
+      sorter: (a, b) => a.type.name.localeCompare(b.type.name),
+      render: (_, record) => `${record.type.name}: ${record.title}`
+    },
+
+    {
+      title: t('event_date'),
+      dataIndex: 'eventDate',
+      render: (_, record) => (dayjs(record.eventDate).format(defaultDateFormat))
+    },
+    {
+      title: t('start_time'),
+      dataIndex: 'startTime'
+    },
+    {
+      title: t('uploaded_photos'),
+      dataIndex: ['temp'],
+      render: (_, record) => record.totalImages
+    },
+    {
+      title: t('separated_photos'),
+      dataIndex: ['temp'],
+      render: () => 0
+    },
+    {
+      title: t('size'),
+      dataIndex: ['temp'],
+      render: (_, record) => filesize(record.totalSize)
+    },
+    {
+      title: t('actions'),
+      key: 'actions',
+      align: 'center',
+      fixed: 'right',
+      width: 120,
+      render: (_, record) => <ActionButtons record={record}/>
+    }
+  ];
+
+  const handleTableChange = (
+    newPagination: TablePaginationConfig,
+    filters: Record<string, any>,
+    sorter: SorterResult<Event> | SorterResult<Event>[]
+  ) => {
+    if (
+      newPagination.current !== pagination.current ||
+      newPagination.pageSize !== pagination.pageSize
+    ) {
+      setPagination(newPagination);
+    }
+  };
+
+  const handleClose = () => {
+    setEditingEvent(undefined)
+    setOpen(false)
+  }
+
+  return (
+    <>
+      <PageHeader title={t('events')}/>
+
+      <Card variant="outlined" className="shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mb-4">
+          <Search placeholder={t('search_event')} className="w-full sm:max-w-60" loading={isLoading}
+                  onChange={e => setSearchTerm(e.target.value)}/>
+          <Button type="primary" onClick={() => setOpen(true)} className="w-full sm:w-auto">
+            {t('add_new_event')}
+          </Button>
+        </div>
+
+        <Table<Event>
+          rowKey="id"
+          columns={columns}
+          dataSource={events}
+          bordered={true}
+          loading={isLoading}
+          scroll={{y: 560, x: 'max-content'}}
+          pagination={{
+            ...pagination,
+            showSizeChanger: true,
+            pageSizeOptions: ['15', '30', '50', '100'],
+            showTotal: (total, range) => t('pagination', {start: range[0], end: range[1], total, count: total}),
+          }}
+          onChange={handleTableChange}
+          locale={{
+            emptyText: (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={
+                  <span>
+            {t('no_event_found')}
+          </span>
+                }
+              >
+                <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
+              </Empty>
+            ),
+          }}
+        />
+
+        <ManageEventModal
+          open={open}
+          event={editingEvent}
+          onCreate={handleClose}
+          onEdit={handleClose}
+          onCancel={handleClose}
+        />
+      </Card>
+    </>
+  );
+}
