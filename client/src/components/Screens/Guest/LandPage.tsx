@@ -1,4 +1,4 @@
-import LandingPageHeader from "@/components/Guest/LandPageHeader";
+import LandingPageHeader from "@/components/Screens/Guest/LandPageHeader";
 import Fallback from "@/components/Fallback";
 
 export default function LandPage() {

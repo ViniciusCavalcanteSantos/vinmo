@@ -1,4 +1,4 @@
-import FinishForm from "@/components/Auth/FinishForm";
+import FinishForm from "@/components/Screens/Auth/FinishForm";
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
 
@@ -7,11 +7,11 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   return createPageMetadata(
-    { path: "signup/finish", titleKey: "seo.finish.title", descriptionKey: "seo.finish.description" },
+    {path: "signup/finish", titleKey: "seo.finish.title", descriptionKey: "seo.finish.description"},
     parent
   );
 }
 
 export default function Page() {
-  return <FinishForm />
+  return <FinishForm/>
 }

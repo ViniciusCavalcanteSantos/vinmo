@@ -1,4 +1,4 @@
-import SignupForm from "@/components/Auth/SignupForm";
+import SignupForm from "@/components/Screens/Auth/SignupForm";
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
 
@@ -7,7 +7,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   return createPageMetadata(
-    { path: "signup", titleKey: "seo.signup.title", descriptionKey: "seo.signup.description" },
+    {path: "signup", titleKey: "seo.signup.title", descriptionKey: "seo.signup.description"},
     parent
   );
 }

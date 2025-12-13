@@ -26,7 +26,7 @@ const LandingPageHeader = () => {
       <div className="container mx-auto flex justify-between items-center h-full">
         <div className="text-xl font-bold">
           <Link
-            href="/"
+            href="/client/public"
             className={`transition-colors duration-300 ${
               isScrolled ? 'text-gray-800' : 'text-white'
             }`}

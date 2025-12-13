@@ -9,7 +9,7 @@ import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
-import SocialMediaAuth from "@/components/Auth/SocialMediaAuth";
+import SocialMediaAuth from "@/components/Screens/Auth/SocialMediaAuth";
 import {login} from "@/lib/api/users/login";
 import {useUser} from "@/contexts/UserContext";
 
