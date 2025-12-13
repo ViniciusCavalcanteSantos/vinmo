@@ -35,6 +35,48 @@
     "forgot_password": {
       "title": "Forgot password",
       "description": "Recover your Vinmo password."
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Overview of your recent events and Photon activities."
+    },
+    "clients": {
+      "index": {
+        "title": "Clients",
+        "description": "Manage your client base, view profiles and history."
+      },
+      "complete_registration": {
+        "title": "Complete Registration",
+        "description": "Finalize client registration data."
+      },
+      "create_by_image": {
+        "title": "Import Clients by Image",
+        "description": "Automatically create clients based on file names."
+      },
+      "profile": {
+        "title": "Client Profile",
+        "description": "Client details, associated contracts, and personal gallery."
+      }
+    },
+    "contracts": {
+      "index": {
+        "title": "Contracts",
+        "description": "Manage your contracts, proposals, and digital signatures."
+      }
+    },
+    "events": {
+      "index": {
+        "title": "Events",
+        "description": "List of all photography events and processing status."
+      },
+      "workspace": {
+        "title": "Event Workspace",
+        "description": "Manage photos, uploads, and facial recognition for this event."
+      }
+    },
+    "send_photo": {
+      "title": "Upload Photos",
+      "description": "Upload new photos for event processing."
     }
   },
   "login": {

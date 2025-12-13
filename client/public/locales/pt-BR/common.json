@@ -35,6 +35,48 @@
     "forgot-password": {
       "title": "Esqueci a senha",
       "description": "Recupere sua senha Vinmo."
+    },
+    "dashboard": {
+      "title": "Painel de Controle",
+      "description": "Visão geral dos seus eventos recentes e atividades do Photon."
+    },
+    "clients": {
+      "index": {
+        "title": "Clientes",
+        "description": "Gerencie sua base de clientes, visualize perfis e histórico."
+      },
+      "complete_registration": {
+        "title": "Concluir Cadastro de Cliente",
+        "description": "Finalize o preenchimento dos dados cadastrais do cliente."
+      },
+      "create_by_image": {
+        "title": "Importar Clientes via Imagem",
+        "description": "Crie clientes automaticamente baseado nos nomes dos arquivos."
+      },
+      "profile": {
+        "title": "Perfil do Cliente",
+        "description": "Detalhes do cliente, contratos associados e galeria pessoal."
+      }
+    },
+    "contracts": {
+      "index": {
+        "title": "Contratos",
+        "description": "Gerencie seus contratos, propostas e assinaturas digitais."
+      }
+    },
+    "events": {
+      "index": {
+        "title": "Eventos",
+        "description": "Lista de todos os eventos fotográficos e status de processamento."
+      },
+      "workspace": {
+        "title": "Área de Trabalho do Evento",
+        "description": "Gerencie fotos, upload e reconhecimento facial deste evento."
+      }
+    },
+    "send_photo": {
+      "title": "Upload de Fotos",
+      "description": "Envie novas fotos para o processamento do evento."
     }
   },
   "dropzone": {
