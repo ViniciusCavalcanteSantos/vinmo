@@ -1,6 +1,7 @@
 import ApiResponse, {ApiStatus} from "@/types/ApiResponse";
 import i18next from "@/i18n/i18next";
 import axios from "axios";
+import {ApiError} from "@/lib/ApiError";
 
 export type ApiDriver = "fetch" | "axios";
 
@@ -69,7 +70,6 @@ export default async function apiFetch<T = undefined>(
   }
 
   const handleCsrfRetry = async () => {
-    console.log('RETRY')
     if (options._retry) {
       return null;
     }
@@ -120,19 +120,25 @@ export default async function apiFetch<T = undefined>(
         handleNotAuthenticated()
       }
 
-      return data;
+      return ensureSuccess(data, res.status);
     } catch (error: any) {
-      const data = error.response.data
-      if (!data || !("status" in data) || !("message" in data)) {
-        return handleUnexpectedError(error.status)
+      if (error instanceof ApiError) {
+        throw error
       }
 
-      if (error.response.status === 419 || data.status === 'csrf_mismatch') {
-        const retryResult = await handleCsrfRetry();
-        if (retryResult) return retryResult;
+      const data = error?.response?.data
+
+      if (error.response?.status === 419 || data?.status === 'csrf_mismatch') {
+        const retry = await handleCsrfRetry();
+        if (retry) return retry;
       }
 
-      return data;
+      throw new ApiError({
+        message: data?.message ?? "Erro de comunicação com a API",
+        status: data?.status ?? ApiStatus.ERROR,
+        httpStatus: error.response?.status,
+        data
+      });
     }
   }
 
@@ -147,20 +153,39 @@ export default async function apiFetch<T = undefined>(
   try {
     data = await res.json()
   } catch (error) {
-    data = null;
   }
 
-  if (!data || !("status" in data) || !("message" in data)) {
-    return handleUnexpectedError(res.status)
+  if (res.status === 419 || data?.status === 'csrf_mismatch') {
+    const retry = await handleCsrfRetry();
+    if (retry) return retry;
   }
 
-  if (res.status === 419 || data.status === 'csrf_mismatch') {
-    const retryResult = await handleCsrfRetry();
-    if (retryResult) return retryResult;
-  }
-
-  if (data.status === ApiStatus.NOT_AUTHENTICATED) {
+  if (data?.status === ApiStatus.NOT_AUTHENTICATED) {
     handleNotAuthenticated()
+  }
+
+  return ensureSuccess(data, res.status);
+}
+
+function ensureSuccess<T>(
+  data: any,
+  httpStatus?: number
+): T {
+  if (!data || !("status" in data)) {
+    throw new ApiError({
+      message: `Erro inesperado da API (HTTP ${httpStatus})`,
+      status: ApiStatus.ERROR,
+      httpStatus
+    });
+  }
+
+  if (data.status !== ApiStatus.SUCCESS) {
+    throw new ApiError({
+      message: data.message ?? "Erro desconhecido",
+      status: data.status,
+      httpStatus,
+      data
+    });
   }
 
   return data;
