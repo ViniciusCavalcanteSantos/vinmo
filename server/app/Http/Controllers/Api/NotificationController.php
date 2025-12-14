@@ -39,7 +39,7 @@ class NotificationController extends Controller
 
     public function dismiss(Request $request, $id)
     {
-        $request->user()->notifications()->findOrFail($id)->delete();
+        $request->user()->notifications()->find($id)?->delete();
 
         return response()->json([
             'status' => 'success',
