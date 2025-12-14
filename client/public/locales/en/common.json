@@ -436,5 +436,7 @@
       "year_other": "in {{count}} years"
     }
   },
-  "session_expired_message": "Your session has expired. Please log in again to continue."
+  "session_expired_message": "Your session has expired. Please log in again to continue.",
+  "something_went_wrong": "Something went wrong",
+  "try_again": "Try again"
 }

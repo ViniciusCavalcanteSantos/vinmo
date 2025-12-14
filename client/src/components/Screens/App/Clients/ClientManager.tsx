@@ -41,6 +41,7 @@ import {fetchAssignments} from "@/lib/api/assignments/fetchAssignments";
 import {assignClient} from "@/lib/api/assignments/assignClient";
 import {assignClientBulk} from "@/lib/api/assignments/assignClientBulk";
 import {unassignClientBulk} from "@/lib/api/assignments/unassignClientBulk";
+import ErrorEmpty from "@/components/ErrorEmpty";
 
 export default function ClientManager() {
   const {t} = useT();
@@ -63,7 +64,13 @@ export default function ClientManager() {
     total: 0,
   });
 
-  const {data: clients, isLoading} = useClients(searchTermDebounce, pagination.current, pagination.pageSize)
+  const {
+    data: clients,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useClients(searchTermDebounce, pagination.current, pagination.pageSize)
   const removeClient = useRemoveClient()
 
   const [openModalGenerateLink, setOpenModalGenerateLink] = useState(false);
@@ -296,18 +303,20 @@ export default function ClientManager() {
           }}
           onChange={handleTableChange}
           locale={{
-            emptyText: (
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description={
-                  <span>
-            {t('no_client_found')}
-          </span>
-                }
-              >
-                <Button type="primary" onClick={() => setOpenModalRegister(true)}>{t('add_new_client')}</Button>
-              </Empty>
-            ),
+            emptyText: isError
+              ? <ErrorEmpty error={error} onRetry={refetch}/>
+              : (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description={
+                    <span>
+                      {t('no_client_found')}
+                    </span>
+                  }
+                >
+                  <Button type="primary" onClick={() => setOpenModalRegister(true)}>{t('add_new_client')}</Button>
+                </Empty>
+              ),
           }}
         />
       </Card>
