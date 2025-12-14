@@ -13,6 +13,7 @@ import {PhotonSpin} from "@/components/Fallback";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {UserProvider} from "@/contexts/UserContext";
 import User from "@/types/User";
+import SessionWatcher from "@/components/SessionWatcher";
 
 const queryClient = new QueryClient()
 
@@ -28,6 +29,8 @@ export default function Providers({children, lang, user, theme}: PropsWithChildr
         <AntdRegistry>
           <ThemeProvider initialTheme={theme}>
             <ConfigProviderWrapper lang={lang}>
+              <SessionWatcher/>
+
               {children}
             </ConfigProviderWrapper>
           </ThemeProvider>

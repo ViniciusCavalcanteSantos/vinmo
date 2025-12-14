@@ -1,5 +1,4 @@
 import ApiResponse, {ApiStatus} from "@/types/ApiResponse";
-import {redirect} from "next/navigation";
 import i18next from "@/i18n/i18next";
 import axios from "axios";
 
@@ -31,23 +30,33 @@ export default async function apiFetch<T = undefined>(
 ): Promise<ApiFetchResponse<T>> {
   const lang = i18next.language;
   const isFormData = options.body instanceof FormData;
-  const driver = options.driver ?? "fetch";
+  const isOnServerSide = typeof window === "undefined"
 
+  const driver = options.driver ?? "fetch";
   const baseURL = typeof options.baseURL === 'string' ? options.baseURL : process.env.NEXT_PUBLIC_API_URL + '/api';
 
   const method = (options.method || "GET").toUpperCase();
-  const isMutatingMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
 
-  // pega XSRF só no browser e só para métodos mutáveis
+  let cookieHeader = "";
   let xsrfHeader: Record<string, string> = {};
-  if (typeof window !== "undefined" && isMutatingMethod) {
-    const xsrfCookie = getCookie("XSRF-TOKEN");
-    if (xsrfCookie) {
-      xsrfHeader["X-XSRF-TOKEN"] = decodeURIComponent(xsrfCookie);
+
+  if (isOnServerSide) {
+    const {cookies} = await import("next/headers");
+    const cookieStore = await cookies();
+
+    cookieHeader = cookieStore.toString();
+  } else {
+    const isMutatingMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
+    // pega XSRF só no browser e só para métodos mutáveis
+    if (isMutatingMethod) {
+      const xsrfCookie = getCookie("XSRF-TOKEN");
+      if (xsrfCookie) {
+        xsrfHeader["X-XSRF-TOKEN"] = decodeURIComponent(xsrfCookie);
+      }
     }
   }
 
-  const headers = {
+  const headers: Record<string, string> = {
     ...(isFormData ? {} : {"Content-Type": "application/json"}),
     "Accept": "application/json",
     "Accept-Language": lang,
@@ -55,7 +64,12 @@ export default async function apiFetch<T = undefined>(
     ...xsrfHeader
   };
 
+  if (cookieHeader) {
+    headers["Cookie"] = cookieHeader;
+  }
+
   const handleCsrfRetry = async () => {
+    console.log('RETRY')
     if (options._retry) {
       return null;
     }
@@ -69,11 +83,8 @@ export default async function apiFetch<T = undefined>(
   }
 
   const handleNotAuthenticated = () => {
-    if (typeof window !== "undefined") {
-      document.cookie = 'logged_in=; Max-Age=0; Path=/; SameSite=Lax';
-      window.location.href = "/signin";
-    } else {
-      redirect("/signin");
+    if (!isOnServerSide) {
+      window.dispatchEvent(new CustomEvent('auth:session-expired'));
     }
   }
 

@@ -435,5 +435,6 @@
       "year": "in {{count}} year",
       "year_other": "in {{count}} years"
     }
-  }
+  },
+  "session_expired_message": "Your session has expired. Please log in again to continue."
 }
