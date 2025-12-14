@@ -128,6 +128,11 @@
     "title": "Click or drag files here to upload",
     "description": "Simply click or drag your files here to upload them in seconds."
   },
+  "not_found_page": {
+    "title": "Ooops, content unavailable!",
+    "description": "We are so sorry, but the content you are trying to access does not exist, isn't available right now, or has been removed.",
+    "back_button": "Back to browsing"
+  },
   "full_name": "Full name",
   "enter_full_name": "Enter your full name",
   "profile": "Profile",
