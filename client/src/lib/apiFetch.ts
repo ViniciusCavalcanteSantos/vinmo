@@ -10,6 +10,7 @@ export interface ApiFetchOptions extends RequestInit {
   baseURL?: string;
   onProgress?: (progress: number) => void;
   _retry?: boolean;
+  throwOnError?: boolean;
 }
 
 export type ApiFetchResponse<T = undefined> = ApiResponse &
@@ -113,7 +114,7 @@ export default async function apiFetch<T = undefined>(
         handleNotAuthenticated()
       }
 
-      return ensureSuccess(data, res.status);
+      return ensureSuccess(data, res.status, options.throwOnError);
     } catch (error: any) {
       if (error instanceof ApiError) {
         throw error
@@ -157,12 +158,13 @@ export default async function apiFetch<T = undefined>(
     handleNotAuthenticated()
   }
 
-  return ensureSuccess(data, res.status);
+  return ensureSuccess(data, res.status, options.throwOnError);
 }
 
 function ensureSuccess<T>(
   data: any,
-  httpStatus?: number
+  httpStatus?: number,
+  throwOnError = true
 ): T {
   if (!data || !("status" in data)) {
     throw new ApiError({
@@ -173,6 +175,10 @@ function ensureSuccess<T>(
   }
 
   if (data.status !== ApiStatus.SUCCESS) {
+    if (!throwOnError) {
+      return data as T;
+    }
+
     throw new ApiError({
       message: data.message ?? "Erro desconhecido",
       status: data.status,
