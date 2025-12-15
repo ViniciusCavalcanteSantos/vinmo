@@ -11,6 +11,7 @@ import {useRouter} from "next/navigation";
 import {ApiStatus} from "@/types/ApiResponse";
 import {confirmCode} from "@/lib/api/users/confirmCode";
 import {sendCode} from "@/lib/api/users/sendCode";
+import {ApiError} from "@/lib/ApiError";
 
 export default function ConfirmCodeForm() {
   const {t} = useT()
@@ -24,44 +25,46 @@ export default function ConfirmCodeForm() {
   }, [emailConfirmation])
 
   const handleSendCode = async () => {
-    const res = await sendCode(emailConfirmation ?? "")
-    if (res.status !== ApiStatus.SUCCESS) {
-      notification.info({
-        title: res.message,
-      });
-      return;
-    }
-
-    notification.success({
-      title: t('login.new_email_code_sent'),
-      description: t('login.check_your_inbox')
-    });
+    await sendCode(emailConfirmation ?? "")
+      .then(() => {
+        notification.success({
+          title: t('login.new_email_code_sent'),
+          description: t('login.check_your_inbox')
+        });
+      })
+      .catch(err => {
+        notification.info({
+          title: err.message,
+        });
+      })
   }
 
   const handleFinish = async (values: any) => {
     setSending(true)
-    const res = await confirmCode(emailConfirmation ?? "", values.code)
-    if (res.status === ApiStatus.MAX_ATTEMPTS) {
-      notification.warning({
-        title: res.message,
-      });
-      router.push('/signup')
-      return;
-    }
+    await confirmCode(emailConfirmation ?? "", values.code)
+      .then(() => {
+        notification.success({
+          title: t('login.email_verified_successfully'),
+          description: t('login.you_can_proceed_with_registration')
+        });
+        router.push('/signup/finish')
+      })
+      .catch(err => {
+        if (err instanceof ApiError && err.status === ApiStatus.MAX_ATTEMPTS) {
+          notification.warning({
+            title: err.message,
+          });
+          router.push('/signup')
+          return;
+        }
 
-    if (res.status !== ApiStatus.SUCCESS) {
-      setSending(false)
-      notification.info({
-        title: res.message,
-      });
-      return;
-    }
-
-    notification.success({
-      title: t('login.email_verified_successfully'),
-      description: t('login.you_can_proceed_with_registration')
-    });
-    router.push('/signup/finish')
+        notification.info({
+          title: err.message,
+        });
+      })
+      .finally(() => {
+        setSending(false)
+      })
   }
 
   return (

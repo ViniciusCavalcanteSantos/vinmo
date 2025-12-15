@@ -20,7 +20,6 @@ import {
 } from 'antd';
 import {useParams, useRouter} from 'next/navigation';
 import {useT} from "@/i18n/client";
-import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import {guardianTypes} from "@/types/Client";
 import dayjs from "dayjs";
@@ -68,15 +67,19 @@ const ManageClientPage: React.FC = () => {
   useEffect(() => {
     const loadClientData = async () => {
       setLoadingForm(true);
-      const res = await fetchLink(linkId);
-      if (res.status === ApiStatus.SUCCESS) {
-        setLinkInfo(res.linkInfo);
-      } else {
-        notification.error({title: t('link_not_found')});
-        router.replace("/");
-      }
-      setLoadingForm(false);
-      form.resetFields();
+      await fetchLink(linkId)
+        .then(res => {
+          setLinkInfo(res.linkInfo);
+
+        })
+        .catch(err => {
+          notification.error({title: t('link_not_found')});
+          router.replace("/");
+        })
+        .finally(() => {
+          setLoadingForm(false);
+          form.resetFields();
+        })
     };
 
     loadClientData();
@@ -106,22 +109,23 @@ const ManageClientPage: React.FC = () => {
       return;
     }
 
-    // setLoadingSubmit(true);
+    setLoadingSubmit(true);
     if (values.birthdate) {
       values.birthdate = dayjs(values.birthdate).format('YYYY-MM-DD');
     }
 
-    let res;
-    res = await createClientPublic(linkInfo?.id, values, fileList[0]);
+    await createClientPublic(linkInfo?.id, values, fileList[0])
+      .then(res => {
+        notification.success({title: res.message});
+        router.push('app/client/register/success');
+      })
+      .catch(err => {
+        notification.warning({title: err.message})
+      })
+      .finally(() => {
+        setLoadingSubmit(false);
 
-    setLoadingSubmit(false);
-
-    if (res.status !== ApiStatus.SUCCESS) {
-      return notification.warning({title: res.message});
-    }
-
-    notification.success({title: res.message});
-    router.push('app/client/register/success');
+      })
   }
 
   const handleBeforeUpload = (file: File) => {

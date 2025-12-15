@@ -25,7 +25,6 @@ import {useT} from "@/i18n/client";
 import Client from "@/types/Client";
 import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, LinkOutlined} from "@ant-design/icons";
 import {useDebounce} from "react-use";
-import {ApiStatus} from "@/types/ApiResponse";
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
 import {useUser} from "@/contexts/UserContext";
@@ -535,22 +534,20 @@ function AssignModals({openModalAssign, handleClose, clientIds, type, initialAss
   const handleAssign = async () => {
     if (!clientIds.length) return;
 
-    let res;
-    if (type === "single") {
-      res = await assignClient(clientIds[0], assignments)
-    } else if (type === "bulk") {
-      res = await assignClientBulk(clientIds, assignments)
-    } else {
-      res = await unassignClientBulk(clientIds, assignments)
+    try {
+      let res;
+      if (type === "single") {
+        res = await assignClient(clientIds[0], assignments)
+      } else if (type === "bulk") {
+        res = await assignClientBulk(clientIds, assignments)
+      } else {
+        res = await unassignClientBulk(clientIds, assignments)
+      }
+      notification.success({title: res.message})
+      handleClose()
+    } catch (err: any) {
+      notification.warning({title: err.message})
     }
-
-    if (res.status !== ApiStatus.SUCCESS) {
-      notification.warning({title: res.message})
-      return;
-    }
-
-    notification.success({title: res.message})
-    handleClose()
   }
 
   let title;

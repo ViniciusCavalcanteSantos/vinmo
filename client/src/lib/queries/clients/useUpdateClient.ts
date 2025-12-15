@@ -1,7 +1,5 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {ApiFetchResponse} from "@/lib/apiFetch";
-import {ApiStatus} from "@/types/ApiResponse";
-import {updateClient, UpdateClientResponse} from "@/lib/api/clients/updateClient";
+import {updateClient} from "@/lib/api/clients/updateClient";
 import {UploadFile} from "antd";
 
 export function useUpdateClient() {
@@ -19,15 +17,7 @@ export function useUpdateClient() {
         values: any,
         profile: UploadFile
       }
-    ) => {
-      const res: ApiFetchResponse<UpdateClientResponse> = await updateClient(id, values, profile);
-
-      if (res.status !== ApiStatus.SUCCESS) {
-        throw new Error(res.message || "API error");
-      }
-
-      return res;
-    },
+    ) => await updateClient(id, values, profile),
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ["clients"]});
     }

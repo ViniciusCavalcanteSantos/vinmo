@@ -8,7 +8,6 @@ import Link from "next/link";
 import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useRouter} from "next/navigation";
-import {ApiStatus} from "@/types/ApiResponse";
 import SocialMediaAuth from "@/components/Screens/Auth/SocialMediaAuth";
 import {login} from "@/lib/api/users/login";
 import {useUser} from "@/contexts/UserContext";
@@ -20,15 +19,15 @@ export default function SigninForm() {
   const {setUser} = useUser()
 
   const handleFinish = async (values: any) => {
-    const res = await login(values.email, values.password, values.remember_me);
-    if (res.status !== ApiStatus.SUCCESS) {
-      notification.info({title: res.message});
-      return;
-    }
-
-    setUser(res.user)
-    router.refresh();
-    router.push("/app");
+    await login(values.email, values.password, values.remember_me)
+      .then(res => {
+        setUser(res.user)
+        router.refresh();
+        router.push("/app");
+      })
+      .catch(err => {
+        notification.info({title: err.message});
+      })
   };
 
   return (

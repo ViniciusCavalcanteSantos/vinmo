@@ -1,18 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, TimePicker, Tooltip,} from 'antd';
 import {useT} from "@/i18n/client";
-import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import Event from "@/types/Event";
-import Contract from "@/types/Contract";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import {useUser} from "@/contexts/UserContext";
 import {InfoCircleOutlined} from "@ant-design/icons";
 import {useCreateEvent} from "@/lib/queries/events/useCreateEvent";
 import {useUpdateEvent} from "@/lib/queries/events/useUpdateEvent";
-import {fetchContracts} from "@/lib/api/contracts/fetchContracts";
 import {fetchEventTypes} from "@/lib/api/events/fetchEventTypes";
+import {useContracts} from "@/lib/queries/contracts/useContracts";
 
 interface ManageEventModalProps {
   open: boolean;
@@ -25,7 +23,6 @@ interface ManageEventModalProps {
 const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreate, onEdit, onCancel}) => {
   const {t} = useT();
   const notification = useNotification();
-  // const {createEvent, updateEvent} = useEvents();
   const createEvent = useCreateEvent()
   const updateEvent = useUpdateEvent()
   const {defaultDateFormat} = useUser();
@@ -34,21 +31,9 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
 
   const [form] = Form.useForm();
 
-  // Estados para os dados de localização
-  const [contracts, setContracts] = useState<Contract[]>([]);
+  // TODO: implementar pesquisa de contratos
+  const {data: contracts} = useContracts(undefined, 1, 300)
   const [eventTypes, setEventTypes] = useState<{ id: number, name: string }[]>([]);
-
-  useEffect(() => {
-    if (open) {
-      (async () => {
-        // TODO: implementar pesquisa de contratos
-        const res = await fetchContracts(1, 300)
-        if (res.status === ApiStatus.SUCCESS) {
-          setContracts(res.contracts)
-        }
-      })()
-    }
-  }, [open]);
 
   useEffect(() => {
     const populateFields = async () => {
@@ -81,10 +66,11 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
     form.setFieldsValue({
       event_type: undefined
     });
-    const res = await fetchEventTypes(contractId);
-    if (res.status === ApiStatus.SUCCESS) {
-      setEventTypes(res.eventTypes);
-    }
+    // TODO: Implementar o useEventTypes
+    await fetchEventTypes(contractId)
+      .then(res => {
+        setEventTypes(res.eventTypes);
+      })
   };
 
   const handleClean = () => {
@@ -150,7 +136,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
                        rules={[{required: true, message: t('select_contract') + "!"}]}>
               <Select placeholder={t('select_contract')}
                       onChange={handleContractChange}
-                      options={contracts.map(contract => {
+                      options={contracts?.map(contract => {
                         return {value: contract.id, label: `${contract.code} - ${contract.title}`};
                       })}/>
             </Form.Item>

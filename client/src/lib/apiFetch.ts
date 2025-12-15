@@ -88,13 +88,6 @@ export default async function apiFetch<T = undefined>(
     }
   }
 
-  const handleUnexpectedError = (code: string | number) => {
-    return {
-      status: ApiStatus.ERROR,
-      message: `Erro inesperado da API (HTTP ${code})`,
-    } as ApiFetchResponse<T>;
-  }
-
   // ======================================
   // 🚀 DRIVER: AXIOS
   // ======================================

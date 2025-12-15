@@ -10,7 +10,6 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useLocalStorage} from "react-use";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
-import {ApiStatus} from "@/types/ApiResponse";
 import SocialMediaAuth from "@/components/Screens/Auth/SocialMediaAuth";
 import {sendCode} from "@/lib/api/users/sendCode";
 
@@ -23,21 +22,22 @@ export default function SignupForm() {
 
   const handleFinish = async (values: any) => {
     setSending(true)
-    const res = await sendCode(values.email)
-    if (res.status !== ApiStatus.SUCCESS) {
-      setSending(false)
-      notification.info({
-        title: res.message,
-      });
-      return;
-    }
-
-    setEmailConfirmation(values.email)
-    notification.success({
-      title: t('login.email_code_sent'),
-      description: t('login.check_your_inbox')
-    });
-    router.push('/signup/confirm-code')
+    await sendCode(values.email)
+      .then(() => {
+        setEmailConfirmation(values.email)
+        notification.success({
+          title: t('login.email_code_sent'),
+          description: t('login.check_your_inbox')
+        });
+        router.push('/signup/confirm-code')
+      })
+      .catch(err => {
+        setSending(false)
+        notification.info({
+          title: err.message,
+        });
+        return;
+      })
   }
 
   return (
