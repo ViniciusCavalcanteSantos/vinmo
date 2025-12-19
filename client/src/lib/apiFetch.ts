@@ -121,44 +121,67 @@ export default async function apiFetch<T = undefined>(
       }
 
       const data = error?.response?.data
+      const httpStatus = error?.response?.status;
 
-      if (error.response?.status === 419 || data?.status === 'csrf_mismatch') {
+      if (httpStatus === 419 || data?.status === 'csrf_mismatch') {
         const retry = await handleCsrfRetry();
         if (retry) return retry;
       }
 
+      if (options.throwOnError === false) {
+        return {
+          status: ApiStatus.ERROR,
+          message: data?.message ?? error.message ?? "Servidor indisponível"
+        } as ApiFetchResponse<T>;
+      }
+
       throw new ApiError({
-        message: data?.message ?? "Erro de comunicação com a API",
         status: data?.status ?? ApiStatus.ERROR,
+        message: data?.message ?? error.message ?? "Servidor indisponível",
         httpStatus: error.response?.status,
         data
       });
     }
   }
 
-  const res = await fetch(`${baseURL}${path}`, {
-    ...options,
-    headers,
-    cache: options.cache ?? "no-store",
-    credentials: 'include'
-  });
-
-  let data: any;
   try {
-    data = await res.json()
-  } catch (error) {
-  }
+    const res = await fetch(`${baseURL}${path}`, {
+      ...options,
+      headers,
+      cache: options.cache ?? "no-store",
+      credentials: 'include'
+    });
 
-  if (res.status === 419 || data?.status === 'csrf_mismatch') {
-    const retry = await handleCsrfRetry();
-    if (retry) return retry;
-  }
+    let data: any;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
+    }
 
-  if (data?.status === ApiStatus.NOT_AUTHENTICATED) {
-    handleNotAuthenticated()
-  }
+    if (res.status === 419 || data?.status === 'csrf_mismatch') {
+      const retry = await handleCsrfRetry();
+      if (retry) return retry;
+    }
 
-  return ensureSuccess(data, res.status, options.throwOnError);
+    if (data?.status === ApiStatus.NOT_AUTHENTICATED) {
+      handleNotAuthenticated()
+    }
+
+    return ensureSuccess(data, res.status, options.throwOnError);
+  } catch (error: any) {
+    if (options.throwOnError === false) {
+      return {
+        status: ApiStatus.ERROR,
+        message: error.message ?? "Servidor indisponível",
+      } as ApiFetchResponse<T>;
+    }
+
+    throw new ApiError({
+      status: ApiStatus.ERROR,
+      message: error.message ?? "Servidor indisponível",
+    });
+  }
 }
 
 function ensureSuccess<T>(
