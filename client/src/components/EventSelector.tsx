@@ -5,7 +5,6 @@ import {TreeSelect} from 'antd';
 import {t} from "i18next";
 import Contract from "@/types/Contract";
 import Event from "@/types/Event";
-import {ApiStatus} from "@/types/ApiResponse";
 import {fetchContracts} from "@/lib/api/contracts/fetchContracts";
 import {fetchEvents} from "@/lib/api/events/fetchEvents";
 
@@ -27,13 +26,8 @@ function EventSelector({value, onChange}: EventSelectorProps) {
           fetchEvents(1, 100)
         ]);
 
-        if (contractsRes.status === ApiStatus.SUCCESS) {
-          setContracts(contractsRes.contracts);
-        }
-
-        if (eventsRes.status === ApiStatus.SUCCESS) {
-          setEvents(eventsRes.events);
-        }
+        setContracts(contractsRes.contracts);
+        setEvents(eventsRes.events);
       } catch (error) {
       } finally {
         setLoading(false);

@@ -3,7 +3,6 @@ import IconGoogle from "@/components/Icons/IconGoogle";
 import IconMicrosoft from "@/components/Icons/IconMicrosoft";
 import IconLinkedin from "@/components/Icons/IconLinkedin";
 import React from "react";
-import {ApiStatus} from "@/types/ApiResponse";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useAvailableProviders} from "@/lib/queries/users/useAvailableProviders";
 import {useSocialRedirect} from "@/lib/queries/users/useSocialRedirect";
@@ -16,12 +15,6 @@ function SocialMediaAuth() {
   const handleSocialogin = async (socialMedia: string) => {
     try {
       const res = await redirect(socialMedia);
-
-      if (res.status !== ApiStatus.SUCCESS) {
-        notification.info({title: res.message});
-        return;
-      }
-
       window.location.href = res.url;
     } catch (err: any) {
       notification.error({title: err.message});

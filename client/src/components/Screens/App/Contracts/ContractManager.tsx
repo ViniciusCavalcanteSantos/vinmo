@@ -13,6 +13,7 @@ import {Trans} from "react-i18next";
 import PageHeader from "@/components/PageHeader";
 import {useContracts} from "@/lib/queries/contracts/useContracts";
 import {useRemoveContract} from "@/lib/queries/contracts/useRemoveContract";
+import ErrorEmpty from "@/components/ErrorEmpty";
 
 export default function ContractManager() {
   const {t} = useT();
@@ -32,7 +33,13 @@ export default function ContractManager() {
     total: 0,
   });
 
-  const {data: contracts, isLoading} = useContracts(searchTermDebounce, pagination.current, pagination.pageSize)
+  const {
+    data: contracts,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useContracts(searchTermDebounce, pagination.current, pagination.pageSize)
   const removeContract = useRemoveContract()
 
   const [editingContract, setEditingContract] = useState<Contract>();
@@ -199,18 +206,21 @@ export default function ContractManager() {
           }}
           onChange={handleTableChange}
           locale={{
-            emptyText: (
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description={
-                  <span>
-            {t('no_contract_found')}
-          </span>
-                }
-              >
-                <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_contract')}</Button>
-              </Empty>
-            ),
+            emptyText: isError
+              ? <ErrorEmpty error={error} onRetry={refetch}/>
+              : (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description={t('no_contract_found')}
+                >
+                  <Button
+                    type="primary"
+                    onClick={() => setOpen(true)}
+                  >
+                    {t('add_new_contract')}
+                  </Button>
+                </Empty>
+              )
           }}
         />
 

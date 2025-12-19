@@ -1,6 +1,7 @@
 import ApiResponse, {ApiStatus} from "@/types/ApiResponse";
 import i18next from "@/i18n/i18next";
 import axios from "axios";
+import {ApiError} from "@/lib/ApiError";
 
 export type ApiDriver = "fetch" | "axios";
 
@@ -9,6 +10,7 @@ export interface ApiFetchOptions extends RequestInit {
   baseURL?: string;
   onProgress?: (progress: number) => void;
   _retry?: boolean;
+  throwOnError?: boolean;
 }
 
 export type ApiFetchResponse<T = undefined> = ApiResponse &
@@ -69,7 +71,6 @@ export default async function apiFetch<T = undefined>(
   }
 
   const handleCsrfRetry = async () => {
-    console.log('RETRY')
     if (options._retry) {
       return null;
     }
@@ -86,13 +87,6 @@ export default async function apiFetch<T = undefined>(
     if (!isOnServerSide) {
       window.dispatchEvent(new CustomEvent('auth:session-expired'));
     }
-  }
-
-  const handleUnexpectedError = (code: string | number) => {
-    return {
-      status: ApiStatus.ERROR,
-      message: `Erro inesperado da API (HTTP ${code})`,
-    } as ApiFetchResponse<T>;
   }
 
   // ======================================
@@ -120,47 +114,100 @@ export default async function apiFetch<T = undefined>(
         handleNotAuthenticated()
       }
 
-      return data;
+      return ensureSuccess(data, res.status, options.throwOnError);
     } catch (error: any) {
-      const data = error.response.data
-      if (!data || !("status" in data) || !("message" in data)) {
-        return handleUnexpectedError(error.status)
+      if (error instanceof ApiError) {
+        throw error
       }
 
-      if (error.response.status === 419 || data.status === 'csrf_mismatch') {
-        const retryResult = await handleCsrfRetry();
-        if (retryResult) return retryResult;
+      const data = error?.response?.data
+      const httpStatus = error?.response?.status;
+
+      if (httpStatus === 419 || data?.status === 'csrf_mismatch') {
+        const retry = await handleCsrfRetry();
+        if (retry) return retry;
       }
 
-      return data;
+      if (options.throwOnError === false) {
+        return {
+          status: ApiStatus.ERROR,
+          message: data?.message ?? error.message ?? "Servidor indisponível"
+        } as ApiFetchResponse<T>;
+      }
+
+      throw new ApiError({
+        status: data?.status ?? ApiStatus.ERROR,
+        message: data?.message ?? error.message ?? "Servidor indisponível",
+        httpStatus: error.response?.status,
+        data
+      });
     }
   }
 
-  const res = await fetch(`${baseURL}${path}`, {
-    ...options,
-    headers,
-    cache: options.cache ?? "no-store",
-    credentials: 'include'
-  });
-
-  let data: any;
   try {
-    data = await res.json()
-  } catch (error) {
-    data = null;
+    const res = await fetch(`${baseURL}${path}`, {
+      ...options,
+      headers,
+      cache: options.cache ?? "no-store",
+      credentials: 'include'
+    });
+
+    let data: any;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
+    }
+
+    if (res.status === 419 || data?.status === 'csrf_mismatch') {
+      const retry = await handleCsrfRetry();
+      if (retry) return retry;
+    }
+
+    if (data?.status === ApiStatus.NOT_AUTHENTICATED) {
+      handleNotAuthenticated()
+    }
+
+    return ensureSuccess(data, res.status, options.throwOnError);
+  } catch (error: any) {
+    if (options.throwOnError === false) {
+      return {
+        status: ApiStatus.ERROR,
+        message: error.message ?? "Servidor indisponível",
+      } as ApiFetchResponse<T>;
+    }
+
+    throw new ApiError({
+      status: ApiStatus.ERROR,
+      message: error.message ?? "Servidor indisponível",
+    });
+  }
+}
+
+function ensureSuccess<T>(
+  data: any,
+  httpStatus?: number,
+  throwOnError = true
+): T {
+  if (!data || !("status" in data)) {
+    throw new ApiError({
+      message: `Erro inesperado da API (HTTP ${httpStatus})`,
+      status: ApiStatus.ERROR,
+      httpStatus
+    });
   }
 
-  if (!data || !("status" in data) || !("message" in data)) {
-    return handleUnexpectedError(res.status)
-  }
+  if (data.status !== ApiStatus.SUCCESS) {
+    if (!throwOnError) {
+      return data as T;
+    }
 
-  if (res.status === 419 || data.status === 'csrf_mismatch') {
-    const retryResult = await handleCsrfRetry();
-    if (retryResult) return retryResult;
-  }
-
-  if (data.status === ApiStatus.NOT_AUTHENTICATED) {
-    handleNotAuthenticated()
+    throw new ApiError({
+      message: data.message ?? "Erro desconhecido",
+      status: data.status,
+      httpStatus,
+      data
+    });
   }
 
   return data;

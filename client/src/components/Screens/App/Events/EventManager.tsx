@@ -16,6 +16,7 @@ import Link from "next/link";
 import {filesize} from "filesize";
 import {useEvents} from "@/lib/queries/events/useEvents";
 import {useRemoveEvent} from "@/lib/queries/events/useRemoveEvent";
+import ErrorEmpty from "@/components/ErrorEmpty";
 
 export default function EventManager() {
   const {t} = useT();
@@ -34,7 +35,13 @@ export default function EventManager() {
     total: 0,
   });
 
-  const {data: events, isLoading} = useEvents(searchTermDebounce, pagination.current, pagination.pageSize, true);
+  const {
+    data: events,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useEvents(searchTermDebounce, pagination.current, pagination.pageSize, true);
   const removeEvent = useRemoveEvent()
 
   const [editingEvent, setEditingEvent] = useState<Event>();
@@ -184,18 +191,20 @@ export default function EventManager() {
           }}
           onChange={handleTableChange}
           locale={{
-            emptyText: (
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description={
-                  <span>
-            {t('no_event_found')}
-          </span>
-                }
-              >
-                <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
-              </Empty>
-            ),
+            emptyText: isError
+              ? <ErrorEmpty error={error} onRetry={refetch}/>
+              : (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description={
+                    <span>
+                      {t('no_event_found')}
+                    </span>
+                  }
+                >
+                  <Button type="primary" onClick={() => setOpen(true)}>{t('add_new_event')}</Button>
+                </Empty>
+              ),
           }}
         />
 

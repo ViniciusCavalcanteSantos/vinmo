@@ -11,7 +11,6 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useLocalStorage} from "react-use";
-import {ApiStatus} from "@/types/ApiResponse";
 import {sendRecoveryLink} from "@/lib/api/users/sendRecoveryLink";
 
 export default function RecoverySentForm() {
@@ -27,18 +26,18 @@ export default function RecoverySentForm() {
 
   const handleFinish = async () => {
     setSending(true)
-    const res = await sendRecoveryLink(emailRecovery ?? "")
-    if (res.status !== ApiStatus.SUCCESS) {
-      setSending(false)
-      notification.info({
-        title: res.message,
-      });
-      return;
-    }
-
-    notification.success({
-      title: res.message,
-    });
+    await sendRecoveryLink(emailRecovery ?? "")
+      .then(res => {
+        notification.success({
+          title: res.message,
+        });
+      })
+      .catch(err => {
+        setSending(false)
+        notification.info({
+          title: err.message,
+        });
+      })
   }
 
   return (

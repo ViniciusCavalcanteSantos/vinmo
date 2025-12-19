@@ -10,7 +10,7 @@ import {useUpdateContract} from "@/lib/queries/contracts/useUpdateContract";
 import {useCountries} from "@/lib/queries/locations/useCountries";
 import {useStates} from "@/lib/queries/locations/useStates";
 import {useCities} from "@/lib/queries/locations/useCities";
-import {fetchContractCategories} from "@/lib/api/contracts/fetchContractCategories";
+import useContractCategories from "@/lib/queries/contracts/useContractCategories";
 
 // Props do componente
 interface ManageContractModalProps {
@@ -38,7 +38,8 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
   const [graduationType, setGraduationType] = useState('');
 
   // Estados para os dados de localização
-  const [categories, setCategories] = useState<{ name: string, slug: string }[]>([]);
+  // const [categories, setCategories] = useState<{ name: string, slug: string }[]>([]);
+  const {data: categories} = useContractCategories(open)
 
   const {data: countries, isLoading: isLoadingCountries} = useCountries(open)
   const {data: states, isLoading: isLoadingStates} = useStates(country, open)
@@ -46,10 +47,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
 
   useEffect(() => {
     if (open) {
-      fetchContractCategories()
-        .then(data => {
-          setCategories(data.categories);
-        })
+
     }
   }, [open]);
 
@@ -184,7 +182,7 @@ const ManageContractModal: React.FC<ManageContractModalProps> = ({open, contract
                 disabled={isEditMode}
                 placeholder={t('select_category')}
                 onChange={handleCategoryChange}
-                options={categories.map(category => {
+                options={categories?.map(category => {
                   return {value: category.slug, label: category.name};
                 })}/>
             </Form.Item>

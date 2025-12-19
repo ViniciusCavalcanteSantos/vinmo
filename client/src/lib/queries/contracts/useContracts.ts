@@ -1,8 +1,7 @@
 import {useQuery} from "@tanstack/react-query";
-import {ApiStatus} from "@/types/ApiResponse";
 import {fetchContracts} from "@/lib/api/contracts/fetchContracts";
 
-export function useContracts(search: string = '', page: number = 1, pageSize: number = 15) {
+export function useContracts(search: string = '', page: number = 1, pageSize: number = 15, enabled: boolean = true) {
   return useQuery({
     queryKey: ["contracts", search, page, pageSize],
     queryFn: () => fetchContracts(
@@ -10,10 +9,10 @@ export function useContracts(search: string = '', page: number = 1, pageSize: nu
       pageSize,
       search,
     ),
-    select: (res) =>
-      res.status === ApiStatus.SUCCESS ? res.contracts : [],
+    select: (data) => data.contracts,
     retry: 1,
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    refetchOnWindowFocus: true,
+    enabled: enabled
   });
 }

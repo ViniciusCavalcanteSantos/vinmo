@@ -12,7 +12,6 @@ import {useNotification} from "@/contexts/NotificationContext";
 import {useLocalStorage} from "react-use";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {ApiStatus} from "@/types/ApiResponse";
 import {register} from "@/lib/api/users/register";
 import {useUser} from "@/contexts/UserContext";
 
@@ -37,22 +36,23 @@ export default function FinishForm() {
       values.name, emailConfirmation ?? "",
       values.password, values.password_confirmation
     )
-    if (res.status !== ApiStatus.SUCCESS) {
-      setSending(false)
-      notification.info({
-        title: res.message,
-      });
-      return;
-    }
+      .then(res => {
+        notification.success({
+          title: t('login.account_created'),
+          description: t('login.start_using_immediately')
+        });
 
-    notification.success({
-      title: t('login.account_created'),
-      description: t('login.start_using_immediately')
-    });
-
-    setUser(res.user)
-    router.refresh();
-    router.push("/app")
+        setUser(res.user)
+        router.refresh();
+        router.push("/app")
+      })
+      .catch(err => {
+        setSending(false)
+        notification.info({
+          title: err.message,
+        });
+        return;
+      })
   }
 
   return (

@@ -9,7 +9,6 @@ import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {useEffect, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
-import {ApiStatus} from "@/types/ApiResponse";
 import {validateRecoveryToken} from "@/lib/api/users/validateRecoveryToken";
 import {changePassword} from "@/lib/api/users/changePassword";
 
@@ -24,31 +23,31 @@ export default function ResetPasswordForm() {
 
   useEffect(() => {
     (async () => {
-      const res = await validateRecoveryToken(email, token)
-      if (res.status !== ApiStatus.SUCCESS) {
-        notification.warning({
-          title: res.message,
-        });
-        router.push('/forgot-password')
-      }
+      await validateRecoveryToken(email, token)
+        .then(res => {
+          notification.warning({
+            title: res.message,
+          });
+          router.push('/forgot-password')
+        })
     })()
   }, []);
 
   const handleFinish = async (values: any) => {
     setSending(true)
-    const res = await changePassword(email, token, values.password, values.password_confirmation)
-    if (res.status !== ApiStatus.SUCCESS) {
-      setSending(false)
-      notification.info({
-        title: res.message,
-      });
-      return;
-    }
-
-    notification.success({
-      title: res.message,
-    });
-    router.push('/signin')
+    await changePassword(email, token, values.password, values.password_confirmation)
+      .then(res => {
+        notification.success({
+          title: res.message,
+        });
+        router.push('/signin')
+      })
+      .catch(err => {
+        setSending(false)
+        notification.info({
+          title: err.message,
+        });
+      })
   }
 
   return (

@@ -6,7 +6,6 @@ import {useT} from "@/i18n/client";
 import {fetchNotifications} from "@/lib/api/notifications/fetchNotifications";
 import {useUserNotifications} from "@/hooks/useUserNotifications";
 import Notification from "@/types/Notification";
-import {ApiStatus} from "@/types/ApiResponse";
 import {CloseOutlined} from "@ant-design/icons";
 import {formatTimeFromNow} from "@/lib/utils/date";
 import {readNotification} from "@/lib/api/notifications/readNotification";
@@ -18,13 +17,12 @@ export default function NotificationsDropdown() {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState<number>(0)
 
+  // TODO: Implementar useNotifications
   useEffect(() => {
     fetchNotifications()
       .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          setNotifications(res.notifications)
-          setUnreadCount(res.notifications.filter(notification => !notification.readAt).length)
-        }
+        setNotifications(res.notifications)
+        setUnreadCount(res.notifications.filter(notification => !notification.readAt).length)
       })
   }, []);
 
@@ -36,26 +34,22 @@ export default function NotificationsDropdown() {
   const handleNotificationClick = async (notification: Notification) => {
     readNotification(notification.id)
       .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          setNotifications(prev => prev.map(n => {
-            if (n.id === notification.id) {
-              return {...n, readAt: dayjs().toISOString()}
-            } else {
-              return n
-            }
-          }))
-          if (!notification.readAt && unreadCount > 0) setUnreadCount(unreadCount - 1)
-        }
+        setNotifications(prev => prev.map(n => {
+          if (n.id === notification.id) {
+            return {...n, readAt: dayjs().toISOString()}
+          } else {
+            return n
+          }
+        }))
+        if (!notification.readAt && unreadCount > 0) setUnreadCount(unreadCount - 1)
       })
   }
 
   const handleDismiss = async (notification: Notification) => {
     dismissNotification(notification.id)
-      .then(res => {
-        if (res.status === ApiStatus.SUCCESS) {
-          setNotifications(prev => prev.filter(n => n.id !== notification.id))
-          if (!notification.readAt && unreadCount > 0) setUnreadCount(unreadCount - 1)
-        }
+      .then(() => {
+        setNotifications(prev => prev.filter(n => n.id !== notification.id))
+        if (!notification.readAt && unreadCount > 0) setUnreadCount(unreadCount - 1)
       })
   }
 

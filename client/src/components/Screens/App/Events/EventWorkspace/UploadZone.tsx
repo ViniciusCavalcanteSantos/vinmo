@@ -6,7 +6,6 @@ import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import PageHeader from "@/components/PageHeader";
 import Dropzone, {FileWithUploadData} from "@/components/Dropzone";
-import {ApiStatus} from "@/types/ApiResponse";
 import Link from "next/link";
 import {useParams} from "next/navigation";
 import {useRemoveImage} from "@/lib/queries/images/useRemoveImage";
@@ -60,23 +59,23 @@ const UploadZone: React.FC = () => {
   }, [files]);
 
   const handleUpload = async (file: FileWithUploadData) => {
-    const res = await uploadEventPhoto({
+    await uploadEventPhoto({
       eventId: eventId, photo: file,
       onProgress: (progress) => {
         updateFile(file.id, {progress: Math.min(progress, 90)});
       }
     })
-
-    if (res.status !== ApiStatus.SUCCESS) {
-      notification.warning({title: res.message})
-      updateFile(file.id, {status: 'error'});
-    } else {
-      updateFile(file.id, {
-        imageId: res.image.id,
-        status: 'success',
-        progress: 100,
-      });
-    }
+      .then(res => {
+        updateFile(file.id, {
+          imageId: res.image.id,
+          status: 'success',
+          progress: 100,
+        });
+      })
+      .catch(err => {
+        notification.warning({title: err.message})
+        updateFile(file.id, {status: 'error'});
+      })
   }
 
   const onFilesAdded = (newFiles: FileWithUploadData[]) => {
