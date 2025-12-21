@@ -13,7 +13,7 @@ import {useEvents} from "@/lib/queries/events/useEvents";
 import {useRemoveEvent} from "@/lib/queries/events/useRemoveEvent";
 import ErrorEmpty from "@/components/common/ErrorEmpty";
 import PageHeader from "@/components/common/layout/PageHeader";
-import {getEventTableColumns} from "@/components/features/app/events/EventManager/_config/eventTableColumns";
+import {getEventTableColumns} from "@/components/features/app/events/EventManager/_config/getEventTableColumns";
 
 export default function EventManager() {
   const {t} = useT();

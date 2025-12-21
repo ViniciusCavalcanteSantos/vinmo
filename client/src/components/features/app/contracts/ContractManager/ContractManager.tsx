@@ -1,19 +1,22 @@
 "use client"
 
-import {App, Button, Card, Empty, Space, Table, TableColumnsType, TablePaginationConfig, Tooltip} from "antd";
-import React, {useState} from "react";
+import {App, Button, Card, Empty, Table, TablePaginationConfig} from "antd";
+import React, {useMemo, useState} from "react";
 import {SorterResult, TableRowSelection} from "antd/es/table/interface";
 import Search from "antd/es/input/Search";
 import ManageContractModal from "@/components/features/app/contracts/ContractManager/_modals/ManageContractModal";
 import {useT} from "@/i18n/client";
 import Contract from "@/types/Contract";
-import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from "@ant-design/icons";
+import {ExclamationCircleFilled} from "@ant-design/icons";
 import {useDebounce} from "react-use";
 import {Trans} from "react-i18next";
 import {useContracts} from "@/lib/queries/contracts/useContracts";
 import {useRemoveContract} from "@/lib/queries/contracts/useRemoveContract";
 import ErrorEmpty from "@/components/common/ErrorEmpty";
 import PageHeader from "@/components/common/layout/PageHeader";
+import {
+  getContractTableColumns
+} from "@/components/features/app/contracts/ContractManager/_config/getContractTableColumns";
 
 export default function ContractManager() {
   const {t} = useT();
@@ -79,58 +82,12 @@ export default function ContractManager() {
     });
   };
 
-  const ActionButtons = ({record}: { record: Contract }) => (
-    <Space size="middle">
-      <Tooltip title={t('edit')} destroyOnHidden>
-        <Button
-          type="text"
-          shape="circle"
-          icon={<EditOutlined/>}
-          onClick={() => editContract(record)}
-        />
-      </Tooltip>
-      <Tooltip title={t('delete')} destroyOnHidden>
-        <Button
-          type="text"
-          shape="circle"
-          danger
-          icon={<DeleteOutlined/>}
-          onClick={() => handleRemove(record)}
-        />
-      </Tooltip>
-    </Space>
-  );
 
-  const columns: TableColumnsType<Contract> = [
-    {
-      title: t('code'),
-      dataIndex: 'code',
-      sorter: (a, b) => a.code.localeCompare(b.code)
-    },
-    {
-      title: t('title'),
-      dataIndex: 'title',
-      sorter: (a, b) => a.title.localeCompare(b.title)
-    },
-    {
-      title: t('city'),
-      dataIndex: ['address', 'city'],
-      sorter: (a, b) => a.address.city.localeCompare(b.address.city)
-    },
-    {
-      title: t('state'),
-      dataIndex: ['address', 'stateName'],
-      sorter: (a, b) => a.address.stateName?.localeCompare(b.address?.stateName ?? "") ?? 0
-    },
-    {
-      title: t('actions'),
-      key: 'actions',
-      align: 'center',
-      fixed: 'right',
-      width: 120,
-      render: (_, record) => <ActionButtons record={record}/>
-    }
-  ];
+  const columns = useMemo(() => getContractTableColumns({
+    t,
+    onEdit: editContract,
+    onDelete: handleRemove
+  }), [t]);
 
   const handleTableChange = (
     newPagination: TablePaginationConfig,
