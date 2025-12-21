@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateFromImageName from "@/components/Screens/App/Clients/Onboarding/CreateFromImageName";
+import CreateFromImageName from "@/components/features/app/clients/Onboarding/CreateFromImageName";
 import {Metadata, ResolvingMetadata} from "next";
 import createPageMetadata from "@/lib/createPageMetadata";
 

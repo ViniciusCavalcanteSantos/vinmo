@@ -1,5 +1,5 @@
 import React from "react";
-import ClientManager from "@/components/Screens/App/Clients/ClientManager";
+import ClientManager from "@/components/features/app/clients/ClientManager";
 import {Metadata, ResolvingMetadata} from "next";
 import createPageMetadata from "@/lib/createPageMetadata";
 

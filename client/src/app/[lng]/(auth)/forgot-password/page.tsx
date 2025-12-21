@@ -1,4 +1,4 @@
-import ForgotPasswordForm from "@/components/Screens/Auth/ForgotPasswordForm";
+import ForgotPasswordForm from "@/components/features/auth/ForgotPasswordForm";
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
 

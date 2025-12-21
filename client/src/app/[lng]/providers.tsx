@@ -9,11 +9,11 @@ import en from 'antd/locale/en_US';
 import ptBR from 'antd/locale/pt_BR';
 import {Locale} from "antd/es/locale";
 import {Theme, ThemeProvider, useTheme} from "@/contexts/AppThemeContext";
-import {PhotonSpin} from "@/components/Fallback";
+import {PhotonSpin} from "@/components/ui/Fallback";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {UserProvider} from "@/contexts/UserContext";
 import User from "@/types/User";
-import SessionWatcher from "@/components/SessionWatcher";
+import SessionWatcher from "@/components/common/SessionWatcher";
 
 const queryClient = new QueryClient()
 

@@ -1,4 +1,4 @@
-import Header from "@/components/Header";
+import Header from "@/components/common/layout/Header";
 import {fetchUserServer} from "@/lib/api/users/fetchUserServer";
 import {redirect} from "next/navigation";
 import Providers from "@/app/[lng]/app/providers";

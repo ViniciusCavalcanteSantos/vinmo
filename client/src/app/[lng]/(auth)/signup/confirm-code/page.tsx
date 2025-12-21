@@ -1,4 +1,4 @@
-import ConfirmCodeForm from "@/components/Screens/Auth/CofirmCodeForm";
+import ConfirmCodeForm from "@/components/features/auth/CofirmCodeForm";
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
 

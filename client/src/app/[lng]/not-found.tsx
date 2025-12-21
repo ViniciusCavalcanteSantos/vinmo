@@ -1,6 +1,6 @@
 'use client'
 
-import {PrimaryButton} from "@/components/PrimaryButton";
+import {PrimaryButton} from "@/components/ui/PrimaryButton";
 import {useT} from "@/i18n/client";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";

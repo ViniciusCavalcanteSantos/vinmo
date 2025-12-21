@@ -1,4 +1,4 @@
-import RecoverySentForm from "@/components/Screens/Auth/RecoverySentForm";
+import RecoverySentForm from "@/components/features/auth/RecoverySentForm";
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
 

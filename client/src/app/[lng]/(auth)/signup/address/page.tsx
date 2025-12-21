@@ -1,6 +1,6 @@
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
-import Address from "@/components/Screens/Auth/Address";
+import Address from "@/components/features/auth/Address";
 
 export async function generateMetadata(
   _: any,

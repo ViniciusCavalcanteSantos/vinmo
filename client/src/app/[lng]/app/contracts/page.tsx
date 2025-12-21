@@ -1,5 +1,5 @@
 import React from "react";
-import ContractManager from "@/components/Screens/App/Contracts/ContractManager";
+import ContractManager from "@/components/features/app/contracts/ContractManager";
 import {Metadata, ResolvingMetadata} from "next";
 import createPageMetadata from "@/lib/createPageMetadata";
 

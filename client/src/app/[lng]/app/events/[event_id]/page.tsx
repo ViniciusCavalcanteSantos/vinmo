@@ -1,5 +1,5 @@
 import React from "react";
-import PhotoGrid from "@/components/Screens/App/Events/EventWorkspace/PhotoGrid";
+import PhotoGrid from "@/components/features/app/events/EventWorkspace/PhotoGrid";
 import {Metadata, ResolvingMetadata} from "next";
 import createPageMetadata from "@/lib/createPageMetadata";
 

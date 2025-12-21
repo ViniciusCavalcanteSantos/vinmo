@@ -1,6 +1,6 @@
 import {Metadata, ResolvingMetadata} from "next";
 import createPageMetadata from "@/lib/createPageMetadata";
-import SigninForm from "@/components/Screens/Auth/SigninForm";
+import SigninForm from "@/components/features/auth/SigninForm";
 
 export async function generateMetadata(
   _: any,

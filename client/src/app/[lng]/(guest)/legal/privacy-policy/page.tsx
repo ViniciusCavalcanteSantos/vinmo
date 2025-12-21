@@ -1,4 +1,4 @@
-import PrivacyPolicy from "@/components/Screens/Guest/Legal/PrivacyPolicy";
+import PrivacyPolicy from "@/components/features/guest/Legal/PrivacyPolicy";
 
 export default function Page() {
   return <PrivacyPolicy/>

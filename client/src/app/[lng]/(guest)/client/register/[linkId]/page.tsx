@@ -23,9 +23,8 @@ import {useT} from "@/i18n/client";
 import {useNotification} from "@/contexts/NotificationContext";
 import {guardianTypes} from "@/types/Client";
 import dayjs from "dayjs";
-import PageHeader from "@/components/PageHeader";
 import {PlusOutlined} from "@ant-design/icons";
-import InputPhone from "@/components/InputPhone";
+import InputPhone from "@/components/ui/InputPhone";
 import {RegisterLinkType} from "@/types/RegisterLinkType";
 import getDateFormatByCountry from "@/lib/getDateFormatByCountry";
 import {CountryCode} from "libphonenumber-js";
@@ -34,6 +33,7 @@ import {useStates} from "@/lib/queries/locations/useStates";
 import {useCities} from "@/lib/queries/locations/useCities";
 import {createClientPublic} from "@/lib/api/clients/createClient";
 import {fetchLink} from "@/lib/api/links/fetchLink";
+import PageHeader from "@/components/common/layout/PageHeader";
 
 const ManageClientPage: React.FC = () => {
   const {t} = useT();

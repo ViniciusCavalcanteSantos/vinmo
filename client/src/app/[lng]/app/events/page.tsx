@@ -1,5 +1,5 @@
 import React from "react";
-import EventManager from "@/components/Screens/App/Events/EventManager";
+import EventManager from "@/components/features/app/events/EventManager/EventManager";
 import {Metadata, ResolvingMetadata} from "next";
 import createPageMetadata from "@/lib/createPageMetadata";
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import UploadZone from "@/components/Screens/App/Events/EventWorkspace/UploadZone";
+import UploadZone from "@/components/features/app/events/EventWorkspace/UploadZone/UploadZone";
 import {Metadata, ResolvingMetadata} from "next";
 import createPageMetadata from "@/lib/createPageMetadata";
 

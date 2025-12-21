@@ -1,6 +1,6 @@
 import {Suspense} from "react";
-import Fallback from "@/components/Fallback";
-import ResetPasswordForm from "@/components/Screens/Auth/ResetPasswordForm";
+import Fallback from "@/components/ui/Fallback";
+import ResetPasswordForm from "@/components/features/auth/ResetPasswordForm";
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
 

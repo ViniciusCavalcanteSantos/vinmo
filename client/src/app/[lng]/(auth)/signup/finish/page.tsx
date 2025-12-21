@@ -1,4 +1,4 @@
-import FinishForm from "@/components/Screens/Auth/FinishForm";
+import FinishForm from "@/components/features/auth/FinishForm";
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
 

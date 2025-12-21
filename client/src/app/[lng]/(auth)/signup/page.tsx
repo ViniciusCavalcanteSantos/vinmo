@@ -1,4 +1,4 @@
-import SignupForm from "@/components/Screens/Auth/SignupForm";
+import SignupForm from "@/components/features/auth/SignupForm";
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
 

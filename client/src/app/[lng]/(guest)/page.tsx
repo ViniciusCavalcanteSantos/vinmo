@@ -1,6 +1,6 @@
 import createPageMetadata from "@/lib/createPageMetadata";
 import {Metadata, ResolvingMetadata} from "next";
-import Landpage from "@/components/Screens/Guest/Landpage";
+import Landpage from "@/components/features/guest/Landpage";
 
 export async function generateMetadata(
   _: any,
