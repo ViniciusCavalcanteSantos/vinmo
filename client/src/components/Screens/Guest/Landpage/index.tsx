@@ -1,10 +1,11 @@
-import LandingPageHeader from "@/components/Screens/Guest/LandPageHeader";
+import GuestHeader from "@/components/Screens/Guest/GuestHeader";
 import Fallback from "@/components/Fallback";
 
-export default function LandPage() {
+export default function Landpage() {
   return (
     <div className='h-[300vh]'>
-      <LandingPageHeader/>
+      <GuestHeader/>
+
 
       <main className="pt-16">
         <Fallback/>
