@@ -73,7 +73,7 @@ export default function PrivacyPolicy() {
 
           <div className="grid grid-cols-[300px_1fr] mt-4 p-8">
             {/* GUIDE SIDEBAR */}
-            <div className="">
+            <aside className="">
               <div className={`sticky top-25`}>
                 <Link href='' className='!text-ant-text hover:!text-ant-text-sec font-semibold text-base'>Privacy
                   Policy</Link>
@@ -100,10 +100,10 @@ export default function PrivacyPolicy() {
 
                 </div>
               </div>
-            </div>
+            </aside>
 
 
-            <div className="text-base  leading-6 max-w-2xl">
+            <article className="text-base  leading-6 max-w-2xl">
               <h1 className='text-5xl font-medium text-ant-text mb-4'>Privacy Policy</h1>
 
               <p className='text-lg text-ant-text-sec mb-6'><em>Effective starting: October 7, 2025</em></p>
@@ -132,7 +132,7 @@ export default function PrivacyPolicy() {
                 <ul className='flex flex-col gap-3 list-disc pl-10'>
                   {sections.map(section => {
                     return (
-                      <li>
+                      <li key={section.id}>
                         <Link
                           href={`#${section.id}`}
                           onClick={e => handleLinkClick(e, section.id)}
@@ -764,7 +764,7 @@ export default function PrivacyPolicy() {
                   us via the email above regarding their specific rights under GDPR or LGPD.
                 </p>
               </div>
-            </div>
+            </article>
           </div>
         </div>
       </main>
