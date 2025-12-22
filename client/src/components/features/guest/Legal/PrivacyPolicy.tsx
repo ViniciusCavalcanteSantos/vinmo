@@ -75,7 +75,7 @@ export default function PrivacyPolicy() {
             <Link href='/legal/privacy-policy' className=''>{t('privacy_policy')}</Link>
           </div>
 
-          <div className="grid grid-cols-[300px_1fr] mt-4 p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] mt-4 p-4 lg:p-8 relative">
             {/* GUIDE SIDEBAR */}
             <SidebarGuide title={t('privacy_policy')} sections={sections} handleClick={handleLinkClick}
                           activeId={activeId}/>

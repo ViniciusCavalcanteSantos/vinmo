@@ -75,7 +75,7 @@ export default function TermsOfService() {
             <Link href='/legal/terms-of-service'>{t('terms_of_service')}</Link>
           </div>
 
-          <div className="grid grid-cols-[300px_1fr] mt-4 p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] mt-4 p-4 lg:p-8 relative">
             {/* SIDEBAR NAVIGATION */}
             <SidebarGuide title={t('terms_of_service')} sections={sections} handleClick={handleLinkClick}
                           activeId={activeId}/>
