@@ -36,6 +36,18 @@
       "title": "Esqueci a senha",
       "description": "Recupere sua senha Vinmo."
     },
+    "legal_hub": {
+      "title": "Central Legal",
+      "description": "Acesse os Termos de Uso, Política de Privacidade e documentos legais do Photon. Transparência, segurança e confiança para fotógrafos profissionais."
+    },
+    "terms_of_service": {
+      "title": "Termos de Uso",
+      "description": "Leia o Contrato de Usuário do Photon Cloud. Entenda seus direitos, responsabilidades e as regras que regem o uso de nossa plataforma de gestão de fotos."
+    },
+    "privacy_policy": {
+      "title": "Política de Privacidade",
+      "description": "Saiba como o Photon coleta, usa e protege seus dados pessoais. Estamos comprometidos com a segurança de dados e conformidade com a LGPD."
+    },
     "dashboard": {
       "title": "Painel de Controle",
       "description": "Visão geral dos seus eventos recentes e atividades do Photon."

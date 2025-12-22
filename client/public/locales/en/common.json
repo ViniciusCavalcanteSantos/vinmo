@@ -36,6 +36,18 @@
       "title": "Forgot password",
       "description": "Recover your Vinmo password."
     },
+    "legal_hub": {
+      "title": "Legal Center",
+      "description": "Access Photon's Terms of Service, Privacy Policy, and legal documentation. Transparency, security, and trust for professional photographers."
+    },
+    "terms_of_service": {
+      "title": "Terms of Service",
+      "description": "Read the User Agreement for Photon Cloud. Understand your rights, responsibilities, and the rules that govern the use of our photo management platform."
+    },
+    "privacy_policy": {
+      "title": "Privacy Policy",
+      "description": "Learn how Photon collects, uses, and protects your personal data. We are committed to data security and compliance with global privacy laws."
+    },
     "dashboard": {
       "title": "Dashboard",
       "description": "Overview of your recent events and Photon activities."
