@@ -1,0 +1,489 @@
+{
+  "terms": {
+    "title": "Termos de Uso",
+    "overview": {
+      "title": "Visão Geral dos Termos de Uso",
+      "last_updated": "Última atualização: 7 de Outubro de 2025",
+      "intro_1": "Estes Termos de Uso do Photon Cloud (“Termos”) constituem um acordo legal vinculativo entre você (“você”, “seu” ou “Cliente”) e o Photon Cloud (“Photon”, “nós”, ou “nosso”). Ao acessar, registrar-se ou usar nossos Serviços, você concorda em ficar vinculado a estes Termos.",
+      "intro_2": "Estes Termos aplicam-se ao seu acesso e uso da plataforma Photon, incluindo nossas ferramentas de organização de fotos, recursos de reconhecimento facial, serviços de armazenamento, galerias de clientes e quaisquer aplicativos, APIs ou sites relacionados (coletivamente, os “Serviços”).",
+      "arbitration": {
+        "label": "AVISO DE ARBITRAGEM:",
+        "text": "ESTES TERMOS CONTÊM UMA DISPOSIÇÃO DE ARBITRAGEM OBRIGATÓRIA E RENÚNCIA A AÇÕES COLETIVAS NA SEÇÃO \"RESOLUÇÃO DE DISPUTAS\". LEIA COM ATENÇÃO, POIS ISSO AFETA SEUS DIREITOS LEGAIS PARA RESOLVER DISPUTAS COM O PHOTON."
+      }
+    },
+    "eligibility": {
+      "title": "Elegibilidade e Contas",
+      "professional_use": {
+        "label": "Uso Profissional:",
+        "text": "Os Serviços destinam-se ao uso profissional por fotógrafos, estúdios e organizadores de eventos. Ao usar os Serviços, você declara que tem pelo menos 18 anos de idade e autoridade para firmar estes Termos pessoalmente ou em nome da entidade legal que representa."
+      },
+      "account_security": {
+        "label": "Segurança da Conta:",
+        "text": "Você é responsável por proteger as credenciais da sua conta. Você concorda em nos notificar imediatamente sobre qualquer uso não autorizado. O Photon não se responsabiliza por qualquer perda ou dano decorrente da sua falha em proteger suas informações de login."
+      },
+      "account_info": {
+        "label": "Informações da Conta:",
+        "text": "Você concorda em fornecer informações precisas, atuais e completas durante o registro e em mantê-las atualizadas. Reservamo-nos o direito de suspender ou encerrar contas que contenham informações falsas ou incompletas."
+      }
+    },
+    "credits": {
+      "title": "Uso de Serviços e Créditos",
+      "system": {
+        "label": "O Sistema de Créditos:",
+        "text": "Certos recursos dos Serviços (ex: indexação por reconhecimento facial, melhorias por IA, alocação de armazenamento) consomem \"Créditos\" ou \"Unidades de Uso\". O custo específico em Créditos para cada recurso é detalhado em nossa Página de Preços."
+      },
+      "allocations": {
+        "label": "Alocações e Expiração:",
+        "text_start": "Os planos de assinatura normalmente incluem uma alocação mensal de Créditos. Salvo indicação explícita em seu plano,",
+        "text_bold": "os Créditos não utilizados expiram no final de cada ciclo de faturamento e não são acumulativos",
+        "text_end": ". Os Créditos não possuem valor monetário."
+      },
+      "changes": {
+        "label": "Alterações no Serviço:",
+        "text_start": "Podemos modificar o custo em Créditos ou os recursos do Serviço. No entanto, para qualquer alteração que impacte negativamente seu uso de forma material (ex: aumento do custo de créditos),",
+        "text_bold": "forneceremos um aviso prévio de pelo menos 30 dias",
+        "text_end": "via e-mail ou notificação no aplicativo, dando a você a oportunidade de cancelar antes que os novos termos entrem em vigor."
+      }
+    },
+    "storage": {
+      "title": "Armazenamento, Segurança e Backups",
+      "infrastructure": {
+        "label": "Infraestrutura em Nuvem (AWS):",
+        "text_start": "Os Serviços são hospedados em provedores de infraestrutura em nuvem líderes do setor, principalmente",
+        "aws": "Amazon Web Services (AWS)",
+        "text_end": ". Utilizamos o AWS S3 e tecnologias redundantes projetadas para fornecer alta durabilidade e disponibilidade para seus dados."
+      },
+      "security": {
+        "label": "Medidas de Segurança:",
+        "text": "Implementamos medidas técnicas e organizacionais comercialmente razoáveis para proteger seus dados, incluindo criptografia em trânsito e em repouso. No entanto, você reconhece que nenhum sistema é impenetrável."
+      },
+      "backup_warning": {
+        "title": "SUA RESPONSABILIDADE PELOS BACKUPS",
+        "text_start": "Embora utilizemos a durabilidade da AWS,",
+        "text_bold": "o Photon não é um serviço de backup de arquivamento",
+        "text_end": "Erros técnicos, suspensões de conta, falhas de pagamento ou eventos catastróficos podem resultar na perda de acesso aos seus dados. Você concorda que é o único responsável por manter cópias independentes de suas fotos originais (RAW/JPG) em seu próprio armazenamento local ou sistemas de backup separados. O Photon não se responsabiliza por qualquer perda de Conteúdo."
+      }
+    },
+    "content": {
+      "title": "Conteúdo e Dados Biométricos",
+      "ownership": {
+        "label": "Propriedade:",
+        "text": "Você mantém todos os direitos e a propriedade das fotos, imagens e metadados (\"Conteúdo\") que carrega. Você concede ao Photon uma licença mundial, não exclusiva e isenta de royalties para hospedar, armazenar, redimensionar, processar e exibir seu Conteúdo exclusivamente conforme necessário para fornecer os Serviços."
+      },
+      "facial_recognition": {
+        "label": "Reconhecimento Facial e Biometria:",
+        "text": "Os Serviços utilizam tecnologia biométrica para detectar e agrupar rostos. Você reconhece que isso envolve o processamento de \"Informações Biométricas\" ou \"Identificadores Biométricos\" sob as leis aplicáveis (como LGPD, GDPR e BIPA)."
+      },
+      "retention": {
+        "title": "Política de Retenção Biométrica",
+        "policy_start": "O Photon retém identificadores biométricos apenas pelo tempo necessário para fornecer o Serviço. Todos os dados biométricos associados à sua conta são destruídos permanentemente",
+        "policy_bold": "dentro de 30 dias",
+        "policy_end": "após o encerramento da conta ou após sua exclusão explícita das fotos de origem, o que ocorrer primeiro.",
+        "exception": {
+          "label": "Exceção:",
+          "text": "Podemos reter tais dados por um período mais longo estritamente se exigido por lei, regulamento ou processo legal válido (ex: ordem judicial). Nesses casos, os dados serão isolados e retidos apenas até que a exigência legal expire."
+        }
+      },
+      "responsibility": {
+        "label": "Sua Responsabilidade:",
+        "text": "Você declara que obteve consentimento explícito dos indivíduos retratados em seu Conteúdo (ou de seus responsáveis) para capturar e processar seus dados biométricos. Você concorda em indenizar o Photon contra quaisquer reclamações decorrentes de sua falha em obter tal consentimento."
+      }
+    },
+    "subscriptions": {
+      "title": "Assinaturas e Pagamentos",
+      "billing": {
+        "label": "Faturamento:",
+        "text": "Você autoriza o Photon (e nossos processadores de pagamento terceirizados) a cobrar em seu método de pagamento as taxas de assinatura aplicáveis e quaisquer cobranças excedentes incorridas. As taxas são faturadas antecipadamente de forma recorrente."
+      },
+      "failure": {
+        "label": "Falha no Pagamento:",
+        "text_start": "Se um pagamento falhar ou estiver atrasado, podemos rebaixar sua conta para um plano gratuito ou suspender seu acesso aos Serviços.",
+        "text_bold": "Contas suspensas podem estar sujeitas à exclusão de dados após um período de carência específico (ex: 30 dias)."
+      },
+      "taxes": {
+        "label": "Impostos:",
+        "text": "As taxas não incluem impostos. Você é responsável pelo pagamento de todos os impostos, taxas ou encargos impostos pelas autoridades fiscais."
+      }
+    },
+    "cancellation": {
+      "title": "Cancelamento e Exportação de Dados",
+      "policy": {
+        "label": "Cancelamento:",
+        "text_start": "Você pode cancelar sua assinatura a qualquer momento através das configurações da conta. O cancelamento entrará em vigor no final do ciclo de faturamento atual.",
+        "text_bold": "Não há reembolsos para meses parciais ou créditos não utilizados."
+      },
+      "export": {
+        "label": "Janela de Exportação de Dados:",
+        "text_start": "Após o cancelamento ou expiração de uma assinatura paga, o Photon pode fornecer um",
+        "grace_period": "período de carência limitado de 30 dias",
+        "text_mid": "durante o qual você poderá acessar sua conta em modo \"somente leitura\" exclusivamente para exportar seu Conteúdo. Após esse período,",
+        "text_bold_end": "o Photon reserva-se o direito de excluir permanentemente todo o seu Conteúdo para liberar espaço de armazenamento."
+      }
+    },
+    "prohibited": {
+      "title": "Uso Proibido",
+      "intro": "Você concorda em não usar os Serviços para:",
+      "items": {
+        "illegal": "Carregar conteúdo ilegal, difamatório, pornográfico ou que viole direitos de propriedade intelectual.",
+        "reverse_engineer": "Tentar fazer engenharia reversa, descompilar ou extrair código-fonte dos Serviços.",
+        "competitive": "Usar os Serviços para construir um produto ou serviço concorrente.",
+        "scrape": "Raspar (scrape), indexar ou acessar os Serviços por meios automatizados não autorizados.",
+        "sharing": "Compartilhar suas credenciais de conta com vários usuários (compartilhamento de conta), a menos que explicitamente permitido pelo seu plano."
+      }
+    },
+    "ip": {
+      "title": "Propriedade Intelectual",
+      "photon_ip": {
+        "label": "PI do Photon:",
+        "text": "Todos os direitos, títulos e interesses relativos aos Serviços (excluindo seu Conteúdo), incluindo todo software, tecnologia, código, interfaces de usuário, marcas registradas e logotipos, são e permanecerão propriedade exclusiva do Photon Cloud."
+      },
+      "feedback": {
+        "label": "Feedback:",
+        "text": "Se você fornecer feedback ou sugestões sobre os Serviços, poderemos usar tal feedback sem obrigação ou compensação para você."
+      }
+    },
+    "disclaimers": {
+      "title": "Isenções e Limitação de Responsabilidade",
+      "as_is": {
+        "label": "GARANTIA \"NO ESTADO EM QUE SE ENCONTRA\":",
+        "text": "OS SERVIÇOS SÃO FORNECIDOS \"NO ESTADO EM QUE SE ENCONTRAM\" E \"CONFORME DISPONIBILIDADE\". O PHOTON ISENTA-SE EXPRESSAMENTE DE TODAS AS GARANTIAS, INCLUINDO GARANTIAS DE COMERCIABILIDADE, ADEQUAÇÃO A UM DETERMINADO FIM E NÃO VIOLAÇÃO. NÃO GARANTIMOS QUE OS SERVIÇOS SERÃO ININTERRUPTOS, LIVRES DE ERROS OU QUE OS RESULTADOS DO RECONHECIMENTO FACIAL SERÃO 100% PRECISOS."
+      },
+      "liability": {
+        "label": "LIMITAÇÃO DE RESPONSABILIDADE:",
+        "text": "NA MÁXIMA EXTENSÃO PERMITIDA POR LEI, O PHOTON NÃO SERÁ RESPONSÁVEL POR QUAISQUER DANOS INDIRETOS, INCIDENTAIS, ESPECIAIS, CONSEQUENCIAIS OU PUNITIVOS, OU QUALQUER PERDA DE LUCROS, DADOS, USO OU BOA VONTADE. EM NENHUMA CIRCUNSTÂNCIA A RESPONSABILIDADE AGREGADA DO PHOTON POR TODAS AS RECLAMAÇÕES EXCEDERÁ O QUE FOR MAIOR ENTRE CEM DÓLARES AMERICANOS (US$ 100) OU O VALOR QUE VOCÊ PAGOU AO PHOTON NOS DOZE (12) MESES ANTERIORES À RECLAMAÇÃO."
+      },
+      "exceptions": {
+        "label": "EXCEÇÕES:",
+        "text": "NADA NESTES TERMOS LIMITA OU EXCLUI A RESPONSABILIDADE POR: (A) MORTE OU LESÃO CORPORAL CAUSADA POR NEGLIGÊNCIA; (B) FRAUDE OU REPRESENTAÇÃO FRAUDULENTA; OU (C) QUALQUER OUTRA RESPONSABILIDADE QUE NÃO POSSA SER EXCLUÍDA OU LIMITADA PELA LEI APLICÁVEL (INCLUINDO NEGLIGÊNCIA GRAVE OU DOLO)."
+      }
+    },
+    "indemnification": {
+      "title": "Indenização",
+      "intro": "Você concorda em defender, indenizar e isentar o Photon Cloud, seus diretores, funcionários e agentes de e contra quaisquer reclamações, danos, obrigações, perdas, responsabilidades, custos e despesas (incluindo honorários advocatícios) decorrentes de:",
+      "items": {
+        "usage": "Seu uso e acesso aos Serviços;",
+        "violation_terms": "Sua violação de qualquer termo destes Termos;",
+        "violation_rights": "Sua violação de qualquer direito de terceiros, incluindo direitos autorais, de propriedade ou privacidade;",
+        "claims": "Qualquer reclamação de que seu Conteúdo ou seu uso de reconhecimento facial causou danos a terceiros (incluindo reclamações relacionadas à falta de consentimento)."
+      }
+    },
+    "dispute": {
+      "title": "Resolução de Disputas",
+      "arbitration": {
+        "label": "Arbitragem:",
+        "text": "Qualquer disputa decorrente destes Termos será resolvida por arbitragem vinculativa administrada por um órgão de arbitragem reconhecido, exceto para disputas que se qualifiquem para o tribunal de pequenas causas."
+      },
+      "class_action": {
+        "label": "Renúncia a Ações Coletivas:",
+        "text": "VOCÊ RENUNCIA A QUALQUER DIREITO DE PARTICIPAR DE UMA AÇÃO COLETIVA OU ARBITRAGEM EM CLASSE. AS DISPUTAS SERÃO RESOLVIDAS APENAS INDIVIDUALMENTE."
+      },
+      "opt_out": {
+        "label": "Opção de Recusa (30 Dias):",
+        "text_start": "Você tem o direito de recusar as disposições de arbitragem e renúncia a ações coletivas enviando um aviso por escrito de sua decisão para",
+        "text_end": "dentro de 30 dias após aceitar estes Termos pela primeira vez."
+      }
+    },
+    "general": {
+      "title": "Disposições Gerais",
+      "governing": {
+        "label": "Lei de Regência:",
+        "text": "Estes Termos são regidos pelas leis da República Federativa do Brasil. Você concorda em submeter-se à jurisdição exclusiva dos tribunais localizados no Brasil para resolver qualquer questão legal decorrente destes Termos, a menos que a legislação local obrigatória em seu país exija o contrário."
+      },
+      "severability": {
+        "label": "Divisibilidade:",
+        "text": "Se qualquer disposição destes Termos for considerada inválida ou inexequível, essa disposição será aplicada na máxima extensão possível, e as disposições restantes permanecerão em pleno vigor."
+      },
+      "contact": {
+        "label": "Contato:",
+        "text_start": "Dúvidas sobre estes Termos? Contate-nos em"
+      }
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "effective_date": "Vigência a partir de: 7 de Outubro de 2025",
+    "intro": {
+      "p1": "Sua privacidade é importante para nós. Esta Política de Privacidade explica como o Photon Cloud (“Photon”, “nós” ou “nosso”) coleta, usa, compartilha e protege informações quando você utiliza nossos produtos, serviços, sites ou interage conosco de outra forma. O Photon fornece software baseado em nuvem e serviços relacionados. Nesta Política de Privacidade, referimo-nos a todos os nossos produtos, serviços e sites coletivamente como os “Serviços”.",
+      "p2_start": "Esta política também explica suas escolhas sobre como usamos informações sobre você, incluindo como você pode se opor a certos usos de informações e como pode acessar e atualizar determinados dados.",
+      "p2_bold": "Se você não concorda com esta política de privacidade, não acesse ou use nossos Serviços nem interaja com qualquer outro aspecto do nosso negócio.",
+      "toc_header": "Esta política de privacidade destina-se a ajudá-lo a entender:",
+      "controller_processor": "Esta Política de Privacidade descreve como o Photon trata dados pessoais quando agimos como controlador de dados, determinando como e por que os dados são processados. Em alguns casos, o Photon processa dados pessoais em nome de nossos clientes (ex: quando um fotógrafo usa nossos Serviços para gerenciar fotos). Nessas situações, o Photon atua como operador de dados ou provedor de serviços, e o cliente é o controlador. O cliente é responsável por obter consentimento e gerenciar o uso dos dados. O Photon processa essas informações de acordo com as instruções do cliente e contratos de proteção de dados aplicáveis."
+    },
+    "overview": {
+      "title": "Visão geral",
+      "point_1": "O Photon coleta informações diretamente de você quando você cria uma conta ou usa nossos Serviços, automaticamente através da sua interação com os Serviços e, em casos limitados, de ferramentas de terceiros que você conecta ao Photon.",
+      "point_2": "Usamos informações para operar, manter e melhorar os Serviços, personalizar sua experiência, comunicar-nos com você, fornecer suporte ao cliente, garantir segurança e, onde permitido, para fins de marketing.",
+      "point_3": "Podemos compartilhar informações com provedores de serviços confiáveis que nos ajudam a operar, cumprir obrigações legais ou realizar operações comerciais. As informações também podem ser compartilhadas com outros usuários quando isso for parte natural do funcionamento dos Serviços.",
+      "point_4": "Se você tiver dúvidas ou solicitações relacionadas à privacidade, entre em contato conosco conforme a seção “Como entrar em contato”."
+    },
+    "collect": {
+      "title": "Informações que coletamos",
+      "intro": "Coletamos informações sobre você quando você as fornece diretamente, quando usa nossos Serviços e, em alguns casos, de outras fontes, conforme descrito abaixo.",
+      "provided": {
+        "header": "Informações que você fornece ao Photon",
+        "sub_intro": "Coletamos informações que você fornece voluntariamente ao interagir com os Serviços. Isso pode incluir:",
+        "account": {
+          "label": "Informações da conta e perfil:",
+          "text": "Coletamos informações quando você cria uma conta, configura seu perfil ou faz compras. Isso inclui detalhes de contato como nome e e-mail, bem como informações de faturamento como endereço e nome da empresa."
+        },
+        "third_party": {
+          "label": "Integrações e serviços de terceiros:",
+          "text": "Você pode fornecer informações ao Photon ao conectar serviços de terceiros (como Login com Google). Recebemos certas informações desse provedor conforme permitido pelas suas configurações naquele serviço."
+        },
+        "third_party_note": "As informações que recebemos de serviços de terceiros dependem das permissões e políticas de privacidade desses serviços.",
+        "content": {
+          "label": "Conteúdo enviado através dos Serviços:",
+          "text": "Também coletamos conteúdo que você envia através de sites do Photon, incluindo feedback, formulários, pesquisas ou conteúdo compartilhado em recursos interativos."
+        },
+        "payment": {
+          "label": "Informações de pagamento e faturamento:",
+          "text": "Para Serviços pagos, coletamos informações de faturamento. Dados financeiros sensíveis são processados por processadores de pagamento terceirizados seguros."
+        }
+      },
+      "automatic": {
+        "header": "Informações que coletamos automaticamente",
+        "intro": "Coletamos automaticamente certas informações quando você acessa ou usa os Serviços, incluindo navegação em nossos sites.",
+        "usage": {
+          "label": "Dados de uso e interação:",
+          "text": "Coletamos informações sobre como você usa os Serviços, incluindo recursos acessados, páginas visualizadas, pesquisas, arquivos carregados e interações com outros usuários."
+        },
+        "device": {
+          "label": "Informações do dispositivo e conexão:",
+          "text": "Coletamos informações sobre os dispositivos que você usa para acessar os Serviços (computador, celular, tablet), incluindo sistema operacional, navegador, IP e tipo de conexão."
+        },
+        "location_note": "Podemos usar endereços IP para estimar a localização geral (como país ou região) para fornecer e proteger os Serviços.",
+        "cookies": {
+          "label": "Cookies e tecnologias semelhantes:",
+          "text": "O Photon e parceiros podem usar cookies e tecnologias de rastreamento para operar os Serviços, lembrar preferências e analisar o uso."
+        },
+        "cookies_note": "Informações adicionais estão disponíveis em nosso Aviso de Cookies."
+      }
+    },
+    "use": {
+      "title": "Como usamos as informações",
+      "intro": "O uso das informações depende dos Serviços que você utiliza e das suas configurações. O Photon usa informações para:",
+      "provide": {
+        "label": "Fornecer os Serviços e personalizar sua experiência:",
+        "text": "Para criar contas, processar transações, autenticar usuários e fornecer suporte. Também usamos dados para entender o contexto organizacional e personalizar o conteúdo."
+      },
+      "develop": {
+        "label": "Desenvolver e melhorar nossos Serviços:",
+        "text": "Usamos dados de uso e feedback para identificar tendências e desenvolver novos produtos e recursos."
+      },
+      "communicate": {
+        "label": "Comunicar-nos com você:",
+        "text": "Usamos suas informações de contato para enviar mensagens transacionais, avisos de faturamento, atualizações de segurança e respostas a solicitações."
+      },
+      "marketing": {
+        "label": "Marketing e promoções:",
+        "text": "Podemos usar informações para enviar comunicações sobre novos recursos, produtos ou ofertas que possam ser relevantes para você, conforme permitido por lei."
+      },
+      "support": {
+        "label": "Fornecer suporte ao cliente:",
+        "text": "Usamos as informações para investigar e resolver problemas técnicos ou dúvidas que você nos envia."
+      },
+      "security": {
+        "label": "Manter segurança e integridade:",
+        "text": "Para verificar contas, detectar fraudes, abusos ou incidentes de segurança e impor nossos termos e políticas."
+      },
+      "legal": {
+        "label": "Proteger nossos direitos legais:",
+        "text": "Quando necessário para cumprir leis, processos legais ou solicitações governamentais, e para proteger os direitos e segurança do Photon e de nossos usuários."
+      },
+      "consent": {
+        "label": "Com seu consentimento:",
+        "text": "Podemos usar informações para fins não descritos acima quando você nos der seu consentimento explícito."
+      },
+      "aggregate": {
+        "label": "Dados agregados ou anonimizados:",
+        "text": "Podemos agregar ou anonimizar informações para que não possam mais ser associadas a um indivíduo, usando-as para fins de pesquisa e estatística."
+      }
+    },
+    "disclose": {
+      "title": "Como compartilhamos informações",
+      "intro": "Às vezes, é necessário compartilhar informações para fornecer os Serviços ou com terceiros confiáveis.",
+      "third_parties": {
+        "header": "Compartilhamento com terceiros",
+        "intro": "Compartilhamos informações com terceiros que nos ajudam a operar, fornecer e melhorar nossos Serviços.",
+        "providers": {
+          "label": "Provedores de Serviço:",
+          "text": "Trabalhamos com provedores para hospedagem, backup, armazenamento, processamento de pagamentos e análise."
+        },
+        "services": {
+          "label": "Serviços de Terceiros:",
+          "text": "Se você conectar serviços de terceiros ao Photon, o uso de seus dados por esses serviços será regido pelas políticas de privacidade deles."
+        },
+        "links": {
+          "label": "Links e Widgets:",
+          "text": "Os Serviços podem incluir links para outros sites cujas práticas de privacidade podem diferir das nossas."
+        },
+        "consent": {
+          "label": "Com seu consentimento:",
+          "text": "Podemos compartilhar suas informações com terceiros quando você nos der consentimento explícito."
+        },
+        "legal": {
+          "label": "Conformidade Legal:",
+          "text": "Podemos divulgar informações a autoridades se acreditarmos ser razoavelmente necessário para cumprir leis ou proteger o Photon e o público."
+        }
+      },
+      "affiliates": {
+        "header": "Compartilhamento com empresas afiliadas",
+        "entities": {
+          "label": "Entidades do Photon Cloud:",
+          "text": "Podemos compartilhar informações com nossas afiliadas corporativas para operar e melhorar os Serviços."
+        },
+        "transfers": {
+          "label": "Transferências de Negócios:",
+          "text": "No caso de fusão, venda de ativos ou aquisição, suas informações podem ser transferidas."
+        }
+      },
+      "users": {
+        "header": "Compartilhamento com outros usuários",
+        "managed": {
+          "label": "Contas gerenciadas e administradores:",
+          "text": "Se você usar um e-mail corporativo, certas informações podem ser acessíveis ao administrador da sua organização."
+        },
+        "public": {
+          "label": "Comunidade e Fóruns Públicos:",
+          "text": "Informações que você contribui em fóruns públicos podem ser lidas e coletadas pelo público."
+        }
+      }
+    },
+    "store": {
+      "title": "Como armazenamos e protegemos informações",
+      "p1": "Utilizamos medidas técnicas e organizacionais padrão da indústria para proteger as informações, incluindo criptografia e ambientes de hospedagem seguros (AWS).",
+      "p2": "Embora implementemos proteções, nenhum sistema de segurança é impenetrável. Devido à natureza da Internet, não podemos garantir segurança absoluta contra intrusões.",
+      "p3": "Se você usa nossos Serviços em nome de uma organização, seu administrador pode ter responsabilidades adicionais pela segurança. Recomendamos o uso de senhas fortes e autenticação multifator."
+    },
+    "retain": {
+      "title": "Por quanto tempo mantemos as informações",
+      "intro": "O tempo de retenção depende do tipo de informação e dos requisitos legais.",
+      "account": {
+        "label": "Informações da conta:",
+        "text": "Mantemos suas informações enquanto sua conta estiver ativa e por um período razoável posteriormente, caso decida reativá-la."
+      },
+      "shared": {
+        "label": "Informações compartilhadas:",
+        "text": "Se sua conta for desativada, algum conteúdo fornecido pode permanecer para permitir que sua equipe continue usando os Serviços."
+      },
+      "managed": {
+        "label": "Contas gerenciadas:",
+        "text": "Se os Serviços forem fornecidos por uma organização, mantemos suas informações conforme exigido pelo administrador."
+      },
+      "marketing": {
+        "label": "Informações de marketing:",
+        "text": "Se você optou por receber e-mails de marketing, mantemos suas preferências por um período razoável a partir da última interação."
+      }
+    },
+    "access": {
+      "title": "Como acessar e controlar suas informações",
+      "rights": {
+        "header": "Seus Direitos",
+        "p1": "Dependendo da sua jurisdição (como no Brasil sob a LGPD), você tem direitos específicos, incluindo acesso, correção, exclusão, portabilidade e revogação de consentimento.",
+        "p2": "Fornecemos ferramentas nos Serviços para ajudá-lo a exercer esses direitos (como configurações de perfil)."
+      },
+      "choices": {
+        "header": "Suas Escolhas",
+        "update": {
+          "label": "Acessar e atualizar:",
+          "text": "Você pode atualizar certas informações diretamente nas configurações do Serviço."
+        },
+        "delete": {
+          "label": "Excluir suas informações:",
+          "text": "Você pode remover conteúdo e informações de perfil. Para excluir totalmente sua conta Photon, entre em contato conosco."
+        },
+        "opt_out": {
+          "label": "Sair de comunicações:",
+          "text": "Você pode optar por não receber comunicações promocionais usando o link de cancelamento de inscrição nos e-mails."
+        },
+        "cookies": {
+          "label": "Controle de cookies:",
+          "text": "Você pode configurar seu navegador para remover ou rejeitar cookies, mas isso pode afetar a funcionalidade dos Serviços."
+        },
+        "portability": {
+          "label": "Portabilidade de dados:",
+          "text": "Entre em contato conosco para solicitar um arquivo eletrônico com suas informações básicas de conta e conteúdo."
+        }
+      }
+    },
+    "children": {
+      "title": "Nossa política para crianças",
+      "usage": {
+        "label": "Uso dos Serviços:",
+        "text": "Nossos Serviços não se destinam a menores de 16 anos. Não coletamos intencionalmente informações de crianças para criar contas."
+      },
+      "photos": {
+        "label": "Fotos de Crianças:",
+        "text": "Entendemos que nossos Clientes (fotógrafos) podem usar os Serviços para processar fotos de crianças. Nesses casos, o Photon atua apenas como operador de dados."
+      },
+      "responsibility": "O Cliente é responsável por obter todos os consentimentos necessários dos pais ou responsáveis para fazer upload, armazenar e processar imagens de menores usando nossos Serviços, incluindo o uso de reconhecimento facial."
+    },
+    "regional": {
+      "title": "Divulgações regionais",
+      "intro": "Dependendo de onde você mora, você pode ter direitos de privacidade específicos.",
+      "br": {
+        "title": "Brasil (LGPD)",
+        "p1": "Se você reside no Brasil, tem direitos sob a Lei Geral de Proteção de Dados (LGPD). Processamos seus dados com base nas bases legais autorizadas, como cumprimento de obrigação legal, execução de contrato e legítimo interesse.",
+        "p2": "Você tem o direito de confirmar a existência de tratamento, acessar seus dados, corrigir dados incompletos ou inexatos, anonimizar ou excluir dados desnecessários e revogar o consentimento. Para exercer esses direitos, entre em contato conosco."
+      },
+      "eu": {
+        "title": "Espaço Econômico Europeu e Reino Unido (GDPR)",
+        "basis": {
+          "label": "Base Legal para Processamento:",
+          "text": "Se você estiver no EEE ou Reino Unido, coletamos e processamos informações apenas onde temos bases legais para fazê-lo (contrato, interesse legítimo, consentimento ou obrigação legal)."
+        },
+        "list": {
+          "item1": "Precisamos disso para fornecer os Serviços;",
+          "item2": "Satisfaz um interesse legítimo (P&D, marketing, direitos legais);",
+          "item3": "Você nos dá consentimento para um propósito específico;",
+          "item4": "Precisamos processar seus dados para cumprir uma obrigação legal."
+        },
+        "transfers": {
+          "label": "Transferências Internacionais:",
+          "text": "Ao transferir dados para fora do EEE ou Reino Unido, contamos com mecanismos legais apropriados, como Cláusulas Contratuais Padrão."
+        }
+      },
+      "us": {
+        "title": "Estados Unidos (Leis Estaduais)",
+        "no_sell": "Não vendemos suas informações pessoais.",
+        "rights": "Residentes da Califórnia, Virgínia, Colorado, Connecticut ou Utah podem ter direitos adicionais de acesso e exclusão.",
+        "categories_header": "Categorias coletadas (últimos 12 meses):",
+        "cat": {
+          "identifiers": {
+            "label": "Identificadores:",
+            "text": "Nome, e-mail, IP."
+          },
+          "commercial": {
+            "label": "Informações comerciais:",
+            "text": "Histórico de compras."
+          },
+          "internet": {
+            "label": "Atividade na Internet:",
+            "text": "Interação com o site."
+          },
+          "biometric": {
+            "label": "Informações Biométricas:",
+            "text": "Geometria facial (apenas quando recursos específicos são usados)."
+          }
+        },
+        "contact": "Para exercer seus direitos, entre em contato conosco."
+      },
+      "biometric": {
+        "title": "Aviso sobre Dados Biométricos",
+        "p1": "O Photon inclui recursos de reconhecimento facial para organizar fotos. Isso envolve o processamento de dados que podem ser considerados \"informações biométricas\" sob certas leis (LGPD, BIPA, GDPR).",
+        "p2": "Processamos esses dados apenas para fornecer a funcionalidade solicitada pelo Cliente. Não vendemos, alugamos ou comercializamos dados biométricos. Mantemos esses dados apenas pelo tempo necessário para fornecer o Serviço ou conforme exigido por lei."
+      }
+    },
+    "changes": {
+      "title": "Alterações nesta política",
+      "p1": "Podemos alterar esta política de tempos em tempos. Publicaremos quaisquer alterações nesta página.",
+      "p2": "Recomendamos que você revise nossa política de privacidade sempre que usar os Serviços.",
+      "p3": "Se você discordar de quaisquer alterações, deverá parar de usar os Serviços e desativar sua conta."
+    },
+    "contact": {
+      "title": "Como entrar em contato",
+      "intro": "Suas informações são controladas pelo Photon Cloud. Se tiver dúvidas sobre como suas informações são tratadas, entre em contato conosco.",
+      "regions": "Indivíduos no EEE, Reino Unido ou Brasil também podem nos contatar via e-mail sobre seus direitos específicos sob GDPR ou LGPD."
+    }
+  }
+}

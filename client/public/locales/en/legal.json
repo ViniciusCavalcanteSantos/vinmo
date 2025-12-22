@@ -1,0 +1,489 @@
+{
+  "terms": {
+    "title": "Terms of Service",
+    "overview": {
+      "title": "Terms of Service Overview",
+      "last_updated": "Last Updated: October 7, 2025",
+      "intro_1": "These Photon Cloud Terms of Service (“Terms”) constitute a binding legal agreement between you (“you”, “your”, or “Customer”) and Photon Cloud (“Photon”, “we”, “us”, or “our”). By accessing, registering for, or using our Services, you agree to be bound by these Terms.",
+      "intro_2": "These Terms apply to your access to and use of the Photon platform, including our photo organization tools, facial recognition features, storage services, client galleries, and any related applications, APIs, or websites (collectively, the “Services”).",
+      "arbitration": {
+        "label": "ARBITRATION NOTICE:",
+        "text": "THESE TERMS CONTAIN A MANDATORY ARBITRATION PROVISION AND CLASS ACTION WAIVER IN THE \"DISPUTE RESOLUTION\" SECTION. PLEASE REVIEW IT CAREFULLY, AS IT AFFECTS YOUR LEGAL RIGHTS TO RESOLVE DISPUTES WITH PHOTON."
+      }
+    },
+    "eligibility": {
+      "title": "Eligibility and Accounts",
+      "professional_use": {
+        "label": "Professional Use:",
+        "text": "The Services are intended for professional use by photographers, studios, and event organizers. By using the Services, you represent that you are at least 18 years old and have the authority to enter into these Terms personally or on behalf of the legal entity you represent."
+      },
+      "account_security": {
+        "label": "Account Security:",
+        "text": "You are responsible for safeguarding your account credentials. You agree to notify us immediately of any unauthorized use of your account. Photon is not liable for any loss or damage arising from your failure to protect your login information."
+      },
+      "account_info": {
+        "label": "Account Information:",
+        "text": "You agree to provide accurate, current, and complete information during registration and to update such information to keep it accurate. We reserve the right to suspend or terminate accounts that contain untruthful or incomplete information."
+      }
+    },
+    "credits": {
+      "title": "Services and Credits Usage",
+      "system": {
+        "label": "The Credit System:",
+        "text": "Certain features of the Services (e.g., facial recognition indexing, AI enhancements, storage allocation) consume \"Credits\" or \"Usage Units\". The specific cost in Credits for each feature is detailed on our Pricing Page."
+      },
+      "allocations": {
+        "label": "Allocations and Expiration:",
+        "text_start": "Subscription plans typically include a monthly allocation of Credits. Unless explicitly stated in your plan,",
+        "text_bold": "unused Credits expire at the end of each billing cycle and do not roll over",
+        "text_end": ". Credits have no monetary value."
+      },
+      "changes": {
+        "label": "Changes to Service:",
+        "text_start": "We may modify the Credit cost or features of the Service. However, for any change that materially negatively impacts your usage (e.g., increasing credit costs),",
+        "text_bold": "we will provide at least 30 days' prior notice",
+        "text_end": "via email or in-app notification, giving you the opportunity to cancel before the new terms apply."
+      }
+    },
+    "storage": {
+      "title": "Storage, Security & Backups",
+      "infrastructure": {
+        "label": "Cloud Infrastructure (AWS):",
+        "text_start": "The Services are hosted on industry-leading cloud infrastructure providers, primarily",
+        "aws": "Amazon Web Services (AWS)",
+        "text_end": ". We utilize AWS S3 and redundant technologies designed to provide high durability and availability for your data."
+      },
+      "security": {
+        "label": "Security Measures:",
+        "text": "We implement commercially reasonable technical and organizational measures to protect your data, including encryption in transit and at rest. However, you acknowledge that no system is impenetrable."
+      },
+      "backup_warning": {
+        "title": "YOUR RESPONSIBILITY FOR BACKUPS",
+        "text_start": "While we leverage AWS's durability,",
+        "text_bold": "Photon is not an archival backup service",
+        "text_end": "Technical errors, account suspensions, payment failures, or catastrophic events could result in loss of access to your data. You agree that you are solely responsible for maintaining independent copies of your original photos (RAW/JPG) on your own local storage or separate backup systems. Photon is not liable for any loss of Content."
+      }
+    },
+    "content": {
+      "title": "Content and Biometric Data",
+      "ownership": {
+        "label": "Ownership:",
+        "text": "You retain all rights and ownership of the photos, images, and metadata (\"Content\") you upload. You grant Photon a worldwide, non-exclusive, royalty-free license to host, store, resize, process, and display your Content solely as required to provide the Services."
+      },
+      "facial_recognition": {
+        "label": "Facial Recognition & Biometrics:",
+        "text": "The Services use biometric technology to detect and group faces. You acknowledge that this involves processing \"Biometric Information\" or \"Biometric Identifiers\" under applicable laws (such as BIPA, GDPR, and LGPD)."
+      },
+      "retention": {
+        "title": "Biometric Retention Policy",
+        "policy_start": "Photon retains biometric identifiers only for as long as necessary to provide the Service. All biometric data associated with your account is permanently destroyed",
+        "policy_bold": "within 30 days",
+        "policy_end": "of account termination or upon your explicit deletion of the source photos, whichever comes first.",
+        "exception": {
+          "label": "Exception:",
+          "text": "We may retain such data for a longer period strictly if required by applicable law, regulation, or valid legal process (e.g., a court order or litigation hold). In such cases, data will be isolated and retained only until the legal requirement expires."
+        }
+      },
+      "responsibility": {
+        "label": "Your Responsibility:",
+        "text": "You represent that you have obtained explicit consent from individuals depicted in your Content (or their guardians) to capture and process their biometric data. You agree to indemnify Photon against any claims arising from your failure to obtain such consent."
+      }
+    },
+    "subscriptions": {
+      "title": "Subscriptions and Payments",
+      "billing": {
+        "label": "Billing:",
+        "text": "You authorize Photon (and our third-party payment processors) to charge your payment method for the applicable subscription fees and any overage charges incurred. Fees are billed in advance on a recurring basis."
+      },
+      "failure": {
+        "label": "Failure to Pay:",
+        "text_start": "If a payment fails or is past due, we may downgrade your account to a free plan or suspend your access to the Services.",
+        "text_bold": "Suspended accounts may be subject to data deletion after a specific grace period (e.g., 30 days)."
+      },
+      "taxes": {
+        "label": "Taxes:",
+        "text": "Fees are exclusive of taxes. You are responsible for paying all taxes, levies, or duties imposed by taxing authorities."
+      }
+    },
+    "cancellation": {
+      "title": "Cancellation & Data Export",
+      "policy": {
+        "label": "Cancellation:",
+        "text_start": "You may cancel your subscription at any time via account settings. Cancellation will be effective at the end of the current billing cycle.",
+        "text_bold": "There are no refunds for partial months or unused credits."
+      },
+      "export": {
+        "label": "Data Export Window:",
+        "text_start": "Upon cancellation or expiration of a paid subscription, Photon may provide a limited",
+        "grace_period": "30-day grace period",
+        "text_mid": "during which you may access your account in a \"read-only\" mode solely to export your Content. After this period,",
+        "text_bold_end": "Photon reserves the right to permanently delete all your Content to free up storage space."
+      }
+    },
+    "prohibited": {
+      "title": "Prohibited Use",
+      "intro": "You agree not to use the Services to:",
+      "items": {
+        "illegal": "Upload content that is illegal, defamatory, pornographic, or violates intellectual property rights.",
+        "reverse_engineer": "Attempt to reverse engineer, decompile, or extract source code from the Services.",
+        "competitive": "Use the Services to build a competitive product or service.",
+        "scrape": "Scrape, crawl, or access the Services via unauthorized automated means.",
+        "sharing": "Share your account credentials with multiple users (account sharing) unless explicitly permitted by your plan."
+      }
+    },
+    "ip": {
+      "title": "Intellectual Property",
+      "photon_ip": {
+        "label": "Photon IP:",
+        "text": "All rights, title, and interest in and to the Services (excluding your Content), including all software, technology, code, user interfaces, trademarks, and logos, are and will remain the exclusive property of Photon Cloud."
+      },
+      "feedback": {
+        "label": "Feedback:",
+        "text": "If you provide feedback or suggestions regarding the Services, we may use such feedback without obligation or compensation to you."
+      }
+    },
+    "disclaimers": {
+      "title": "Disclaimers and Limitation of Liability",
+      "as_is": {
+        "label": "\"AS IS\" WARRANTY:",
+        "text": "THE SERVICES ARE PROVIDED ON AN \"AS IS\" AND \"AS AVAILABLE\" BASIS. PHOTON EXPRESSLY DISCLAIMS ALL WARRANTIES, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICES WILL BE UNINTERRUPTED, ERROR-FREE, OR THAT FACIAL RECOGNITION RESULTS WILL BE 100% ACCURATE."
+      },
+      "liability": {
+        "label": "LIMITATION OF LIABILITY:",
+        "text": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, PHOTON SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, DATA, USE, OR GOODWILL. IN NO EVENT SHALL PHOTON'S AGGREGATE LIABILITY FOR ALL CLAIMS EXCEED THE GREATER OF ONE HUNDRED U.S. DOLLARS ($100) OR THE AMOUNT YOU PAID PHOTON IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM."
+      },
+      "exceptions": {
+        "label": "EXCEPTIONS:",
+        "text": "NOTHING IN THESE TERMS LIMITS OR EXCLUDES LIABILITY FOR: (A) DEATH OR PERSONAL INJURY CAUSED BY NEGLIGENCE; (B) FRAUD OR FRAUDULENT MISREPRESENTATION; OR (C) ANY OTHER LIABILITY THAT CANNOT BE EXCLUDED OR LIMITED BY APPLICABLE LAW (INCLUDING GROSS NEGLIGENCE OR WILLFUL MISCONDUCT)."
+      }
+    },
+    "indemnification": {
+      "title": "Indemnification",
+      "intro": "You agree to defend, indemnify, and hold harmless Photon Cloud, its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, and expenses (including attorney's fees) arising from:",
+      "items": {
+        "usage": "Your use of and access to the Services;",
+        "violation_terms": "Your violation of any term of these Terms;",
+        "violation_rights": "Your violation of any third-party right, including copyright, property, or privacy rights;",
+        "claims": "Any claim that your Content or your use of facial recognition caused damage to a third party (including claims related to lack of consent)."
+      }
+    },
+    "dispute": {
+      "title": "Dispute Resolution",
+      "arbitration": {
+        "label": "Arbitration:",
+        "text": "Any dispute arising from these Terms shall be resolved by binding arbitration administered by a recognized arbitration body, except for disputes qualifying for small claims court."
+      },
+      "class_action": {
+        "label": "Class Action Waiver:",
+        "text": "YOU WAIVE ANY RIGHT TO PARTICIPATE IN A CLASS-ACTION LAWSUIT OR CLASS-WIDE ARBITRATION. DISPUTES SHALL BE RESOLVED ON AN INDIVIDUAL BASIS ONLY."
+      },
+      "opt_out": {
+        "label": "30-Day Opt-Out:",
+        "text_start": "You have the right to opt out of the arbitration and class action waiver provisions by sending written notice of your decision to",
+        "text_end": "within 30 days of first accepting these Terms."
+      }
+    },
+    "general": {
+      "title": "General Provisions",
+      "governing": {
+        "label": "Governing Law:",
+        "text": "These Terms are governed by the laws of the Federative Republic of Brazil. You agree to submit to the exclusive jurisdiction of the courts located in Brazil to resolve any legal matter arising from these Terms, unless mandatory local law in your country requires otherwise."
+      },
+      "severability": {
+        "label": "Severability:",
+        "text": "If any provision of these Terms is found to be invalid or unenforceable, that provision shall be enforced to the maximum extent possible, and the remaining provisions shall remain in full force."
+      },
+      "contact": {
+        "label": "Contact:",
+        "text_start": "Questions about these Terms? Contact us at"
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "effective_date": "Effective starting: October 7, 2025",
+    "intro": {
+      "p1": "Your privacy matters to us. This Privacy Policy explains how Photon Cloud (“Photon”, “we”, “us”, or “our”) collects, uses, shares, and protects information when you use our products, services, websites, or otherwise interact with us. Photon provides cloud-based software and related services. In this Privacy Policy, we refer to all of our products, services, and websites collectively as the “Services.”",
+      "p2_start": "This privacy policy also explains your choices surrounding how we use information about you, which includes how you can object to certain uses of information about you and how you can access and update certain information about you.",
+      "p2_bold": "If you do not agree with this privacy policy, do not access or use our Services or interact with any other aspect of our business.",
+      "toc_header": "This privacy policy is intended to help you understand:",
+      "controller_processor": "This Privacy Policy describes how Photon handles personal information when we act as a data controller, meaning we determine how and why personal information is processed. In some cases, Photon processes personal information on behalf of our customers, such as when our Services are used by an organization to manage its own data or users. In these situations, Photon acts as a data processor or service provider, and the customer is the data controller. The customer is responsible for managing user accounts, configuring the Services, and determining how personal information is used. When Photon processes personal information on behalf of a customer, we do so according to that customer’s instructions and applicable data protection agreements."
+    },
+    "overview": {
+      "title": "Privacy policy overview",
+      "point_1": "Photon collects information directly from you when you create an account or use our Services, automatically through your interaction with the Services, and, in limited cases, from third-party tools or services you choose to connect with Photon.",
+      "point_2": "We use information to operate, maintain, and improve the Services, personalize your experience, communicate with you, provide customer support, ensure security and reliability, and, where permitted, for marketing and product development purposes.",
+      "point_3": "We may share information with trusted service providers that help us operate the Services, comply with legal obligations, protect our rights, or carry out business operations. Information may also be shared with other users when this is a natural part of how the Services work, or with your consent.",
+      "point_4": "If you have questions, concerns, or requests related to privacy or this policy, you can contact Photon using the details provided in the “How to contact us” section."
+    },
+    "collect": {
+      "title": "Information we collect",
+      "intro": "We collect information about you when you provide it directly to us, when you use our Services, and, in some cases, from other sources, as described below.",
+      "provided": {
+        "header": "Information you provide to Photon",
+        "sub_intro": "We collect information that you voluntarily provide when you interact with the Services or communicate with us. This may include the following categories of information:",
+        "account": {
+          "label": "Account and profile information:",
+          "text": "We collect information when you create an account, sign up for the Services, configure your profile, update account settings, set preferences, or make purchases. This information may include contact details such as your name and email address, as well as billing-related information such as billing address, company name, or other account identifiers."
+        },
+        "third_party": {
+          "label": "Third-party integrations and connected services:",
+          "text": "You may provide information to Photon when you choose to connect or integrate third-party services with our Services. For example, if you sign up for or log in to Photon using a third-party authentication provider (such as Google), we may receive certain information from that provider."
+        },
+        "third_party_note": "The information we receive from third-party services depends on the permissions, settings, and privacy policies of those services.",
+        "content": {
+          "label": "Content you submit through the Services:",
+          "text": "We also collect information and content that you submit through websites owned or operated by Photon. This may include feedback, form submissions, messages, survey responses, or content shared through interactive features."
+        },
+        "payment": {
+          "label": "Payment and billing information:",
+          "text": "For paid Services, we collect billing and payment-related information. This may include the name and contact details of a billing contact, billing address, and transaction-related details."
+        }
+      },
+      "automatic": {
+        "header": "Information we collect automatically",
+        "intro": "We automatically collect certain information when you access or use the Services, including when you browse our websites or interact with features of the Services.",
+        "usage": {
+          "label": "Usage and interaction data:",
+          "text": "We collect information about how you use the Services, including features accessed, actions taken, pages viewed, links clicked, search queries, uploaded files, and interactions with other users."
+        },
+        "device": {
+          "label": "Device and connection information:",
+          "text": "We collect information about the devices you use to access the Services, such as your computer, mobile device, or tablet. This may include operating system, browser type, device identifiers, IP address, and connection type."
+        },
+        "location_note": "We may use IP addresses or similar signals to estimate general location (such as country or region) in order to provide, secure, and improve the Services.",
+        "cookies": {
+          "label": "Cookies and similar technologies:",
+          "text": "Photon and our third-party partners may use cookies and similar tracking technologies (such as pixels, web beacons, and local storage) to operate the Services, remember preferences, analyze usage, and improve functionality."
+        },
+        "cookies_note": "Additional information about how we use cookies and similar technologies is provided in our Cookies & Tracking Notice."
+      }
+    },
+    "use": {
+      "title": "How we use information",
+      "intro": "How we use the information we collect depends on the Services you use, how you use them, and the preferences or settings you have configured. Photon uses information for the purposes described below.",
+      "provide": {
+        "label": "To provide the Services and personalize your experience:",
+        "text": "We use information about you to operate and provide the Services, including to create and manage accounts, process transactions, authenticate users, enable core functionality, and provide customer support."
+      },
+      "develop": {
+        "label": "To develop, improve, and evolve our Services:",
+        "text": "We use information, usage data, and feedback to understand how the Services are used, to identify trends, usage patterns, and areas for improvement, and to develop new products, features, and technologies."
+      },
+      "communicate": {
+        "label": "To communicate with you about the Services:",
+        "text": "We use your contact information to communicate with you regarding the Services. These communications may include transactional or administrative messages, such as account confirmations, billing notices, and security notifications."
+      },
+      "marketing": {
+        "label": "To conduct marketing and promotional activities:",
+        "text": "We may use information about you for marketing, research, analytics, promotional activities, and business development. This may include sending communications about new features or products."
+      },
+      "support": {
+        "label": "To provide customer support:",
+        "text": "We use information you provide through support channels to investigate, respond to, and resolve technical issues or other requests."
+      },
+      "security": {
+        "label": "To maintain safety, security, and integrity:",
+        "text": "We use information to help verify accounts and activity, detect and prevent security incidents, abuse, fraud, or unauthorized access."
+      },
+      "legal": {
+        "label": "To protect our legal rights:",
+        "text": "We may use information where necessary to comply with applicable laws, regulations, legal processes, or governmental requests, and to protect the rights, property, and safety of Photon, our users, or others."
+      },
+      "consent": {
+        "label": "With your consent:",
+        "text": "We may use information about you for purposes not described above where you have given your explicit consent."
+      },
+      "aggregate": {
+        "label": "To aggregate or de-identify data:",
+        "text": "We may aggregate or de-identify information collected through the Services so that it can no longer be reasonably associated with an identifiable individual."
+      }
+    },
+    "disclose": {
+      "title": "How we disclose information",
+      "intro": "Photon is built to empower your workflow, and sometimes that involves disclosing information through the Services and to certain trusted third parties.",
+      "third_parties": {
+        "header": "Disclosing to third parties",
+        "intro": "We disclose information to third parties that help us operate, provide, improve, integrate, customize, support, and market our Services.",
+        "providers": {
+          "label": "Service Providers:",
+          "text": "We work with third-party service providers for hosting, maintenance, backup, storage, payment processing, analysis, and other services."
+        },
+        "services": {
+          "label": "Third-Party Services:",
+          "text": "You or your administrator may choose to add functionality by connecting third-party services to Photon. The use of your data by these third-party services is governed by their own privacy policies."
+        },
+        "links": {
+          "label": "Links and Widgets:",
+          "text": "The Services may include links to other websites or widgets whose privacy practices may differ from ours."
+        },
+        "consent": {
+          "label": "With your consent:",
+          "text": "We may disclose your information to third parties when you give us explicit consent to do so."
+        },
+        "legal": {
+          "label": "Legal Compliance and Enforcement:",
+          "text": "We may disclose your information to government authorities or law enforcement if we believe it is reasonably necessary to comply with applicable laws or protect Photon and our users."
+        }
+      },
+      "affiliates": {
+        "header": "Disclosing to affiliated companies",
+        "entities": {
+          "label": "Photon Cloud Entities:",
+          "text": "We may disclose information to our corporate affiliates in order to operate, maintain, and improve the Services."
+        },
+        "transfers": {
+          "label": "Business Transfers:",
+          "text": "In the event of a merger, sale of company assets, financing, or acquisition, your information may be disclosed or transferred."
+        }
+      },
+      "users": {
+        "header": "Disclosing to other Service users",
+        "managed": {
+          "label": "Managed accounts and administrators:",
+          "text": "If you use an email address owned by your organization, certain information may be accessible to that organization’s administrator."
+        },
+        "public": {
+          "label": "Community and Public Forums:",
+          "text": "Any information you contribute to our publicly accessible blogs or forums may be read and collected by the public."
+        }
+      }
+    },
+    "store": {
+      "title": "How we store and secure information",
+      "p1": "We use industry-standard technical and organizational measures to secure the information we store. This includes use of encryption, access controls, and secure data hosting environments provided by world-class infrastructure partners.",
+      "p2": "While we implement safeguards designed to protect your information, no security system is impenetrable. Due to the inherent nature of the Internet, we cannot guarantee that information is absolutely safe from intrusion by others.",
+      "p3": "If you use our Services on behalf of an organization, your administrator may have additional responsibilities for securing your use of the Services. We recommend that users take steps to protect their own accounts."
+    },
+    "retain": {
+      "title": "How long we keep information",
+      "intro": "How long we keep information we collect about you depends on the type of information, the purposes for which it was collected, and applicable legal requirements.",
+      "account": {
+        "label": "Account information:",
+        "text": "We retain your account information for as long as your account is active and a reasonable period thereafter in case you decide to re-activate the Services."
+      },
+      "shared": {
+        "label": "Information you share on the Services:",
+        "text": "If your account is deactivated, some of your information and the content you have provided will remain in order to allow your team members to make full use of the Services."
+      },
+      "managed": {
+        "label": "Managed accounts:",
+        "text": "If the Services are made available to you through an organization, we retain your information as long as required by the administrator."
+      },
+      "marketing": {
+        "label": "Marketing information:",
+        "text": "If you have elected to receive marketing emails from us, we retain information about your marketing preferences for a reasonable period of time."
+      }
+    },
+    "access": {
+      "title": "How to access and control your information",
+      "rights": {
+        "header": "Your Rights",
+        "p1": "Where applicable under local law, you may have certain rights with respect to your personal information. Depending on your jurisdiction, this may include the right to request access, correction, deletion, restriction, portability, or to withdraw consent.",
+        "p2": "We provide tools within the Services to help you exercise some of these rights."
+      },
+      "choices": {
+        "header": "Your Choices",
+        "update": {
+          "label": "Access and update your information:",
+          "text": "Our Services give you the ability to access and update certain information about you from within the Service, such as your profile settings."
+        },
+        "delete": {
+          "label": "Delete your information:",
+          "text": "You can remove certain content and profile information directly within the Services. If you wish to delete your Photon account entirely, please contact us."
+        },
+        "opt_out": {
+          "label": "Opt out of communications:",
+          "text": "You may opt out of receiving promotional communications from us by using the unsubscribe link within each email."
+        },
+        "cookies": {
+          "label": "Cookie controls:",
+          "text": "You can usually choose to set your browser to remove or reject browser cookies. Note that this could affect the functionality of our Services."
+        },
+        "portability": {
+          "label": "Data portability:",
+          "text": "Data portability is the ability to obtain some of your information in a format you can move from one service provider to another. Contact us to initiate this request."
+        }
+      }
+    },
+    "children": {
+      "title": "Our policy towards children",
+      "usage": {
+        "label": "Usage of the Services:",
+        "text": "Our Services are not intended for use by anyone under the age of 16. We do not knowingly collect personal information directly from children under 16."
+      },
+      "photos": {
+        "label": "Photos of Children:",
+        "text": "We understand that our Customers may use the Services to process photos that include children. In these cases, Photon acts solely as a data processor."
+      },
+      "responsibility": "The Customer is responsible for obtaining all necessary consents and authorizations from parents or legal guardians required by applicable law to upload, store, and process images of minors using our Services, including the use of facial recognition features."
+    },
+    "regional": {
+      "title": "Regional disclosures",
+      "intro": "Depending on where you live, you may have specific privacy rights that apply to you.",
+      "br": {
+        "title": "Brazil (LGPD)",
+        "p1": "If you are a resident of Brazil, you have rights under the Lei Geral de Proteção de Dados (LGPD). We process your data based on legal grounds authorized by the LGPD, such as compliance with a legal obligation, performance of a contract, and legitimate interests.",
+        "p2": "You have the right to confirm the existence of processing, access your data, correct incomplete or inaccurate data, anonymize or delete unnecessary data, and revoke consent. To exercise any of these rights, please contact us."
+      },
+      "eu": {
+        "title": "European Economic Area and United Kingdom (GDPR)",
+        "basis": {
+          "label": "Legal Basis for Processing:",
+          "text": "If you are an individual in the EEA or UK, we collect and process information about you only where we have legal bases for doing so under applicable EU laws."
+        },
+        "list": {
+          "item1": "We need it to provide you the Services;",
+          "item2": "It satisfies a legitimate interest (research, development, marketing, legal rights);",
+          "item3": "You give us consent to do so for a specific purpose; or",
+          "item4": "We need to process your data to comply with a legal obligation."
+        },
+        "transfers": {
+          "label": "International Transfers:",
+          "text": "When we transfer information about you to our third-party service providers outside the EEA or UK, we rely on appropriate legal mechanisms, such as Standard Contractual Clauses."
+        }
+      },
+      "us": {
+        "title": "United States (State Privacy Laws)",
+        "no_sell": "We do not sell your personal information.",
+        "rights": "Residents of California, Virginia, Colorado, Connecticut, or Utah may have additional rights, including the right to know, delete, and correct information.",
+        "categories_header": "Categories of Information Collected (Last 12 Months):",
+        "cat": {
+          "identifiers": {
+            "label": "Identifiers:",
+            "text": "Name, email, IP address, unique user identifiers."
+          },
+          "commercial": {
+            "label": "Commercial Information:",
+            "text": "Transaction records, purchase history."
+          },
+          "internet": {
+            "label": "Internet Activity:",
+            "text": "Interaction with our website, pages viewed, features used."
+          },
+          "biometric": {
+            "label": "Biometric Information:",
+            "text": "Facial geometry data (only processed when using specific features of the Services and strictly for the purpose of photo organization)."
+          }
+        },
+        "contact": "To exercise your rights under US State Laws, please contact us."
+      },
+      "biometric": {
+        "title": "Notice Regarding Biometric Data",
+        "p1": "Photon includes features that use facial recognition technology to sort and organize photos. This involves the processing of data that may be considered \"biometric information\" or \"biometric identifiers\" under certain laws (such as BIPA in Illinois or GDPR in Europe).",
+        "p2": "We process this data solely to provide the specific functionality of the Service requested by the Customer. We do not sell, lease, or trade biometric data. We retain this data only for as long as necessary to provide the Service or as required by law."
+      }
+    },
+    "changes": {
+      "title": "Changes to our privacy policy",
+      "p1": "We may change this privacy policy from time to time. We will post any privacy policy changes on this page.",
+      "p2": "We encourage you to review our privacy policy whenever you use the Services to stay informed about our information practices.",
+      "p3": "If you disagree with any changes to this privacy policy, you will need to stop using the Services and deactivate your account(s)."
+    },
+    "contact": {
+      "title": "How to contact us",
+      "intro": "Your information is controlled by Photon Cloud. If you have questions or concerns about how your information is handled, please direct your inquiry to us.",
+      "regions": "Individuals in the European Economic Area, United Kingdom, or Brazil may also contact us via the email above regarding their specific rights under GDPR or LGPD."
+    }
+  }
+}

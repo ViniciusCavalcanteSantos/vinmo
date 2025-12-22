@@ -26,12 +26,29 @@ const sections = [
   {id: 'general-provisions', title: 'General Provisions'},
 ];
 
+
 export default function TermsOfService() {
   const isScrolled = useScrollThreshold();
-  const sectionIds = sections.map(s => s.id)
   const {t} = useT('legal')
 
+  const sections = [
+    {id: 'terms-overview', title: t('terms.overview.title')},
+    {id: 'eligibility-accounts', title: t('terms.eligibility.title')},
+    {id: 'service-credits', title: t('terms.credits.title')},
+    {id: 'storage-security', title: t('terms.storage.title')},
+    {id: 'content-biometrics', title: t('terms.content.title')},
+    {id: 'subscriptions-payments', title: t('terms.subscriptions.title')},
+    {id: 'cancellation-termination', title: t('terms.cancellation.title')},
+    {id: 'prohibited-use', title: t('terms.prohibited.title')},
+    {id: 'intellectual-property', title: t('terms.ip.title')},
+    {id: 'disclaimers-liability', title: t('terms.disclaimers.title')},
+    {id: 'indemnification', title: t('terms.indemnification.title')},
+    {id: 'dispute-resolution', title: t('terms.dispute.title')},
+    {id: 'general-provisions', title: t('terms.general.title')},
+  ];
+  const sectionIds = sections.map(s => s.id)
   const {activeId, setManualScroll} = useScrollSpy(sectionIds, 200, sectionIds[0])
+
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -82,284 +99,235 @@ export default function TermsOfService() {
 
             {/* CONTENT AREA */}
             <article className="text-base leading-7 max-w-3xl pl-12 text-ant-text-sec">
-              <h1 className='text-5xl font-medium text-ant-text mb-4'>Terms of Service</h1>
+              <h1 className='text-5xl font-medium text-ant-text mb-4'>{t('terms.title')}</h1>
 
+              {/* OVERVIEW */}
               <div id="terms-overview" className="scroll-mt-32 mt-10">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Terms of Service Overview</h2>
-                <p className="mb-6"><em>Last Updated: October 7, 2025</em></p>
+                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.overview.title')}</h2>
+                <p className="mb-6"><em>{t('terms.overview.last_updated')}</em></p>
 
-                <p className="mb-6">
-                  These Photon Cloud Terms of Service (“Terms”) constitute a binding legal agreement between you
-                  (“you”, “your”, or “Customer”) and Photon Cloud (“Photon”, “we”, “us”, or “our”). By accessing,
-                  registering for, or using our Services, you agree to be bound by these Terms.
-                </p>
-
-                <p className="mb-6">
-                  These Terms apply to your access to and use of the Photon platform, including our photo organization
-                  tools, facial recognition features, storage services, client galleries, and any related applications,
-                  APIs, or websites (collectively, the “Services”).
-                </p>
+                <p className="mb-6">{t('terms.overview.intro_1')}</p>
+                <p className="mb-6">{t('terms.overview.intro_2')}</p>
 
                 <p className="mb-6 p-4 bg-ant-bg-elevated rounded border border-ant-border">
-                  <strong>ARBITRATION NOTICE:</strong> THESE TERMS CONTAIN A MANDATORY ARBITRATION PROVISION AND CLASS
-                  ACTION WAIVER IN THE "DISPUTE RESOLUTION" SECTION. PLEASE REVIEW IT CAREFULLY, AS IT AFFECTS YOUR
-                  LEGAL RIGHTS TO RESOLVE DISPUTES WITH PHOTON.
+                  <strong>{t('terms.overview.arbitration.label')}</strong> {t('terms.overview.arbitration.text')}
                 </p>
               </div>
 
+              {/* ELIGIBILITY */}
               <div id="eligibility-accounts" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Eligibility and Accounts</h2>
+                <h2
+                  className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.eligibility.title')}</h2>
 
-                <p className="mb-6"><strong>Professional Use:</strong> The Services are intended for professional use by
-                  photographers, studios, and event organizers. By using the Services, you represent that you are at
-                  least 18 years old and have the authority to enter into these Terms personally or on behalf of the
-                  legal entity you represent.</p>
+                <p className="mb-6">
+                  <strong>{t('terms.eligibility.professional_use.label')}</strong> {t('terms.eligibility.professional_use.text')}
+                </p>
 
-                <p className="mb-6"><strong>Account Security:</strong> You are responsible for safeguarding your account
-                  credentials. You agree to notify us immediately of any unauthorized use of your account. Photon is not
-                  liable for any loss or damage arising from your failure to protect your login information.</p>
+                <p className="mb-6">
+                  <strong>{t('terms.eligibility.account_security.label')}</strong> {t('terms.eligibility.account_security.text')}
+                </p>
 
-                <p className="mb-6"><strong>Account Information:</strong> You agree to provide accurate, current, and
-                  complete information during registration and to update such information to keep it accurate. We
-                  reserve the right to suspend or terminate accounts that contain untruthful or incomplete information.
+                <p className="mb-6">
+                  <strong>{t('terms.eligibility.account_info.label')}</strong> {t('terms.eligibility.account_info.text')}
                 </p>
               </div>
 
+              {/* SERVICE CREDITS */}
               <div id="service-credits" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Services and Credits Usage</h2>
+                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.credits.title')}</h2>
 
                 <p className="mb-6">
-                  <strong>The Credit System:</strong> Certain features of the Services (e.g., facial recognition
-                  indexing,
-                  AI enhancements, storage allocation) consume "Credits" or "Usage Units". The specific cost in Credits
-                  for each feature is detailed on our Pricing Page.
+                  <strong>{t('terms.credits.system.label')}</strong> {t('terms.credits.system.text')}
                 </p>
 
                 <p className="mb-6">
-                  <strong>Allocations and Expiration:</strong> Subscription plans typically include a monthly allocation
-                  of Credits. Unless explicitly stated in your plan, <strong>unused Credits expire at the end of each
-                  billing cycle and do not roll over</strong>. Credits have no monetary value.
+                  <strong>{t('terms.credits.allocations.label')}</strong> {t('terms.credits.allocations.text_start')}
+                  <strong>{t('terms.credits.allocations.text_bold')}</strong> {t('terms.credits.allocations.text_end')}
                 </p>
 
                 <p className="mb-6 bg-ant-bg-elevated p-4 rounded border border-ant-border">
-                  <strong>Changes to Service:</strong> We may modify the Credit cost or features of the Service.
-                  However, for any change that materially negatively impacts your usage (e.g., increasing credit costs),
-                  <strong>we will provide at least 30 days' prior notice</strong> via email or in-app notification,
-                  giving you the opportunity to cancel before the new terms apply.
+                  <strong>{t('terms.credits.changes.label')}</strong> {t('terms.credits.changes.text_start')}
+                  <strong>{t('terms.credits.changes.text_bold')}</strong> {t('terms.credits.changes.text_end')}
                 </p>
               </div>
 
+              {/* STORAGE & SECURITY */}
               <div id="storage-security" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Storage, Security & Backups</h2>
+                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.storage.title')}</h2>
 
                 <p className="mb-6">
-                  <strong>Cloud Infrastructure (AWS):</strong> The Services are hosted on industry-leading cloud
-                  infrastructure
-                  providers, primarily <strong>Amazon Web Services (AWS)</strong>. We utilize AWS S3 and redundant
-                  technologies
-                  designed to provide high durability and availability for your data.
+                  <strong>{t('terms.storage.infrastructure.label')}</strong> {t('terms.storage.infrastructure.text_start')}
+                  <strong>{t('terms.storage.infrastructure.aws')}</strong>{t('terms.storage.infrastructure.text_end')}
                 </p>
 
                 <p className="mb-6">
-                  <strong>Security Measures:</strong> We implement commercially reasonable technical and organizational
-                  measures to protect your data, including encryption in transit and at rest. However, you acknowledge
-                  that no system is impenetrable.
+                  <strong>{t('terms.storage.security.label')}</strong> {t('terms.storage.security.text')}
                 </p>
 
                 <div
                   className="mb-6 p-4 rounded border border-yellow-200/50 bg-yellow-50/50 dark:bg-yellow-900/10 dark:border-yellow-800/30">
-                  <p className="font-semibold text-ant-text mb-2">YOUR RESPONSIBILITY FOR BACKUPS</p>
+                  <p className="font-semibold text-ant-text mb-2">{t('terms.storage.backup_warning.title')}</p>
                   <p>
-                    While we leverage AWS's durability, <strong>Photon is not an archival backup service</strong>.
-                    Technical errors, account suspensions, payment failures, or catastrophic events could result in loss
-                    of access to your data. You agree that you are solely responsible for maintaining independent copies
-                    of your original photos (RAW/JPG) on your own local storage or separate backup systems.
-                    Photon is not liable for any loss of Content.
+                    {t('terms.storage.backup_warning.text_start')}
+                    <strong>{t('terms.storage.backup_warning.text_bold')}</strong>. {t('terms.storage.backup_warning.text_end')}
                   </p>
                 </div>
               </div>
 
+              {/* CONTENT & BIOMETRICS */}
               <div id="content-biometrics" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Content and Biometric Data</h2>
-
-                <p className="mb-6"><strong>Ownership:</strong> You retain all rights and ownership of the photos,
-                  images, and metadata ("Content") you upload. You grant Photon a worldwide, non-exclusive, royalty-free
-                  license to host, store, resize, process, and display your Content solely as required to provide the
-                  Services.</p>
+                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.content.title')}</h2>
 
                 <p className="mb-6">
-                  <strong>Facial Recognition & Biometrics:</strong> The Services use biometric technology to detect
-                  and group faces. You acknowledge that this involves processing "Biometric Information" or "Biometric
-                  Identifiers"
-                  under applicable laws (such as BIPA, GDPR, and LGPD).
+                  <strong>{t('terms.content.ownership.label')}</strong> {t('terms.content.ownership.text')}
+                </p>
+
+                <p className="mb-6">
+                  <strong>{t('terms.content.facial_recognition.label')}</strong> {t('terms.content.facial_recognition.text')}
                 </p>
 
                 <div className="mb-6 bg-ant-bg-elevated p-4 rounded border border-ant-border">
-                  <p className="font-semibold text-ant-text mb-2">Biometric Retention Policy</p>
+                  <p className="font-semibold text-ant-text mb-2">{t('terms.content.retention.title')}</p>
                   <p className="mb-3">
-                    Photon retains biometric identifiers only for as long as necessary to provide the Service.
-                    All biometric data associated with your account is permanently destroyed <strong>within 30
-                    days</strong>
-                    of account termination or upon your explicit deletion of the source photos, whichever comes first.
+                    {t('terms.content.retention.policy_start')}
+                    <strong>{t('terms.content.retention.policy_bold')}</strong> {t('terms.content.retention.policy_end')}
                   </p>
                   <p className="text-sm italic">
-                    <strong>Exception:</strong> We may retain such data for a longer period strictly if required by
-                    applicable law, regulation, or valid legal process (e.g., a court order or litigation hold).
-                    In such cases, data will be isolated and retained only until the legal requirement expires.
+                    <strong>{t('terms.content.retention.exception.label')}</strong> {t('terms.content.retention.exception.text')}
                   </p>
                 </div>
 
                 <p className="mb-6">
-                  <strong>Your Responsibility:</strong> You represent that you have obtained explicit consent from
-                  individuals depicted in your Content (or their guardians) to capture and process their biometric data.
-                  You agree to indemnify Photon against any claims arising from your failure to obtain such consent.
+                  <strong>{t('terms.content.responsibility.label')}</strong> {t('terms.content.responsibility.text')}
                 </p>
               </div>
 
+              {/* SUBSCRIPTIONS */}
               <div id="subscriptions-payments" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Subscriptions and Payments</h2>
+                <h2
+                  className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.subscriptions.title')}</h2>
 
-                <p className="mb-6"><strong>Billing:</strong> You authorize Photon (and our third-party payment
-                  processors) to charge your payment method for the applicable subscription fees and any overage charges
-                  incurred. Fees are billed in advance on a recurring basis.</p>
+                <p className="mb-6">
+                  <strong>{t('terms.subscriptions.billing.label')}</strong> {t('terms.subscriptions.billing.text')}
+                </p>
 
-                <p className="mb-6"><strong>Failure to Pay:</strong> If a payment fails or is past due, we may downgrade
-                  your account to a free plan or suspend your access to the Services. <strong>Suspended accounts may be
-                    subject to data deletion after a specific grace period (e.g., 30 days).</strong></p>
+                <p className="mb-6">
+                  <strong>{t('terms.subscriptions.failure.label')}</strong> {t('terms.subscriptions.failure.text_start')}
+                  <strong>{t('terms.subscriptions.failure.text_bold')}</strong>
+                </p>
 
-                <p className="mb-6"><strong>Taxes:</strong> Fees are exclusive of taxes. You are responsible for paying
-                  all taxes, levies, or duties imposed by taxing authorities.</p>
+                <p className="mb-6">
+                  <strong>{t('terms.subscriptions.taxes.label')}</strong> {t('terms.subscriptions.taxes.text')}
+                </p>
               </div>
 
+              {/* CANCELLATION */}
               <div id="cancellation-termination" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Cancellation & Data Export</h2>
+                <h2
+                  className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.cancellation.title')}</h2>
 
                 <p className="mb-6">
-                  <strong>Cancellation:</strong> You may cancel your subscription at any time via account settings.
-                  Cancellation will be effective at the end of the current billing cycle.
-                  <strong>There are no refunds for partial months or unused credits.</strong>
+                  <strong>{t('terms.cancellation.policy.label')}</strong> {t('terms.cancellation.policy.text_start')}
+                  <strong>{t('terms.cancellation.policy.text_bold')}</strong>
                 </p>
 
                 <p className="mb-6">
-                  <strong>Data Export Window:</strong> Upon cancellation or expiration of a paid subscription, Photon
-                  may
-                  provide a limited <strong>30-day grace period</strong> during which you may access your account in a
-                  "read-only" mode solely to export your Content. After this period, <strong>Photon reserves the right
-                  to permanently delete all your Content to free up storage space.</strong>
+                  <strong>{t('terms.cancellation.export.label')}</strong> {t('terms.cancellation.export.text_start')}
+                  <strong>{t('terms.cancellation.export.grace_period')}</strong> {t('terms.cancellation.export.text_mid')}
+                  <strong>{t('terms.cancellation.export.text_bold_end')}</strong>
                 </p>
               </div>
 
+              {/* PROHIBITED USE */}
               <div id="prohibited-use" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Prohibited Use</h2>
-                <p className="mb-6">You agree not to use the Services to:</p>
+                <h2
+                  className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.prohibited.title')}</h2>
+                <p className="mb-6">{t('terms.prohibited.intro')}</p>
                 <ul className='flex flex-col gap-2 list-disc pl-10 mb-6'>
-                  <li>Upload content that is illegal, defamatory, pornographic, or violates intellectual property
-                    rights.
-                  </li>
-                  <li>Attempt to reverse engineer, decompile, or extract source code from the Services.</li>
-                  <li>Use the Services to build a competitive product or service.</li>
-                  <li>Scrape, crawl, or access the Services via unauthorized automated means.</li>
-                  <li>Share your account credentials with multiple users (account sharing) unless explicitly permitted
-                    by your plan.
-                  </li>
+                  <li>{t('terms.prohibited.items.illegal')}</li>
+                  <li>{t('terms.prohibited.items.reverse_engineer')}</li>
+                  <li>{t('terms.prohibited.items.competitive')}</li>
+                  <li>{t('terms.prohibited.items.scrape')}</li>
+                  <li>{t('terms.prohibited.items.sharing')}</li>
                 </ul>
               </div>
 
+              {/* INTELLECTUAL PROPERTY */}
               <div id="intellectual-property" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Intellectual Property</h2>
+                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.ip.title')}</h2>
                 <p className="mb-6">
-                  <strong>Photon IP:</strong> All rights, title, and interest in and to the Services (excluding your
-                  Content),
-                  including all software, technology, code, user interfaces, trademarks, and logos, are and will remain
-                  the exclusive property of Photon Cloud.
+                  <strong>{t('terms.ip.photon_ip.label')}</strong> {t('terms.ip.photon_ip.text')}
                 </p>
                 <p className="mb-6">
-                  <strong>Feedback:</strong> If you provide feedback or suggestions regarding the Services, we may use
-                  such feedback without obligation or compensation to you.
+                  <strong>{t('terms.ip.feedback.label')}</strong> {t('terms.ip.feedback.text')}
                 </p>
               </div>
 
+              {/* DISCLAIMERS */}
               <div id="disclaimers-liability" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Disclaimers and Limitation of
-                  Liability</h2>
-
-                <p className="mb-6"><strong>"AS IS" WARRANTY:</strong> THE SERVICES ARE PROVIDED ON AN "AS IS" AND "AS
-                  AVAILABLE" BASIS. PHOTON EXPRESSLY DISCLAIMS ALL WARRANTIES, INCLUDING WARRANTIES OF MERCHANTABILITY,
-                  FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICES WILL BE
-                  UNINTERRUPTED, ERROR-FREE, OR THAT FACIAL RECOGNITION RESULTS WILL BE 100% ACCURATE.</p>
-
-                <p className="mb-6"><strong>LIMITATION OF LIABILITY:</strong> TO THE MAXIMUM EXTENT PERMITTED BY LAW,
-                  PHOTON SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES,
-                  OR ANY LOSS OF PROFITS, DATA, USE, OR GOODWILL. IN NO EVENT SHALL PHOTON'S AGGREGATE LIABILITY FOR ALL
-                  CLAIMS EXCEED THE GREATER OF ONE HUNDRED U.S. DOLLARS ($100) OR THE AMOUNT YOU PAID PHOTON IN THE
-                  TWELVE (12) MONTHS PRECEDING THE CLAIM.</p>
-
-                <p className="mb-6"><strong>EXCEPTIONS:</strong> NOTHING IN THESE TERMS LIMITS OR EXCLUDES LIABILITY
-                  FOR: (A) DEATH OR PERSONAL INJURY CAUSED BY NEGLIGENCE; (B) FRAUD OR FRAUDULENT MISREPRESENTATION; OR
-                  (C) ANY OTHER LIABILITY THAT CANNOT BE EXCLUDED OR LIMITED BY APPLICABLE LAW (INCLUDING GROSS
-                  NEGLIGENCE OR WILLFUL MISCONDUCT).</p>
-              </div>
-
-              <div id="indemnification" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Indemnification</h2>
+                <h2
+                  className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.disclaimers.title')}</h2>
 
                 <p className="mb-6">
-                  You agree to defend, indemnify, and hold harmless Photon Cloud, its officers, directors, employees,
-                  and agents from and against any claims, damages, obligations, losses, liabilities, costs, and expenses
-                  (including attorney's fees) arising from:
+                  <strong>{t('terms.disclaimers.as_is.label')}</strong> {t('terms.disclaimers.as_is.text')}
                 </p>
+
+                <p className="mb-6">
+                  <strong>{t('terms.disclaimers.liability.label')}</strong> {t('terms.disclaimers.liability.text')}
+                </p>
+
+                <p className="mb-6">
+                  <strong>{t('terms.disclaimers.exceptions.label')}</strong> {t('terms.disclaimers.exceptions.text')}
+                </p>
+              </div>
+
+              {/* INDEMNIFICATION */}
+              <div id="indemnification" className="scroll-mt-32 mt-20">
+                <h2
+                  className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.indemnification.title')}</h2>
+
+                <p className="mb-6">{t('terms.indemnification.intro')}</p>
                 <ul className='flex flex-col gap-2 list-disc pl-10 mb-6'>
-                  <li>Your use of and access to the Services;</li>
-                  <li>Your violation of any term of these Terms;</li>
-                  <li>Your violation of any third-party right, including copyright, property, or privacy rights;</li>
-                  <li>Any claim that your Content or your use of facial recognition caused damage to a third party
-                    (including claims related to lack of consent).
-                  </li>
+                  <li>{t('terms.indemnification.items.usage')}</li>
+                  <li>{t('terms.indemnification.items.violation_terms')}</li>
+                  <li>{t('terms.indemnification.items.violation_rights')}</li>
+                  <li>{t('terms.indemnification.items.claims')}</li>
                 </ul>
               </div>
 
+              {/* DISPUTE RESOLUTION */}
               <div id="dispute-resolution" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>Dispute Resolution</h2>
+                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.dispute.title')}</h2>
 
                 <p className="mb-6">
-                  <strong>Arbitration:</strong> Any dispute arising from these Terms shall be resolved by binding
-                  arbitration
-                  administered by a recognized arbitration body, except for disputes qualifying for small claims court.
+                  <strong>{t('terms.dispute.arbitration.label')}</strong> {t('terms.dispute.arbitration.text')}
                 </p>
 
                 <p className="mb-6">
-                  <strong>Class Action Waiver:</strong> YOU WAIVE ANY RIGHT TO PARTICIPATE IN A CLASS-ACTION LAWSUIT
-                  OR CLASS-WIDE ARBITRATION. DISPUTES SHALL BE RESOLVED ON AN INDIVIDUAL BASIS ONLY.
+                  <strong>{t('terms.dispute.class_action.label')}</strong> {t('terms.dispute.class_action.text')}
                 </p>
 
                 <p className="mb-6">
-                  <strong>30-Day Opt-Out:</strong> You have the right to opt out of the arbitration and class action
-                  waiver provisions
-                  by sending written notice of your decision to <Link
-                  href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_SUPPORT_LEGAL}`}>{process.env.NEXT_PUBLIC_EMAIL_SUPPORT_LEGAL}
-                </Link> within
-                  30 days of first accepting these Terms.
+                  <strong>{t('terms.dispute.opt_out.label')}</strong> {t('terms.dispute.opt_out.text_start')} <Link
+                  href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_SUPPORT_LEGAL}`}>{process.env.NEXT_PUBLIC_EMAIL_SUPPORT_LEGAL}</Link> {t('terms.dispute.opt_out.text_end')}
                 </p>
               </div>
 
+              {/* GENERAL */}
               <div id="general-provisions" className="scroll-mt-32 mt-20">
-                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>General Provisions</h2>
+                <h2 className='text-[22px] font-medium text-ant-text leading-1.5 mb-6'>{t('terms.general.title')}</h2>
 
                 <p className="mb-6">
-                  <strong>Governing Law:</strong> These Terms are governed by the laws of the Federative Republic of
-                  Brazil.
-                  You agree to submit to the exclusive jurisdiction of the courts located in Brazil to resolve any legal
-                  matter
-                  arising from these Terms, unless mandatory local law in your country requires otherwise.
+                  <strong>{t('terms.general.governing.label')}</strong> {t('terms.general.governing.text')}
                 </p>
 
-                <p className="mb-6"><strong>Severability:</strong> If any provision of these Terms is found to be
-                  invalid or unenforceable, that provision shall be enforced to the maximum extent possible, and the
-                  remaining provisions shall remain in full force.</p>
+                <p className="mb-6">
+                  <strong>{t('terms.general.severability.label')}</strong> {t('terms.general.severability.text')}
+                </p>
 
-                <p className="mb-6"><strong>Contact:</strong> Questions about these Terms? Contact us at <Link
-                  href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_SUPPORT_LEGAL}`}>{process.env.NEXT_PUBLIC_EMAIL_SUPPORT_LEGAL}
-                </Link>.
+                <p className="mb-6">
+                  <strong>{t('terms.general.contact.label')}</strong> {t('terms.general.contact.text_start')} <Link
+                  href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_SUPPORT_LEGAL}`}>{process.env.NEXT_PUBLIC_EMAIL_SUPPORT_LEGAL}</Link>.
                 </p>
               </div>
 
