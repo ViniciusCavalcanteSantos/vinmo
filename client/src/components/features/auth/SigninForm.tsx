@@ -11,6 +11,7 @@ import {useRouter} from "next/navigation";
 import SocialMediaAuth from "@/components/features/auth/SocialMediaAuth";
 import {login} from "@/lib/api/users/login";
 import {useUser} from "@/contexts/UserContext";
+import {Trans} from "react-i18next";
 
 export default function SigninForm() {
   const {t} = useT();
@@ -92,7 +93,7 @@ export default function SigninForm() {
       <SocialMediaAuth/>
 
       {/* links */}
-      <div className="flex justify-center text-sm text-ant-text-sec">
+      <div className="flex justify-center text-sm text-ant-text-sec mb-8">
         <Link
           href="/forgot-password"
           className="
@@ -117,6 +118,26 @@ export default function SigninForm() {
           {t("login.create_an_account")}
         </Link>
       </div>
+
+      <p className='text-ant-text-ter text-xs mt-6 text-center px-4'>
+        <Trans
+          i18nKey="login.login_terms"
+          components={{
+            // Note que removi o underline forçado (!underline) e o ícone.
+            // O link fica sutil, apenas mudando de cor ou sublinhando no hover.
+            tos: <Link
+              href="/legal/terms-of-service"
+              target='_blank'
+              className='hover:text-ant-text hover:underline transition-colors'
+            />,
+            pp: <Link
+              href="/legal/privacy-policy"
+              target='_blank'
+              className='hover:text-ant-text hover:underline transition-colors'
+            />
+          }}
+        />
+      </p>
     </Form>
   )
 }
