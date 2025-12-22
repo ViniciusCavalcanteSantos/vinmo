@@ -1,96 +1,4 @@
 {
-  "seo": {
-    "landpage": {
-      "title": "A IA que organiza e entrega suas fotos com velocidade",
-      "description": "Nossa plataforma identifica os rostos em suas fotos, cria galerias individuais para cada cliente ou convidado e automatiza sua entrega. Chega de separar fotos manualmente."
-    },
-    "signin": {
-      "title": "Entrar",
-      "description": "Acesse sua conta Vinmo."
-    },
-    "signup": {
-      "title": "Criar conta",
-      "description": "Cadastre-se na Vinmo."
-    },
-    "confirm-code": {
-      "title": "Verificar email",
-      "description": "Confirme seu email Vinmo."
-    },
-    "address": {
-      "title": "Informe seu endereço",
-      "description": "Por favor informe seu endereço"
-    },
-    "finish": {
-      "title": "Conta Confirmada",
-      "description": "Email verificado com sucesso."
-    },
-    "reset_password": {
-      "title": "Redefinir Senha",
-      "description": "Crie uma nova senha Vinmo."
-    },
-    "recovery-sent": {
-      "title": "Email enviado",
-      "description": "Link para redefinir senha enviado."
-    },
-    "forgot-password": {
-      "title": "Esqueci a senha",
-      "description": "Recupere sua senha Vinmo."
-    },
-    "legal_hub": {
-      "title": "Central Legal",
-      "description": "Acesse os Termos de Uso, Política de Privacidade e documentos legais do Photon. Transparência, segurança e confiança para fotógrafos profissionais."
-    },
-    "terms_of_service": {
-      "title": "Termos de Uso",
-      "description": "Leia o Contrato de Usuário do Photon Cloud. Entenda seus direitos, responsabilidades e as regras que regem o uso de nossa plataforma de gestão de fotos."
-    },
-    "privacy_policy": {
-      "title": "Política de Privacidade",
-      "description": "Saiba como o Photon coleta, usa e protege seus dados pessoais. Estamos comprometidos com a segurança de dados e conformidade com a LGPD."
-    },
-    "dashboard": {
-      "title": "Painel de Controle",
-      "description": "Visão geral dos seus eventos recentes e atividades do Photon."
-    },
-    "clients": {
-      "index": {
-        "title": "Clientes",
-        "description": "Gerencie sua base de clientes, visualize perfis e histórico."
-      },
-      "complete_registration": {
-        "title": "Concluir Cadastro de Cliente",
-        "description": "Finalize o preenchimento dos dados cadastrais do cliente."
-      },
-      "create_by_image": {
-        "title": "Importar Clientes via Imagem",
-        "description": "Crie clientes automaticamente baseado nos nomes dos arquivos."
-      },
-      "profile": {
-        "title": "Perfil do Cliente",
-        "description": "Detalhes do cliente, contratos associados e galeria pessoal."
-      }
-    },
-    "contracts": {
-      "index": {
-        "title": "Contratos",
-        "description": "Gerencie seus contratos, propostas e assinaturas digitais."
-      }
-    },
-    "events": {
-      "index": {
-        "title": "Eventos",
-        "description": "Lista de todos os eventos fotográficos e status de processamento."
-      },
-      "workspace": {
-        "title": "Área de Trabalho do Evento",
-        "description": "Gerencie fotos, upload e reconhecimento facial deste evento."
-      }
-    },
-    "send_photo": {
-      "title": "Upload de Fotos",
-      "description": "Envie novas fotos para o processamento do evento."
-    }
-  },
   "dropzone": {
     "title": "Clique ou arraste os arquivos para esta área para fazer o upload",
     "description": "Clique ou arraste aqui para enviar seus arquivos em poucos segundos."
@@ -112,7 +20,7 @@
     "confirm_new_password": "Confirmar nova senha",
     "create_password": "Criar senha",
     "cant_get_in": "Não consegue entrar?",
-    "already_have_a_account": "Já tem uma conta Vinmo? Entrar",
+    "already_have_a_account": "Já tem uma conta Photon? Entrar",
     "email_code_sent": "O email com o código foi enviado",
     "new_email_code_sent": "O email com o novo código foi enviado",
     "check_your_inbox": "Verifique a caixa de entrada.",

@@ -1,0 +1,94 @@
+{
+  "seo": {
+    "landpage": {
+      "title": "Plataforma de Entrega de Fotos com Reconhecimento Facial",
+      "description": "Automatize seu fluxo de trabalho. O Photon Cloud identifica rostos, cria galerias individuais para cada cliente e realiza a entrega das fotos com velocidade e precisão."
+    },
+    "signin": {
+      "title": "Entrar no Photon Cloud",
+      "description": "Acesse seu painel de controle. Gerencie seus eventos, galerias e entregas automáticas de fotos em um só lugar."
+    },
+    "signup": {
+      "title": "Criar conta",
+      "description": "Junte-se ao Photon Cloud. Crie sua conta e comece a automatizar seu fluxo de trabalho fotográfico com inteligência artificial."
+    },
+    "confirm-code": {
+      "title": "Verificar email",
+      "description": "Etapa de segurança. Confirme o código enviado ao seu email para validar seu acesso à plataforma Photon."
+    },
+    "address": {
+      "title": "Completar Cadastro",
+      "description": "Finalize a configuração da sua conta informando seus dados de endereço para faturamento e contratos."
+    },
+    "finish": {
+      "title": "Conta Confirmada",
+      "description": "Tudo pronto! Seu email foi verificado e sua conta Photon Cloud está ativa e segura."
+    },
+    "reset_password": {
+      "title": "Redefinir Senha",
+      "description": "Defina uma nova senha segura para retomar o acesso à sua conta e aos seus eventos."
+    },
+    "recovery-sent": {
+      "title": "Email de recuperação enviado",
+      "description": "Verifique sua caixa de entrada. Enviamos as instruções necessárias para você redefinir sua senha com segurança."
+    },
+    "forgot-password": {
+      "title": "Recuperar acesso",
+      "description": "Esqueceu sua senha? Inicie o processo de recuperação segura para retomar o acesso à sua conta Photon Cloud."
+    },
+    "legal_hub": {
+      "title": "Central Legal",
+      "description": "Acesse os Termos de Uso, Política de Privacidade e documentos legais do Photon. Transparência, segurança e confiança para fotógrafos profissionais."
+    },
+    "terms_of_service": {
+      "title": "Termos de Uso",
+      "description": "Leia o Contrato de Usuário do Photon Cloud. Entenda seus direitos, responsabilidades e as regras que regem o uso de nossa plataforma."
+    },
+    "privacy_policy": {
+      "title": "Política de Privacidade",
+      "description": "Saiba como o Photon coleta, usa e protege seus dados pessoais. Estamos comprometidos com a segurança de dados e conformidade com a LGPD."
+    },
+    "dashboard": {
+      "title": "Painel de Controle",
+      "description": "Visão geral estratégica. Acompanhe o desempenho dos seus eventos recentes, armazenamento e atividades no Photon."
+    },
+    "clients": {
+      "index": {
+        "title": "Gerenciamento de Clientes",
+        "description": "Organize sua base de clientes, visualize perfis, histórico de eventos e status de acesso às galerias."
+      },
+      "complete_registration": {
+        "title": "Concluir Cadastro de Cliente",
+        "description": "Preencha os dados cadastrais pendentes para garantir a correta geração de contratos e faturas."
+      },
+      "create_by_image": {
+        "title": "Importação Inteligente",
+        "description": "Agilize seu trabalho criando perfis de clientes automaticamente através da leitura de nomes de arquivos."
+      },
+      "profile": {
+        "title": "Perfil do Cliente",
+        "description": "Central de informações do cliente. Acesse contratos assinados, galerias pessoais e dados de contato."
+      }
+    },
+    "contracts": {
+      "index": {
+        "title": "Gestão de Contratos",
+        "description": "Controle total sobre seus documentos legais. Crie, envie e monitore o status de assinaturas digitais."
+      }
+    },
+    "events": {
+      "index": {
+        "title": "Meus Eventos",
+        "description": "Lista completa de seus eventos fotográficos. Monitore o progresso do reconhecimento facial e entregas."
+      },
+      "workspace": {
+        "title": "Workspace do Evento",
+        "description": "Ambiente de trabalho do fotógrafo. Faça upload, gerencie a curadoria e acompanhe a indexação por IA."
+      }
+    },
+    "send_photo": {
+      "title": "Upload de Fotos",
+      "description": "Envie arquivos de alta resolução para processamento. Nossa IA começará a organizar as fotos assim que o upload terminar."
+    }
+  }
+}

@@ -9,8 +9,8 @@ export async function generateMetadata(
   return createPageMetadata(
     {
       path: "legal",
-      titleKey: "legal:seo.legal_hub.title",
-      descriptionKey: "legal:seo.legal_hub.description"
+      titleKey: "seo.legal_hub.title",
+      descriptionKey: "seo.legal_hub.description"
     },
     parent
   );

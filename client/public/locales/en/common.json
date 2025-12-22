@@ -1,96 +1,4 @@
 {
-  "seo": {
-    "landpage": {
-      "title": "The AI that organizes and delivers your photos quickly",
-      "description": "Our platform recognizes faces in your photos, creates individual galleries for each client or guest, and automates delivery. No more manually sorting photos."
-    },
-    "signin": {
-      "title": "Sign in",
-      "description": "Access your Vinmo account."
-    },
-    "signup": {
-      "title": "Sign up",
-      "description": "Create your Vinmo account."
-    },
-    "confirm_code": {
-      "title": "Verify email",
-      "description": "Confirm your Vinmo email."
-    },
-    "address": {
-      "title": "inform your address",
-      "description": "Please inform your address."
-    },
-    "finish": {
-      "title": "Account verified",
-      "description": "Email successfully verified."
-    },
-    "reset_password": {
-      "title": "Reset password",
-      "description": "Set a new Vinmo password."
-    },
-    "recovery_sent": {
-      "title": "Email sent",
-      "description": "Password reset link sent."
-    },
-    "forgot_password": {
-      "title": "Forgot password",
-      "description": "Recover your Vinmo password."
-    },
-    "legal_hub": {
-      "title": "Legal Center",
-      "description": "Access Photon's Terms of Service, Privacy Policy, and legal documentation. Transparency, security, and trust for professional photographers."
-    },
-    "terms_of_service": {
-      "title": "Terms of Service",
-      "description": "Read the User Agreement for Photon Cloud. Understand your rights, responsibilities, and the rules that govern the use of our photo management platform."
-    },
-    "privacy_policy": {
-      "title": "Privacy Policy",
-      "description": "Learn how Photon collects, uses, and protects your personal data. We are committed to data security and compliance with global privacy laws."
-    },
-    "dashboard": {
-      "title": "Dashboard",
-      "description": "Overview of your recent events and Photon activities."
-    },
-    "clients": {
-      "index": {
-        "title": "Clients",
-        "description": "Manage your client base, view profiles and history."
-      },
-      "complete_registration": {
-        "title": "Complete Registration",
-        "description": "Finalize client registration data."
-      },
-      "create_by_image": {
-        "title": "Import Clients by Image",
-        "description": "Automatically create clients based on file names."
-      },
-      "profile": {
-        "title": "Client Profile",
-        "description": "Client details, associated contracts, and personal gallery."
-      }
-    },
-    "contracts": {
-      "index": {
-        "title": "Contracts",
-        "description": "Manage your contracts, proposals, and digital signatures."
-      }
-    },
-    "events": {
-      "index": {
-        "title": "Events",
-        "description": "List of all photography events and processing status."
-      },
-      "workspace": {
-        "title": "Event Workspace",
-        "description": "Manage photos, uploads, and facial recognition for this event."
-      }
-    },
-    "send_photo": {
-      "title": "Upload Photos",
-      "description": "Upload new photos for event processing."
-    }
-  },
   "login": {
     "sign_up": "Sign up",
     "sign_in": "Sign in",
@@ -108,7 +16,7 @@
     "confirm_new_password": "Confirm new password",
     "create_password": "Create password",
     "cant_get_in": "Forgot your password?",
-    "already_have_a_account": "Already have a Vinmo account? Sign in",
+    "already_have_a_account": "Already have a Photon account? Sign in",
     "email_code_sent": "The email with the code has been sent",
     "new_email_code_sent": "The email with the new code has been sent",
     "check_your_inbox": "Check your inbox.",

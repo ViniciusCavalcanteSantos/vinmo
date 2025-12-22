@@ -9,8 +9,8 @@ export async function generateMetadata(
   return createPageMetadata(
     {
       path: "legal/privacy-policy",
-      titleKey: "legal:seo.privacy_policy.title",
-      descriptionKey: "legal:seo.privacy_policy.description"
+      titleKey: "seo.privacy_policy.title",
+      descriptionKey: "seo.privacy_policy.description"
     },
     parent
   );

@@ -20,7 +20,7 @@ async function createPageMetadata(
   let baseUrlString = String(parentMetadata.alternates?.canonical?.url || "https://photon.org");
   baseUrlString = baseUrlString.replace(/\/$/, "").replace(/\/(pt-BR|en)$/, "");
 
-  const {t} = await getT();
+  const {t} = await getT('seo');
   const title = t(titleKey);
   const description = t(descriptionKey);
   const defaultImage = "/og-default.png";

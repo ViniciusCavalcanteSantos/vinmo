@@ -1,0 +1,94 @@
+{
+  "seo": {
+    "landpage": {
+      "title": "Photo Delivery Platform with Facial Recognition",
+      "description": "Automate your workflow. Photon Cloud identifies faces, creates individual galleries for each client, and delivers photos with speed and precision."
+    },
+    "signin": {
+      "title": "Log In to Photon Cloud",
+      "description": "Access your dashboard. Manage your events, galleries, and automated photo deliveries in one place."
+    },
+    "signup": {
+      "title": "Create Account",
+      "description": "Join Photon Cloud. Sign up and start streamlining your photography workflow with artificial intelligence."
+    },
+    "confirm-code": {
+      "title": "Verify Email",
+      "description": "Security step. Please confirm the code sent to your email to validate your access to the Photon platform."
+    },
+    "address": {
+      "title": "Complete Registration",
+      "description": "Finish setting up your account by providing your address details for billing and contracts."
+    },
+    "finish": {
+      "title": "Account Confirmed",
+      "description": "All set! Your email has been verified and your Photon Cloud account is active and secure."
+    },
+    "reset_password": {
+      "title": "Reset Password",
+      "description": "Set a new secure password to regain access to your account and events."
+    },
+    "recovery-sent": {
+      "title": "Recovery Email Sent",
+      "description": "Check your inbox. We have sent the necessary instructions for you to securely reset your password."
+    },
+    "forgot-password": {
+      "title": "Recover Access",
+      "description": "Forgot your password? Start the secure recovery process to regain access to your Photon Cloud account."
+    },
+    "legal_hub": {
+      "title": "Legal Center",
+      "description": "Access Photon's Terms of Service, Privacy Policy, and legal documentation. Transparency and trust for professional photographers."
+    },
+    "terms_of_service": {
+      "title": "Terms of Service",
+      "description": "Read the User Agreement for Photon Cloud. Understand your rights, responsibilities, and the rules governing the use of our platform."
+    },
+    "privacy_policy": {
+      "title": "Privacy Policy",
+      "description": "Learn how Photon collects, uses, and protects your personal data. We are committed to data security and global privacy compliance."
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Strategic overview. Track the performance of your recent events, storage usage, and Photon activities."
+    },
+    "clients": {
+      "index": {
+        "title": "Client Management",
+        "description": "Organize your client base, view profiles, event history, and gallery access status."
+      },
+      "complete_registration": {
+        "title": "Complete Client Profile",
+        "description": "Fill in pending registration data to ensure correct contract generation and invoicing."
+      },
+      "create_by_image": {
+        "title": "Smart Import",
+        "description": "Speed up your work by automatically creating client profiles by reading file names."
+      },
+      "profile": {
+        "title": "Client Profile",
+        "description": "Client information hub. Access signed contracts, personal galleries, and contact details."
+      }
+    },
+    "contracts": {
+      "index": {
+        "title": "Contract Management",
+        "description": "Full control over your legal documents. Create, send, and monitor digital signature status."
+      }
+    },
+    "events": {
+      "index": {
+        "title": "My Events",
+        "description": "Complete list of your photography events. Monitor facial recognition progress and deliveries."
+      },
+      "workspace": {
+        "title": "Event Workspace",
+        "description": "Photographer's workspace. Upload photos, manage curation, and track AI indexing."
+      }
+    },
+    "send_photo": {
+      "title": "Upload Photos",
+      "description": "Send high-resolution files for processing. Our AI will start organizing photos as soon as the upload finishes."
+    }
+  }
+}
