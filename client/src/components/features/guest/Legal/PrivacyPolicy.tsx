@@ -6,6 +6,8 @@ import Link from "next/link";
 import React from "react";
 import {useScrollSpy} from "@/hooks/useScrollSpy";
 import GuestHeader from "@/components/common/layout/GuestHeader";
+import SidebarGuide from "@/components/features/guest/Legal/_components/SidebarGuide";
+import {useT} from "@/i18n/client";
 
 const sections = [
   {id: 'privacy-policy-overview', title: 'Privacy policy overview'},
@@ -24,6 +26,7 @@ const sections = [
 export default function PrivacyPolicy() {
   const isScrolled = useScrollThreshold();
   const sectionIds = sections.map(s => s.id)
+  const {t} = useT()
 
   const {activeId, setManualScroll} = useScrollSpy(sectionIds, 200, sectionIds[0])
 
@@ -65,42 +68,16 @@ export default function PrivacyPolicy() {
 
       <main className={`${isScrolled ? 'pt-18' : 'pt-36'}`}>
         <div className="container mx-auto pt-8">
-          <div className="flex text-base text-ant-text-sec gap-2">
-            <Link href='/' className=''>Legal information</Link>
+          <div className="flex text-base text-ant-text-sec gap-2 px-8">
+            <Link href='/legal' className=''>{t('legal_information')}</Link>
             /
-            <Link href='/' className=''>Privacy Policy</Link>
+            <Link href='/legal/privacy-policy' className=''>{t('privacy_policy')}</Link>
           </div>
 
           <div className="grid grid-cols-[300px_1fr] mt-4 p-8">
             {/* GUIDE SIDEBAR */}
-            <aside className="">
-              <div className={`sticky top-25`}>
-                <Link href='' className='!text-ant-text hover:!text-ant-text-sec font-semibold text-base'>Privacy
-                  Policy</Link>
-
-                <div className="flex flex-col pl-8 mt-4 gap-4">
-
-                  {sections.map(section => (
-                    <div key={section.id} className='relative flex items-center'>
-                      <span
-                        className={`absolute -left-3.5 w-[5px] h-[5px] rounded-full bg-ant-text-ter transition-opacity duration-300 
-                          ${activeId === section.id ? 'opacity-100' : 'opacity-0'}
-                        `}
-                      />
-
-                      <Link
-                        href={`#${section.id}`}
-                        className='!text-ant-text-sec hover:!text-ant-text-ter'
-                        onClick={(e) => handleLinkClick(e, section.id)}
-                      >
-                        {section.title}
-                      </Link>
-                    </div>
-                  ))}
-
-                </div>
-              </div>
-            </aside>
+            <SidebarGuide title={t('privacy_policy')} sections={sections} handleClick={handleLinkClick}
+                          activeId={activeId}/>
 
 
             <article className="text-base  leading-6 max-w-2xl">

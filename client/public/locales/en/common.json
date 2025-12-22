@@ -438,5 +438,8 @@
   },
   "session_expired_message": "Your session has expired. Please log in again to continue.",
   "something_went_wrong": "Something went wrong",
-  "try_again": "Try again"
+  "try_again": "Try again",
+  "legal_information": "Legal Information",
+  "privacy_policy": "Privacy Policy",
+  "terms_of_service": "Terms of Service"
 }
