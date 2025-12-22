@@ -112,6 +112,24 @@ export default function TermsOfService() {
                 <p className="mb-6 p-4 bg-ant-bg-elevated rounded border border-ant-border">
                   <strong>{t('terms.overview.arbitration.label')}</strong> {t('terms.overview.arbitration.text')}
                 </p>
+
+                <div className="mb-10">
+                  <p className='mb-6'>{t('terms.toc_header')}</p>
+
+                  <ul className='flex flex-col gap-2 list-disc pl-10'>
+                    {sections.map(section => (
+                      <li key={section.id}>
+                        <Link
+                          href={`#${section.id}`}
+                          onClick={(e) => handleLinkClick(e, section.id)}
+                          className="hover:text-ant-primary transition-colors"
+                        >
+                          {section.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
               {/* ELIGIBILITY */}
