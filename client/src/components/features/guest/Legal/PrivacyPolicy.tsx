@@ -93,8 +93,9 @@ export default function PrivacyPolicy() {
               </p>
 
               {/* TABLE OF CONTENTS */}
-              <div className="mb-6">
+              <nav className="mb-6" aria-label={t('table_of_contents')}>
                 <p className='mb-6'>{t('privacy.intro.toc_header')}</p>
+
                 <ul className='flex flex-col gap-3 list-disc pl-10'>
                   {sections.map(section => (
                     <li key={section.id}>
@@ -104,7 +105,7 @@ export default function PrivacyPolicy() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </nav>
 
               <p className='mb-6'>{t('privacy.intro.controller_processor')}</p>
 

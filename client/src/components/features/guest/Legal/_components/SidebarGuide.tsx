@@ -3,6 +3,7 @@ import Link from "next/link";
 import {useClickAway} from "react-use";
 import {RightOutlined} from "@ant-design/icons";
 import {useScrollThreshold} from "@/hooks/useScrollThreshold";
+import {useT} from "@/i18n/client";
 
 interface SidebarGuide {
   title: string,
@@ -15,6 +16,7 @@ export default function SidebarGuide({title, sections, handleClick, activeId}: S
   const [isOpen, setIsOpen] = useState(false);
   const isScrolled = useScrollThreshold();
   const ref = useRef(null);
+  const {t} = useT()
 
   useClickAway(ref, () => {
     if (isOpen) setIsOpen(false);
@@ -50,28 +52,30 @@ export default function SidebarGuide({title, sections, handleClick, activeId}: S
           {title}
         </Link>
 
-        <div className="flex flex-col pl-4 lg:pl-8 mt-4 gap-4">
-          {sections.map(section => (
-            <div key={section.id} className='relative flex items-center'>
+        <nav aria-label={t('aria.sidebar_nav')}>
+          <ul className="flex flex-col pl-4 lg:pl-8 mt-4 gap-4">
+            {sections.map(section => (
+              <li key={section.id} className='relative flex items-center'>
               <span
                 className={`absolute -left-3.5 w-[5px] h-[5px] rounded-full bg-ant-text-ter transition-opacity duration-300 
                   ${activeId === section.id ? 'opacity-100' : 'opacity-0'}
                 `}
               />
 
-              <Link
-                href={`#${section.id}`}
-                className={`!text-ant-text-sec hover:!text-ant-text-ter transition-colors ${activeId === section.id ? '!text-ant-text font-medium' : ''}`}
-                onClick={(e) => {
-                  handleClick(e, section.id);
-                  setIsOpen(false);
-                }}
-              >
-                {section.title}
-              </Link>
-            </div>
-          ))}
-        </div>
+                <Link
+                  href={`#${section.id}`}
+                  className={`!text-ant-text-sec hover:!text-ant-text-ter transition-colors ${activeId === section.id ? '!text-ant-text font-medium' : ''}`}
+                  onClick={(e) => {
+                    handleClick(e, section.id);
+                    setIsOpen(false);
+                  }}
+                >
+                  {section.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </aside>
   )

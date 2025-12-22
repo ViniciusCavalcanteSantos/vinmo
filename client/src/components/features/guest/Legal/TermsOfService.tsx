@@ -96,7 +96,7 @@ export default function TermsOfService() {
                   <strong>{t('terms.overview.arbitration.label')}</strong> {t('terms.overview.arbitration.text')}
                 </p>
 
-                <div className="mb-10">
+                <nav className="mb-10" aria-label={t('table_of_contents')}>
                   <p className='mb-6'>{t('terms.toc_header')}</p>
 
                   <ul className='flex flex-col gap-2 list-disc pl-10'>
@@ -112,7 +112,7 @@ export default function TermsOfService() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </nav>
               </div>
 
               {/* ELIGIBILITY */}
