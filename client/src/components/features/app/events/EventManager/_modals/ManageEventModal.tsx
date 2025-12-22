@@ -32,7 +32,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
   const [form] = Form.useForm();
 
   // TODO: implementar pesquisa de contratos
-  const {data: contracts} = useContracts(undefined, 1, 300)
+  const {data: contractsData} = useContracts(undefined, 1, 300)
   const [eventTypes, setEventTypes] = useState<{ id: number, name: string }[]>([]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
     if (open) {
       populateFields();
     }
-  }, [open, event, contracts, form, isEditMode]);
+  }, [open, event, contractsData, form, isEditMode]);
 
   const handleContractChange = async (contractId: number) => {
     setEventTypes([]);
@@ -136,7 +136,7 @@ const ManageEventModal: React.FC<ManageEventModalProps> = ({open, event, onCreat
                        rules={[{required: true, message: t('select_contract') + "!"}]}>
               <Select placeholder={t('select_contract')}
                       onChange={handleContractChange}
-                      options={contracts?.map(contract => {
+                      options={contractsData?.contracts?.map(contract => {
                         return {value: contract.id, label: `${contract.code} - ${contract.title}`};
                       })}/>
             </Form.Item>

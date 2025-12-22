@@ -9,7 +9,6 @@ export function useContracts(search: string = '', page: number = 1, pageSize: nu
       pageSize,
       search,
     ),
-    select: (data) => data.contracts,
     retry: 1,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true,

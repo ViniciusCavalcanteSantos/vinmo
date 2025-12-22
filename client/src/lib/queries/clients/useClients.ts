@@ -9,7 +9,6 @@ export function useClients(search: string = '', page: number = 1, page_size: num
       page_size,
       search
     ),
-    select: (data) => data.clients,
     retry: 1,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true
