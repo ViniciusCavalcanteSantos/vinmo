@@ -10,23 +10,6 @@ import {useT} from "@/i18n/client";
 import GuestHeader from "@/components/common/layout/GuestHeader";
 import PhotonLogo from "@/components/ui/icons/PhotonLogo";
 
-const sections = [
-  {id: 'terms-overview', title: 'Terms of Service Overview'},
-  {id: 'eligibility-accounts', title: 'Eligibility and Accounts'},
-  {id: 'service-credits', title: 'Services and Credits Usage'},
-  {id: 'storage-security', title: 'Storage, Security & Backups'},
-  {id: 'content-biometrics', title: 'Content & Biometric Data'},
-  {id: 'subscriptions-payments', title: 'Subscriptions and Payments'},
-  {id: 'cancellation-termination', title: 'Cancellation & Data Export'},
-  {id: 'prohibited-use', title: 'Prohibited Use'},
-  {id: 'intellectual-property', title: 'Intellectual Property'},
-  {id: 'disclaimers-liability', title: 'Disclaimers & Liability'},
-  {id: 'indemnification', title: 'Indemnification'},
-  {id: 'dispute-resolution', title: 'Dispute Resolution'},
-  {id: 'general-provisions', title: 'General Provisions'},
-];
-
-
 export default function TermsOfService() {
   const isScrolled = useScrollThreshold();
   const {t} = useT('legal')
