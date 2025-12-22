@@ -1,4 +1,17 @@
 {
+  "hub": {
+    "title": "Legal Center",
+    "subtitle": "Transparency and trust are at the core of Photon. Here you can find our legal documents and policies.",
+    "privacy_card": {
+      "title": "Privacy Policy",
+      "description": "Learn how we collect, use, and protect your personal data and your rights regarding your information."
+    },
+    "terms_card": {
+      "title": "Terms of Service",
+      "description": "Read the rules, requirements, and agreements that govern your use of the Photon platform."
+    },
+    "read_document": "Read documento"
+  },
   "terms": {
     "title": "Terms of Service",
     "toc_header": "To help you navigate your rights and responsibilities, we have organized these Terms as follows:",

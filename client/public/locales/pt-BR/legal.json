@@ -1,4 +1,17 @@
 {
+  "hub": {
+    "title": "Central Legal",
+    "subtitle": "Transparência e confiança são fundamentais no Photon. Aqui você encontra nossos documentos legais e políticas.",
+    "privacy_card": {
+      "title": "Política de Privacidade",
+      "description": "Saiba como coletamos, usamos e protegemos seus dados pessoais e quais são seus direitos."
+    },
+    "terms_card": {
+      "title": "Termos de Uso",
+      "description": "Leia as regras, requisitos e acordos que regem o uso da plataforma Photon."
+    },
+    "read_document": "Ler documento"
+  },
   "terms": {
     "title": "Termos de Uso",
     "toc_header": "Para ajudá-lo a navegar por seus direitos e responsabilidades, organizamos estes Termos da seguinte forma:",
