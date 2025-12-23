@@ -25,6 +25,7 @@
     "i18next-resources-to-backend": "^1.2.1",
     "laravel-echo": "^2.2.6",
     "libphonenumber-js": "^1.12.23",
+    "motion": "^12.23.26",
     "next": "^16.0.7",
     "pusher-js": "^8.4.0",
     "react": "^19.2.1",
