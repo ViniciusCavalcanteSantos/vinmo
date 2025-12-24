@@ -42,12 +42,19 @@ export default function HeroPerson() {
       {/* 2. Imagem */}
       <div
         className="absolute overflow-hidden bottom-0 w-[90%] h-[100%] rounded-3xl rotate-[3deg] -z-9">
-        <Image
-          src={photographer}
-          alt="Professional Photographer using Photon Cloud"
-          priority
-          className="object-contain drop-shadow-2xl mask-image-gradient-b absolute -bottom-3 -rotate-[3deg] w-[120%] max-w-[500px] left-1/2 -translate-x-[52%]"
-        />
+        <motion.div
+          initial={{opacity: 0, y: 100}}
+          animate={{opacity: 1, y: 0}}
+          transition={{delay: 0.9}}
+          className="absolute -bottom-3 -rotate-[3deg] w-[120%] max-w-[500px] left-1/2 -translate-x-[52%]"
+        >
+          <Image
+            src={photographer}
+            alt="Professional Photographer using Photon Cloud"
+            priority
+            className="object-contain drop-shadow-2xl mask-image-gradient-b"
+          />
+        </motion.div>
       </div>
 
       {/* 3. Imagem que define a largura */}
