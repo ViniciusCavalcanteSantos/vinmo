@@ -13,23 +13,7 @@ export default function HeroSection() {
   const {t} = useT('common');
 
   return (
-    // 'overflow-hidden' no section pai é CRUCIAL para evitar scrollbars laterais indesejadas e bordas vazando
-    <section className="relative min-h-[80vh] flex flex-col  overflow-hidden bg-ant-bg py-20 ">
-      {/* ================= BACKGROUND LAYERS ================= */}
-      {/* 1. Imagem de Fundo (Blur e Opacidade controlados) */}
-      {/*<div className="absolute inset-0 z-0 select-none pointer-events-none">*/}
-      {/*  <div*/}
-      {/*    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 dark:opacity-30 scale-110"*/}
-      {/*    style={{*/}
-      {/*      backgroundImage: "url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2000&auto=format&fit=crop')",*/}
-      {/*      filter: 'blur(10px)',*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*  /!* Gradiente para suavizar a transição para a cor sólida do site *!/*/}
-      {/*  <div className="absolute inset-0 bg-gradient-to-b from-ant-bg/90 via-ant-bg/80 to-ant-bg"/>*/}
-      {/*</div>*/}
-
-
+    <section className="relative min-h-[80vh] flex flex-col  overflow-hidden bg-ant-bg py-20">
       {/* ================= MAIN CONTENT ================= */}
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -40,7 +24,7 @@ export default function HeroSection() {
         >
 
           {/* COLUNA ESQUERDA: Texto */}
-          <div className="text-center lg:text-left order-2 lg:order-1 pb-20 lg:pb-0">
+          <div className="text-center lg:text-left order-1 pb-20 lg:pb-0">
             <motion.div variants={fadeIn} className="mb-6 inline-block">
               <span
                 className="px-5 py-2 rounded-full bg-ant-bg-elevated/50 backdrop-blur-md border border-ant-border text-ant-primary text-sm font-bold tracking-widest uppercase shadow-sm">
@@ -91,16 +75,14 @@ export default function HeroSection() {
           </div>
 
           {/* COLUNA DIREITA: Imagem da Pessoa (HeroPerson) */}
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end relative">
+          <div className="order-2 flex justify-center lg:justify-end relative">
             <HeroPerson/>
           </div>
-
         </motion.div>
       </div>
 
       {/* ================= SLOT PARA SVG WAVE ================= */}
       {/*<div className="absolute bottom-0 left-0 w-full leading-[0] z-20 pointer-events-none">*/}
-
       {/*  <svg id="wave" viewBox="0 0 1440 160" version="1.1"*/}
       {/*       xmlns="http://www.w3.org/2000/svg">*/}
       {/*    <defs>*/}

@@ -13,7 +13,7 @@ export const staggerContainer: Variants = {
   hidden: {opacity: 0},
   visible: {
     opacity: 1,
-    transition: {staggerChildren: 0.2}
+    transition: {delayChildren: 0.2}
   }
 };
 

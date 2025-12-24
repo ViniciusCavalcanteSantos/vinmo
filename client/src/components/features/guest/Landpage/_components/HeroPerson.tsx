@@ -18,10 +18,26 @@ export default function HeroPerson() {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[80%] bg-gradient-to-tr from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-[80px] rounded-full -z-20 pointer-events-none"/>
 
       {/* 2. Boxes */}
-      <div
-        className="absolute bottom-0 w-[90%] h-[70%] bg-ant-bg-elevated/60 d-backdrop-blur-xl border border-ant-border/50 rounded-3xl -z-11 shadow-2xl rotate-[-2deg]"/>
-      <div
-        className="absolute bottom-0 w-[90%] h-[70%] bg-ant-bg-elevated/90 d-backdrop-blur-sm border border-ant-border/30 rounded-3xl -z-10 shadow-lg rotate-[3deg]"/>
+      <motion.div
+        className="absolute bottom-0 w-[90%] h-[70%] bg-ant-bg-elevated/60 d-backdrop-blur-xl border border-ant-border/50 rounded-3xl -z-11 shadow-2xl"
+        style={{transformOrigin: "100% 100%"}}
+        initial={{rotate: -180}}
+        animate={{rotate: -2}}
+        transition={{
+          duration: 0.9,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+      />
+      <motion.div
+        className="absolute bottom-0 w-[90%] h-[70%] bg-ant-bg-elevated/90 d-backdrop-blur-sm border border-ant-border/30 rounded-3xl -z-10 shadow-lg"
+        style={{transformOrigin: "0% 100%"}}
+        initial={{rotate: 180}}
+        animate={{rotate: 3}}
+        transition={{
+          duration: 0.9,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+      />
 
       {/* 2. Imagem */}
       <div
@@ -41,13 +57,10 @@ export default function HeroPerson() {
 
       {/* 4. Badges Flutuantes */}
       <motion.div
-        initial={{opacity: 0, x: -20}}
-        animate={{opacity: 1, x: 0, y: [0, -10, 0]}}
-        transition={{
-          opacity: {delay: 0.5},
-          y: {duration: 4, repeat: Infinity, ease: "easeInOut"}
-        }}
-        className="absolute top-[20%] left-[-10px] md:-left-8 z-30"
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        transition={{delay: 0.7}}
+        className="absolute top-[20%] left-[-10px] md:-left-8 z-30 floating-css"
       >
         <div
           className="flex items-center gap-3 bg-ant-bg-elevated/90 backdrop-blur-md border border-ant-border/60 rounded-2xl p-3 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
@@ -61,15 +74,11 @@ export default function HeroPerson() {
         </div>
       </motion.div>
 
-      {/* Badge Direita: Photos Delivered */}
       <motion.div
-        initial={{opacity: 0, x: 20}}
-        animate={{opacity: 1, x: 0, y: [0, 10, 0]}}
-        transition={{
-          opacity: {delay: 0.7},
-          y: {duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5}
-        }}
-        className="absolute bottom-[15%] right-[-10px] md:-right-4 z-30"
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        transition={{delay: 0.7}}
+        className="absolute bottom-[15%] right-[-10px] md:-right-4 z-30 floating-css"
       >
         <div
           className="flex items-center gap-3 bg-ant-bg-elevated/90 backdrop-blur-md border border-ant-border/60 rounded-2xl p-3 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">

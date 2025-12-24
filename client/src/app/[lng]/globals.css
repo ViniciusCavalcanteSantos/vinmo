@@ -187,3 +187,17 @@ body {
     content: '';
     animation: dots 2s steps(1) infinite;
 }
+
+@keyframes float-smooth {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.floating-css {
+    animation: float-smooth 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    will-change: transform;
+}
