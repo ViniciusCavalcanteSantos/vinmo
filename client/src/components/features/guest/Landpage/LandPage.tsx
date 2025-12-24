@@ -14,7 +14,7 @@ export default function Page() {
 
   return (
     <div
-      className="relative min-h-screen bg-ant-bg text-ant-text overflow-x-hidden selection:bg-ant-primary selection:text-white">
+      className="relative min-h-screen bg-ant-bg text-ant-text selection:bg-ant-primary selection:text-white">
       <GuestHeader/>
 
       <main>
