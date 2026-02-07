@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class NotificationController extends Controller
 {
@@ -44,6 +46,45 @@ class NotificationController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Notification dismissed successfully',
+        ]);
+    }
+
+    public function stream(Request $request)
+    {
+        set_time_limit(0);
+        session_write_close();
+
+        $userId = $request->user()->id;
+
+        return new StreamedResponse(function () use ($userId) {
+            // Headers iniciais do SSE
+            echo ":" . str_repeat(" ", 2048) . "\n";
+            echo "retry: 2000\n\n";
+            if (ob_get_level() > 0) {
+                ob_flush();
+            }
+            flush();
+
+            $channel = 'sse:user:' . $userId;
+
+            try {
+                // Fica "preso" aqui escutando o Redis. Zero uso de CPU enquanto espera.
+                // Requer que o 'read_write_timeout' do Redis esteja alto ou -1 (infinito)
+                Redis::subscribe([$channel], function ($message) {
+                    echo "data: $message\n\n";
+
+                    if (ob_get_level() > 0) {
+                        ob_flush();
+                    }
+                    flush();
+                });
+            } catch (\Exception $e) {
+            }
+        }, 200, [
+            'Content-Type' => 'text/event-stream',
+            'Cache-Control' => 'no-cache',
+            'Connection' => 'keep-alive',
+            'X-Accel-Buffering' => 'no',
         ]);
     }
 }

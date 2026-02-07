@@ -2,13 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Notifications\Channels\SseRedisChannel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
-class SystemNotification extends Notification implements ShouldQueue, ShouldBroadcast
+class SystemNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -33,7 +32,7 @@ class SystemNotification extends Notification implements ShouldQueue, ShouldBroa
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', SseRedisChannel::class];
     }
 
     /**
@@ -49,14 +48,5 @@ class SystemNotification extends Notification implements ShouldQueue, ShouldBroa
             'action' => $this->action,
             'created_at' => now()->toISOString()
         ];
-    }
-
-    public function toBroadcast(object $notifiable): BroadcastMessage
-    {
-        return new BroadcastMessage([
-            'id' => $this->id,
-            'data' => $this->toArray($notifiable),
-            'read_at' => null
-        ]);
     }
 }
