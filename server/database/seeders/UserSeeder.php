@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     {
         User::factory()->withOrganization()->create([
             'name' => 'Administrador',
-            'email' => 'admin@admin.com',
+            'email' => 'admin@photon.com',
             'password' => bcrypt('12345678'),
             'email_verified_at' => now()->toDateTimeString(),
         ]);

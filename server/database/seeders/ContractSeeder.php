@@ -16,7 +16,7 @@ class ContractSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::where('email', 'admin@admin.com')->first();
+        $user = User::where('email', 'admin@photon.com')->first();
 
         if (!$user) {
             $this->command->warn('⚠ Nenhum usuário admin encontrado, rode primeiro o UserSeeder.');
