@@ -74,6 +74,7 @@ Route::prefix('/api')->group(function () {
             Route::delete('/{id}/dismiss', [NotificationController::class, 'dismiss']);
             Route::post('/{id}/read', [NotificationController::class, 'read']);
             Route::post('/read-all', [NotificationController::class, 'readAll']);
+            Route::get('/stream', [NotificationController::class, 'stream']);
         });
     });
 });
