@@ -5,7 +5,6 @@ import {useT} from '@/i18n/client';
 import {SafetyCertificateOutlined, ThunderboltOutlined, UsergroupAddOutlined} from '@ant-design/icons';
 import {motion, useScroll, useSpring, useTransform} from 'framer-motion';
 
-// ----- dados (mesma lista) -----
 const features = [
   {
     id: 'speed',
@@ -33,18 +32,13 @@ const features = [
   }
 ];
 
-// ------------------------
-// Helper: calcula stepSize e snapPoints de forma consistente
-// - se `providedStepSize` for passado, usa-o
-// - caso contrário calcula com base em startOffset + endPadding e total
-// ------------------------
 function computeSnapLayout(total: number, opts?: {
   providedStepSize?: number;
   startOffset?: number;
   endPadding?: number;
 }) {
   const startOffset = opts?.startOffset ?? 0.15;
-  const endPadding = opts?.endPadding ?? 0.10; // reserva final para 'respirar'
+  const endPadding = opts?.endPadding ?? 0.10;
   if (typeof opts?.providedStepSize === 'number') {
     const stepSize = opts!.providedStepSize;
     const snapPoints = Array.from({length: total}, (_, i) => (i === 0 ? 0 : startOffset + ((i - 1) * stepSize)));
@@ -60,26 +54,18 @@ function computeSnapLayout(total: number, opts?: {
   return {stepSize, startOffset, endPadding, snapPoints};
 }
 
-// ------------------------------------------------------------------
-// Hook reutilizável: useCardMotion (com "biased snap" embutido)
-// - Se stepSize não for passado, calcula automaticamente com computeSnapLayout
-// - Retorna estilo pronto para o motion.div
-// - Expondo internals para poder debug
-// ------------------------------------------------------------------
 export function useCardMotion(options: {
-  containerRef: React.RefObject<HTMLElement>;
+  containerRef: React.RefObject<HTMLElement|null>;
   index: number;
   total: number;
-  // controle fino
-  stepSize?: number; // quanto cada card 'ocupa' do scroll (padrão calculado)
-  startOffset?: number; // offset inicial (padrão 0.15)
-  endPadding?: number; // espaço reservado no final (padrão 0.1)
-  snap?: boolean; // true => animação só dispara ao cruzar um ponto (modo "snap")
-  // Comportamento de "viés" (preferência de parar perto dos pontos)
-  snapBias?: boolean; // ativa o viés preferencial
-  snapRadius?: number; // quão perto precisa estar para ativar o viés (em progress 0..1)
-  snapStrength?: number; // intensidade do viés (0..1)
-  entryRangeFactor?: number; // quando snap=false, mapeia entrada para myEnter -> myEnter + stepSize * entryRangeFactor
+  stepSize?: number;
+  startOffset?: number;
+  endPadding?: number;
+  snap?: boolean;
+  snapBias?: boolean;
+  snapRadius?: number;
+  snapStrength?: number;
+  entryRangeFactor?: number;
   stiffness?: number;
   damping?: number;
 }) {
@@ -99,14 +85,12 @@ export function useCardMotion(options: {
     damping = 20
   } = options;
 
-  // Calcula layout (stepSize + snapPoints) de forma consistente
   const {stepSize, startOffset, endPadding, snapPoints} = computeSnapLayout(total, {
     providedStepSize,
     startOffset: providedStartOffset,
     endPadding: providedEndPadding
   });
 
-  // progress relativo à seção
   const {scrollYProgress} = useScroll({
     target: containerRef,
     offset: ['start start', 'end end']
@@ -114,12 +98,10 @@ export function useCardMotion(options: {
 
   const isLast = index === total - 1;
 
-  // pontos base (mesma lógica conceitual do original)
   const myEnterPoint = index === 0 ? 0 : startOffset + ((index - 1) * stepSize);
   const nextEnterPoint = startOffset + (index * stepSize);
 
-  // range usado para mapear 0 -> 1
-  const eps = 0.001; // usado no modo snap para simular um "cliff"
+  const eps = 0.001;
   const entryRange = snap
     ? [myEnterPoint, myEnterPoint + eps]
     : [myEnterPoint, myEnterPoint + stepSize * entryRangeFactor];
@@ -128,9 +110,8 @@ export function useCardMotion(options: {
     ? [nextEnterPoint, nextEnterPoint + eps]
     : [nextEnterPoint, nextEnterPoint + stepSize * entryRangeFactor];
 
-  // --- BIASED PROGRESS (viés preferencial) ---
   const biasedProgress = snapBias
-    ? useTransform(scrollYProgress, (v) => {
+    ? useTransform(scrollYProgress, (v: number) => {
       // encontra o ponto mais próximo
       let nearest = snapPoints[0];
       let bestDist = Math.abs(v - nearest);
@@ -142,7 +123,6 @@ export function useCardMotion(options: {
         }
       }
 
-      // se muito longe, não aplicar viés
       if (bestDist > snapRadius) return v;
 
       const t = 1 - bestDist / snapRadius;
@@ -150,17 +130,14 @@ export function useCardMotion(options: {
     })
     : scrollYProgress;
 
-  // Escolhe qual progress alimentar as molas: biasado (preferencial) ou cru
   const progressForMapping = biasedProgress;
 
-  // target values (0..1) e suas molas
   const targetEnter = useTransform(progressForMapping, entryRange, [0, 1]);
   const springEnter = useSpring(targetEnter, {stiffness, damping});
 
   const targetRotate = useTransform(progressForMapping, rotateRange, [0, isLast ? 0 : 1]);
   const springRotate = useSpring(targetRotate, {stiffness, damping});
 
-  // mapeamentos visuais (mesma geometria do original)
   const xStart = index === 0 ? 0 : -800;
   const yStart = index === 0 ? 0 : 100;
 
@@ -170,19 +147,22 @@ export function useCardMotion(options: {
 
   const rotateEnd = index % 2 === 0 ? -3 : 3;
 
-  const rotate = useTransform([springEnter, springRotate], ([enter, rot]) => {
-    if (index === 0) {
-      return rot * rotateEnd;
+  const rotate = useTransform(
+    [springEnter, springRotate],
+    (values: number[]) => {
+      const [enter, rot] = values;
+      if (index === 0) {
+        return rot * rotateEnd;
+      }
+
+      const entranceRotation = (1 - enter) * -45;
+      const exitRotation = rot * rotateEnd;
+
+      return entranceRotation + exitRotation;
     }
-
-    const entranceRotation = (1 - enter) * -45; // -45 -> 0 na entrada
-    const exitRotation = rot * rotateEnd; // leve giro no momento de sair
-
-    return entranceRotation + exitRotation;
-  });
+  );
 
   return {
-    // estilo pronto para aplicar no <motion.div style={{ ...style }}>
     style: {
       x,
       y,
@@ -190,7 +170,6 @@ export function useCardMotion(options: {
       rotate,
       zIndex: index
     },
-    // valores brutos (se precisar para lógica extra)
     internals: {
       scrollYProgress,
       biasedProgress,
@@ -204,20 +183,13 @@ export function useCardMotion(options: {
   };
 }
 
-// ------------------------------------------------------------------
-// Debug overlay: mostra snapPoints (fácil de remover)
-// - Renderiza dentro do container sticky, com marcadores posicionados verticalmente
-// - Controlado pelo prop `debug`
-// ------------------------------------------------------------------
 function DebugSnapOverlay({containerRef, snapPoints}: {
-  containerRef: React.RefObject<HTMLElement>;
+  containerRef: React.RefObject<HTMLElement | null>;
   snapPoints: number[]
 }) {
-  // a overlay só é útil no cliente
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    // permitimos toggle com `d`+`s` em dev para mostrar/ocultar rapidamente
     function onKey(e: KeyboardEvent) {
       if (e.key.toLowerCase() === 'd' && e.shiftKey) setVisible(v => !v);
     }
@@ -244,11 +216,6 @@ function DebugSnapOverlay({containerRef, snapPoints}: {
   );
 }
 
-// ------------------------------------------------------------------
-// Components: FeaturesSection (simplificado) + Card (usa o hook)
-// - FeaturesSection agora aceita props: snap, debug, providedStepSize, startOffset, endPadding
-// - Debug overlay fácil de remover (passando debug={false})
-// ------------------------------------------------------------------
 export default function FeaturesSection({snap = true, debug = false, providedStepSize, startOffset, endPadding}: {
   snap?: boolean;
   debug?: boolean;
@@ -259,7 +226,6 @@ export default function FeaturesSection({snap = true, debug = false, providedSte
   const {t} = useT('common');
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // calculamos layout global para passar pro overlay (mantendo consistência)
   const {stepSize, snapPoints} = computeSnapLayout(features.length, {providedStepSize, startOffset, endPadding});
 
   return (
@@ -310,31 +276,32 @@ interface CardProps {
   iconColor: string;
   Icon: any;
   t: any;
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement|null>;
   snap?: boolean;
   providedStepSize?: number;
   startOffset?: number;
   endPadding?: number;
 }
 
-const Card = ({
-                i,
-                total,
-                defaultTitle,
-                defaultDesc,
-                color,
-                iconColor,
-                Icon,
-                t,
-                id,
-                containerRef,
-                snap = true,
-                providedStepSize,
-                startOffset,
-                endPadding
-              }: CardProps) => {
-  // usa o hook reutilizável
-  const {style, internals} = useCardMotion({
+const Card = (
+  {
+    i,
+    total,
+    defaultTitle,
+    defaultDesc,
+    color,
+    iconColor,
+    Icon,
+    t,
+    id,
+    containerRef,
+    snap = true,
+    providedStepSize,
+    startOffset,
+    endPadding
+  }: CardProps
+) => {
+  const {style} = useCardMotion({
     containerRef,
     index: i,
     total,
@@ -347,7 +314,7 @@ const Card = ({
   return (
     <motion.div
       style={style}
-      className="absolute w-full max-w-4xl h-full md:h-[450px] bg-ant-bg-elevated rounded-3xl border border-ant-border/60 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row will-change-transform"
+      className="absolute w-full max-w-4xl h-full md:h-112.5 bg-ant-bg-elevated rounded-3xl border border-ant-border/60 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row will-change-transform"
     >
       {/* Conteúdo Esquerdo */}
       <div className="flex flex-col justify-center w-full md:w-1/2 p-8 gap-4 z-10 relative">
@@ -370,10 +337,10 @@ const Card = ({
         </div>
       </div>
 
-      {/* Visual Direito */}
-      <div className={`relative w-full md:w-1/2 min-h-[200px] md:h-full overflow-hidden bg-gradient-to-br ${color}`}>
+      <div
+        className={`relative w-full md:w-1/2 min-h-50 md:h-full overflow-hidden bg-linear-to-br ${color}`}>
         <div className="absolute inset-0 flex items-center justify-center opacity-30">
-          <div className="w-[250px] h-[250px] bg-white rounded-full blur-[90px]"/>
+          <div className="w-62.5 h-62.5 bg-white rounded-full blur-[90px]"/>
         </div>
 
         <div className="absolute inset-0 flex items-center justify-center">
