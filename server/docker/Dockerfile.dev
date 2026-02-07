@@ -1,4 +1,4 @@
-FROM php:8.2-cli-alpine
+FROM php:8.2-fpm-alpine
 
 # libs e extensões PHP
 RUN apk add --no-cache \
@@ -63,4 +63,5 @@ WORKDIR /var/www
 
 ENV TZ=UTC
 
-CMD ["php", "-v"]
+EXPOSE 9000
+CMD ["php-fpm"]
