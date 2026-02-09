@@ -49,11 +49,26 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
 
-	userID := r.URL.Query().Get("user_id")
-	if userID == "" {
-		http.Error(w, "user_id is required", http.StatusBadRequest)
+	ticket := r.URL.Query().Get("ticket")
+	if ticket == "" {
+		http.Error(w, "Ticket required", http.StatusUnauthorized)
 		return
 	}
+
+	ctx := r.Context()
+	redisKey := "sse_auth:" + ticket
+
+	userID, err := rdb.Get(ctx, redisKey).Result()
+	if err == redis.Nil {
+		http.Error(w, "Invalid or expired ticket", http.StatusForbidden)
+		return
+	} else if err != nil {
+		log.Printf("Erro no Redis: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	rdb.Del(ctx, redisKey)
 
 	flusher, ok := w.(http.Flusher)
 	if !ok {
@@ -64,7 +79,7 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, ": conectado ao canal user:%s\n\n", userID)
 	flusher.Flush()
 
-	ctx := r.Context()
+	ctx = r.Context()
 	pubsub := rdb.Subscribe(ctx, "sse:user:"+userID)
 	defer pubsub.Close()
 
