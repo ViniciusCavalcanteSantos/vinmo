@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useUser } from '@/contexts/UserContext';
-import Notification from "@/types/Notification"; // Seu tipo existente
+import Notification from "@/types/Notification";
 
 export const useUserNotifications = (callback: (data: Notification) => void) => {
   const { user } = useUser();
@@ -8,7 +8,7 @@ export const useUserNotifications = (callback: (data: Notification) => void) => 
   useEffect(() => {
     if (!user?.id) return;
     const eventSource = new EventSource(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/stream`,
+      `${process.env.NEXT_PUBLIC_API_URL}/sse/stream?user_id=${user.id}`,
       { withCredentials: true }
     );
 
@@ -17,7 +17,6 @@ export const useUserNotifications = (callback: (data: Notification) => void) => 
     };
 
     eventSource.onmessage = (event) => {
-      // Ignora pings ou mensagens vazias
       if (!event.data) return;
 
       try {

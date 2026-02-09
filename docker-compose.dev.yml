@@ -4,20 +4,20 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./docker/nginx/conf.d/dev.conf:/etc/nginx/conf.d/default.conf
-      - ./:/var/www # Monta o código local para o Nginx servir assets se precisar
+      - ./server/docker/nginx/conf.d/dev.conf:/etc/nginx/conf.d/default.conf
+      - ./server:/var/www # Monta o código local para o Nginx servir assets se precisar
     depends_on:
       - app
 
   app:
     build:
-      context: .
+      context: ./server
       dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     volumes:
-      - ./:/var/www
+      - ./server:/var/www
     env_file:
-      - .env
+      - ./server/.env
     depends_on:
       - mysql
       - redis
@@ -31,54 +31,38 @@ services:
 
   queue:
     build:
-      context: .
+      context: ./server
       dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     command: php artisan queue:listen --sleep=1 --tries=3
     volumes:
-      - ./:/var/www
+      - ./server:/var/www
     env_file:
-      - ./.env
+      - ./server/.env
     depends_on:
       - app
       - redis
 
   scheduler:
     build:
-      context: .
+      context: ./server
       dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     command: php artisan schedule:work
     volumes:
-      - ./:/var/www
+      - ./server:/var/www
     env_file:
-      - .env
+      - ./server/.env
     depends_on:
       - app
-
-  reverb:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.dev
-    working_dir: /var/www
-    command: php artisan reverb:start --host="0.0.0.0" --port=8080
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./:/var/www
-    env_file:
-      - ./.env
-    depends_on:
-      - app
-      - redis
 
   composer:
     build:
-      context: .
+      context: ./server
       dockerfile: docker/Dockerfile.dev
     working_dir: /var/www
     volumes:
-      - ./:/var/www
+      - ./server:/var/www
     entrypoint: [ "composer", "--ansi", "--no-interaction", "--no-progress" ]
 
   mysql:
@@ -95,6 +79,19 @@ services:
 
   redis:
     image: redis:8-alpine
+
+  sse:
+    build:
+      context: ./sse
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+    depends_on:
+      - redis
 
   mailpit:
     image: axllent/mailpit:latest
