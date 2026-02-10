@@ -61,6 +61,11 @@ RUN chown -R www-data:www-data /var/www \
 
 RUN php artisan package:discover --ansi
 
-EXPOSE 9000
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
+    && chmod +x /usr/local/bin/entrypoint.sh \
+    && chown -R www-data:www-data /var/www \
+    && chmod -R 775 storage bootstrap/cache
 
+EXPOSE 9000
 CMD ["php-fpm"]
