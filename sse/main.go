@@ -7,20 +7,38 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
 var rdb *redis.Client
+var redisPrefix string
+var allowedOrigins []string
 
 func main() {
-	redisAddr := os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT")
-	if redisAddr == ":" {
-		redisAddr = "redis:6379"
+	redisHost := os.Getenv("REDIS_HOST")
+	if redisHost == "" {
+		redisHost = "redis"
+	}
+	redisPort := os.Getenv("REDIS_PORT")
+	if redisPort == "" {
+		redisPort = "6379"
+	}
+	redisAddr := redisHost + ":" + redisPort
+	redisPassword := os.Getenv("REDIS_PASSWORD")
+
+	redisPrefix = os.Getenv("REDIS_PREFIX")
+	if redisPrefix == "" {
+		redisPrefix = ""
 	}
 
-	redisPassword := os.Getenv("REDIS_PASSWORD")
+	allowed := os.Getenv("SSE_ALLOWED_ORIGINS")
+	if allowed == "" {
+		allowed = "http://localhost:3000"
+	}
+	allowedOrigins = strings.Split(allowed, ",")
 
 	rdb = redis.NewClient(&redis.Options{
 		Addr:     redisAddr,
@@ -37,17 +55,39 @@ func main() {
 
 	http.HandleFunc("/stream", sseHandler)
 
-	port := "8080"
+	port := os.Getenv("SSE_PORT")
+	if port == "" {
+		port = "8080"
+	}
 	log.Printf("Microsserviço SSE rodando na porta %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
+func originAllowed(origin string) bool {
+	for _, o := range allowedOrigins {
+		if strings.TrimSpace(o) == origin {
+			return true
+		}
+	}
+	return false
+}
+
 func sseHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	origin := r.Header.Get("Origin")
+	if origin != "" && originAllowed(origin) {
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+	} else {
+		w.Header().Set("Access-Control-Allow-Origin", "null")
+	}
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Cache-Control, X-Requested-With")
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 
 	ticket := r.URL.Query().Get("ticket")
 	if ticket == "" {
@@ -56,7 +96,7 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	redisKey := "sse_auth:" + ticket
+	redisKey := redisPrefix + "sse_auth:" + ticket
 
 	userID, err := rdb.Get(ctx, redisKey).Result()
 	if err == redis.Nil {
@@ -68,7 +108,10 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rdb.Del(ctx, redisKey)
+	// delete single-use ticket
+	if err := rdb.Del(ctx, redisKey).Err(); err != nil {
+		log.Printf("Falha ao deletar ticket Redis: %v", err)
+	}
 
 	flusher, ok := w.(http.Flusher)
 	if !ok {
@@ -79,8 +122,7 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, ": conectado ao canal user:%s\n\n", userID)
 	flusher.Flush()
 
-	ctx = r.Context()
-	pubsub := rdb.Subscribe(ctx, "sse:user:"+userID)
+	pubsub := rdb.Subscribe(ctx, redisPrefix+"sse:user:"+userID)
 	defer pubsub.Close()
 
 	ch := pubsub.Channel()
@@ -98,7 +140,6 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 
 			fmt.Fprintf(w, "data: %s\n\n", msg.Payload)
 			flusher.Flush()
-
 		case <-ctx.Done():
 			log.Printf("Cliente desconectou: User %s", userID)
 			return
