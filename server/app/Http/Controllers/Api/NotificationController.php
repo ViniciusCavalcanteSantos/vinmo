@@ -6,10 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class NotificationController extends Controller
 {
+    public function getSseTicket(Request $request)
+    {
+        $ticket = Str::uuid()->toString();
+        $userId = $request->user()->id;
+
+        Redis::setex("sse_auth:{$ticket}", 60, $userId);
+
+        return response()->json([
+            'ticket' => $ticket,
+        ]);
+    }
+
     public function index(Request $request)
     {
         return response()->json([
