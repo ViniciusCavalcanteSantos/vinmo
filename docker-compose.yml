@@ -26,9 +26,6 @@ services:
     working_dir: /var/www
     networks:
       - vinmo-network
-    depends_on:
-      - mysql
-      - redis
 
   queue:
     env_file:
@@ -52,8 +49,6 @@ services:
       - vinmo-network
     depends_on:
       - app
-      - redis
-      - mysql
 
   scheduler:
     env_file:
@@ -77,7 +72,6 @@ services:
       - vinmo-network
     depends_on:
       - app
-      - mysql
 
   sse:
     env_file:
@@ -89,8 +83,6 @@ services:
     build:
       context: ./sse
       dockerfile: Dockerfile
-    depends_on:
-      - redis
     networks:
       - vinmo-network
 
