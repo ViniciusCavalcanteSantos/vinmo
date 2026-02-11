@@ -1,7 +1,7 @@
 services:
   webserver:
     ports:
-      - "80:80"
+      - "8010:80"
     volumes:
       - ./server/docker/nginx/conf.d/prod.conf:/etc/nginx/conf.d/default.conf:ro
       - assets_volume:/var/www/public
