@@ -8,8 +8,6 @@ services:
     restart: always
 
   app:
-    env_file:
-      - ./server/.env # Ou /run/secrets no futuro
     volumes:
       - ./server/storage:/var/www/storage
       - assets_volume:/var/www/public
@@ -18,27 +16,13 @@ services:
 
   queue:
     command: php artisan queue:work --tries=3 --timeout=90
-    env_file:
-      - ./server/.env
     restart: always
 
   scheduler:
     command: php artisan schedule:work
-    env_file:
-      - ./server/.env
     restart: always
-
-  mysql:
-    restart: always
-    # NENHUMA PORTA EXPOSTA AQUI PARA O EXTERNO
-
-  redis:
-    restart: always
-    # NENHUMA PORTA EXPOSTA AQUI PARA O EXTERNO
 
   sse:
     ports:
       - "8080:8080"
-    env_file:
-      - ./sse/.env
     restart: always
