@@ -42,6 +42,7 @@ export default async function apiFetch<T = undefined>(
   let cookieHeader = "";
   let xsrfHeader: Record<string, string> = {};
 
+  console.log('isOnServerSide', isOnServerSide)
   if (isOnServerSide) {
     const {cookies} = await import("next/headers");
     const cookieStore = await cookies();
@@ -49,11 +50,18 @@ export default async function apiFetch<T = undefined>(
     cookieHeader = cookieStore.toString();
   } else {
     const isMutatingMethod = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
+    console.log('method', method)
+    console.log('isMutatingMethod', isMutatingMethod)
+
+
     // pega XSRF só no browser e só para métodos mutáveis
     if (isMutatingMethod) {
       const xsrfCookie = getCookie("XSRF-TOKEN");
+      console.log('xsrfCookie', xsrfCookie)
+
       if (xsrfCookie) {
         xsrfHeader["X-XSRF-TOKEN"] = decodeURIComponent(xsrfCookie);
+        console.log('xsrfHeader', xsrfHeader)
       }
     }
   }
@@ -96,7 +104,7 @@ export default async function apiFetch<T = undefined>(
     const url = `${baseURL}${path}`;
     try {
       const res = await axios({
-        method: options.method || "POST",
+        method,
         url,
         headers,
         data: options.body,
